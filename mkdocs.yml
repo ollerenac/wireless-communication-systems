@@ -1,0 +1,66 @@
+site_name: Sistemas de Comunicaciones Inalámbricas
+site_url: https://ollerenac.github.io/wireless-communication-systems/
+site_description: Curso de máster en sistemas de comunicaciones inalámbricas — fundamentos, 5G/6G e IA aplicada
+site_author: ollerenac
+repo_url: https://github.com/ollerenac/wireless-communication-systems
+repo_name: ollerenac/wireless-communication-systems
+
+theme:
+  name: material
+  language: es
+  features:
+    - navigation.tabs
+    - navigation.breadcrumbs
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+
+extra:
+  status:
+    draft: En desarrollo
+
+plugins:
+  - search:
+      lang: es
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.details
+  - admonition
+  - attr_list
+  - md_in_html
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Inicio: index.md
+  - Programa: syllabus.md
