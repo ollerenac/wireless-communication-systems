@@ -17,25 +17,25 @@ Un tratamiento riguroso y moderno de las comunicaciones inalámbricas — desde 
 
     ---
 
-    Sesiones 1–4
+    Sesiones 1–5
 
-    Modelado de canal inalámbrico, modulación digital y BER, sistemas OFDM, codificación de canal con LDPC y códigos Polares.
+    Modelado de canal inalámbrico, modulación digital y BER, sistemas OFDM, codificación de canal con LDPC y códigos Polares, acceso múltiple: OFDMA y NOMA.
 
--   :material-antenna:{ .lg .middle } **Sistemas Multi-Antena y PHY Avanzada**
-
-    ---
-
-    Sesiones 5–7
-
-    Fundamentos MIMO y capacidad, MIMO masivo con conformación de haz digital, estimación de canal clásica y basada en aprendizaje.
-
--   :material-brain:{ .lg .middle } **IA/ML y Tecnologías Emergentes**
+-   :material-antenna:{ .lg .middle } **Sistemas Multi-Antena**
 
     ---
 
-    Sesiones 8–15
+    Sesiones 6–8
 
-    Aprendizaje automático y profundo para comunicaciones inalámbricas, aprendizaje por refuerzo, RIS, ISAC, fronteras del 6G y sistemas especializados.
+    Fundamentos MIMO y capacidad, MIMO masivo con conformación de haz digital, estimación de canal clásica.
+
+-   :material-brain:{ .lg .middle } **Tecnologías Avanzadas y Emergentes**
+
+    ---
+
+    Sesiones 9–15
+
+    5G NR, mmWave y sub-THz, RIS, ISAC, radio cognitiva y gestión de espectro, IA/ML para comunicaciones inalámbricas, fronteras del 6G.
 
 </div>
 
@@ -49,17 +49,17 @@ Un tratamiento riguroso y moderno de las comunicaciones inalámbricas — desde 
 | 02 | [Modulación Digital y Análisis de BER](#) | Próximamente |
 | 03 | [Sistemas OFDM e Implementación](#) | Próximamente |
 | 04 | [Codificación de Canal: LDPC y Códigos Polares](#) | Próximamente |
-| 05 | [Fundamentos MIMO y Capacidad](#) | Próximamente |
-| 06 | [MIMO Masivo y Conformación de Haz Digital](#) | Próximamente |
-| 07 | [Estimación de Canal: Clásica y Basada en Aprendizaje](#) | Próximamente |
-| 08 | [Aprendizaje Automático para Redes Inalámbricas: Fundamentos](#) | Próximamente |
-| 09 | [Comunicaciones Aprendidas Extremo a Extremo](#) | Próximamente |
-| 10 | [Aprendizaje Profundo para Detección MIMO](#) | Próximamente |
-| 11 | [Aprendizaje por Refuerzo para Asignación de Recursos](#) | Próximamente |
-| 12 | [Superficies Inteligentes Reconfigurables (RIS)](#) | Próximamente |
-| 13 | [Detección e Integración con Comunicaciones (ISAC)](#) | Próximamente |
-| 14 | [Fronteras del 6G: THz, MIMO Libre de Celdas y Aprendizaje Federado](#) | Próximamente |
-| 15 | [Sistemas Inalámbricos Especializados](#) | Próximamente |
+| 05 | [Acceso Múltiple: OFDMA, NOMA y Gestión de Recursos de Radio](#) | Próximamente |
+| 06 | [Fundamentos MIMO y Capacidad](#) | Próximamente |
+| 07 | [MIMO Masivo y Conformación de Haz Digital](#) | Próximamente |
+| 08 | [Estimación de Canal: Métodos Clásicos](#) | Próximamente |
+| 09 | [Arquitectura 5G NR: Interfaz Radio y Numerología](#) | Próximamente |
+| 10 | [Comunicaciones mmWave y Sub-THz](#) | Próximamente |
+| 11 | [Superficies Inteligentes Reconfigurables (RIS)](#) | Próximamente |
+| 12 | [Detección e Integración con Comunicaciones (ISAC)](#) | Próximamente |
+| 13 | [Radio Cognitiva y Gestión Dinámica de Espectro](#) | Próximamente |
+| 14 | [IA/ML para Comunicaciones Inalámbricas](#) | Próximamente |
+| 15 | [6G: Fronteras, Investigación Abierta y Redes Especializadas](#) | Próximamente |
 
 ---
 
