@@ -1,6 +1,5 @@
 ---
 title: "Sesión 01 — Modelado del Canal Inalámbrico"
-status: draft
 session: 1
 description: "Fundamentos del canal inalámbrico: pérdidas de propagación, sombreado, desvanecimiento multitrayecto y modelos estadísticos de Rayleigh y Rician."
 ---
