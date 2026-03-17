@@ -64,3 +64,5 @@ extra_css:
 nav:
   - Inicio: index.md
   - Programa: syllabus.md
+  - Sesiones:
+      - "01 — Modelado del Canal": sessions/01-channel-modeling/index.md
