@@ -1,7 +1,7 @@
 ---
 title: "Sesión 01 — Modelado del Canal Inalámbrico"
 session: 1
-description: "Fundamentos del canal inalámbrico: pérdidas de propagación, sombreado, desvanecimiento multitrayecto y modelos estadísticos de Rayleigh y Rician."
+description: "Fundamentos del canal inalámbrico: path loss, shadowing, multipath fading y modelos estadísticos de Rayleigh y Rician."
 ---
 
 # Sesión 01 — Modelado del Canal Inalámbrico
@@ -11,10 +11,10 @@ description: "Fundamentos del canal inalámbrico: pérdidas de propagación, som
 Al finalizar esta sesión, el estudiante será capaz de:
 
 1. Calcular la potencia recibida usando el modelo de pérdida de propagación en espacio libre y el modelo log-distancia
-2. Modelar el sombreado mediante una variable aleatoria log-normal y estimar su impacto en el enlace
-3. Describir el fenómeno de propagación multitrayecto y sus consecuencias en el dominio temporal y frecuencial
-4. Derivar las distribuciones de Rayleigh y Rician para la envolvente de la señal en canales con desvanecimiento
-5. Calcular el ancho de banda de coherencia y el tiempo de coherencia a partir de parámetros del canal
+2. Modelar el shadowing mediante una variable aleatoria log-normal y estimar su impacto en el link budget
+3. Describir el fenómeno de multipath propagation y sus consecuencias en el dominio temporal y frecuencial
+4. Derivar las distribuciones de Rayleigh y Rician para la envolvente de la señal en canales con fading
+5. Calcular el coherence bandwidth y el coherence time a partir de parámetros del canal
 
 ---
 
@@ -22,11 +22,11 @@ Al finalizar esta sesión, el estudiante será capaz de:
 
 El canal inalámbrico es el elemento más impredecible y limitante de cualquier sistema de comunicaciones. A diferencia de los canales guiados (fibra óptica, cable coaxial), el canal inalámbrico somete a la señal a una combinación de efectos que degradan su calidad de forma simultánea:
 
-- **Pérdida de propagación**: la potencia de la señal disminuye con la distancia
-- **Sombreado**: obstáculos como edificios y colinas atenúan la señal de forma aleatoria
-- **Desvanecimiento multitrayecto**: múltiples reflexiones, difracciones y dispersiones crean versiones retardadas de la señal que interfieren entre sí
+- **Path loss**: la potencia de la señal disminuye con la distancia
+- **Shadowing**: obstáculos como edificios y colinas atenúan la señal de forma aleatoria
+- **Multipath fading**: múltiples reflexiones, difracciones y dispersiones crean versiones retardadas de la señal que interfieren entre sí
 
-Comprender y modelar estos efectos es indispensable para todo lo que viene después en este curso: desde el diseño de modulaciones robustas hasta el dimensionamiento de sistemas MIMO y la optimización mediante aprendizaje por refuerzo. **El canal inalámbrico es la razón por la que existen la mayoría de los problemas que estudiaremos.**
+Comprender y modelar estos efectos es indispensable para todo lo que viene después en este curso: desde el diseño de modulaciones robustas hasta el dimensionamiento de sistemas MIMO y la gestión del espectro en redes 5G. **El canal inalámbrico es la razón por la que existen la mayoría de los problemas que estudiaremos.**
 
 ---
 
@@ -76,7 +76,7 @@ donde:
 
 ---
 
-### 3. Sombreado (Shadowing)
+### 3. Shadowing
 
 Las variaciones lentas de la potencia recibida debidas a obstáculos se modelan añadiendo un término aleatorio al modelo log-distancia:
 
@@ -84,7 +84,7 @@ $$\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma$$
 
 donde $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ es una variable gaussiana con desviación típica $\sigma$ (en dB), típicamente entre 4 y 12 dB.
 
-En escala lineal, la potencia recibida sigue una distribución **log-normal** — de ahí el nombre de sombreado log-normal.
+En escala lineal, la potencia recibida sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
 
 ---
 
@@ -94,7 +94,7 @@ En entornos reales, la señal llega al receptor a través de múltiples caminos 
 
 $$h(\tau, t) = \sum_{i} a_i(t)\, e^{j\phi_i(t)}\, \delta(\tau - \tau_i(t))$$
 
-Los parámetros clave que caracterizan el dispersión temporal del canal son:
+Los parámetros clave que caracterizan la dispersión temporal del canal son:
 
 **Retardo medio de exceso** (*mean excess delay*):
 
@@ -108,8 +108,8 @@ $$\sigma_\tau = \sqrt{\overline{\tau^2} - \bar{\tau}^2}$$
 
 $$B_c \approx \frac{1}{5\sigma_\tau}$$
 
-Si el ancho de banda de la señal $B_s \ll B_c$: canal de **desvanecimiento plano** (*flat fading*).
-Si $B_s \gg B_c$: canal de **desvanecimiento selectivo en frecuencia** (*frequency-selective fading*).
+Si el ancho de banda de la señal $B_s \ll B_c$: canal de **flat fading**.
+Si $B_s \gg B_c$: canal de **frequency-selective fading**.
 
 ---
 
@@ -125,12 +125,12 @@ El **tiempo de coherencia** del canal es aproximadamente:
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
-Si el período de símbolo $T_s \ll T_c$: canal **lentamente variante** (*slow fading*).
-Si $T_s \gg T_c$: canal **rápidamente variante** (*fast fading*).
+Si el período de símbolo $T_s \ll T_c$: canal de **slow fading**.
+Si $T_s \gg T_c$: canal de **fast fading**.
 
 ---
 
-### 6. Desvanecimiento de Rayleigh
+### 6. Rayleigh Fading
 
 Cuando no existe línea de visión directa (NLOS) entre transmisor y receptor, y hay un gran número de componentes multitrayecto con amplitudes y fases aleatorias, la **envolvente** de la señal recibida sigue una distribución de **Rayleigh**:
 
@@ -144,11 +144,11 @@ La **tasa de error de bit (BER)** para BPSK en canal Rayleigh con SNR medio $\ba
 
 $$\text{BER}_{\text{Rayleigh}} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
 
-Nótese que la BER decae como $1/\bar{\gamma}$ (lineal), frente a la caída exponencial en canal AWGN. Este es el coste del desvanecimiento.
+Nótese que la BER decae como $1/\bar{\gamma}$ (lineal), frente a la caída exponencial en canal AWGN. Este es el coste del fading.
 
 ---
 
-### 7. Desvanecimiento de Rician
+### 7. Rician Fading
 
 Cuando existe una componente de línea de visión (LOS) dominante además de las componentes dispersas, la envolvente sigue una distribución de **Rician**:
 
@@ -160,12 +160,12 @@ El **factor K de Rician** es la relación entre la potencia de la componente LOS
 
 $$K = \frac{A^2}{2\sigma^2}$$
 
-- $K = 0$: distribución de Rayleigh (sin LOS)
+- $K = 0$: Rayleigh fading (sin LOS)
 - $K \to \infty$: canal AWGN (LOS dominante, sin dispersión)
 - $K = 1$–$10$: valores típicos en entornos con LOS parcial (interior, picoceldas)
 
 !!! example "Ejemplo numérico"
-    Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). La componente LOS concentra una fracción $K/(K+1) = 4/5 = 80\,\%$ de la potencia total; las componentes difusas aportan el 20 % restante. Esto implica que el desvanecimiento profundo (envolvente $\ll$ valor medio) es mucho menos probable que en un canal Rayleigh puro.
+    Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). La componente LOS concentra una fracción $K/(K+1) = 4/5 = 80\,\%$ de la potencia total; las componentes difusas aportan el 20 % restante. Esto implica que el deep fading (envolvente $\ll$ valor medio) es mucho menos probable que en Rayleigh fading puro.
 
 ---
 
@@ -180,10 +180,10 @@ Los modelos de canal de los organismos de estandarización, como el **3GPP TR 38
 | **InH** (Indoor Hotspot) | Oficina / corredor interior | 1,7 – 2,2 | 20 – 70 ns |
 | **RMa** (Rural Macro) | Macrocelda rural | 2,3 – 4,0 | 10 – 40 ns |
 
-El estándar también distingue entre condiciones **LOS** y **NLOS**, asignando exponentes de pérdida y parámetros de desvanecimiento diferentes para cada caso.
+El estándar también distingue entre condiciones **LOS** y **NLOS**, asignando exponentes de path loss y parámetros de fading diferentes para cada caso.
 
 !!! note "Relevancia para el diseño"
-    Cuando se evalúa una nueva técnica (OFDM, MIMO, RIS) sobre un canal realista, se utilizan los parámetros de TR 38.901 para que los resultados de simulación sean representativos de los despliegues reales. En las sesiones 03, 05 y 12 utilizaremos este estándar para calibrar nuestras simulaciones.
+    Cuando se evalúa una nueva técnica (OFDM, MIMO, RIS) sobre un canal realista, se utilizan los parámetros de TR 38.901 para que los resultados de simulación sean representativos de los despliegues reales. En las sesiones 06, 07 y 09 utilizaremos este estándar para calibrar nuestras simulaciones.
 
 ---
 
@@ -191,9 +191,9 @@ El estándar también distingue entre condiciones **LOS** y **NLOS**, asignando 
 
 El canal inalámbrico introduce **tres capas de degradación** que operan a escalas espaciales y temporales distintas:
 
-1. **Pérdida de propagación** (escala: kilómetros) — determina el radio de cobertura y el presupuesto de enlace. Se controla con potencia de transmisión, ganancia de antena y frecuencia de portadora.
-2. **Sombreado** (escala: decenas de metros) — introduce variabilidad estadística lenta. Se gestiona con márgenes de enlace o diversidad de sitio.
-3. **Desvanecimiento multitrayecto** (escala: longitud de onda, ~cm) — produce fluctuaciones rápidas de la envolvente. Requiere técnicas específicas: OFDM (sesión 03), codificación de canal (sesión 04), MIMO (sesión 05) o diversidad de recepción.
+1. **Path loss** (escala: kilómetros) — determina el radio de cobertura y el link budget. Se controla con potencia de transmisión, ganancia de antena y frecuencia de portadora.
+2. **Shadowing** (escala: decenas de metros) — introduce variabilidad estadística lenta. Se gestiona con shadowing margins o diversidad de sitio.
+3. **Multipath fading** (escala: longitud de onda, ~cm) — produce fluctuaciones rápidas de la envolvente. Requiere técnicas específicas: OFDM (sesión 03), codificación de canal (sesión 04), MIMO (sesión 06) o diversidad de recepción.
 
 Comprender qué capa domina en cada escenario es el primer paso del diseño de cualquier sistema inalámbrico. El resto del curso puede verse como un catálogo de soluciones a los problemas que esta sesión ha identificado.
 
@@ -209,7 +209,7 @@ Un sistema celular opera a $f = 900\ \text{MHz}$. La estación base transmite co
 
 **(b)** Calcula la potencia recibida en dBm a $d = 1\ \text{km}$.
 
-**(c)** Si el sombreado tiene $\sigma = 8\ \text{dB}$, ¿qué margen de enlace adicional se necesita para garantizar cobertura al 90% de las ubicaciones? (Usa $Q^{-1}(0{,}1) \approx 1{,}28$.)
+**(c)** Si el shadowing tiene $\sigma = 8\ \text{dB}$, ¿qué shadowing margin adicional se necesita para garantizar cobertura al 90% de las ubicaciones? (Usa $Q^{-1}(0{,}1) \approx 1{,}28$.)
 
 ??? example "Solución"
 
@@ -225,9 +225,9 @@ Un sistema celular opera a $f = 900\ \text{MHz}$. La estación base transmite co
 
     $$P_r\ [\text{dBm}] = P_t\ [\text{dBm}] - \text{PL} = 33\ \text{dBm} - 106{,}5\ \text{dB} = -73{,}5\ \text{dBm}$$
 
-    **(c)** Para cobertura al 90% de las ubicaciones con sombreado $X_\sigma \sim \mathcal{N}(0, 8^2)$:
+    **(c)** Para cobertura al 90% de las ubicaciones con shadowing $X_\sigma \sim \mathcal{N}(0, 8^2)$:
 
-    El margen de sombreado necesario es:
+    El shadowing margin necesario es:
 
     $$M_\sigma = Q^{-1}(0{,}1) \times \sigma = 1{,}28 \times 8 \approx 10{,}2\ \text{dB}$$
 
@@ -251,7 +251,7 @@ Un canal de comunicaciones móviles presenta una dispersión de retardo RMS $\si
 
     **(b)** Espaciado entre subportadoras: $\Delta f = B/N = 10\ \text{MHz}/256 \approx 39\ \text{kHz}$.
 
-    Como $\Delta f \approx B_c$, el canal es **ligeramente selectivo en frecuencia** por subportadora. En la práctica se añade un prefijo cíclico mayor que $\sigma_\tau$.
+    Como $\Delta f \approx B_c$, el canal es **ligeramente frequency-selective** por subportadora. En la práctica se añade un cyclic prefix mayor que $\sigma_\tau$.
 
     **(c)** Velocidad: $v = 120/3{,}6 \approx 33{,}3\ \text{m/s}$. Longitud de onda: $\lambda = c/f_c = 0{,}15\ \text{m}$.
 
@@ -259,7 +259,7 @@ Un canal de comunicaciones móviles presenta una dispersión de retardo RMS $\si
 
     $$T_c \approx \frac{0{,}423}{222} \approx 1{,}9\ \text{ms}$$
 
-    Como $T_s = 100\ \mu\text{s} \ll T_c = 1{,}9\ \text{ms}$, el canal es **lentamente variante** (slow fading) — el canal no cambia significativamente durante un símbolo OFDM.
+    Como $T_s = 100\ \mu\text{s} \ll T_c = 1{,}9\ \text{ms}$, el canal es **slow fading** — el canal no cambia significativamente durante un símbolo OFDM.
 
 ---
 
@@ -283,7 +283,7 @@ En un canal Rayleigh con SNR medio $\bar{\gamma} = 20\ \text{dB}$:
     Canal AWGN ($Q(x) \approx \frac{1}{2}e^{-x^2/2}$ para $x$ grande):
     $$\text{BER}_{\text{AWGN}} = Q(\sqrt{2\bar{\gamma}}) = Q(\sqrt{200}) = Q(14{,}1) \approx 10^{-44}$$
 
-    La diferencia es de **más de 40 órdenes de magnitud** — el desvanecimiento Rayleigh degrada dramáticamente la BER.
+    La diferencia es de **más de 40 órdenes de magnitud** — el Rayleigh fading degrada dramáticamente la BER.
 
     **(b)** En AWGN con $\bar{\gamma} = 10\ \text{dB} = 10$:
     $$\text{BER}_{\text{AWGN}} = Q(\sqrt{20}) = Q(4{,}47) \approx 3{,}9\times10^{-6}$$
@@ -293,7 +293,7 @@ En un canal Rayleigh con SNR medio $\bar{\gamma} = 20\ \text{dB}$:
 
     Se necesitan aproximadamente **38 dB adicionales** — esta es la "penalización por desvanecimiento" sin técnicas de diversidad.
 
-    **(c)** Con $K > 0$, existe una componente LOS que estabiliza la amplitud de la señal. El canal Rician tiene **menor variabilidad** que el Rayleigh, por lo que la BER será **menor** para el mismo $\bar{\gamma}$. A medida que $K \to \infty$, la BER converge a la del canal AWGN.
+    **(c)** Con $K > 0$, existe una componente LOS que estabiliza la amplitud de la señal. El Rician fading tiene **menor variabilidad** que el Rayleigh fading, por lo que la BER será **menor** para el mismo $\bar{\gamma}$. A medida que $K \to \infty$, la BER converge a la del canal AWGN.
 
 ---
 
@@ -331,7 +331,7 @@ Sea la envolvente $R$ de un canal Rayleigh con parámetro $\sigma = 1/\sqrt{2}$ 
 
     $$10\log_{10}(r_{\text{th}}^2) = 10\log_{10}(0{,}01005) \approx -20\ \text{dB}$$
 
-    Para garantizar sólo el 1% de interrupción, la señal recibida puede caer hasta **−20 dB** respecto a su valor medio — lo que ilustra por qué el margen de desvanecimiento en el diseño de enlace es tan elevado.
+    Para garantizar sólo el 1% de outage, la señal recibida puede caer hasta **−20 dB** respecto a su valor medio — lo que ilustra por qué el fading margin en el link budget es tan elevado.
 
 ---
 
@@ -350,7 +350,7 @@ Un sistema LTE opera a $f_c = 1{,}8\ \text{GHz}$ con los siguientes parámetros:
 | SNR mínima requerida | $\text{SNR}_{\text{min}} = 0\ \text{dB}$ |
 | Exponente de pérdida (UMa NLOS) | $n = 3{,}8$, $d_0 = 100\ \text{m}$ |
 | Pérdida de referencia en $d_0$ | $\text{PL}(d_0) = 78\ \text{dB}$ |
-| Desviación de sombreado | $\sigma = 10\ \text{dB}$, cobertura 90% |
+| Desviación de shadowing | $\sigma = 10\ \text{dB}$, cobertura 90% |
 
 **(a)** Calcula la sensibilidad del receptor $S_{\min}$ en dBm.
 
@@ -374,7 +374,7 @@ Un sistema LTE opera a $f_c = 1{,}8\ \text{GHz}$ con los siguientes parámetros:
 
     $$\text{MAPL} = P_t + G_t + G_r - L_{\text{misc}} - S_{\min} - M_\sigma$$
 
-    donde el margen de sombreado es $M_\sigma = 1{,}28 \times 10 = 12{,}8\ \text{dB}$:
+    donde el shadowing margin es $M_\sigma = 1{,}28 \times 10 = 12{,}8\ \text{dB}$:
 
     $$\text{MAPL} = 46 + 17 + 0 - 3 - (-95) - 12{,}8 = 142{,}2\ \text{dB}$$
 
@@ -386,7 +386,7 @@ Un sistema LTE opera a $f_c = 1{,}8\ \text{GHz}$ con los siguientes parámetros:
 
     $$\log_{10}\!\left(\frac{d_{\max}}{100}\right) = \frac{64{,}2}{38} = 1{,}689 \Rightarrow d_{\max} = 100 \times 10^{1{,}689} \approx 4{,}9\ \text{km}$$
 
-    Este es el radio de celda máximo para garantizar una SNR de 0 dB en el 90% de las ubicaciones dentro del área de cobertura en un entorno UMa NLOS.
+    Este es el radio de celda máximo para garantizar una SNR de 0 dB en el 90% de las ubicaciones en un entorno UMa NLOS.
 
 ---
 
@@ -400,7 +400,7 @@ En este laboratorio (~90 minutos) implementarás los modelos de canal estudiados
 2. **Rician y factor K**: compara distribuciones para K = 0, 1, 5, 10 dB (Ej. 2 — ~15 min)
 3. **BER vs SNR**: curvas de BPSK sobre AWGN y Rayleigh, penalización por desvanecimiento (Ej. 3 — ~20 min)
 4. **CDF empírica y probabilidad de interrupción**: calcula outage para distintos umbrales (Ej. 4 — ~15 min)
-5. **Calculadora de presupuesto de enlace**: función completa con Friis + log-distancia + sombreado (Ej. 5 — ~25 min)
+5. **Link budget calculator**: función completa con Friis + log-distancia + shadowing (Ej. 5 — ~25 min)
 
 ---
 
