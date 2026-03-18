@@ -48,15 +48,13 @@ El estudiante debe tener conocimientos sólidos a nivel de grado en las siguient
 Al finalizar este curso, el estudiante será capaz de:
 
 1. Modelar canales inalámbricos incluyendo pérdidas de propagación, sombreado y desvanecimiento multitrayecto
-2. Diseñar y analizar esquemas de modulación digital y calcular la tasa de error de bit (BER)
-3. Implementar y simular transceptores OFDM desde primeros principios
-4. Aplicar técnicas de codificación de canal (LDPC, Polar) y evaluar la ganancia de codificación
-5. Analizar la capacidad de canales MIMO y diseñar precodificadores de conformación de haz
-6. Implementar estimadores de canal clásicos y basados en aprendizaje automático
-7. Aplicar técnicas de aprendizaje automático y aprendizaje profundo al diseño de sistemas inalámbricos
-8. Diseñar sistemas de comunicación extremo a extremo basados en autoencoders
-9. Formular y resolver problemas de asignación de recursos mediante aprendizaje por refuerzo
-10. Evaluar tecnologías emergentes como RIS, ISAC, THz y MIMO libre de celdas
+2. Diseñar esquemas de modulación digital y calcular la tasa de error de bit (BER) analíticamente
+3. Implementar transceptores OFDM y sistemas de codificación de canal (LDPC, Polar) desde primeros principios
+4. Gestionar el acceso múltiple mediante OFDMA, NOMA y planificadores de recursos de radio
+5. Analizar la capacidad de canales MIMO y diseñar precodificadores (MRT, ZF, water-filling)
+6. Estimar el canal inalámbrico con métodos clásicos (LS, MMSE) y entender su contexto en 5G NR
+7. Evaluar tecnologías emergentes: 5G NR, mmWave, RIS, ISAC y radio cognitiva
+8. Aplicar técnicas de IA/ML al diseño de sistemas inalámbricos y describir las fronteras del 6G
 
 ---
 
@@ -86,7 +84,7 @@ Al finalizar este curso, el estudiante será capaz de:
 
 Este es un curso abierto y autónomo sin evaluación calificada. Cada sesión incluye:
 
-- **≥ 3 ejercicios** con soluciones de referencia paso a paso
+- **≥ 5 ejercicios** con soluciones de referencia paso a paso
 - **1 laboratorio Python** (cuaderno Jupyter, ejecutable en Google Colab sin instalación local)
 
 Se recomienda al estudiante intentar los ejercicios de forma independiente antes de consultar las soluciones.
