@@ -208,25 +208,35 @@ Ambos paneles muestran la amplitud recibida en dB en una sola frecuencia, varian
 
 Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: determinan la longitud del cyclic prefix en OFDM, la densidad de pilotos en la cuadrícula tiempo-frecuencia, la frecuencia de actualización del estimador de canal y el máximo orden de modulación que puede sostenerse de forma fiable.
 
-El coherence time caracteriza la velocidad de variación del canal, pero no dice qué valores toma la envolvente en cada instante. Para calcular BER, probabilidad de outage o ganancia de diversidad, se necesita un modelo estadístico de la amplitud recibida.
+Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué **valor** toma la amplitud de la señal recibida en un instante concreto?
+
+Recuerda que el link budget de las secciones 1–3 calculó una **potencia media** recibida — un valor promedio que depende de la distancia, el entorno y el shadowing. Ese promedio determina la SNR media $\bar{\gamma}$. Pero el multipath fading hace que la SNR **instantánea** $\gamma$ fluctúe continuamente alrededor de ese promedio: a veces está muy por encima, a veces cae dramáticamente por debajo. Son esas caídas — los llamados **deep fades** — los que producen errores de bit, no el promedio. Para calcular la BER es necesario conocer la distribución estadística de esas fluctuaciones.
 
 ---
 
 ### 6. Rayleigh Fading
 
-Cuando no existe línea de visión directa (NLOS) entre transmisor y receptor, y hay un gran número de componentes multitrayecto con amplitudes y fases aleatorias, la **envolvente** de la señal recibida sigue una distribución de **Rayleigh**:
+**Por qué la envolvente sigue una distribución de Rayleigh**: en un entorno NLOS con muchos caminos multitrayecto, la señal recibida es la suma de un gran número de componentes con amplitudes y fases aleatorias e independientes. Por el teorema central del límite, las componentes en fase (I) y en cuadratura (Q) convergen a distribuciones gaussianas de media cero. La **envolvente** $r = \sqrt{I^2 + Q^2}$ de dos gaussianas independientes sigue una distribución de **Rayleigh**:
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0$$
 
-donde $\sigma^2$ es la potencia media de cada componente I/Q. La potencia instantánea $\gamma = r^2 / \bar{\gamma}$ sigue una distribución **exponencial**:
+La envolvente tiene un valor medio $\bar{r}$ — pero a diferencia de una señal AWGN pura, tiene una cola izquierda no nula: existe una probabilidad de que $r$ caiga muy cerca de cero (deep fade), independientemente de cuál sea la potencia media.
+
+La **SNR instantánea** $\gamma = r^2/\bar{\gamma}$ — la potencia instantánea normalizada — sigue una distribución **exponencial**:
 
 $$f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}\exp\!\left(-\frac{\gamma}{\bar{\gamma}}\right)$$
 
-La **tasa de error de bit (BER)** para BPSK en canal Rayleigh con SNR medio $\bar{\gamma}$ es:
+La distribución exponencial tiene una **cola izquierda pesada**: aunque la SNR media sea $\bar{\gamma}$, hay una fracción significativa del tiempo en que $\gamma$ es mucho menor que $\bar{\gamma}$. Esos instantes de baja SNR son los que generan errores.
 
-$$\text{BER}_{\text{Rayleigh}} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
+**De la BER en AWGN a la BER en fading**: en un canal AWGN con SNR fija $\gamma$, la BER para BPSK es determinista: $\text{BER}_{\text{AWGN}}(\gamma) = Q(\sqrt{2\gamma})$. En un canal Rayleigh, $\gamma$ es aleatoria — la BER efectiva es el **promedio** de $\text{BER}_{\text{AWGN}}(\gamma)$ sobre todas las posibles realizaciones de $\gamma$:
 
-Nótese que la BER decae como $1/\bar{\gamma}$ (lineal), frente a la caída exponencial en canal AWGN. Este es el coste del fading.
+$$\text{BER}_{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) f_\gamma(\gamma)\, d\gamma = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
+
+El resultado es una BER que decae como $1/\bar{\gamma}$ — **linealmente** con la SNR media — en lugar de la caída exponencial del canal AWGN. La diferencia es enorme en la práctica.
+
+![Rayleigh fading: PDF, distribución de SNR y BER](figures/rayleigh-ber.png)
+
+El panel izquierdo muestra la PDF de la envolvente Rayleigh: aunque la envolvente tiene un valor medio $\bar{r}$, hay una probabilidad no despreciable de que caiga por debajo del umbral de detección (zona roja) — esos instantes producen errores. El panel central muestra la distribución exponencial de la SNR instantánea $\gamma$: la cola izquierda pesada confirma que existe una fracción significativa del tiempo con $\gamma$ muy baja. El panel derecho compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
 
 El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.
 
