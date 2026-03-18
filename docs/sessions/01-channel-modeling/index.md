@@ -149,13 +149,17 @@ Para entender de dónde viene esta relación: la respuesta en frecuencia del can
 
 La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el régimen de operación:
 
-- **Flat fading** ($B_s \ll B_c$): toda la señal cabe dentro de una región donde $H(f)$ es aproximadamente constante. El canal actúa como un simple multiplicador complejo — escala la amplitud y rota la fase, pero no distorsiona la forma de la señal.
+- **Flat fading** ($B_s \ll B_c$): $B_c$ es la zona del espectro sobre la que el canal aplica una degradación uniforme. Si $B_s$ es mucho menor que $B_c$, toda la señal cabe dentro de esa zona uniforme — el canal aplica **una única ganancia** a toda la señal, como multiplicar por un solo número complejo. Todas las frecuencias de la señal sufren la misma atenuación y el mismo desfase. No hay distorsión espectral: la señal sale del canal con la misma forma que entró, solo escalada y rotada en fase.
 
-- **Frequency-selective fading** ($B_s \gg B_c$): la señal se extiende sobre múltiples regiones del espectro, cada una con ganancia diferente. Las distintas componentes frecuenciales llegan con amplitudes distintas → la señal recibida está distorsionada → aparece **ISI** (inter-symbol interference) porque los ecos tardíos de un símbolo se solapan con el símbolo siguiente.
+- **Frequency-selective fading** ($B_s \gg B_c$): cuando $B_s$ supera ampliamente $B_c$, la señal ocupa varias zonas del espectro, cada una con su propia ganancia. El canal ya no aplica una degradación única — aplica **ganancias diferentes a diferentes partes de la señal**. Algunas frecuencias son muy atenuadas (los valles de $|H(f)|$), otras lo son menos (los picos). En el dominio temporal esto significa que los ecos de un símbolo se extienden en el tiempo y se solapan con el símbolo siguiente, produciendo **ISI** (inter-symbol interference).
 
 ![Flat fading vs frequency-selective fading](figures/flat-vs-selective-fading.png)
 
-La figura muestra la respuesta en frecuencia $|H(f)|$ del mismo canal en los dos regímenes. En flat fading (izquierda), $B_s$ es menor que $B_c$: la señal cae en una región plana del canal y no se distorsiona. En frequency-selective fading (derecha), $B_s$ supera ampliamente $B_c$: distintas partes de la señal son amplificadas o atenuadas de forma diferente, lo que introduce distorsión e ISI. OFDM — que estudiaremos en la sesión 03 — convierte un canal frequency-selective en muchos sub-canales de flat fading, uno por subportadora.
+La curva negra en ambos paneles es la misma: la respuesta en frecuencia $|H(f)|$ del canal, con sus picos y valles. Lo que cambia es el tamaño de $B_s$ respecto a $B_c$.
+
+En el panel izquierdo (flat fading), $B_s$ es estrecho y cae en un tramo aproximadamente plano de $|H(f)|$: todas las frecuencias de la señal ven la misma ganancia, el canal se comporta como un multiplicador. En el panel derecho (frequency-selective fading), $B_s$ es ancho y abarca múltiples picos y valles de $|H(f)|$: cada segmento de la señal recibe una atenuación distinta, la forma espectral queda distorsionada y aparece ISI en el dominio temporal.
+
+Este es uno de los problemas centrales que motiva el diseño de OFDM (sesión 03): dividir el ancho de banda total en cientos de subportadoras estrechas, cada una con $B_s \ll B_c$, de modo que cada subportadora opera en flat fading aunque el canal global sea frequency-selective.
 
 La respuesta impulsional $h(\tau, t)$ describe cómo varía el canal en frecuencia. Lo que no dice es con qué rapidez varía en el tiempo — información crítica cuando el terminal está en movimiento.
 
