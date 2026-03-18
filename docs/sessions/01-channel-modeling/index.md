@@ -109,11 +109,23 @@ El shadowing explica la variabilidad lenta. Pero incluso un terminal completamen
 
 ---
 
-### 4. Propagación Multitrayecto
+### 4. Multipath Propagation
 
-En entornos reales, la señal llega al receptor a través de múltiples caminos con distintos retardos $\tau_i$, atenuaciones $a_i$ y desplazamientos de fase $\phi_i$. La respuesta impulsional del canal en banda base equivalente es:
+En un entorno urbano, la señal transmitida no viaja únicamente en línea recta hacia el receptor. Se refleja en fachadas de edificios, se difracta en esquinas, se dispersa en vehículos y objetos. El receptor recibe simultáneamente varias copias de la misma señal, cada una llegando por un camino distinto.
+
+![Multipath propagation: caminos físicos y respuesta impulsional](figures/multipath-channel.png)
+
+El panel izquierdo muestra tres caminos de ejemplo. El **camino directo** (verde) recorre la distancia mínima y llega primero, con el menor retardo $\tau_1$ y la mayor amplitud $a_1$. Los caminos reflejados (azul, rojo) recorren distancias mayores: llegan más tarde ($\tau_2 > \tau_1$, $\tau_3 > \tau_2$) y con menor amplitud ($a_2 < a_1$, $a_3 < a_2$) porque cada reflexión introduce pérdidas adicionales.
+
+**El experimento mental del impulso**: supón que el transmisor emite un pulso perfectamente corto — un impulso de Dirac $\delta(t)$. El receptor no recibe un único pulso sino una secuencia de ecos, uno por cada camino, llegando en tiempos distintos. El panel derecho de la figura muestra exactamente eso: la **respuesta impulsional del canal** $h(\tau)$, con tres impulsos en $\tau_1$, $\tau_2$ y $\tau_3$ de amplitudes $a_1$, $a_2$ y $a_3$. El canal queda completamente caracterizado por esa "huella".
+
+Formalizando: si el camino $i$ llega con retardo $\tau_i$, atenuación $a_i$ y desfase $\phi_i$, su contribución a la señal recibida es una copia de la señal transmitida desplazada $\tau_i$ segundos, escalada por $a_i$ y rotada en fase $e^{j\phi_i}$. La suma de todas las contribuciones es la respuesta impulsional del canal en banda base equivalente:
 
 $$h(\tau, t) = \sum_{i} a_i(t)\, e^{j\phi_i(t)}\, \delta(\tau - \tau_i(t))$$
+
+Cada término de la suma es un eco: la **delta de Dirac** $\delta(\tau - \tau_i)$ actúa como selector — extrae del eje de retardos exactamente el instante $\tau_i$ en que llega el camino $i$. La amplitud $a_i$ y la fase $e^{j\phi_i}$ describen cuánto atenúa y cuánto desfasa ese camino específico.
+
+La dependencia en $t$ — la segunda variable — aparece porque el canal no es estático: cuando el terminal o los objetos del entorno se mueven, las longitudes de los caminos cambian. Un camino que antes llegaba en $\tau_i$ ahora llega en $\tau_i(t)$, con una amplitud $a_i(t)$ y una fase $\phi_i(t)$ distintas. El canal es, por tanto, una función de **dos variables independientes**: $\tau$ describe la estructura del canal en el dominio de los retardos; $t$ describe cómo evoluciona esa estructura en el tiempo.
 
 Los parámetros clave que caracterizan la dispersión temporal del canal son:
 
