@@ -282,22 +282,46 @@ El modelo Rayleigh asume que no existe ninguna componente directa entre transmis
 
 ### 7. Rician Fading
 
-Cuando existe una componente de línea de visión (LOS) dominante además de las componentes dispersas, la envolvente sigue una distribución de **Rician**:
+La derivación I/Q de la sección anterior asumió que todas las fases $\phi_i$ son uniformemente distribuidas en $[0, 2\pi)$, de modo que las medias de $I$ y $Q$ son exactamente cero. Esa suposición corresponde a un entorno NLOS sin camino directo entre transmisor y receptor. Ahora consideramos qué ocurre cuando **sí existe un camino LOS**: una componente con amplitud fija $A$ que llega con fase $\phi_\text{LOS}$ prácticamente constante (el camino directo no cambia de longitud de manera aleatoria).
+
+**Impacto del LOS en el diagrama fasorial**: por la misma identidad trigonométrica de la sección 6, el camino LOS aporta:
+
+$$s_\text{LOS}(t) = A\cos(2\pi f_c t + \phi_\text{LOS}) = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I} \cos(2\pi f_c t) - \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q} \sin(2\pi f_c t)$$
+
+Este término es **determinista** — no aleatorio. Los $N-1$ caminos dispersos restantes siguen siendo aleatorios con media cero, igual que en Rayleigh. La suma total da:
+
+$$I = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I \neq 0} + \tilde{I}_\text{scatter}, \qquad Q = \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q \neq 0} + \tilde{Q}_\text{scatter}$$
+
+donde $\tilde{I}_\text{scatter}$ y $\tilde{Q}_\text{scatter}$ son gaussianas de media cero y varianza $\sigma^2$ (igual que en Rayleigh). Con el término LOS, $I$ y $Q$ siguen siendo gaussianas de varianza $\sigma^2$, pero ahora con **media no nula**: $I \sim \mathcal{N}(\mu_I, \sigma^2)$, $Q \sim \mathcal{N}(\mu_Q, \sigma^2)$. En el diagrama fasorial, el cúmulo de puntos ya no está centrado en el origen — está desplazado al punto $(\mu_I, \mu_Q)$, que es el fasor LOS.
+
+**De dónde sale la PDF de Rician**: la envolvente $r = \sqrt{I^2 + Q^2}$ es la distancia desde el origen hasta ese cúmulo desplazado. Para obtener su distribución, hay que integrar la PDF gaussiana 2D sobre todos los puntos situados a distancia $r$ del origen — es decir, sobre el círculo de radio $r$:
+
+$$f_R(r) = \int_0^{2\pi} \frac{r}{2\pi\sigma^2} \exp\!\left(-\frac{(I-\mu_I)^2 + (Q-\mu_Q)^2}{2\sigma^2}\right) d\theta$$
+
+Expandiendo el cuadrado y usando la identidad $\mu_I^2 + \mu_Q^2 = A^2$ (porque $A^2\cos^2\phi_\text{LOS} + A^2\sin^2\phi_\text{LOS} = A^2$), la integral sobre el ángulo $\theta$ produce exactamente $\int_0^{2\pi} e^{(rA/\sigma^2)\cos\theta}\,d\theta = 2\pi\, I_0(rA/\sigma^2)$, donde $I_0(\cdot)$ es la **función de Bessel modificada de orden cero** — simplemente el nombre que recibe esa integral estándar. El resultado es la **distribución de Rician**:
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\!\left(\frac{rA}{\sigma^2}\right), \quad r \geq 0$$
 
-donde $A$ es la amplitud de la componente LOS e $I_0(\cdot)$ es la función de Bessel modificada de orden cero.
+Nótese que cuando $A = 0$ (sin LOS), $I_0(0) = 1$ y la expresión se reduce exactamente a la PDF de Rayleigh de la sección 6 — Rayleigh es el caso límite de Rician sin componente directa.
 
-El **factor K de Rician** es la relación entre la potencia de la componente LOS y la potencia de las componentes dispersas:
+**El factor K de Rician**: es conveniente expresar la distribución en función de la relación entre la potencia LOS y la potencia de las componentes dispersas. La potencia de la componente LOS es $A^2/2$ (valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$). La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
 
-$$K = \frac{A^2}{2\sigma^2}$$
+$$K = \frac{A^2/2}{\sigma^2 + \sigma^2} = \frac{A^2}{2\sigma^2}$$
 
-- $K = 0$: Rayleigh fading (sin LOS)
-- $K \to \infty$: canal AWGN (LOS dominante, sin dispersión)
-- $K = 1$–$10$: valores típicos en entornos con LOS parcial (interior, picoceldas)
+Con este parámetro, los dos extremos quedan perfectamente caracterizados:
+
+- $K = 0$ ($A = 0$): sin LOS → Rayleigh fading
+- $K \to \infty$ ($\sigma \to 0$): sin dispersión → canal puramente determinista, equivalente a AWGN
+- $K = 1$–$10$ (0–10 dB): LOS parcial, típico en interiores, picoceldas y enlaces punto a punto
+
+**Efecto sobre la BER**: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia $A$ — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que $K$ crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER.
+
+![Distribución de Rician para distintos valores de K](figures/rayleigh-rician-pdf.png)
+
+La figura muestra la PDF de la envolvente para K = 0 (Rayleigh), 1, $\sqrt{10}$ y 10. Con K = 0, la PDF tiene su máximo cerca del origen y una cola izquierda ancha — los deep fades son frecuentes. Al aumentar K, el pico se desplaza hacia la derecha y la distribución se estrecha: la envolvente es más predecible y concentrada alrededor de su valor medio. Para K = 10 (10 dB), la PDF se asemeja a una gaussiana estrecha — el canal se comporta casi como AWGN.
 
 !!! example "Ejemplo numérico"
-    Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). La componente LOS concentra una fracción $K/(K+1) = 4/5 = 80\,\%$ de la potencia total; las componentes difusas aportan el 20 % restante. Esto implica que el deep fading (envolvente $\ll$ valor medio) es mucho menos probable que en Rayleigh fading puro.
+    Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). El factor K relaciona las potencias LOS y difusa: $K/(K+1) = 4/5 = 80\,\%$ de la potencia total está concentrada en la componente LOS; las componentes dispersas aportan sólo el 20 % restante. El fasor resultante rara vez se aleja del valor LOS dominante, por lo que la probabilidad de deep fading es mucho menor que en Rayleigh fading puro con la misma potencia media.
 
 Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parámetros — $\sigma$, $K$, $\sigma_\tau$, $f_D$, el exponente $n$ — deben venir de algún sitio. En diseño de sistemas reales, esos valores no se eligen arbitrariamente.
 
