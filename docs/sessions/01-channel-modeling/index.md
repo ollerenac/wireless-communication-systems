@@ -161,26 +161,46 @@ En el panel izquierdo (flat fading), $B_s$ es estrecho y cae en un tramo aproxim
 
 Este es uno de los problemas centrales que motiva el diseño de OFDM (sesión 03): dividir el ancho de banda total en cientos de subportadoras estrechas, cada una con $B_s \ll B_c$, de modo que cada subportadora opera en flat fading aunque el canal global sea frequency-selective.
 
-La respuesta impulsional $h(\tau, t)$ describe cómo varía el canal en frecuencia. Lo que no dice es con qué rapidez varía en el tiempo — información crítica cuando el terminal está en movimiento.
+Todo lo visto en esta sección — $h(\tau)$, $\sigma_\tau$, $B_c$, flat fading, FSF — describe el canal **en un instante congelado**. Es una fotografía. Lo que no dice es con qué rapidez cambia esa fotografía cuando el terminal o los objetos del entorno se mueven.
 
 ---
 
-### 5. Efecto Doppler y Tiempo de Coherencia
+### 5. Doppler Effect y Coherence Time
 
-El movimiento relativo entre transmisor y receptor produce un desplazamiento Doppler:
+Imagina un coche circulando a 120 km/h con una conexión 4G activa. A 2 GHz, la longitud de onda es $\lambda = 15$ cm. En 1 ms, el coche recorre 3,3 cm — aproximadamente $\lambda/4$. En ese intervalo, la diferencia de camino hacia cada reflexor ha cambiado en una fracción de $\lambda$, lo que equivale a una rotación de fase de varios grados en cada eco multitrayecto. La respuesta en frecuencia $|H(f)|$ — los picos y valles que vimos en la figura anterior — es ahora diferente. El canal que el receptor midió hace 1 ms ya no es válido. ¿Cuánto tiempo sigue siendo válida una estimación del canal? Esa es la pregunta que responde esta sección.
+
+**Mecanismo físico**: cuando el terminal se mueve con velocidad $v$, cada camino multitrayecto tiene una componente de velocidad distinta a lo largo de su dirección de llegada. Esa componente acorta o alarga el camino en cada ciclo de la portadora, produciendo un **desplazamiento en frecuencia** — el efecto Doppler:
 
 $$f_D = \frac{v}{\lambda}\cos\theta$$
 
-donde $v$ es la velocidad del móvil y $\theta$ el ángulo de llegada. La **frecuencia Doppler máxima** es $f_{D,\text{max}} = v/\lambda$.
+donde $\theta$ es el ángulo entre la dirección de movimiento y la dirección de llegada del camino. Un camino que llega de frente ($\theta=0$) sufre el máximo desplazamiento positivo $f_{D,\text{max}} = v/\lambda$; uno que llega por detrás ($\theta=\pi$) sufre el máximo negativo. Con muchos caminos en ángulos distintos, cada uno tiene un desplazamiento Doppler diferente — el conjunto forma un **Doppler spread** que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$.
 
-El **tiempo de coherencia** del canal es aproximadamente:
+**Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
-Si el período de símbolo $T_s \ll T_c$: canal de **slow fading**.
-Si $T_s \gg T_c$: canal de **fast fading**.
+Nótese la dualidad con $B_c \approx 1/(5\sigma_\tau)$: el delay spread $\sigma_\tau$ comprime $B_c$ en frecuencia; el Doppler spread $f_{D,\text{max}}$ comprime $T_c$ en tiempo. Velocidades altas → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápidamente.
 
-El coherence time caracteriza la velocidad de variación del canal, pero no dice nada sobre los valores que toma la envolvente. Para calcular BER, probabilidad de outage o ganancia de diversidad, se necesita un modelo estadístico de la amplitud recibida.
+La relación entre $T_s$ (duración de un símbolo) y $T_c$ determina el régimen temporal:
+
+- **Slow fading** ($T_s \ll T_c$): el canal apenas cambia durante la transmisión de un símbolo. Una estimación del canal obtenida con un piloto sigue siendo válida varios símbolos después. Es el régimen habitual en la mayoría de los sistemas prácticos.
+
+- **Fast fading** ($T_s \gg T_c$): el canal cambia múltiples veces dentro de un solo símbolo. El receptor no puede seguir el canal con suficiente rapidez. Es el caso de terminales muy rápidos o portadoras muy altas (mmWave con vehículos).
+
+![Slow fading vs fast fading](figures/slow-vs-fast-fading.png)
+
+Ambos paneles muestran la amplitud recibida en dB en una sola frecuencia, variando en el tiempo. En slow fading (arriba), $T_c$ es grande — el canal cambia lentamente y un símbolo de duración $T_s \ll T_c$ ve un canal prácticamente constante. En fast fading (abajo), $T_c$ es pequeño — el canal completa varias fluctuaciones dentro de un símbolo de duración $T_s \gg T_c$, lo que hace imposible asumir que el canal es estático durante la recepción.
+
+**Los cuatro parámetros que caracterizan $h(\tau, t)$**: la función de dos variables queda completamente descrita por dos pares duales:
+
+| Dimensión | Parámetro de dispersión | Parámetro de coherencia | Régimen |
+|-----------|------------------------|------------------------|---------|
+| Frecuencia ($\tau$) | Delay spread $\sigma_\tau$ | Coherence bandwidth $B_c \approx 1/5\sigma_\tau$ | Flat / Frequency-selective |
+| Tiempo ($t$) | Doppler spread $f_{D,\text{max}}$ | Coherence time $T_c \approx 0.423/f_{D,\text{max}}$ | Slow / Fast fading |
+
+Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: determinan la longitud del cyclic prefix en OFDM, la densidad de pilotos en la cuadrícula tiempo-frecuencia, la frecuencia de actualización del estimador de canal y el máximo orden de modulación que puede sostenerse de forma fiable.
+
+El coherence time caracteriza la velocidad de variación del canal, pero no dice qué valores toma la envolvente en cada instante. Para calcular BER, probabilidad de outage o ganancia de diversidad, se necesita un modelo estadístico de la amplitud recibida.
 
 ---
 
