@@ -127,22 +127,35 @@ Cada término de la suma es un eco: la **delta de Dirac** $\delta(\tau - \tau_i)
 
 La dependencia en $t$ — la segunda variable — aparece porque el canal no es estático: cuando el terminal o los objetos del entorno se mueven, las longitudes de los caminos cambian. Un camino que antes llegaba en $\tau_i$ ahora llega en $\tau_i(t)$, con una amplitud $a_i(t)$ y una fase $\phi_i(t)$ distintas. El canal es, por tanto, una función de **dos variables independientes**: $\tau$ describe la estructura del canal en el dominio de los retardos; $t$ describe cómo evoluciona esa estructura en el tiempo.
 
-Los parámetros clave que caracterizan la dispersión temporal del canal son:
+Con la respuesta impulsional definida, el siguiente paso es cuantificar cuánto se dispersan los ecos en tiempo. Tres parámetros lo describen:
 
-**Retardo medio de exceso** (*mean excess delay*):
+**Mean excess delay** $\bar{\tau}$ — el "centro de masa" de la energía multitrayecto en el eje de retardos, ponderado por la potencia de cada camino:
 
 $$\bar{\tau} = \frac{\sum_i |a_i|^2 \tau_i}{\sum_i |a_i|^2}$$
 
-**Dispersión de retardo RMS** (*RMS delay spread*) $\sigma_\tau$:
+No tiene consecuencias directas de diseño por sí solo, pero es el punto de referencia para calcular el parámetro que sí importa.
+
+**RMS delay spread** $\sigma_\tau$ — la desviación estándar de los retardos respecto a $\bar{\tau}$, ponderada por potencia:
 
 $$\sigma_\tau = \sqrt{\overline{\tau^2} - \bar{\tau}^2}$$
 
-**Ancho de banda de coherencia** (*coherence bandwidth*):
+$\sigma_\tau$ mide cuánto tiempo tardan en llegar todos los ecos significativos después del primero — es decir, la "duración de la memoria" del canal. Un canal con $\sigma_\tau$ grande tiene ecos que llegan muy dispersos en el tiempo; uno con $\sigma_\tau$ pequeño tiene ecos casi simultáneos. Valores típicos: interiores de oficina ~30 ns, urbano ~300 ns, suburbano ~1 µs.
 
-$$B_c \approx \frac{1}{5\sigma_\tau}$$
+**Coherence bandwidth** $B_c$ — el rango de frecuencias sobre el que el canal se comporta de forma aproximadamente uniforme:
 
-Si el ancho de banda de la señal $B_s \ll B_c$: canal de **flat fading**.
-Si $B_s \gg B_c$: canal de **frequency-selective fading**.
+$$B_c \approx \frac{1}{5\,\sigma_\tau}$$
+
+Para entender de dónde viene esta relación: la respuesta en frecuencia del canal $H(f)$ es la transformada de Fourier de $h(\tau)$. Si los ecos se extienden durante $\sigma_\tau$ segundos en el dominio temporal, $H(f)$ varía significativamente en un rango de frecuencias del orden de $1/\sigma_\tau$. El factor 5 es una convención práctica (criterio del 50% de correlación). $B_c$ define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de $B_c$ ven esencialmente el mismo canal; separadas por más de $B_c$, ven canales independientes.
+
+La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el régimen de operación:
+
+- **Flat fading** ($B_s \ll B_c$): toda la señal cabe dentro de una región donde $H(f)$ es aproximadamente constante. El canal actúa como un simple multiplicador complejo — escala la amplitud y rota la fase, pero no distorsiona la forma de la señal.
+
+- **Frequency-selective fading** ($B_s \gg B_c$): la señal se extiende sobre múltiples regiones del espectro, cada una con ganancia diferente. Las distintas componentes frecuenciales llegan con amplitudes distintas → la señal recibida está distorsionada → aparece **ISI** (inter-symbol interference) porque los ecos tardíos de un símbolo se solapan con el símbolo siguiente.
+
+![Flat fading vs frequency-selective fading](figures/flat-vs-selective-fading.png)
+
+La figura muestra la respuesta en frecuencia $|H(f)|$ del mismo canal en los dos regímenes. En flat fading (izquierda), $B_s$ es menor que $B_c$: la señal cae en una región plana del canal y no se distorsiona. En frequency-selective fading (derecha), $B_s$ supera ampliamente $B_c$: distintas partes de la señal son amplificadas o atenuadas de forma diferente, lo que introduce distorsión e ISI. OFDM — que estudiaremos en la sesión 03 — convierte un canal frequency-selective en muchos sub-canales de flat fading, uno por subportadora.
 
 La respuesta impulsional $h(\tau, t)$ describe cómo varía el canal en frecuencia. Lo que no dice es con qué rapidez varía en el tiempo — información crítica cuando el terminal está en movimiento.
 
