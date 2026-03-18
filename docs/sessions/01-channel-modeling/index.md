@@ -53,6 +53,8 @@ $$\text{PL}_{\text{FS}}(d)\ [\text{dB}] = 20\log_{10}(4\pi d / \lambda) = 20\log
     Para $f = 2{,}4\ \text{GHz}$ y $d = 100\ \text{m}$:
     $\text{PL}_{\text{FS}} = 20\log_{10}(100) + 20\log_{10}(2{,}4\times10^9) - 147{,}55 \approx 80\ \text{dB}$
 
+El modelo de Friis es exacto en condiciones de espacio libre, pero las medidas en entornos urbanos muestran sistemáticamente pérdidas que superan esta predicción en 10, 20 o incluso 30 dB — y la discrepancia no es aleatoria: crece de forma ordenada con la distancia y depende del tipo de entorno.
+
 ---
 
 ### 2. Modelo Log-Distancia
@@ -74,6 +76,8 @@ donde:
 | Interior (sin obstáculos) | 1,6 – 1,8 |
 | Interior (con obstáculos) | 4 – 6 |
 
+Con el exponente $n$ correcto, el modelo predice bien la potencia media recibida a cada distancia. El problema es que dos terminales situados exactamente a la misma distancia de la misma estación base pueden diferir en más de 15 dB — y esa variación cambia lentamente mientras el usuario se desplaza, no con la frecuencia portadora.
+
 ---
 
 ### 3. Shadowing
@@ -85,6 +89,8 @@ $$\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma$$
 donde $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ es una variable gaussiana con desviación típica $\sigma$ (en dB), típicamente entre 4 y 12 dB.
 
 En escala lineal, la potencia recibida sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
+
+El shadowing explica la variabilidad lenta. Pero incluso un terminal completamente estacionario, en un entorno sin objetos en movimiento, muestra fluctuaciones de señal de varios decibelios al desplazarse unos pocos centímetros. A esa escala, los edificios no se mueven — algo más está ocurriendo.
 
 ---
 
@@ -111,6 +117,8 @@ $$B_c \approx \frac{1}{5\sigma_\tau}$$
 Si el ancho de banda de la señal $B_s \ll B_c$: canal de **flat fading**.
 Si $B_s \gg B_c$: canal de **frequency-selective fading**.
 
+La respuesta impulsional $h(\tau, t)$ describe cómo varía el canal en frecuencia. Lo que no dice es con qué rapidez varía en el tiempo — información crítica cuando el terminal está en movimiento.
+
 ---
 
 ### 5. Efecto Doppler y Tiempo de Coherencia
@@ -127,6 +135,8 @@ $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
 Si el período de símbolo $T_s \ll T_c$: canal de **slow fading**.
 Si $T_s \gg T_c$: canal de **fast fading**.
+
+El coherence time caracteriza la velocidad de variación del canal, pero no dice nada sobre los valores que toma la envolvente. Para calcular BER, probabilidad de outage o ganancia de diversidad, se necesita un modelo estadístico de la amplitud recibida.
 
 ---
 
@@ -145,6 +155,8 @@ La **tasa de error de bit (BER)** para BPSK en canal Rayleigh con SNR medio $\ba
 $$\text{BER}_{\text{Rayleigh}} = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
 
 Nótese que la BER decae como $1/\bar{\gamma}$ (lineal), frente a la caída exponencial en canal AWGN. Este es el coste del fading.
+
+El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.
 
 ---
 
@@ -166,6 +178,8 @@ $$K = \frac{A^2}{2\sigma^2}$$
 
 !!! example "Ejemplo numérico"
     Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). La componente LOS concentra una fracción $K/(K+1) = 4/5 = 80\,\%$ de la potencia total; las componentes difusas aportan el 20 % restante. Esto implica que el deep fading (envolvente $\ll$ valor medio) es mucho menos probable que en Rayleigh fading puro.
+
+Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parámetros — $\sigma$, $K$, $\sigma_\tau$, $f_D$, el exponente $n$ — deben venir de algún sitio. En diseño de sistemas reales, esos valores no se eligen arbitrariamente.
 
 ---
 
