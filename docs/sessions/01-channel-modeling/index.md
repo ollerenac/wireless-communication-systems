@@ -82,13 +82,20 @@ Con el exponente $n$ correcto, el modelo predice bien la potencia media recibida
 
 ### 3. Shadowing
 
-Las variaciones lentas de la potencia recibida debidas a obstáculos se modelan añadiendo un término aleatorio al modelo log-distancia:
+Imagina que mides la potencia recibida en 60 puntos distintos del mismo barrio, todos a exactamente 1 km de la misma antena. El modelo log-distancia predice un único valor de PL para esa distancia. Las medidas reales, sin embargo, se dispersan alrededor de esa predicción en un rango de ±15–20 dB. La causa no es ruido de medida: es la disposición particular de edificios, muros y obstáculos entre la antena y cada punto — diferente en cada ubicación, impredecible de antemano.
+
+Modelar cada obstáculo individualmente es inviable. En cambio, se trata el efecto acumulado como una variable aleatoria: la pérdida a una distancia $d$ ya no es un número fijo sino la suma de la predicción media más una desviación aleatoria que depende del entorno específico de cada ubicación.
 
 $$\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma$$
 
-donde $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ es una variable gaussiana con desviación típica $\sigma$ (en dB), típicamente entre 4 y 12 dB.
+- $\overline{\text{PL}}(d)$ — la barra indica **valor medio**: es exactamente la predicción del modelo log-distancia, es decir, la pérdida esperada promediada sobre todas las posibles ubicaciones a distancia $d$.
+- $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ — la desviación aleatoria en dB en una ubicación concreta, con media cero (no introduce sesgo) y desviación típica $\sigma$ entre 4 y 12 dB según el entorno.
 
-En escala lineal, la potencia recibida sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
+La elección de una distribución gaussiana en dB tiene dos justificaciones. La primera es empírica: las medidas de campo en entornos urbanos muestran consistentemente que los residuos $\text{PL}_{\text{medido}} - \overline{\text{PL}}(d)$ siguen una campana gaussiana. La segunda es teórica: cada obstáculo multiplica la potencia por un factor aleatorio en escala lineal; el producto de muchos factores aleatorios independientes tiene logaritmo gaussiano por el teorema central del límite. En escala lineal, la potencia sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
+
+![Shadowing: medidas reales vs. predicción del modelo](figures/shadowing-scatter.png)
+
+El panel izquierdo muestra medidas simuladas dispersas alrededor de la curva $\overline{\text{PL}}(d)$: cada punto es una ubicación real con su disposición única de obstáculos. La flecha roja marca $X_\sigma$ — la desviación de esa ubicación concreta respecto a la predicción media. Las bandas $\pm\sigma$ y $\pm 2\sigma$ encierran aproximadamente el 68% y el 95% de las ubicaciones posibles. El panel derecho muestra el histograma de los residuos a distancia fija: la campana gaussiana confirma por qué $\mathcal{N}(0, \sigma^2)$ es el modelo correcto.
 
 La figura siguiente resume las tres contribuciones estudiadas hasta aquí, representadas sobre los mismos ejes de distancia y path loss:
 
