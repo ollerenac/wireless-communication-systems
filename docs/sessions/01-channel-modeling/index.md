@@ -175,7 +175,7 @@ $$f_D = \frac{v}{\lambda}\cos\theta$$
 
 donde $\theta$ es el ángulo entre la dirección de movimiento y la dirección de llegada del camino. Un camino que llega de frente ($\theta=0°$) sufre el máximo desplazamiento positivo $f_{D,\text{max}} = v/\lambda$; uno que llega por detrás ($\theta=180°$) sufre el máximo negativo $-f_{D,\text{max}}$; los que llegan en perpendicular ($\theta=90°$) no tienen desplazamiento.
 
-![Doppler effect: geometría y espectro](figures/doppler-spectrum.png)
+![Doppler effect: geometría y espectro](figures/doppler-spectrum-v2.png)
 
 El panel izquierdo muestra cuatro caminos multitrayecto llegando al receptor móvil desde ángulos distintos. Cada uno produce un desplazamiento Doppler diferente según $f_D = (v/\lambda)\cos\theta$: el camino frontal (verde, $\theta=0°$) se desplaza al máximo positivo; el camino trasero (rojo, $\theta=180°$) al máximo negativo; los intermedios quedan entre ambos extremos.
 
