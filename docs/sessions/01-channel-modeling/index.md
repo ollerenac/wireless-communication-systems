@@ -173,7 +173,15 @@ Imagina un coche circulando a 120 km/h con una conexión 4G activa. A 2 GHz, la 
 
 $$f_D = \frac{v}{\lambda}\cos\theta$$
 
-donde $\theta$ es el ángulo entre la dirección de movimiento y la dirección de llegada del camino. Un camino que llega de frente ($\theta=0$) sufre el máximo desplazamiento positivo $f_{D,\text{max}} = v/\lambda$; uno que llega por detrás ($\theta=\pi$) sufre el máximo negativo. Con muchos caminos en ángulos distintos, cada uno tiene un desplazamiento Doppler diferente — el conjunto forma un **Doppler spread** que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$.
+donde $\theta$ es el ángulo entre la dirección de movimiento y la dirección de llegada del camino. Un camino que llega de frente ($\theta=0°$) sufre el máximo desplazamiento positivo $f_{D,\text{max}} = v/\lambda$; uno que llega por detrás ($\theta=180°$) sufre el máximo negativo $-f_{D,\text{max}}$; los que llegan en perpendicular ($\theta=90°$) no tienen desplazamiento.
+
+![Doppler effect: geometría y espectro](figures/doppler-spectrum.png)
+
+El panel izquierdo muestra cuatro caminos multitrayecto llegando al receptor móvil desde ángulos distintos. Cada uno produce un desplazamiento Doppler diferente según $f_D = (v/\lambda)\cos\theta$: el camino frontal (verde, $\theta=0°$) se desplaza al máximo positivo; el camino trasero (rojo, $\theta=180°$) al máximo negativo; los intermedios quedan entre ambos extremos.
+
+El panel derecho muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una **única frecuencia** $f_0$ — el tono negro vertical. El receptor, sin embargo, recibe **múltiples copias** de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos del panel izquierdo. El conjunto de todos estos desplazamientos forma el **Doppler spread**, que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.
+
+Con muchos caminos en ángulos distintos, cada uno contribuye en una frecuencia ligeramente diferente — el conjunto forma un **Doppler spread** que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$.
 
 **Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
 
