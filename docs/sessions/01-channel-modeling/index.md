@@ -228,7 +228,9 @@ El problema es el multipath fading. Las múltiples réplicas de la señal llegan
 
 ### 6. Rayleigh Fading
 
-**De dónde vienen las componentes I y Q**: para entender por qué la envolvente sigue una distribución de Rayleigh, hay que rastrear las componentes $I$ y $Q$ desde sus orígenes físicos.
+Para obtener esa distribución estadística de $\gamma$ hay que responder primero a una pregunta más física: ¿cómo se suma en el receptor el conjunto de todos los caminos multitrayecto? La respuesta a esa pregunta revela de dónde vienen las componentes $I$ y $Q$, y por qué la envolvente resultante sigue una distribución de Rayleigh.
+
+**De dónde vienen las componentes I y Q**: hay que rastrearlas desde sus orígenes físicos.
 
 Considera un transmisor que emite una portadora $\cos(2\pi f_c t)$. Cada uno de los $N$ caminos multitrayecto llega al receptor con una amplitud $a_i$ y un desfase de fase acumulado $\phi_i$ (debido a la diferencia de longitud de camino). La contribución del camino $i$ es:
 
