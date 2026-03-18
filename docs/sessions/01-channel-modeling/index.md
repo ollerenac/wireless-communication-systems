@@ -228,7 +228,31 @@ El problema es el multipath fading. Las múltiples réplicas de la señal llegan
 
 ### 6. Rayleigh Fading
 
-**Por qué la envolvente sigue una distribución de Rayleigh**: en un entorno NLOS con muchos caminos multitrayecto, la señal recibida es la suma de un gran número de componentes con amplitudes y fases aleatorias e independientes. Por el teorema central del límite, las componentes en fase (I) y en cuadratura (Q) convergen a distribuciones gaussianas de media cero. La **envolvente** $r = \sqrt{I^2 + Q^2}$ de dos gaussianas independientes sigue una distribución de **Rayleigh**:
+**De dónde vienen las componentes I y Q**: para entender por qué la envolvente sigue una distribución de Rayleigh, hay que rastrear las componentes $I$ y $Q$ desde sus orígenes físicos.
+
+Considera un transmisor que emite una portadora $\cos(2\pi f_c t)$. Cada uno de los $N$ caminos multitrayecto llega al receptor con una amplitud $a_i$ y un desfase de fase acumulado $\phi_i$ (debido a la diferencia de longitud de camino). La contribución del camino $i$ es:
+
+$$s_i(t) = a_i \cos(2\pi f_c t + \phi_i)$$
+
+Aplicando la identidad trigonométrica $\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta$:
+
+$$s_i(t) = \underbrace{a_i \cos\phi_i}_{I_i} \cdot \cos(2\pi f_c t) \;-\; \underbrace{a_i \sin\phi_i}_{Q_i} \cdot \sin(2\pi f_c t)$$
+
+Cada camino aporta dos proyecciones: una sobre la portadora coseno ($I_i$) y otra sobre la portadora seno desplazada 90° ($Q_i$). Sumando los $N$ caminos, la señal total es:
+
+$$s(t) = \underbrace{\left(\sum_{i=1}^N a_i \cos\phi_i\right)}_{I} \cos(2\pi f_c t) \;-\; \underbrace{\left(\sum_{i=1}^N a_i \sin\phi_i\right)}_{Q} \sin(2\pi f_c t)$$
+
+$I$ y $Q$ son, por tanto, **sumas de muchas variables aleatorias independientes** — cada $a_i$ y $\phi_i$ es aleatoria e independiente de los demás caminos. Cuando $N$ es grande (entorno urbano: decenas o centenares de caminos), el **teorema central del límite** (TCL) garantiza que $I$ y $Q$ convergen a distribuciones gaussianas de media cero e igual varianza $\sigma^2$. El hecho de que ambas tengan media cero refleja que, sin LOS, las fases $\phi_i$ se distribuyen uniformemente en $[0, 2\pi)$ — los cosenos y senos se cancelan en promedio.
+
+![Derivación de Rayleigh: diagrama fasorial e histogramas I/Q](figures/rayleigh-derivation.png)
+
+El panel izquierdo muestra la imagen fasorial: cada flecha de color representa un camino multitrayecto ($I_i + jQ_i$), con amplitud $a_i$ y fase $\phi_i$ aleatorias. La flecha negra gruesa es la **suma vectorial** $I + jQ$ — el fasor resultante que ve el receptor. En cada nuevo instante de tiempo, las amplitudes y fases cambian, y el punto extremo de la flecha negra recorre la región sombreada de manera aleatoria. El panel derecho muestra los histogramas de $I$ y $Q$ obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL.
+
+La **envolvente** de la señal — la amplitud del fasor resultante — es:
+
+$$r = \sqrt{I^2 + Q^2}$$
+
+Geométricamente, $r$ es la distancia desde el origen hasta el extremo del fasor negro. Como $I$ y $Q$ son gaussianas independientes de igual varianza, $r$ sigue una distribución de **Rayleigh**:
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0$$
 
