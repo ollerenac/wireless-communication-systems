@@ -13,7 +13,7 @@
 
 ## Descripción
 
-Este curso ofrece un tratamiento riguroso, a nivel de posgrado, de los sistemas de comunicaciones inalámbricas — desde los fundamentos de la capa física hasta las técnicas más avanzadas de 5G/6G y el diseño de sistemas nativos con inteligencia artificial. Cada sesión combina teoría matemática con un laboratorio práctico en Python, para que el estudiante desarrolle tanto profundidad analítica como habilidades de implementación.
+Este curso ofrece un tratamiento riguroso, a nivel de posgrado, de los sistemas de comunicaciones inalámbricas — desde los fundamentos de la capa física hasta las tecnologías más avanzadas de 5G y 6G. Cada sesión combina teoría matemática con un laboratorio práctico en Python, para que el estudiante desarrolle tanto profundidad analítica como habilidades de implementación.
 
 El curso se organiza en tres arcos temáticos:
 
