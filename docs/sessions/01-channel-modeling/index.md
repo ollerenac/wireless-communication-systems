@@ -210,7 +210,13 @@ Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: de
 
 Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué **valor** toma la amplitud de la señal recibida en un instante concreto?
 
-Recuerda que el link budget de las secciones 1–3 calculó una **potencia media** recibida — un valor promedio que depende de la distancia, el entorno y el shadowing. Ese promedio determina la SNR media $\bar{\gamma}$. Pero el multipath fading hace que la SNR **instantánea** $\gamma$ fluctúe continuamente alrededor de ese promedio: a veces está muy por encima, a veces cae dramáticamente por debajo. Son esas caídas — los llamados **deep fades** — los que producen errores de bit, no el promedio. Para calcular la BER es necesario conocer la distribución estadística de esas fluctuaciones.
+Para conectar con lo que viene, es útil recordar qué determina si un bit se recibe correctamente.
+
+En el receptor, la señal llega mezclada con **ruido térmico** — una perturbación aleatoria e inevitable generada en los circuitos electrónicos. El detector compara la señal recibida con un umbral: si la señal está suficientemente por encima del ruido, el bit se decodifica correctamente; si el ruido la empuja al otro lado del umbral, se produce un error. La relación entre la potencia de la señal y la potencia del ruido es la **SNR** (*Signal-to-Noise Ratio*) $\gamma$. Cuanto mayor es $\gamma$, más separada está la señal del umbral de decisión y menor es la probabilidad de error — la **BER** (*Bit Error Rate*).
+
+El link budget de las secciones 1–3 calculó la **potencia media recibida** en función de la distancia, el entorno y el shadowing. Dividida por la potencia de ruido del receptor, esa potencia media da la **SNR media** $\bar{\gamma}$. Si el canal fuera puramente AWGN, $\gamma$ sería constante e igual a $\bar{\gamma}$, y la BER quedaría fijada.
+
+El problema es el multipath fading. Las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. Cuando se suman destructivamente, la amplitud recibida cae — a veces de forma drástica. En esos instantes, la SNR instantánea $\gamma$ desciende muy por debajo de $\bar{\gamma}$: aunque el promedio sea confortable (digamos $\bar{\gamma} = 20$ dB), hay momentos en que $\gamma$ cae a 0 dB o menos. Esos instantes de baja SNR — los **deep fades** — son los que producen ráfagas de errores de bit, aunque el nivel medio de señal sea perfectamente adecuado. Para calcular la BER real es necesario conocer la distribución estadística de esas fluctuaciones de $\gamma$.
 
 ---
 
