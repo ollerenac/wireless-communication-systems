@@ -90,6 +90,14 @@ donde $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ es una variable gaussiana con des
 
 En escala lineal, la potencia recibida sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
 
+La figura siguiente resume las tres contribuciones estudiadas hasta aquí, representadas sobre los mismos ejes de distancia y path loss:
+
+![Path loss: de Friis al shadowing](figures/path-loss-models.png)
+
+La curva de **Friis** ($n=2$) establece el límite inferior de pérdida en espacio libre: es determinista, sin dispersión. Las curvas de **log-distancia** ($n=2.5$, $3.5$, $4.5$) muestran cómo el entorno físico modifica el slope — la divergencia respecto a Friis crece logarítmicamente con la distancia. Las **bandas de shadowing** ($\pm\sigma$ y $\pm 2\sigma$ alrededor de $n=3.5$) representan la dispersión estadística que introduce el log-normal shadowing: para cualquier distancia dada, la potencia recibida no es un valor único sino una distribución gaussiana en dB, centrada en la curva del modelo log-distancia.
+
+Las tres capas comparten el mismo espacio: distancia vs. path loss. Esto cambia a partir de la siguiente sección. El multipath fading no opera a escala de metros sino de centímetros — a la escala de la longitud de onda — y su descripción requiere un framework matemático completamente distinto.
+
 El shadowing explica la variabilidad lenta. Pero incluso un terminal completamente estacionario, en un entorno sin objetos en movimiento, muestra fluctuaciones de señal de varios decibelios al desplazarse unos pocos centímetros. A esa escala, los edificios no se mueven — algo más está ocurriendo.
 
 ---
