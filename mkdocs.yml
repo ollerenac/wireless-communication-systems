@@ -70,3 +70,4 @@ nav:
   - Sesiones:
       - "01 — Modelado del Canal": sessions/01-channel-modeling/index.md
       - "02 — Modulación Digital": sessions/02-digital-modulation/index.md
+      - "03 — Sistemas OFDM": sessions/03-ofdm-systems/index.md
