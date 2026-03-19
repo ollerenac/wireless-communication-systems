@@ -595,6 +595,8 @@ Un sistema LTE opera a $f_c = 1{,}8\ \text{GHz}$ con los siguientes parámetros:
 
     Este es el radio de celda máximo para garantizar una SNR de 0 dB en el 90% de las ubicaciones en un entorno UMa NLOS.
 
+---
+
 ### Ejercicio 6 — Parámetros TR 38.901 y Caracterización Completa del Canal
 
 Un sistema 5G NR opera en el escenario **UMa LOS** a $f_c = 2{,}6\ \text{GHz}$. El terminal se desplaza a $v = 50\ \text{km/h}$. Según TR 38.901 UMa LOS, los parámetros de canal son: exponente $n = 2{,}2$, $\sigma_\text{sh} = 4\ \text{dB}$, delay spread $\sigma_\tau = 100\ \text{ns}$, factor Rician $K = 9\ \text{dB}$.
