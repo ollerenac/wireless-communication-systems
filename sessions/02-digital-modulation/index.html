@@ -1,0 +1,1996 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="De la geometría del espacio de señales a la BER: BPSK, QPSK, M-QAM, Gray coding y adaptación de enlace en 5G NR.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/02-digital-modulation/">
+      
+      
+        <link rel="prev" href="../01-channel-modeling/">
+      
+      
+        <link rel="next" href="../03-ofdm-systems/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Sesión 02 — Modulación Digital y Análisis de BER - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sesion-02-modulacion-digital-y-analisis-de-ber" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sesión 02 — Modulación Digital y Análisis de BER
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-del-canal-a-la-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Del Canal a la Decisión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-bpsk-el-caso-de-dos-puntos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. BPSK: El Caso de Dos Puntos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. BPSK: El Caso de Dos Puntos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-el-filtro-adaptado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 El Filtro Adaptado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-derivacion-de-la-ber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Derivación de la BER
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-qpsk-dos-dimensiones-ortogonales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. QPSK: Dos Dimensiones Ortogonales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. QPSK: Dos Dimensiones Ortogonales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-constelacion-y-ber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Constelación y BER
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-m-qam-mas-bits-por-simbolo-menos-margen-de-ruido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. M-QAM: Más Bits por Símbolo, Menos Margen de Ruido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. M-QAM: Más Bits por Símbolo, Menos Margen de Ruido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-formula-de-ber-para-m-qam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Fórmula de BER para M-QAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-tabla-de-penalizacion-de-snr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Tabla de Penalización de SNR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-gray-coding-minimizar-los-errores-de-bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Gray Coding: Minimizar los Errores de Bit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-adaptacion-de-enlace-en-5g-nr-ejemplo-integrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Adaptación de Enlace en 5G NR: Ejemplo Integrador
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Adaptación de Enlace en 5G NR: Ejemplo Integrador">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-de-la-ber-al-mcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 De la BER al MCS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ejemplo-numerico-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Ejemplo Numérico End-to-End
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-sistema-5g-nr-seleccion-de-mcs-y-caudal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Sistema 5G NR: Selección de MCS y Caudal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-del-canal-a-la-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Del Canal a la Decisión
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-bpsk-el-caso-de-dos-puntos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. BPSK: El Caso de Dos Puntos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. BPSK: El Caso de Dos Puntos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-el-filtro-adaptado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 El Filtro Adaptado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-derivacion-de-la-ber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Derivación de la BER
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-qpsk-dos-dimensiones-ortogonales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. QPSK: Dos Dimensiones Ortogonales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. QPSK: Dos Dimensiones Ortogonales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-constelacion-y-ber" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Constelación y BER
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-m-qam-mas-bits-por-simbolo-menos-margen-de-ruido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. M-QAM: Más Bits por Símbolo, Menos Margen de Ruido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. M-QAM: Más Bits por Símbolo, Menos Margen de Ruido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-formula-de-ber-para-m-qam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Fórmula de BER para M-QAM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-tabla-de-penalizacion-de-snr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Tabla de Penalización de SNR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-gray-coding-minimizar-los-errores-de-bit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Gray Coding: Minimizar los Errores de Bit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-adaptacion-de-enlace-en-5g-nr-ejemplo-integrador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Adaptación de Enlace en 5G NR: Ejemplo Integrador
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Adaptación de Enlace en 5G NR: Ejemplo Integrador">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-de-la-ber-al-mcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 De la BER al MCS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-ejemplo-numerico-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Ejemplo Numérico End-to-End
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-sistema-5g-nr-seleccion-de-mcs-y-caudal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Sistema 5G NR: Selección de MCS y Caudal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sesion-02-modulacion-digital-y-analisis-de-ber">Sesión 02 — Modulación Digital y Análisis de BER</h1>
+<h2 id="objetivos-de-aprendizaje">Objetivos de Aprendizaje</h2>
+<p>Al finalizar esta sesión, el estudiante será capaz de:</p>
+<ol>
+<li>Derivar la BER de BPSK desde primeros principios mediante el filtro adaptado y la función Q</li>
+<li>Explicar por qué QPSK tiene la misma BER que BPSK por bit con el doble de eficiencia espectral</li>
+<li>Calcular la BER de M-QAM y cuantificar la penalización de SNR al aumentar M</li>
+<li>Justificar la codificación Gray como estrategia para minimizar errores de bit dado un error de símbolo</li>
+<li>Determinar el esquema de modulación óptimo dado un SNR recibido en el contexto de la adaptación de enlace 5G NR</li>
+</ol>
+<hr />
+<h2 id="introduccion">Introducción</h2>
+<p>En la Sesión 01 caracterizamos el canal inalámbrico: aprendimos que la señal recibida es <span class="arithmatex">\(y = h \cdot s + n\)</span>, donde <span class="arithmatex">\(h\)</span> recoge los efectos de path loss, shadowing y fading, y <span class="arithmatex">\(n\)</span> es ruido gaussiano. Calculamos la BER de BPSK sobre canal Rayleigh y obtuvimos la fórmula <span class="arithmatex">\(P_b \approx 1/(4\bar{\gamma})\)</span> — pero la usamos sin demostrarla. Una pregunta quedó implícitamente abierta: ¿de dónde viene exactamente esa BER? ¿Qué tiene de especial la modulación BPSK para que se exprese de esa manera?</p>
+<p>La respuesta exige entender cómo el receptor toma decisiones: dado un valor recibido <span class="arithmatex">\(y\)</span>, ¿qué símbolo fue enviado? Esta pregunta de detección es el núcleo de la modulación digital. Cuando la respondemos para AWGN puro, obtenemos la BER en función del SNR instantáneo; cuando la promediamos sobre la distribución del canal (exponencial para Rayleigh), recuperamos la fórmula de la Sesión 01. La Sesión 02 cierra ese ciclo y lo extiende a familias de modulaciones de mayor orden.</p>
+<hr />
+<h2 id="teoria">Teoría</h2>
+<h3 id="1-del-canal-a-la-decision">1. Del Canal a la Decisión</h3>
+<p>La Sesión 01 asumió implícitamente que el receptor sabe cuánta amplitud llega. En realidad, el receptor recibe una señal corrompida por ruido y tiene que <em>decidir</em> cuál de los posibles símbolos fue transmitido. Para construir esa lógica de decisión necesitamos una representación geométrica de las señales.</p>
+<p><strong>El espacio de señales.</strong> Cualquier conjunto de señales <span class="arithmatex">\(\{s_m(t)\}_{m=1}^M\)</span> puede representarse como un vector en un espacio euclídeo de dimensión <span class="arithmatex">\(N \leq M\)</span>. La distancia euclídea entre dos señales es:</p>
+<div class="arithmatex">\[d(s_i, s_j) = \sqrt{\int_0^{T_s} [s_i(t) - s_j(t)]^2\, dt}\]</div>
+<p>Esta distancia determina cuán difícil es que el ruido confunda una señal con otra. Un sistema de modulación es, fundamentalmente, un diseño de geometría: colocar <span class="arithmatex">\(M\)</span> puntos en el espacio de señales de forma que las distancias sean las máximas posibles dado un presupuesto de energía.</p>
+<p><strong>Detección ML en AWGN.</strong> Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de máxima verosimilitud (ML) selecciona el símbolo más cercano al punto recibido:</p>
+<div class="arithmatex">\[\hat{m} = \arg\min_m \|y - s_m\|^2\]</div>
+<p>Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido <span class="arithmatex">\(n \sim \mathcal{N}(0, N_0/2)\)</span> es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad <em>a posteriori</em>. Detrás de cada umbral de decisión hay un argumento de máxima verosimilitud — no es una convención arbitraria.</p>
+<p>La distancia entre el punto recibido y la frontera de decisión determina la probabilidad de error. Cuanto mayor es esa distancia en relación con la desviación estándar del ruido <span class="arithmatex">\(\sqrt{N_0/2}\)</span>, menor es la BER.</p>
+<hr />
+<h3 id="2-bpsk-el-caso-de-dos-puntos">2. BPSK: El Caso de Dos Puntos</h3>
+<p>El sistema de modulación más simple coloca dos puntos en el eje real: <span class="arithmatex">\(s_1 = +\sqrt{E_b}\)</span> y <span class="arithmatex">\(s_2 = -\sqrt{E_b}\)</span>, separados por <span class="arithmatex">\(d_{\min} = 2\sqrt{E_b}\)</span>. La frontera de decisión está en el origen.</p>
+<h4 id="21-el-filtro-adaptado">2.1 El Filtro Adaptado</h4>
+<p>Antes de aplicar la regla de decisión, el receptor necesita extraer del continuo temporal <span class="arithmatex">\(y(t)\)</span> un número suficiente. Ese número es la salida del <strong>filtro adaptado</strong> (<em>matched filter</em>): el filtro cuya respuesta al impulso es la imagen especular de la señal transmitida, <span class="arithmatex">\(h_{MF}(t) = s(T_s - t)\)</span>.</p>
+<p>¿Por qué este filtro y no otro? El criterio es maximizar el SNR a la salida en el instante de muestreo <span class="arithmatex">\(t = T_s\)</span>. Aplicando la desigualdad de Cauchy-Schwarz a la energía de salida:</p>
+<div class="arithmatex">\[\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t) h_{MF}(T_s-t)\, dt\right|^2}{N_0/2 \cdot \int_0^{T_s} h_{MF}^2(t)\, dt} \leq \frac{\|s\|^2}{N_0/2} = \frac{2E_s}{N_0}\]</div>
+<p>La igualdad se alcanza cuando <span class="arithmatex">\(h_{MF}(t) = c \cdot s(T_s - t)\)</span> para cualquier constante <span class="arithmatex">\(c\)</span>. El filtro adaptado no es un filtro "inteligente": es el que más se parece a la señal que busca, y por eso extrae de ella la mayor cantidad posible de energía antes de muestrear.</p>
+<p>Tras el filtro adaptado, la muestra en <span class="arithmatex">\(t = T_s\)</span> tiene distribución:</p>
+<div class="arithmatex">\[y = \sqrt{E_b} + n_c, \qquad n_c \sim \mathcal{N}\!\left(0,\, \frac{N_0}{2}\right) \quad \text{(si se envió } s_1\text{)}\]</div>
+<h4 id="22-derivacion-de-la-ber">2.2 Derivación de la BER</h4>
+<p>La probabilidad de error dado que se envió <span class="arithmatex">\(s_1\)</span> es:</p>
+<div class="arithmatex">\[P_e = P(y &lt; 0) = P\!\left(n_c &lt; -\sqrt{E_b}\right) = P\!\left(\frac{n_c}{\sqrt{N_0/2}} &lt; -\sqrt{\frac{2E_b}{N_0}}\right) = Q\!\left(\sqrt{\frac{2E_b}{N_0}}\right)\]</div>
+<p>Por simetría de la constelación, <span class="arithmatex">\(P(y &gt; 0 \mid s_2)\)</span> da el mismo resultado, de modo que la BER de BPSK es:</p>
+<div class="arithmatex">\[\boxed{P_b^{\text{BPSK}} = Q\!\left(\sqrt{2\gamma_b}\right)}\]</div>
+<p>donde <span class="arithmatex">\(\gamma_b = E_b/N_0\)</span> es la SNR por bit. La función <span class="arithmatex">\(Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^\infty e^{-t^2/2}\,dt\)</span> es la probabilidad de que una variable gaussiana estándar supere <span class="arithmatex">\(x\)</span>.</p>
+<p>La figura siguiente ilustra la geometría: la campana de ruido centrada en <span class="arithmatex">\(+\sqrt{E_b}\)</span> y el área sombreada a la izquierda de cero es exactamente <span class="arithmatex">\(Q(\sqrt{2\gamma_b})\)</span>.</p>
+<p><img alt="Geometría de detección BPSK" src="figures/bpsk-geometry.png" /></p>
+<p>Las dos campanas gaussianas representan las distribuciones de <span class="arithmatex">\(y\)</span> cuando se envía <span class="arithmatex">\(s_1\)</span> (derecha) y <span class="arithmatex">\(s_2\)</span> (izquierda). La frontera de decisión se sitúa en <span class="arithmatex">\(y=0\)</span> — exactamente en el punto de intersección de ambas campanas. El área sombreada bajo la campana derecha a la izquierda de cero es la probabilidad de error <span class="arithmatex">\(Q(\sqrt{2\gamma_b})\)</span>. La asimetría visual entre los dos posibles errores es engañosa: por simetría del ruido gaussiano, ambas áreas sombreadas son idénticas. Lo que varía con el SNR es la anchura relativa de las campanas respecto a su separación <span class="arithmatex">\(2\sqrt{E_b}\)</span>: a mayor <span class="arithmatex">\(\gamma_b\)</span>, las campanas se vuelven más estrechas (en unidades de <span class="arithmatex">\(d_{\min}\)</span>) y el solapamiento es menor.</p>
+<p><strong>Cerrando el círculo con la Sesión 01.</strong> Ahora podemos derivar la BER sobre canal Rayleigh que usamos sin prueba en la Sesión 01. Si <span class="arithmatex">\(\gamma = |h|^2 \gamma_b\)</span> es la SNR instantánea y <span class="arithmatex">\(|h|\)</span> sigue una distribución Rayleigh, entonces <span class="arithmatex">\(\gamma\)</span> sigue una distribución exponencial: <span class="arithmatex">\(f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}\)</span>. La BER media es:</p>
+<div class="arithmatex">\[P_b^{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) \cdot \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}\,d\gamma = \frac{1}{2}\!\left(1 - \sqrt{\frac{\bar{\gamma}}{1+\bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)\]</div>
+<p>La integral tiene solución cerrada gracias a la forma exponencial de la PDF de Rayleigh; para SNR alto, la aproximación <span class="arithmatex">\(1/(4\bar{\gamma})\)</span> reproduce exactamente la fórmula de la Sesión 01.</p>
+<hr />
+<h3 id="3-qpsk-dos-dimensiones-ortogonales">3. QPSK: Dos Dimensiones Ortogonales</h3>
+<p>BPSK usaba únicamente el eje real del espacio de señales. La suposición implícita era que la señal vive en un espacio unidimensional. Una señal bandpass tiene en realidad dos dimensiones disponibles: la componente en fase (I) y la componente en cuadratura (Q), definidas por las portadoras <span class="arithmatex">\(\cos(2\pi f_c t)\)</span> y <span class="arithmatex">\(\sin(2\pi f_c t)\)</span>.</p>
+<p>Estas dos portadoras son <strong>ortogonales</strong> en el sentido de la energía de señal:</p>
+<div class="arithmatex">\[\int_0^{T_s} \cos(2\pi f_c t)\cdot\sin(2\pi f_c t)\,dt = \frac{1}{2}\int_0^{T_s}\sin(4\pi f_c t)\,dt \approx 0 \quad (f_c \gg 1/T_s)\]</div>
+<p>La energía transmitida en el canal I no aparece en el canal Q, y viceversa. Esto significa que podemos transmitir <strong>dos BPSK independientes simultáneamente</strong> — uno en I y otro en Q — sin que interfieran entre sí.</p>
+<h4 id="31-constelacion-y-ber">3.1 Constelación y BER</h4>
+<p>QPSK (Quadrature Phase Shift Keying) coloca 4 puntos en las 4 esquinas del plano I-Q:</p>
+<div class="arithmatex">\[s_m = \sqrt{\frac{E_s}{2}}\cos\theta_m \cdot \mathbf{e}_I + \sqrt{\frac{E_s}{2}}\sin\theta_m \cdot \mathbf{e}_Q, \quad \theta_m \in \left\{\frac{\pi}{4}, \frac{3\pi}{4}, \frac{5\pi}{4}, \frac{7\pi}{4}\right\}\]</div>
+<p>Cada símbolo porta 2 bits: uno en I, otro en Q. La energía por símbolo es <span class="arithmatex">\(E_s = 2E_b\)</span>.</p>
+<p>La detección QPSK proyecta el vector recibido sobre I y Q por separado, tomando una decisión BPSK en cada eje. La componente I recibe <span class="arithmatex">\(\pm\sqrt{E_s/2} = \pm\sqrt{E_b}\)</span> más ruido <span class="arithmatex">\(\mathcal{N}(0, N_0/2)\)</span>. Esto es exactamente el problema BPSK con energía <span class="arithmatex">\(E_b\)</span>, de modo que:</p>
+<div class="arithmatex">\[P_b^{\text{QPSK}} = Q\!\left(\sqrt{2\gamma_b}\right)\]</div>
+<p><strong>La BER por bit de QPSK es idéntica a la de BPSK para el mismo <span class="arithmatex">\(E_b/N_0\)</span></strong>, pero QPSK transmite 2 bits por símbolo. Dicho de otro modo: QPSK transporta el doble de información en el mismo ancho de banda con la misma BER. Esta equivalencia es la razón por la que BPSK y QPSK se representan juntas en las curvas de BER.</p>
+<hr />
+<h3 id="4-m-qam-mas-bits-por-simbolo-menos-margen-de-ruido">4. M-QAM: Más Bits por Símbolo, Menos Margen de Ruido</h3>
+<p>QPSK coloca un punto por cuadrante. La suposición que hacía era: una sola distancia de decisión por cuadrante. Si relajamos esta suposición y colocamos múltiples puntos por cuadrante, obtenemos M-QAM.</p>
+<p>Para M = 16, 64, 256 o 1024, la constelación es una cuadrícula de <span class="arithmatex">\(\sqrt{M} \times \sqrt{M}\)</span> puntos igualmente espaciados. Con energía media por símbolo fija <span class="arithmatex">\(E_s\)</span>, el número de puntos aumenta pero la potencia total no: los puntos deben estar más juntos. La distancia mínima entre puntos adyacentes es:</p>
+<div class="arithmatex">\[d_{\min} = \sqrt{\frac{6E_s}{M-1}}\]</div>
+<p>Esta expresión se obtiene de la condición de energía media para una rejilla uniforme: <span class="arithmatex">\(E_s = \frac{2(M-1)}{3}\left(\frac{d_{\min}}{2}\right)^2\)</span>, que es la energía media de la coordenada I (o Q) de una PAM de <span class="arithmatex">\(\sqrt{M}\)</span> niveles. Despejando <span class="arithmatex">\(d_{\min}\)</span>:</p>
+<div class="arithmatex">\[E_s = \frac{(M-1)}{6}d_{\min}^2 \quad \Rightarrow \quad d_{\min} = \sqrt{\frac{6E_s}{M-1}}\]</div>
+<p>A medida que M crece, <span class="arithmatex">\(d_{\min}\)</span> decrece como <span class="arithmatex">\(1/\sqrt{M-1}\)</span>: el espacio entre puntos vecinos se reduce aunque la potencia total sea la misma. Más puntos en la misma "área" energética siempre significa menos margen frente al ruido.</p>
+<h4 id="41-formula-de-ber-para-m-qam">4.1 Fórmula de BER para M-QAM</h4>
+<p>M-QAM se puede descomponer en dos √M-PAM independientes (I y Q). Un punto interior (el caso más frecuente para M grande) tiene cuatro vecinos más cercanos. La probabilidad de error de símbolo aproximada, válida para SNR moderada-alta con codificación Gray, es:</p>
+<div class="arithmatex">\[P_s \approx 4\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3E_s}{(M-1)N_0}}\right)\]</div>
+<p>El factor <span class="arithmatex">\((1-1/\sqrt{M})\)</span> corrige el hecho de que los puntos del borde y la esquina tienen menos vecinos que los interiores (tienen 3 y 2 vecinos respectivamente). Expresando <span class="arithmatex">\(E_s = \log_2(M)\cdot E_b\)</span> e identificando <span class="arithmatex">\(k = \log_2 M\)</span> bits por símbolo:</p>
+<div class="arithmatex">\[\boxed{P_b^{M\text{-QAM}} \approx \frac{4}{\log_2 M}\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3\log_2 M}{M-1}\cdot\frac{E_b}{N_0}}\right)}\]</div>
+<p>La figura siguiente muestra las constelaciones QPSK, 16-QAM y 64-QAM con las etiquetas de bits de Gray.</p>
+<p><img alt="Constelaciones QPSK, 16-QAM y 64-QAM" src="figures/qam-constellations.png" /></p>
+<p>Los tres paneles muestran las constelaciones a la misma escala de energía media (el círculo de igual energía media tiene el mismo radio en los tres paneles). En QPSK, los cuatro puntos están ampliamente separados. En 16-QAM, los 16 puntos se distribuyen en una cuadrícula de 4×4; la distancia entre vecinos es claramente menor. En 64-QAM, la cuadrícula 8×8 deja apenas margen entre puntos adyacentes. Las etiquetas en gris son los códigos Gray asignados a cada punto: en todos los casos, dos símbolos vecinos difieren exactamente en 1 bit. La reducción de <span class="arithmatex">\(d_{\min}\)</span> al pasar de QPSK a 16-QAM y de 16-QAM a 64-QAM es la manifestación geométrica de la penalización de SNR que cuantifica la tabla siguiente.</p>
+<h4 id="42-tabla-de-penalizacion-de-snr">4.2 Tabla de Penalización de SNR</h4>
+<table>
+<thead>
+<tr>
+<th>Modulación</th>
+<th style="text-align: center;">Bits/símbolo</th>
+<th style="text-align: center;"><span class="arithmatex">\(E_b/N_0\)</span> mín. para BER = <span class="arithmatex">\(10^{-3}\)</span></th>
+<th style="text-align: center;">Penalización vs BPSK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BPSK / QPSK</td>
+<td style="text-align: center;">1 / 2</td>
+<td style="text-align: center;">6.8 dB</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>16-QAM</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">10.5 dB</td>
+<td style="text-align: center;">+3.7 dB</td>
+</tr>
+<tr>
+<td>64-QAM</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">14.4 dB</td>
+<td style="text-align: center;">+7.6 dB</td>
+</tr>
+<tr>
+<td>256-QAM</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">18.5 dB</td>
+<td style="text-align: center;">+11.7 dB</td>
+</tr>
+<tr>
+<td>1024-QAM</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">22.5 dB</td>
+<td style="text-align: center;">+15.7 dB</td>
+</tr>
+</tbody>
+</table>
+<p>Cada duplicación del número de bits por símbolo (que cuadriplica M) cuesta aproximadamente 4 dB adicionales de SNR para mantener la misma BER. Esta regularidad tiene una base física: cuadriplicar M reduce <span class="arithmatex">\(d_{\min}\)</span> a la mitad, y la función Q necesita ~4 dB más de argumento para compensarlo.</p>
+<hr />
+<h3 id="5-gray-coding-minimizar-los-errores-de-bit">5. Gray Coding: Minimizar los Errores de Bit</h3>
+<p>La tabla anterior asume codificación Gray. La suposición que estábamos haciendo implícitamente al hablar de BER era que el mapeado de bits a símbolos no importa. En realidad, importa mucho.</p>
+<p><strong>El problema de la etiqueta arbitraria.</strong> Supón que en 16-QAM asignas las etiquetas de 4 bits a los 16 puntos de forma aleatoria. Cuando el receptor comete un error de símbolo (confunde el punto enviado con su vecino más cercano), puede acertar en 0, 1, 2, 3 o 4 bits dependiendo de qué etiquetas tengan los dos puntos involucrados. En el peor caso, dos vecinos tienen etiquetas que difieren en todos los bits.</p>
+<p><strong>Código Gray.</strong> El código Gray es una enumeración binaria en la que dos enteros consecutivos difieren en exactamente un bit. Para una dimensión:</p>
+<div class="arithmatex">\[0 \to 00, \quad 1 \to 01, \quad 2 \to 11, \quad 3 \to 10\]</div>
+<p>Para M-QAM 2D, el código Gray se construye asignando un código Gray a cada columna y cada fila de la cuadrícula:</p>
+<table>
+<thead>
+<tr>
+<th>Fila/Col</th>
+<th style="text-align: center;">00</th>
+<th style="text-align: center;">01</th>
+<th style="text-align: center;">11</th>
+<th style="text-align: center;">10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>00</strong></td>
+<td style="text-align: center;">0000</td>
+<td style="text-align: center;">0001</td>
+<td style="text-align: center;">0011</td>
+<td style="text-align: center;">0010</td>
+</tr>
+<tr>
+<td><strong>01</strong></td>
+<td style="text-align: center;">0100</td>
+<td style="text-align: center;">0101</td>
+<td style="text-align: center;">0111</td>
+<td style="text-align: center;">0110</td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td style="text-align: center;">1100</td>
+<td style="text-align: center;">1101</td>
+<td style="text-align: center;">1111</td>
+<td style="text-align: center;">1110</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td style="text-align: center;">1000</td>
+<td style="text-align: center;">1001</td>
+<td style="text-align: center;">1011</td>
+<td style="text-align: center;">1010</td>
+</tr>
+</tbody>
+</table>
+<p><em>Tabla: etiquetas Gray para 16-QAM. Cualquier par de puntos adyacentes (horizontal o vertical) difiere en exactamente 1 bit de los 4.</em></p>
+<p><strong>BER ≈ SER / log₂M.</strong> Con codificación Gray y SNR moderada-alta, la mayoría de los errores de símbolo se producen con el vecino más cercano — que difiere en 1 bit. Por tanto:</p>
+<div class="arithmatex">\[P_b \approx \frac{P_s}{\log_2 M}\]</div>
+<p>Sin Gray coding, la relación puede ser hasta <span class="arithmatex">\(P_b \leq P_s\)</span> (siempre mejor con Gray que sin él), pero la ganancia puede ser de varios dB en la curva de BER. En los sistemas reales, M-QAM siempre se implementa con Gray coding; los estándares (3GPP NR, IEEE 802.11) lo especifican explícitamente.</p>
+<hr />
+<h3 id="6-adaptacion-de-enlace-en-5g-nr-ejemplo-integrador">6. Adaptación de Enlace en 5G NR: Ejemplo Integrador</h3>
+<p>Las secciones anteriores asumen SNR fija. En un sistema real, la calidad del canal varía continuamente: el móvil se aleja, aparecen obstáculos, el fading cambia la amplitud. La pregunta práctica es: dado el SNR actual, ¿qué modulación maximiza el caudal manteniendo una BER aceptable?</p>
+<p>5G NR resuelve esto mediante la <strong>adaptación de enlace</strong> (<em>link adaptation</em>): el terminal mide el canal, calcula el <em>Channel Quality Indicator</em> (CQI), lo envía a la estación base, y ésta selecciona el <em>Modulation and Coding Scheme</em> (MCS) óptimo para ese CQI.</p>
+<h4 id="61-de-la-ber-al-mcs">6.1 De la BER al MCS</h4>
+<p>La BER objetivo en sistemas reales no es <span class="arithmatex">\(10^{-3}\)</span> sino <span class="arithmatex">\(10^{-1}\)</span> o superior — porque hay un código de canal (LDPC en 5G NR, Sesión 04) que, operando cerca del umbral de Shannon, puede llevar esa BER de pre-decodificación hasta <span class="arithmatex">\(10^{-5}\)</span> o menos con una tasa de código próxima a la capacidad. El MCS especifica conjuntamente la modulación y la tasa de código.</p>
+<p>Una versión simplificada de la tabla MCS de 5G NR:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">CQI</th>
+<th style="text-align: center;">Modulación</th>
+<th style="text-align: center;">Tasa de código aprox.</th>
+<th style="text-align: center;">Eficiencia espectral (bits/s/Hz)</th>
+<th style="text-align: center;">SNR mín. aprox.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">QPSK</td>
+<td style="text-align: center;">1/8</td>
+<td style="text-align: center;">0.23</td>
+<td style="text-align: center;">−6.7 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">QPSK</td>
+<td style="text-align: center;">1/2</td>
+<td style="text-align: center;">1.0</td>
+<td style="text-align: center;">0.0 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">16-QAM</td>
+<td style="text-align: center;">1/2</td>
+<td style="text-align: center;">2.0</td>
+<td style="text-align: center;">6.6 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">64-QAM</td>
+<td style="text-align: center;">2/3</td>
+<td style="text-align: center;">4.0</td>
+<td style="text-align: center;">14.1 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">256-QAM</td>
+<td style="text-align: center;">3/4</td>
+<td style="text-align: center;">6.0</td>
+<td style="text-align: center;">20.8 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">1024-QAM</td>
+<td style="text-align: center;">4/5</td>
+<td style="text-align: center;">8.0</td>
+<td style="text-align: center;">27.3 dB</td>
+</tr>
+</tbody>
+</table>
+<h4 id="62-ejemplo-numerico-end-to-end">6.2 Ejemplo Numérico End-to-End</h4>
+<p>Un sistema 5G NR opera con ancho de banda <span class="arithmatex">\(B = 40\ \text{MHz}\)</span>, numerología <span class="arithmatex">\(\mu = 1\)</span> (subportadoras de 30 kHz). El terminal reporta CQI = 10. La estación base asigna 25 resource blocks (RBs) de 12 subportadoras cada uno.</p>
+<p><strong>Paso 1 — Subportadoras útiles:</strong> <span class="arithmatex">\(N_{SC} = 25 \times 12 = 300\)</span> subportadoras.</p>
+<p><strong>Paso 2 — Modulación y tasa de código:</strong> CQI 10 → 64-QAM, tasa <span class="arithmatex">\(r \approx 2/3\)</span>.</p>
+<p><strong>Paso 3 — Bits por símbolo OFDM:</strong> <span class="arithmatex">\(k \cdot r = 6 \times 2/3 = 4\)</span> bits/subportadora útil.</p>
+<p><strong>Paso 4 — Caudal pico de la ranura:</strong></p>
+<div class="arithmatex">\[\text{Throughput} = N_{SC} \times k \times r \times \frac{14\ \text{símbolos/ranura}}{0.5\ \text{ms}} = 300 \times 4 \times 14 / 0.5\times10^{-3} \approx 33.6\ \text{Mbit/s}\]</div>
+<p><strong>Paso 5 — Verificación del SNR.</strong> Con <span class="arithmatex">\(N_0 = kTB = -174 + 10\log_{10}(40\times10^6) = -174 + 76 = -98\ \text{dBm}\)</span>, y figura de ruido <span class="arithmatex">\(F = 9\ \text{dB}\)</span>: piso de ruido <span class="arithmatex">\(= -89\ \text{dBm}\)</span>. Para CQI 10 se necesita SNR <span class="arithmatex">\(\approx 14\ \text{dB}\)</span>, lo que requiere <span class="arithmatex">\(P_r = -89 + 14 = -75\ \text{dBm}\)</span>.</p>
+<p>¿Es ese nivel de potencia recibida coherente con la geometría de la Sesión 01? Un sistema UMa LOS a 300 m con <span class="arithmatex">\(P_t = 43\ \text{dBm}\)</span>, <span class="arithmatex">\(G_t = 17\ \text{dBi}\)</span>, <span class="arithmatex">\(n = 2{,}2\)</span>:</p>
+<div class="arithmatex">\[\text{PL}(300) = 78 + 22\log_{10}(3) \approx 78 + 10{,}5 = 88{,}5\ \text{dB}$$
+$$P_r = 43 + 17 - 88{,}5 = -28{,}5\ \text{dBm} \gg -75\ \text{dBm} \quad ✓\]</div>
+<p>A 300 m en LOS, el terminal tiene SNR muy por encima del mínimo para 64-QAM. Alejándolo hasta donde la SNR caiga a 14 dB (<span class="arithmatex">\(P_r = -75\ \text{dBm}\)</span>):</p>
+<div class="arithmatex">\[88{,}5 + 22\log_{10}(d/300) = 43 + 17 + 89 - 14 \Rightarrow d \approx 300 \times 10^{(135-88{,}5)/22} \approx 13\ \text{km}\]</div>
+<p>El ejemplo ilustra cómo los parámetros de la Sesión 01 (path loss, potencia, ruido) y los de la Sesión 02 (modulación, tasa de código, BER threshold) se combinan para dimensionar la celda. La adaptación de enlace — seleccionar el MCS en función del CQI — es el mecanismo que maximiza el caudal en cada instante preservando la fiabilidad.</p>
+<p>La figura siguiente resume las curvas de BER teóricas y simuladas para todas las modulaciones estudiadas.</p>
+<p><img alt="BER vs Eb/N0 para BPSK, QPSK, 16-QAM, 64-QAM, 256-QAM" src="figures/ber-vs-snr-qam.png" /></p>
+<p>Cada curva cae más lentamente hacia cero que la del orden de modulación anterior. El panel izquierdo muestra las curvas teóricas; el derecho superpone los puntos simulados (Monte Carlo) del laboratorio. Las curvas teóricas y simuladas coinciden con precisión creciente al aumentar el número de ensayos. La línea discontinua horizontal en BER = <span class="arithmatex">\(10^{-3}\)</span> intersecta las curvas en los valores de <span class="arithmatex">\(E_b/N_0\)</span> de la tabla de penalización de la Sección 4.2: confirma el coste de ~4 dB por cada duplicación del número de bits por símbolo. A SNR baja, las curvas de alto orden de QAM tienen una BER significativamente peor, mientras que a SNR alta la ganancia en eficiencia espectral compensa con creces ese coste — ésta es la justificación fundamental de la adaptación de enlace.</p>
+<hr />
+<h2 id="sintesis">Síntesis</h2>
+<p>Esta sesión ha construido el vínculo entre la representación geométrica de las señales y la BER medida en un sistema real.</p>
+<p><strong>Dimensión 1: Espacio de señales y distancia mínima.</strong> La BER depende de cuánto ruido hace falta para cruzar la frontera de decisión más cercana. El único parámetro que importa es <span class="arithmatex">\(d_{\min}/\sqrt{N_0}\)</span>. Diseñar una modulación es maximizar <span class="arithmatex">\(d_{\min}\)</span> sujeto a una restricción de energía. <em>Implicación de diseño</em>: a igualdad de energía por bit <span class="arithmatex">\(E_b\)</span>, una constelación más compacta (mayor M) tiene menor <span class="arithmatex">\(d_{\min}\)</span> y peor BER.</p>
+<p><strong>Dimensión 2: La función Q como herramienta universal.</strong> Todas las expresiones de BER se reducen a <span class="arithmatex">\(Q(\cdot)\)</span> porque el ruido gaussiano domina el mecanismo de error en AWGN. La misma estructura aparece en coherence bandwidth, outage probability (Sesión 01), capacidad de canal (Sesión 06). Entender <span class="arithmatex">\(Q(x)\)</span> como la cola de una campana de Gauss unifica todo el análisis de prestaciones. <em>Implicación de diseño</em>: la BER decae exponencialmente con el argumento al cuadrado, lo que explica la forma en S de las curvas en escala semilogarítmica.</p>
+<p><strong>Dimensión 3: Trade-off espectral eficiencia / SNR.</strong> Duplicar los bits por símbolo requiere ~4 dB adicionales de SNR para la misma BER. Esta penalización es el coste de la eficiencia espectral. <em>Implicación de diseño</em>: en entornos con SNR limitada (cobertura al borde de celda, canales de fading profundo), se usa modulación de bajo orden (QPSK). Con SNR alta (LOS, distancia corta, mmWave de corto alcance), se usa alto orden (256-QAM, 1024-QAM) para maximizar el caudal.</p>
+<p><strong>Dimensión 4: Gray coding como capa de optimización del etiquetado.</strong> La asignación Gray garantiza que los errores de símbolo más frecuentes (al vecino más próximo) sólo producen 1 error de bit. Sin Gray coding, la BER efectiva puede ser significativamente peor aunque la SER sea la misma. <em>Implicación de diseño</em>: en todos los estándares modernos (3GPP NR, 802.11ax) el Gray coding es obligatorio para M-QAM.</p>
+<p><strong>Dimensión 5: Adaptación de enlace como política de operación.</strong> La modulación óptima depende del SNR instante a instante. En 5G NR, el CQI permite al sistema seleccionar el MCS que maximiza el caudal manteniendo la BER de pre-decodificación por debajo del umbral de operación del código LDPC. <em>Implicación de diseño</em>: el rango dinámico del CQI (de QPSK 1/8 a 1024-QAM 4/5) da una variación de eficiencia espectral de 0.23 a 8 bits/s/Hz — un factor de 35. La Sesión 09 (5G NR) detalla cómo se implementa este mecanismo en el plano de control.</p>
+<p><strong>Dependencias hacia adelante:</strong></p>
+<ul>
+<li><em>Sesión 03 — OFDM</em>: la modulación M-QAM se aplica subportadora a subportadora. El canal FSF de la Sesión 01 impone que cada subportadora tenga un SNR distinto → el MCS óptimo varía por subportadora.</li>
+<li><em>Sesión 04 — Codificación de canal</em>: el código LDPC/Polar transforma la BER de <span class="arithmatex">\(10^{-1}\)</span> (pre-decodificación) a <span class="arithmatex">\(10^{-5}\)</span> (post-decodificación) cerca del límite de Shannon. La ganancia de codificación desplaza las curvas de BER de esta sesión ~5–8 dB hacia la izquierda.</li>
+<li><em>Sesión 05 — Acceso múltiple</em>: NOMA asigna potencias distintas a usuarios con modulaciones distintas en la misma portadora.</li>
+<li><em>Sesión 06 — MIMO</em>: la capacidad MIMO se alcanza transmitiendo flujos independientes, cada uno con su propia modulación elegida via water-filling.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">Ejercicios</h2>
+<h3 id="ejercicio-1">Ejercicio 1</h3>
+<p>En un canal AWGN con <span class="arithmatex">\(\gamma_b = E_b/N_0\)</span>:</p>
+<p><strong>(a)</strong> Calcula la BER de BPSK para <span class="arithmatex">\(\gamma_b = 5\ \text{dB}\)</span> y <span class="arithmatex">\(\gamma_b = 10\ \text{dB}\)</span>. Usa <span class="arithmatex">\(Q(3{,}16) \approx 7{,}9\times10^{-4}\)</span> y <span class="arithmatex">\(Q(4{,}47) \approx 3{,}9\times10^{-6}\)</span>.</p>
+<p><strong>(b)</strong> ¿Cuántos dB adicionales de SNR se necesitan para reducir la BER de <span class="arithmatex">\(10^{-3}\)</span> a <span class="arithmatex">\(10^{-5}\)</span> en BPSK? (<span class="arithmatex">\(Q^{-1}(10^{-3}) \approx 3{,}09\)</span>; <span class="arithmatex">\(Q^{-1}(10^{-5}) \approx 4{,}42\)</span>.)</p>
+<p><strong>(c)</strong> Compara las dos respuestas anteriores con lo que ocurriría en un canal Rayleigh: ¿cuántos dB se necesitan para pasar de BER <span class="arithmatex">\(= 10^{-3}\)</span> a <span class="arithmatex">\(10^{-5}\)</span> en Rayleigh? Usa <span class="arithmatex">\(P_b^{\text{Rayleigh}} \approx 1/(4\bar{\gamma})\)</span>.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong></p>
+<p>Para <span class="arithmatex">\(\gamma_b = 5\ \text{dB} = 3{,}16\)</span>:
+$<span class="arithmatex">\(P_b = Q(\sqrt{2 \times 3{,}16}) = Q(\sqrt{6{,}32}) = Q(2{,}51)\)</span>$
+<span class="arithmatex">\(Q(2{,}51) \approx 6{,}0\times10^{-3}\)</span>. (Nota: con la aproximación del enunciado <span class="arithmatex">\(Q(3{,}16)\)</span>, el argumento <span class="arithmatex">\(\sqrt{2\times 5} = \sqrt{10} = 3{,}16\)</span> corresponde a <span class="arithmatex">\(\gamma_b = 5 = 7\ \text{dB}\)</span>. Para <span class="arithmatex">\(\gamma_b=5\ \text{dB}=3{,}16\)</span>: <span class="arithmatex">\(\sqrt{2\times3{,}16}=2{,}51\)</span>, <span class="arithmatex">\(Q(2{,}51)\approx 6{,}0\times10^{-3}\)</span>.)</p>
+<p>Para <span class="arithmatex">\(\gamma_b = 10\ \text{dB} = 10\)</span>:
+$<span class="arithmatex">\(P_b = Q(\sqrt{20}) = Q(4{,}47) \approx 3{,}9\times10^{-6}\)</span>$</p>
+<p><strong>(b)</strong> Para BER <span class="arithmatex">\(= 10^{-3}\)</span>: <span class="arithmatex">\(\sqrt{2\gamma_b} = Q^{-1}(10^{-3}) = 3{,}09 \Rightarrow 2\gamma_b = 9{,}55 \Rightarrow \gamma_b = 4{,}77 \Rightarrow\)</span> <strong>6.8 dB</strong>.</p>
+<p>Para BER <span class="arithmatex">\(= 10^{-5}\)</span>: <span class="arithmatex">\(\sqrt{2\gamma_b} = 4{,}42 \Rightarrow \gamma_b = 9{,}77 \Rightarrow\)</span> <strong>9.9 dB</strong>.</p>
+<p>Penalización: <span class="arithmatex">\(9{,}9 - 6{,}8 = \mathbf{3{,}1\ \text{dB}}\)</span> para bajar 2 décadas de BER en AWGN.</p>
+<p><strong>(c)</strong> En Rayleigh:</p>
+<p>Para BER <span class="arithmatex">\(= 10^{-3}\)</span>: <span class="arithmatex">\(\bar{\gamma} = 1/(4\times10^{-3}) = 250 \Rightarrow\)</span> <strong>24 dB</strong>.</p>
+<p>Para BER <span class="arithmatex">\(= 10^{-5}\)</span>: <span class="arithmatex">\(\bar{\gamma} = 1/(4\times10^{-5}) = 25000 \Rightarrow\)</span> <strong>44 dB</strong>.</p>
+<p>Penalización: <span class="arithmatex">\(44 - 24 = \mathbf{20\ \text{dB}}\)</span> para bajar las mismas 2 décadas de BER en Rayleigh.</p>
+<p>En AWGN, la función Q cae muy rápido (el argumento crece como <span class="arithmatex">\(\sqrt{\gamma_b}\)</span>, haciendo la BER caer exponencialmente). En Rayleigh, la BER cae como <span class="arithmatex">\(1/\bar{\gamma}\)</span> — muy lentamente. Cada factor de 10 en BER requiere 10 dB más de SNR. Este comportamiento asintótico en <span class="arithmatex">\(1/\bar{\gamma}\)</span> es el coste del fading sin diversidad.</p>
+</details>
+<hr />
+<h3 id="ejercicio-2">Ejercicio 2</h3>
+<p>Un sistema QPSK transmite datos a 10 Mbit/s usando un canal de ancho de banda <span class="arithmatex">\(B = 5\ \text{MHz}\)</span>.</p>
+<p><strong>(a)</strong> ¿Cuántos símbolos por segundo (<em>symbol rate</em>) necesita el sistema?</p>
+<p><strong>(b)</strong> ¿Con qué eficiencia espectral (<span class="arithmatex">\(\eta = R_b/B\)</span>, en bit/s/Hz) opera?</p>
+<p><strong>(c)</strong> Si se reemplaza QPSK por BPSK manteniendo el mismo <em>symbol rate</em>, ¿qué ocurre con la tasa de bits y la eficiencia espectral?</p>
+<p><strong>(d)</strong> ¿Qué BER (<span class="arithmatex">\(E_b/N_0\)</span>) necesita QPSK para obtener BER <span class="arithmatex">\(= 10^{-4}\)</span>? ¿Y BPSK para la misma BER? ¿Cuántos dB de diferencia hay? (<span class="arithmatex">\(Q^{-1}(10^{-4}) \approx 3{,}72\)</span>.)</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> QPSK: <span class="arithmatex">\(k = 2\)</span> bits/símbolo. Symbol rate <span class="arithmatex">\(= R_b / k = 10\times10^6 / 2 = \mathbf{5\ \text{Msím/s}}\)</span>.</p>
+<p><strong>(b)</strong> <span class="arithmatex">\(\eta = R_b/B = 10/5 = \mathbf{2\ \text{bit/s/Hz}}\)</span>.</p>
+<p><strong>(c)</strong> BPSK: <span class="arithmatex">\(k = 1\)</span> bit/símbolo al mismo symbol rate <span class="arithmatex">\(= 5\ \text{Msím/s}\)</span> → tasa de bits <span class="arithmatex">\(= 5\ \text{Mbit/s}\)</span>. La eficiencia espectral cae a <span class="arithmatex">\(\eta = 5/5 = 1\ \text{bit/s/Hz}\)</span> — la mitad.</p>
+<p><strong>(d)</strong> Ambas modulaciones tienen la misma fórmula: <span class="arithmatex">\(P_b = Q(\sqrt{2\gamma_b})\)</span>.</p>
+<p><span class="arithmatex">\(\sqrt{2\gamma_b} = Q^{-1}(10^{-4}) = 3{,}72 \Rightarrow \gamma_b = 3{,}72^2/2 = 6{,}9 \Rightarrow\)</span> <strong>8.4 dB</strong>.</p>
+<p><strong>La diferencia es 0 dB</strong>: a igual <span class="arithmatex">\(E_b/N_0\)</span>, BPSK y QPSK tienen exactamente la misma BER. QPSK transporta el doble de bits sin coste en energía por bit — la ganancia proviene de usar ambas dimensiones I y Q, no de "comprimir" los puntos.</p>
+</details>
+<hr />
+<h3 id="ejercicio-3">Ejercicio 3</h3>
+<p>Un sistema 16-QAM opera a <span class="arithmatex">\(E_b/N_0 = 12\ \text{dB}\)</span>.</p>
+<p><strong>(a)</strong> Calcula la BER aproximada usando la fórmula de M-QAM. (<span class="arithmatex">\(Q(x) \approx \frac{1}{2}e^{-x^2/2}\)</span> para <span class="arithmatex">\(x &gt; 3\)</span>.)</p>
+<p><strong>(b)</strong> ¿Qué <span class="arithmatex">\(E_b/N_0\)</span> se necesita para BER <span class="arithmatex">\(= 10^{-3}\)</span> con 16-QAM? Compara con BPSK (6.8 dB) y cuantifica la penalización.</p>
+<p><strong>(c)</strong> Calcula la misma penalización para 64-QAM (BER <span class="arithmatex">\(= 10^{-3}\)</span>, <span class="arithmatex">\(Q^{-1}(10^{-3}) \approx 3{,}09\)</span>).</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Para <span class="arithmatex">\(M = 16\)</span>, <span class="arithmatex">\(\log_2 16 = 4\)</span>, <span class="arithmatex">\(\gamma_b = 12\ \text{dB} = 15{,}85\)</span>:</p>
+<div class="arithmatex">\[P_b \approx \frac{4}{4}\left(1 - \frac{1}{4}\right)Q\!\left(\sqrt{\frac{3\times4}{15}\times 15{,}85}\right) = \frac{3}{4}Q\!\left(\sqrt{0{,}8\times15{,}85}\right) = \frac{3}{4}Q(\sqrt{12{,}7})\]</div>
+<p><span class="arithmatex">\(\sqrt{12{,}7} = 3{,}56\)</span>. Con la aproximación <span class="arithmatex">\(Q(x)\approx\frac{1}{2}e^{-x^2/2}\)</span>:</p>
+<div class="arithmatex">\[Q(3{,}56) \approx \frac{1}{2}e^{-3{,}56^2/2} = \frac{1}{2}e^{-6{,}34} \approx \frac{1}{2}\times 1{,}75\times10^{-3} \approx 8{,}7\times10^{-4}\]</div>
+<div class="arithmatex">\[P_b \approx \frac{3}{4}\times 8{,}7\times10^{-4} \approx \mathbf{6{,}5\times10^{-4}}\]</div>
+<p><strong>(b)</strong> Para BER <span class="arithmatex">\(= 10^{-3}\)</span>: necesitamos <span class="arithmatex">\(\frac{3}{4}Q(\sqrt{0{,}8\gamma_b}) = 10^{-3}\)</span>.</p>
+<p><span class="arithmatex">\(Q(\sqrt{0{,}8\gamma_b}) = 10^{-3}/0{,}75 \approx 1{,}33\times10^{-3}\)</span>, pero <span class="arithmatex">\(Q^{-1}(1{,}33\times10^{-3})\approx 3{,}0\)</span> (interpolando).</p>
+<p><span class="arithmatex">\(\sqrt{0{,}8\gamma_b} = 3{,}0 \Rightarrow \gamma_b = 9{,}0/0{,}8 = 11{,}25 \Rightarrow\)</span> <strong>10.5 dB</strong>.</p>
+<p>Penalización: <span class="arithmatex">\(10{,}5 - 6{,}8 = \mathbf{+3{,}7\ \text{dB}}\)</span> respecto a BPSK.</p>
+<p><strong>(c)</strong> Para <span class="arithmatex">\(M = 64\)</span>: <span class="arithmatex">\(\frac{4}{6}(1-1/8)Q(\sqrt{\frac{3\times6}{63}\gamma_b}) = 10^{-3}\)</span>.</p>
+<p><span class="arithmatex">\(\frac{2}{3}\times\frac{7}{8}\times Q(\sqrt{0{,}286\gamma_b}) = 10^{-3} \Rightarrow Q(\sqrt{0{,}286\gamma_b}) = 1{,}71\times10^{-3}\)</span>, <span class="arithmatex">\(Q^{-1}(1{,}71\times10^{-3}) \approx 2{,}93\)</span>.</p>
+<p><span class="arithmatex">\(\sqrt{0{,}286\gamma_b} = 2{,}93 \Rightarrow \gamma_b = 8{,}58/0{,}286 \approx 30{,}0 \Rightarrow\)</span> <strong>14.8 dB</strong>.</p>
+<p>Penalización 64-QAM: <span class="arithmatex">\(14{,}8 - 6{,}8 = \mathbf{+8{,}0\ \text{dB}}\)</span>.</p>
+<p>Cada octava de M (×4) cuesta aproximadamente 4 dB: QPSK→16-QAM (+3.7 dB), 16-QAM→64-QAM (+4.3 dB). ✓</p>
+</details>
+<hr />
+<h3 id="ejercicio-4">Ejercicio 4</h3>
+<p>Se comparan dos esquemas de etiquetado para QPSK (4 puntos en las esquinas del cuadrado):</p>
+<ul>
+<li><strong>Esquema A (binario natural):</strong> <span class="arithmatex">\(s_1 \to 00\)</span>, <span class="arithmatex">\(s_2 \to 01\)</span>, <span class="arithmatex">\(s_3 \to 10\)</span>, <span class="arithmatex">\(s_4 \to 11\)</span> (en orden antihorario).</li>
+<li><strong>Esquema B (Gray):</strong> <span class="arithmatex">\(s_1 \to 00\)</span>, <span class="arithmatex">\(s_2 \to 01\)</span>, <span class="arithmatex">\(s_3 \to 11\)</span>, <span class="arithmatex">\(s_4 \to 10\)</span> (en orden antihorario).</li>
+</ul>
+<p><strong>(a)</strong> Para el Esquema A, si el receptor confunde <span class="arithmatex">\(s_1\)</span> con su vecino más cercano <span class="arithmatex">\(s_2\)</span>, ¿cuántos errores de bit produce? ¿Y si confunde <span class="arithmatex">\(s_1\)</span> con <span class="arithmatex">\(s_3\)</span> (diagonal)?</p>
+<p><strong>(b)</strong> Repite el análisis para el Esquema B (Gray).</p>
+<p><strong>(c)</strong> Para SNR alta, los errores casi siempre ocurren con el vecino más cercano. Calcula la BER aproximada de cada esquema en este régimen. (Asume <span class="arithmatex">\(P_s \approx 2Q(\sqrt{2\gamma_b})\)</span> para QPSK.)</p>
+<p><strong>(d)</strong> ¿En qué factor se diferencia la BER entre los dos esquemas en este régimen?</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a) Esquema A — binario natural:</strong></p>
+<p>Vecinos más cercanos de <span class="arithmatex">\(s_1 = 00\)</span>: <span class="arithmatex">\(s_2 = 01\)</span> y <span class="arithmatex">\(s_4 = 11\)</span>.</p>
+<ul>
+<li>Confusión <span class="arithmatex">\(s_1(00) \to s_2(01)\)</span>: difieren en 1 bit → <strong>1 error de bit</strong>.</li>
+<li>Confusión <span class="arithmatex">\(s_1(00) \to s_3(10)\)</span>: vecino diagonal (más lejano), difieren en 1 bit → <strong>1 error de bit</strong>.</li>
+<li>Confusión <span class="arithmatex">\(s_1(00) \to s_4(11)\)</span>: difieren en 2 bits → <strong>2 errores de bit</strong>.</li>
+</ul>
+<p><strong>(b) Esquema B — Gray:</strong></p>
+<p>Vecinos de <span class="arithmatex">\(s_1 = 00\)</span>: <span class="arithmatex">\(s_2 = 01\)</span> y <span class="arithmatex">\(s_4 = 10\)</span>.</p>
+<ul>
+<li><span class="arithmatex">\(s_1(00) \to s_2(01)\)</span>: difieren en 1 bit → <strong>1 error de bit</strong>.</li>
+<li><span class="arithmatex">\(s_1(00) \to s_3(11)\)</span>: diagonal (más lejano), difieren en 2 bits → <strong>2 errores de bit</strong>.</li>
+<li><span class="arithmatex">\(s_1(00) \to s_4(10)\)</span>: difieren en 1 bit → <strong>1 error de bit</strong>.</li>
+</ul>
+<p>Con Gray, <strong>ambos vecinos más cercanos</strong> producen exactamente 1 error de bit. Con binario natural, uno de ellos produce 2 errores.</p>
+<p><strong>(c)</strong> Para SNR alta, ignoramos los errores con el vecino diagonal (mucho más improbables). La SER <span class="arithmatex">\(\approx P_s = 2Q(\sqrt{2\gamma_b})\)</span> (dos vecinos por punto, cada uno con probabilidad <span class="arithmatex">\(Q(\sqrt{2\gamma_b})\)</span>).</p>
+<p>Cada error de símbolo produce:
+- Esquema A: promedio de errores de bit por símbolo erróneo <span class="arithmatex">\(\approx (1 + 2)/2 = 1{,}5\)</span> (promediando los dos vecinos más cercanos, que producen 1 y 2 errores respectivamente).
+- Esquema B: <span class="arithmatex">\(1{,}0\)</span> error de bit por símbolo erróneo (ambos vecinos producen exactamente 1).</p>
+<p>BER <span class="arithmatex">\(\approx \frac{\text{errores de bit por error de símbolo}}{\log_2 M} \times P_s\)</span>:</p>
+<ul>
+<li>Esquema A: <span class="arithmatex">\(P_b^A \approx \frac{1{,}5}{2} \times P_s = 0{,}75 \times P_s\)</span></li>
+<li>Esquema B: <span class="arithmatex">\(P_b^B \approx \frac{1{,}0}{2} \times P_s = 0{,}50 \times P_s\)</span></li>
+</ul>
+<p><strong>(d)</strong> El ratio es <span class="arithmatex">\(P_b^A / P_b^B = 0{,}75/0{,}50 = \mathbf{1{,}5}\)</span>. Gray coding reduce la BER al 67% respecto al binario natural en este caso. Para órdenes más altos (64-QAM, 256-QAM), la diferencia es mayor porque la fracción de vecinos con etiquetas de alto peso Hamming crece.</p>
+</details>
+<hr />
+<h3 id="ejercicio-5">Ejercicio 5</h3>
+<p>Completa la tabla de penalización de SNR para BER <span class="arithmatex">\(= 10^{-3}\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Modulación</th>
+<th style="text-align: center;">M</th>
+<th style="text-align: center;">Bits/símbolo</th>
+<th style="text-align: center;"><span class="arithmatex">\(E_b/N_0\)</span> [dB]</th>
+<th style="text-align: center;">Penalización vs BPSK [dB]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">BPSK/QPSK</td>
+<td style="text-align: center;">2/4</td>
+<td style="text-align: center;">1/2</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">16-QAM</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+</tr>
+<tr>
+<td style="text-align: center;">64-QAM</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+</tr>
+<tr>
+<td style="text-align: center;">256-QAM</td>
+<td style="text-align: center;">256</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">?</td>
+<td style="text-align: center;">?</td>
+</tr>
+</tbody>
+</table>
+<p>Para la columna de <span class="arithmatex">\(E_b/N_0\)</span>, usa la fórmula de BER de M-QAM invirtiendo la función Q. Aplica la aproximación de que el factor pre-Q para M grande es <span class="arithmatex">\(\approx 4/\log_2 M\)</span>. (<span class="arithmatex">\(Q^{-1}(10^{-3}) \approx 3{,}09\)</span>.)</p>
+<details class="example">
+<summary>Solución</summary>
+<p>El objetivo es encontrar <span class="arithmatex">\(\gamma_b\)</span> tal que <span class="arithmatex">\(P_b = 10^{-3}\)</span>. La condición es:</p>
+<div class="arithmatex">\[\frac{4}{\log_2 M}\left(1 - \frac{1}{\sqrt{M}}\right) Q\!\left(\sqrt{\frac{3\log_2 M}{M-1}\gamma_b}\right) = 10^{-3}\]</div>
+<p>Definamos <span class="arithmatex">\(A_M = \frac{4}{\log_2 M}(1 - 1/\sqrt{M})\)</span> y <span class="arithmatex">\(\alpha_M = 3\log_2 M/(M-1)\)</span>. Entonces:</p>
+<div class="arithmatex">\[Q(\sqrt{\alpha_M \gamma_b}) = \frac{10^{-3}}{A_M} \Rightarrow \alpha_M \gamma_b = \left[Q^{-1}\!\left(\frac{10^{-3}}{A_M}\right)\right]^2\]</div>
+<p><strong>BPSK (M=2):</strong> <span class="arithmatex">\(P_b = Q(\sqrt{2\gamma_b}) = 10^{-3} \Rightarrow 2\gamma_b = 3{,}09^2 = 9{,}55 \Rightarrow \gamma_b = 4{,}77 \Rightarrow\)</span> <strong>6.8 dB</strong>.</p>
+<p><strong>16-QAM (M=16):</strong> <span class="arithmatex">\(A_{16} = (4/4)(3/4) = 0{,}75\)</span>; <span class="arithmatex">\(\alpha_{16} = (3\times4)/15 = 0{,}8\)</span>.</p>
+<p><span class="arithmatex">\(Q(\sqrt{0{,}8\gamma_b}) = 10^{-3}/0{,}75 = 1{,}33\times10^{-3}\)</span>. Interpolando, <span class="arithmatex">\(Q^{-1}(1{,}33\times10^{-3}) \approx 3{,}00\)</span>.</p>
+<p><span class="arithmatex">\(0{,}8\gamma_b = 9{,}0 \Rightarrow \gamma_b = 11{,}25 \Rightarrow\)</span> <strong>10.5 dB</strong> → penalización <strong>+3.7 dB</strong>.</p>
+<p><strong>64-QAM (M=64):</strong> <span class="arithmatex">\(A_{64} = (4/6)(7/8) = 0{,}583\)</span>; <span class="arithmatex">\(\alpha_{64} = (3\times6)/63 = 0{,}286\)</span>.</p>
+<p><span class="arithmatex">\(Q(\sqrt{0{,}286\gamma_b}) = 10^{-3}/0{,}583 = 1{,}71\times10^{-3}\)</span>. <span class="arithmatex">\(Q^{-1}(1{,}71\times10^{-3}) \approx 2{,}93\)</span>.</p>
+<p><span class="arithmatex">\(0{,}286\gamma_b = 8{,}58 \Rightarrow \gamma_b = 30{,}0 \Rightarrow\)</span> <strong>14.8 dB</strong> → penalización <strong>+8.0 dB</strong>.</p>
+<p><strong>256-QAM (M=256):</strong> <span class="arithmatex">\(A_{256} = (4/8)(15/16) = 0{,}469\)</span>; <span class="arithmatex">\(\alpha_{256} = (3\times8)/255 = 0{,}094\)</span>.</p>
+<p><span class="arithmatex">\(Q(\sqrt{0{,}094\gamma_b}) = 10^{-3}/0{,}469 = 2{,}13\times10^{-3}\)</span>. <span class="arithmatex">\(Q^{-1}(2{,}13\times10^{-3}) \approx 2{,}87\)</span>.</p>
+<p><span class="arithmatex">\(0{,}094\gamma_b = 8{,}24 \Rightarrow \gamma_b = 87{,}6 \Rightarrow\)</span> <strong>19.4 dB</strong> → penalización <strong>+12.6 dB</strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Modulación</th>
+<th style="text-align: center;">M</th>
+<th style="text-align: center;">Bits/símbolo</th>
+<th style="text-align: center;"><span class="arithmatex">\(E_b/N_0\)</span> [dB]</th>
+<th style="text-align: center;">Penalización</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">BPSK/QPSK</td>
+<td style="text-align: center;">2/4</td>
+<td style="text-align: center;">1/2</td>
+<td style="text-align: center;">6.8</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr>
+<td style="text-align: center;">16-QAM</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">10.5</td>
+<td style="text-align: center;">+3.7 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">64-QAM</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">14.8</td>
+<td style="text-align: center;">+8.0 dB</td>
+</tr>
+<tr>
+<td style="text-align: center;">256-QAM</td>
+<td style="text-align: center;">256</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">19.4</td>
+<td style="text-align: center;">+12.6 dB</td>
+</tr>
+</tbody>
+</table>
+</details>
+<hr />
+<h3 id="ejercicio-6-sistema-5g-nr-seleccion-de-mcs-y-caudal">Ejercicio 6 — Sistema 5G NR: Selección de MCS y Caudal</h3>
+<p>Un terminal 5G NR está a 500 m de la estación base en un escenario UMi LOS. Parámetros del enlace descendente:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frecuencia portadora</td>
+<td><span class="arithmatex">\(f_c = 3{,}5\ \text{GHz}\)</span></td>
+</tr>
+<tr>
+<td>Potencia TX</td>
+<td><span class="arithmatex">\(P_t = 43\ \text{dBm}\)</span></td>
+</tr>
+<tr>
+<td>Ganancia antena TX / RX</td>
+<td><span class="arithmatex">\(G_t = 17\ \text{dBi}\)</span> / <span class="arithmatex">\(G_r = 0\ \text{dBi}\)</span></td>
+</tr>
+<tr>
+<td>Exponente de pérdida (UMi LOS)</td>
+<td><span class="arithmatex">\(n = 2{,}0\)</span>, <span class="arithmatex">\(\text{PL}(d_0=100\ \text{m}) = 82\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Figura de ruido del receptor</td>
+<td><span class="arithmatex">\(F = 9\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Ancho de banda asignado</td>
+<td><span class="arithmatex">\(B = 20\ \text{MHz}\)</span>, numerología <span class="arithmatex">\(\mu=1\)</span> (30 kHz/subportadora)</td>
+</tr>
+<tr>
+<td>Margen de shadowing</td>
+<td><span class="arithmatex">\(M_\sigma = 6\ \text{dB}\)</span> (90% de cobertura)</td>
+</tr>
+</tbody>
+</table>
+<p>La tabla MCS simplificada para selección:</p>
+<table>
+<thead>
+<tr>
+<th>Rango SNR</th>
+<th style="text-align: center;">Modulación</th>
+<th style="text-align: center;">Tasa de código</th>
+<th style="text-align: center;">Efic. espectral (bits/s/Hz)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 2 dB</td>
+<td style="text-align: center;">QPSK</td>
+<td style="text-align: center;">1/4</td>
+<td style="text-align: center;">0.5</td>
+</tr>
+<tr>
+<td>2–8 dB</td>
+<td style="text-align: center;">QPSK</td>
+<td style="text-align: center;">1/2</td>
+<td style="text-align: center;">1.0</td>
+</tr>
+<tr>
+<td>8–15 dB</td>
+<td style="text-align: center;">16-QAM</td>
+<td style="text-align: center;">2/3</td>
+<td style="text-align: center;">2.67</td>
+</tr>
+<tr>
+<td>15–22 dB</td>
+<td style="text-align: center;">64-QAM</td>
+<td style="text-align: center;">2/3</td>
+<td style="text-align: center;">4.0</td>
+</tr>
+<tr>
+<td>22–28 dB</td>
+<td style="text-align: center;">256-QAM</td>
+<td style="text-align: center;">3/4</td>
+<td style="text-align: center;">6.0</td>
+</tr>
+<tr>
+<td>&gt; 28 dB</td>
+<td style="text-align: center;">1024-QAM</td>
+<td style="text-align: center;">4/5</td>
+<td style="text-align: center;">8.0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(a)</strong> Calcula la potencia recibida <span class="arithmatex">\(P_r\)</span> en dBm a <span class="arithmatex">\(d = 500\ \text{m}\)</span>.</p>
+<p><strong>(b)</strong> Calcula el SNR recibido en dB. (Piso de ruido: <span class="arithmatex">\(N_\text{floor} = -174 + 10\log_{10}(B) + F\)</span> dBm.)</p>
+<p><strong>(c)</strong> Aplicando el margen de shadowing, ¿cuál es el SNR efectivo de planificación? ¿Qué MCS debe seleccionarse?</p>
+<p><strong>(d)</strong> ¿Cuál es el caudal en el ancho de banda asignado con ese MCS?</p>
+<p><strong>(e)</strong> Si el operador desea garantizar BER <span class="arithmatex">\(\leq 10^{-3}\)</span> <em>antes</em> de la decodificación del código (pre-FEC), ¿es el MCS seleccionado coherente con los resultados del Ejercicio 5? Justifica.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Path loss a 500 m:</p>
+<div class="arithmatex">\[\text{PL}(500) = 82 + 10\times2{,}0\times\log_{10}(500/100) = 82 + 20\times0{,}699 = 82 + 14{,}0 = 96{,}0\ \text{dB}\]</div>
+<div class="arithmatex">\[P_r = P_t + G_t + G_r - \text{PL} = 43 + 17 + 0 - 96 = -36{,}0\ \text{dBm}\]</div>
+<p><strong>(b)</strong> Piso de ruido con <span class="arithmatex">\(B = 20\ \text{MHz}\)</span>:</p>
+<div class="arithmatex">\[N_\text{floor} = -174 + 10\log_{10}(2\times10^7) + 9 = -174 + 73{,}0 + 9 = -92{,}0\ \text{dBm}\]</div>
+<div class="arithmatex">\[\text{SNR} = P_r - N_\text{floor} = -36{,}0 - (-92{,}0) = \mathbf{56{,}0\ \text{dB}}\]</div>
+<p><strong>(c)</strong> SNR efectivo (tras margen): <span class="arithmatex">\(56{,}0 - 6{,}0 = \mathbf{50{,}0\ \text{dB}}\)</span>.</p>
+<p>Con SNR <span class="arithmatex">\(= 50\ \text{dB} &gt; 28\ \text{dB}\)</span> → el terminal puede usar el MCS de mayor orden: <strong>1024-QAM, tasa 4/5</strong>.</p>
+<p><strong>(d)</strong> Número de subportadoras en 20 MHz con 30 kHz de espaciado: <span class="arithmatex">\(N_{SC} \approx 20\times10^6 / 30\times10^3 = 667\)</span> subportadoras (en la práctica NR usa 66 RBs × 12 = 792 en 20 MHz con <span class="arithmatex">\(\mu=1\)</span>; usaremos el valor de la tabla de eficiencia espectral directamente).</p>
+<div class="arithmatex">\[\text{Throughput} \approx B \times \eta = 20\times10^6 \times 8{,}0 = \mathbf{160\ \text{Mbit/s}}\]</div>
+<p><strong>(e)</strong> Del Ejercicio 5, 256-QAM necesita 19.4 dB para BER = <span class="arithmatex">\(10^{-3}\)</span>; 1024-QAM requeriría ~23 dB. El SNR efectivo de planificación es 50 dB — ampliamente por encima del umbral pre-FEC de cualquier modulación de la tabla. El MCS seleccionado es coherente: incluso con 1024-QAM, la BER pre-FEC sería órdenes de magnitud por debajo de <span class="arithmatex">\(10^{-3}\)</span>, y el código LDPC la reduciría aún más. En la práctica, la limitación sería la interferencia de celdas adyacentes o el <em>implementation margin</em>, no el ruido térmico.</p>
+</details>
+<hr />
+<h2 id="laboratorio-python">Laboratorio Python</h2>
+<p><a href="https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/02-digital-modulation/lab.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>En este laboratorio (~90 minutos) implementarás desde cero la cadena TX-RX completa de modulación digital:</p>
+<ol>
+<li><strong>Cadena TX-RX y BER de BPSK</strong>: genera bits, modula, añade AWGN, decide, cuenta errores (Ej. 1 — ~15 min)</li>
+<li><strong>Constelaciones QPSK y 16-QAM</strong>: visualiza los puntos recibidos bajo distintos niveles de ruido (Ej. 2 — ~15 min)</li>
+<li><strong>BER simulada vs teórica</strong>: curvas Monte Carlo para BPSK/QPSK/16-QAM/64-QAM (Ej. 3 — ~25 min)</li>
+<li><strong>Efecto del Gray coding</strong>: compara BER con etiquetado Gray vs binario natural en 16-QAM (Ej. 4 — ~15 min)</li>
+<li><strong>Adaptación de enlace</strong>: simula la selección de MCS en función del SNR y calcula el caudal (Ej. 5 — ~20 min)</li>
+</ol>
+<hr />
+<h2 id="lecturas-recomendadas">Lecturas Recomendadas</h2>
+<ol>
+<li><strong>Proakis, J. G. &amp; Salehi, M.</strong> — <em>Digital Communications</em>, 5ª ed., McGraw-Hill, 2008. Capítulos 4 (modulación bandpass) y 5 (BER en AWGN).</li>
+<li><strong>Goldsmith, A.</strong> — <em>Wireless Communications</em>, Cambridge University Press, 2005. Capítulo 6 (modulación digital y BER).</li>
+<li><strong>Tse, D. &amp; Viswanath, P.</strong> — <em>Fundamentals of Wireless Communication</em>, Cambridge University Press, 2005. Capítulo 3 (punto de vista de espacio de señales).</li>
+<li><strong>3GPP TS 38.214</strong> — <em>Physical layer procedures for data</em>, Release 17. §5.1 (MCS tables para DL-SCH).</li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
