@@ -6,6 +6,8 @@ description: "Fundamentos del canal inalámbrico: path loss, shadowing, multipat
 
 # Sesión 01 — Modelado del Canal Inalámbrico
 
+<!-- T027: instructor workflow validation test — remove after merge -->
+
 ## Objetivos de Aprendizaje
 
 Al finalizar esta sesión, el estudiante será capaz de:
