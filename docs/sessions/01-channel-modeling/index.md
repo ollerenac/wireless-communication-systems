@@ -329,19 +329,58 @@ Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parám
 
 ### 8. Modelos de Canal Estandarizados (3GPP TR 38.901)
 
-Los modelos de canal de los organismos de estandarización, como el **3GPP TR 38.901**, parametrizan con precisión los entornos de despliegue para validar sistemas 5G/6G. Los escenarios principales son:
+Los parámetros de las secciones anteriores — $n$, $\sigma_\text{sh}$, $\sigma_\tau$, $f_{D,\text{max}}$, $K$ — no se inventan ni se eligen por conveniencia. Provienen de **campañas de medición de canal**: cientos de miles de medidas realizadas en distintas ciudades, bandas de frecuencia y condiciones de despliegue. El proceso es sistemático — se transmite una señal de prueba de banda ancha, se registra la respuesta al impulso del canal $h(\tau, t)$ en múltiples posiciones y se ajustan los parámetros estadísticos a los datos medidos. 3GPP recoge esos resultados en el estándar **TR 38.901** para que fabricantes, operadores e investigadores evalúen sus sistemas sobre el mismo canal de referencia, haciendo los resultados de simulación comparables y representativos de despliegues reales.
 
-| Escenario | Descripción | $n$ típico (NLOS) | $\sigma_\tau$ típico |
-|-----------|-------------|:-----------------:|:--------------------:|
-| **UMa** (Urban Macro) | Macrocelda urbana, antena sobre azotea | 3,5 – 4,0 | 300 – 1 000 ns |
-| **UMi** (Urban Micro) | Picocelda en calle, antena bajo azotea | 2,8 – 3,5 | 100 – 300 ns |
-| **InH** (Indoor Hotspot) | Oficina / corredor interior | 1,7 – 2,2 | 20 – 70 ns |
-| **RMa** (Rural Macro) | Macrocelda rural | 2,3 – 4,0 | 10 – 40 ns |
+**Estructura del modelo TR 38.901**: el estándar define, para cada escenario de despliegue y condición LOS/NLOS, exactamente los parámetros que hemos desarrollado en esta sesión:
 
-El estándar también distingue entre condiciones **LOS** y **NLOS**, asignando exponentes de path loss y parámetros de fading diferentes para cada caso.
+| Parámetro | Concepto (sección) | Rol en el diseño |
+|-----------|-------------------|-----------------|
+| Exponente $n$, offset $A$ | Path loss log-distancia (§2) | Dimensiona el link budget y el radio de celda |
+| $\sigma_\text{sh}$ | Shadowing log-normal (§3) | Determina el shadowing margin en el link budget |
+| $\sigma_\tau$ | Delay spread (§4) | Fija la longitud mínima del cyclic prefix en OFDM |
+| $B_c \approx 1/(5\sigma_\tau)$ | Coherence bandwidth (§4) | Decide si el canal es flat o frequency-selective |
+| $f_{D,\text{max}}$, $T_c$ | Doppler / coherence time (§5) | Determina la frecuencia de actualización del estimador de canal |
+| $K$ (LOS) / Rayleigh (NLOS) | Distribución de la envolvente (§6–7) | Fija la penalización por fading y el margen de fade |
 
-!!! note "Relevancia para el diseño"
-    Cuando se evalúa una nueva técnica (OFDM, MIMO, RIS) sobre un canal realista, se utilizan los parámetros de TR 38.901 para que los resultados de simulación sean representativos de los despliegues reales. En las sesiones 06, 07 y 09 utilizaremos este estándar para calibrar nuestras simulaciones.
+**Escenarios principales y parámetros típicos**:
+
+| Escenario | Entorno | Cond. | $n$ | $\sigma_\text{sh}$ (dB) | $\sigma_\tau$ típico |
+|-----------|---------|:-----:|:---:|:-----------------------:|:--------------------:|
+| **UMa** (Urban Macro) | Macrocelda urbana, BS sobre azotea | LOS | 2,2 | 4 | 300 – 1 000 ns |
+| | | NLOS | 3,7 | 6 | 300 – 1 000 ns |
+| **UMi** (Urban Micro) | Picocelda en calle, BS bajo azotea | LOS | 2,1 | 4 | 100 – 300 ns |
+| | | NLOS | 3,2 | 7 | 100 – 300 ns |
+| **InH** (Indoor Hotspot) | Oficina / corredor interior | LOS | 1,7 | 3 | 20 – 70 ns |
+| | | NLOS | 3,5 | 8,5 | 20 – 70 ns |
+| **RMa** (Rural Macro) | Macrocelda rural | LOS | 2,1 | 4 | 10 – 40 ns |
+| | | NLOS | 3,8 | 8 | 10 – 40 ns |
+
+**Por qué los valores difieren entre escenarios**: los números no son arbitrarios — cada uno refleja la física del entorno:
+
+- **InH tiene $n$ bajo (~1,7 en LOS)**: en interiores con visión directa, los pasillos actúan como guías de onda parciales — la señal se propaga más eficientemente que en espacio libre. Además, las distancias son cortas (10–50 m), por lo que la absorción acumulada es pequeña.
+- **InH tiene $\sigma_\tau$ pequeño (20–70 ns)**: las dimensiones del entorno interior son reducidas (~10–50 m). Los caminos más largos (rebotes en paredes distantes) solo añaden unos pocos metros de recorrido extra → diferencias de retardo de decenas de nanosegundos, no cientos.
+- **UMa tiene $n$ alto (3,7 NLOS) y $\sigma_\tau$ grande (hasta 1 µs)**: en macroceldas urbanas, la señal debe rodear edificios altos y encuentra reflexiones en fachadas lejanas a 200–1 000 m. El camino libre no existe en NLOS; los caminos dispersos pueden diferir en longitud hasta 300 m → 1 µs de delay spread.
+- **$\sigma_\text{sh}$ mayor en NLOS que en LOS para todos los escenarios**: sin camino directo, el shadowing depende de qué obstáculos concretos se interponen entre BS y UE — variabilidad mucho mayor que cuando el LOS domina.
+
+!!! example "Ejemplo integrador: enlace UMi NLOS a 3,5 GHz"
+    **Datos**: BS a $h = 10$ m, UE a $d = 200$ m, $f = 3{,}5$ GHz, $P_t = 23$ dBm, $G_t = G_r = 0$ dBi.
+
+    **1. Path loss (TR 38.901 UMi NLOS)**:
+
+    $$PL = 36{,}7\log_{10}(d) + 22{,}7 + 26\log_{10}(f_\text{GHz}) \approx 36{,}7 \cdot 2{,}30 + 22{,}7 + 26 \cdot 0{,}544 \approx 122\ \text{dB}$$
+
+    **2. Shadowing margin**: con $\sigma_\text{sh} = 7$ dB y fiabilidad del 90 %, el margen es $1{,}28 \times 7 \approx 9$ dB.
+
+    **3. Potencia recibida media**: $P_r = 23 - 122 - 9 = -108$ dBm (sin margen de fade adicional).
+
+    **4. Coherence bandwidth**: con $\sigma_\tau = 200$ ns → $B_c \approx 1/(5 \times 200\ \text{ns}) = 1$ MHz. Un sistema con $B_s = 100$ MHz es altamente frequency-selective: necesita OFDM con cyclic prefix $\geq \sigma_\tau = 200$ ns.
+
+    **5. Coherence time**: a $v = 30$ km/h → $f_{D,\text{max}} = (v/\lambda) = (8{,}3\ \text{m/s})/(0{,}086\ \text{m}) \approx 97$ Hz → $T_c \approx 0{,}423/97 \approx 4{,}4$ ms. Con subportadoras de 30 kHz (NR $\mu=1$), la duración de ranura es 0,5 ms $\ll T_c$: slow fading — el canal es estable durante varias ranuras, lo que permite pilotos espaciados.
+
+    **6. Modelo de fading**: condición NLOS → Rayleigh fading ($K = 0$). La BER de BPSK en este canal decae como $1/(4\bar{\gamma})$ — se necesitarán técnicas de mitigación (OFDM + codificación, MIMO) para operar fiablemente.
+
+!!! note "Uso en sesiones posteriores"
+    En las sesiones 06 (MIMO), 07 (Massive MIMO) y 09 (5G NR) utilizaremos los parámetros de TR 38.901 para calibrar las simulaciones. El escenario UMa NLOS con $\sigma_\tau = 300$ ns y $n = 3{,}7$ es el canal de referencia más habitual en la literatura de 5G.
 
 ---
 
