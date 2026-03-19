@@ -34,7 +34,7 @@ jupyter nbconvert --clear-output docs/sessions/NN-topic/lab.ipynb
 
 - Título conciso: `Sesión NN — Título del tema`
 - Describe brevemente los cambios en el cuerpo del PR
-- El checklist del PR template se completará automáticamente
+- El cuerpo del PR se pre-rellena automáticamente con el checklist de [`.github/pull_request_template.md`](.github/pull_request_template.md) — complétalo antes de pedir revisión
 
 ### 6. Revisión y merge
 
