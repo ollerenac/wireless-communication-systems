@@ -386,13 +386,15 @@ Los parámetros de las secciones anteriores — $n$, $\sigma_\text{sh}$, $\sigma
 
 ## Síntesis
 
-El canal inalámbrico introduce **tres capas de degradación** que operan a escalas espaciales y temporales distintas:
+El canal inalámbrico introduce **cinco dimensiones de degradación** que operan a escalas distintas y exigen soluciones distintas:
 
 1. **Path loss** (escala: kilómetros) — determina el radio de cobertura y el link budget. Se controla con potencia de transmisión, ganancia de antena y frecuencia de portadora.
-2. **Shadowing** (escala: decenas de metros) — introduce variabilidad estadística lenta. Se gestiona con shadowing margins o diversidad de sitio.
-3. **Multipath fading** (escala: longitud de onda, ~cm) — produce fluctuaciones rápidas de la envolvente. Requiere técnicas específicas: OFDM (sesión 03), codificación de canal (sesión 04), MIMO (sesión 06) o diversidad de recepción.
+2. **Shadowing** (escala: decenas de metros) — introduce variabilidad estadística lenta debida a obstáculos en el entorno. Se gestiona con shadowing margins o diversidad de sitio.
+3. **Dispersión temporal y selectividad en frecuencia** — el delay spread $\sigma_\tau$ fragmenta el canal en el dominio de la frecuencia. Cuando $B_s \gg B_c$, cada subportadora ve un canal distinto (frequency-selective fading); cuando $B_s \ll B_c$, el canal es flat. El parámetro de diseño clave es la longitud del cyclic prefix en OFDM (sesión 03).
+4. **Variación temporal y coherence time** — el Doppler spread $f_{D,\text{max}}$, causado por el movimiento del terminal, comprime el coherence time $T_c$. Cuando $T_s \ll T_c$ (slow fading), el canal se puede estimar con pilotos dispersos; cuando $T_s \gg T_c$ (fast fading), el estimador de canal debe actualizarse símbolo a símbolo (sesión 08).
+5. **Distribución estadística de la envolvente** — en entornos NLOS, la suma de muchos caminos produce una envolvente Rayleigh con deep fades frecuentes y una BER que decae solo como $1/\bar{\gamma}$. La presencia de LOS añade un término determinista que desplaza el fasor resultante y reduce los deep fades — el canal pasa de Rayleigh ($K=0$) a Rician ($K>0$). Conocer la distribución de la envolvente es el punto de partida para dimensionar técnicas de mitigación: codificación de canal (sesión 04), MIMO (sesión 06) o diversidad de recepción.
 
-Comprender qué capa domina en cada escenario es el primer paso del diseño de cualquier sistema inalámbrico. El resto del curso puede verse como un catálogo de soluciones a los problemas que esta sesión ha identificado.
+Los parámetros que caracterizan estas cinco dimensiones — $n$, $\sigma_\text{sh}$, $\sigma_\tau$, $f_{D,\text{max}}$, $K$ — no se eligen arbitrariamente: los proporciona el estándar 3GPP TR 38.901, calibrado con campañas de medición reales para los escenarios de despliegue más comunes. El resto del curso puede verse como un catálogo de soluciones a los problemas que esta sesión ha identificado.
 
 ---
 
@@ -490,7 +492,7 @@ En un canal Rayleigh con SNR medio $\bar{\gamma} = 20\ \text{dB}$:
 
     Se necesitan aproximadamente **38 dB adicionales** — esta es la "penalización por desvanecimiento" sin técnicas de diversidad.
 
-    **(c)** Con $K > 0$, existe una componente LOS que estabiliza la amplitud de la señal. El Rician fading tiene **menor variabilidad** que el Rayleigh fading, por lo que la BER será **menor** para el mismo $\bar{\gamma}$. A medida que $K \to \infty$, la BER converge a la del canal AWGN.
+    **(c)** Con $K > 0$, el camino LOS añade un término determinista $(\mu_I, \mu_Q) \neq (0,0)$ al diagrama fasorial — el cúmulo de puntos se desplaza lejos del origen. Para que se produzca un deep fade, el ruido aleatorio de los caminos dispersos tendría que arrastrar el fasor resultante hasta cerca del origen, lo que ocurre con mucha menor probabilidad que en Rayleigh ($K=0$, donde el cúmulo está centrado en el origen y el deep fade es frecuente). Por tanto, el canal Rician tiene **menor variabilidad** de envolvente y **menor BER** para el mismo $\bar{\gamma}$. A medida que $K \to \infty$, la dispersión del cúmulo desaparece y la BER converge a la del canal AWGN.
 
 ---
 
@@ -584,6 +586,42 @@ Un sistema LTE opera a $f_c = 1{,}8\ \text{GHz}$ con los siguientes parámetros:
     $$\log_{10}\!\left(\frac{d_{\max}}{100}\right) = \frac{64{,}2}{38} = 1{,}689 \Rightarrow d_{\max} = 100 \times 10^{1{,}689} \approx 4{,}9\ \text{km}$$
 
     Este es el radio de celda máximo para garantizar una SNR de 0 dB en el 90% de las ubicaciones en un entorno UMa NLOS.
+
+### Ejercicio 6 — Parámetros TR 38.901 y Caracterización Completa del Canal
+
+Un sistema 5G NR opera en el escenario **UMa LOS** a $f_c = 2{,}6\ \text{GHz}$. El terminal se desplaza a $v = 50\ \text{km/h}$. Según TR 38.901 UMa LOS, los parámetros de canal son: exponente $n = 2{,}2$, $\sigma_\text{sh} = 4\ \text{dB}$, delay spread $\sigma_\tau = 100\ \text{ns}$, factor Rician $K = 9\ \text{dB}$.
+
+**(a)** Calcula el coherence bandwidth $B_c$. Un sistema NR con numerología $\mu = 1$ usa subportadoras de 30 kHz y un ancho de banda de 40 MHz. ¿El canal es flat o frequency-selective para cada subportadora? ¿Y para el sistema completo?
+
+**(b)** Calcula el Doppler spread máximo $f_{D,\text{max}}$ y el coherence time $T_c$. La duración de una ranura NR con $\mu = 1$ es $T_\text{slot} = 0{,}5\ \text{ms}$. ¿El canal es slow o fast fading a escala de ranura?
+
+**(c)** Con $K = 9\ \text{dB}$, calcula la fracción de potencia concentrada en la componente LOS ($K/(K+1)$) y la fracción en los caminos dispersos. ¿Qué modelo de fading aplica — Rayleigh o Rician? ¿Esperarías una BER mayor o menor que en el escenario UMa NLOS (Rayleigh)?
+
+**(d)** ¿Qué implicación práctica tiene el hecho de que $T_c \gg T_\text{slot}$ para el diseño del estimador de canal en 5G NR? (Respuesta cualitativa, 3–4 líneas.)
+
+??? example "Solución"
+
+    **(a)** Coherence bandwidth:
+
+    $$B_c \approx \frac{1}{5\sigma_\tau} = \frac{1}{5 \times 100\ \text{ns}} = 2\ \text{MHz}$$
+
+    Ancho de banda por subportadora: $\Delta f = 30\ \text{kHz} \ll B_c = 2\ \text{MHz}$ → el canal es **flat por subportadora** — cada subportadora individual ve un canal prácticamente constante en frecuencia. Sin embargo, el sistema completo ocupa 40 MHz $\gg B_c$ → el canal es **frequency-selective a escala de sistema**: distintas subportadoras ven ganancias de canal distintas. Esta es precisamente la razón de usar OFDM — convierte un canal frequency-selective en muchos canales flat independientes.
+
+    **(b)** Velocidad: $v = 50/3{,}6 \approx 13{,}9\ \text{m/s}$. Longitud de onda: $\lambda = c/f_c = 3\times10^8/2{,}6\times10^9 \approx 0{,}115\ \text{m}$.
+
+    $$f_{D,\text{max}} = \frac{v}{\lambda} = \frac{13{,}9}{0{,}115} \approx 121\ \text{Hz}$$
+
+    $$T_c \approx \frac{0{,}423}{121} \approx 3{,}5\ \text{ms}$$
+
+    Como $T_\text{slot} = 0{,}5\ \text{ms} \ll T_c = 3{,}5\ \text{ms}$, el canal es **slow fading** a escala de ranura — el canal varía poco durante una ranura completa.
+
+    **(c)** $K = 9\ \text{dB} \Rightarrow K_\text{lineal} = 10^{9/10} \approx 7{,}9$.
+
+    $$\frac{K}{K+1} = \frac{7{,}9}{8{,}9} \approx 89\,\%\ \text{(componente LOS)} \qquad \frac{1}{K+1} \approx 11\,\%\ \text{(dispersos)}$$
+
+    Con $K > 0$, aplica el modelo **Rician**. La componente LOS concentra casi el 90 % de la potencia — el fasor resultante está fuertemente anclado al término determinista LOS y rara vez cae cerca del origen. En consecuencia, la BER será **notablemente menor** que en UMa NLOS (Rayleigh, $K=0$), donde el cúmulo fasorial está centrado en el origen y los deep fades son frecuentes.
+
+    **(d)** Con $T_c = 3{,}5\ \text{ms}$ y $T_\text{slot} = 0{,}5\ \text{ms}$, el canal tarda aproximadamente $3{,}5/0{,}5 = 7$ ranuras en cambiar de forma apreciable. Esto significa que una estimación de canal obtenida con pilotos en una ranura sigue siendo válida durante las siguientes 5–6 ranuras — no es necesario re-estimar el canal en cada ranura. En 5G NR, esta propiedad permite espaciar los símbolos de referencia (DMRS) sin degradar la estimación, reduciendo el overhead de pilotos y aumentando la eficiencia espectral efectiva del sistema.
 
 ---
 
