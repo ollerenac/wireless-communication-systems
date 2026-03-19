@@ -45,6 +45,8 @@ donde:
 - $\lambda = c/f$: longitud de onda
 - $d$: distancia entre transmisor y receptor
 
+El factor $(\lambda/4\pi d)^2$ tiene una interpretación física directa: una antena isotrópica irradia su potencia uniformemente sobre la superficie de una esfera de área $4\pi d^2$; la densidad de potencia en el receptor cae como $1/d^2$. La antena receptora captura de esa esfera un área efectiva proporcional a $\lambda^2$ — a mayor longitud de onda (menor frecuencia), la antena "ve" más grande el frente de onda y capta más potencia. La combinación de ambos efectos produce el factor $(\lambda/4\pi d)^2$. Esto explica por qué, a la misma distancia, un enlace a 900 MHz tiene menos path loss que uno a 2,4 GHz: la frecuencia más baja tiene mayor longitud de onda y mayor área efectiva de captación.
+
 En decibelios, la **pérdida de propagación en espacio libre** es:
 
 $$\text{PL}_{\text{FS}}(d)\ [\text{dB}] = 20\log_{10}(4\pi d / \lambda) = 20\log_{10}(d) + 20\log_{10}(f) - 147{,}55$$
@@ -75,6 +77,8 @@ donde:
 | Suburbano | 3 – 5 |
 | Interior (sin obstáculos) | 1,6 – 1,8 |
 | Interior (con obstáculos) | 4 – 6 |
+
+El valor $n < 2$ en interiores sin obstáculos puede parecer paradójico — ¿cómo puede haber *menos* pérdida que en espacio libre? La explicación es el **efecto guía de onda**: en un pasillo largo con paredes paralelas, el techo y el suelo actúan como reflectores que "canalizan" la señal a lo largo del eje del pasillo, de forma similar a como una guía de onda metálica confina la energía electromagnética. La energía que en espacio libre se dispersaría hacia los lados queda atrapada y se propaga con menos pérdida que $1/d^2$.
 
 Con el exponente $n$ correcto, el modelo predice bien la potencia media recibida a cada distancia. El problema es que dos terminales situados exactamente a la misma distancia de la misma estación base pueden diferir en más de 15 dB — y esa variación cambia lentamente mientras el usuario se desplaza, no con la frecuencia portadora.
 
@@ -151,7 +155,7 @@ La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el ré
 
 - **Flat fading** ($B_s \ll B_c$): $B_c$ es la zona del espectro sobre la que el canal aplica una degradación uniforme. Si $B_s$ es mucho menor que $B_c$, toda la señal cabe dentro de esa zona uniforme — el canal aplica **una única ganancia** a toda la señal, como multiplicar por un solo número complejo. Todas las frecuencias de la señal sufren la misma atenuación y el mismo desfase. No hay distorsión espectral: la señal sale del canal con la misma forma que entró, solo escalada y rotada en fase.
 
-- **Frequency-selective fading** ($B_s \gg B_c$): cuando $B_s$ supera ampliamente $B_c$, la señal ocupa varias zonas del espectro, cada una con su propia ganancia. El canal ya no aplica una degradación única — aplica **ganancias diferentes a diferentes partes de la señal**. Algunas frecuencias son muy atenuadas (los valles de $|H(f)|$), otras lo son menos (los picos). En el dominio temporal esto significa que los ecos de un símbolo se extienden en el tiempo y se solapan con el símbolo siguiente, produciendo **ISI** (inter-symbol interference).
+- **Frequency-selective fading** ($B_s \gg B_c$): cuando $B_s$ supera ampliamente $B_c$, la señal ocupa varias zonas del espectro, cada una con su propia ganancia. El canal ya no aplica una degradación única — aplica **ganancias diferentes a diferentes partes de la señal**. Algunas frecuencias son muy atenuadas (los valles de $|H(f)|$), otras lo son menos (los picos). En el dominio temporal, esto tiene una consecuencia directa: los ecos de un símbolo llegan dispersos durante $\sigma_\tau$ segundos. Si la duración de un símbolo $T_s < \sigma_\tau$, los ecos del símbolo $n$ todavía están llegando cuando el símbolo $n+1$ ya ha comenzado — los dos símbolos se mezclan en el receptor. Este solapamiento se denomina **ISI** (*inter-symbol interference*, interferencia entre símbolos) y es el principal obstáculo para la transmisión de alta velocidad en canales dispersivos.
 
 ![Flat fading vs frequency-selective fading](figures/flat-vs-selective-fading.png)
 
@@ -181,11 +185,11 @@ El panel izquierdo muestra cuatro caminos multitrayecto llegando al receptor mó
 
 El panel derecho muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una **única frecuencia** $f_0$ — el tono negro vertical. El receptor, sin embargo, recibe **múltiples copias** de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos del panel izquierdo. El conjunto de todos estos desplazamientos forma el **Doppler spread**, que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.
 
-Con muchos caminos en ángulos distintos, cada uno contribuye en una frecuencia ligeramente diferente — el conjunto forma un **Doppler spread** que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$.
-
 **Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
+
+El coeficiente 0,423 proviene del modelo de Jakes: la función de autocorrelación temporal del canal es $R(\Delta t) = J_0(2\pi f_{D,\text{max}} \Delta t)$, donde $J_0$ es la función de Bessel de primera especie y orden cero. $T_c$ se define como el retardo $\Delta t$ al que $R(T_c) = 0{,}5$ (criterio del 50% de correlación), lo que resuelve a $2\pi f_{D,\text{max}} T_c \approx 2{,}657$, es decir, $T_c \approx 0{,}423/f_{D,\text{max}}$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$; la constante exacta depende del criterio de correlación elegido.
 
 Nótese la dualidad con $B_c \approx 1/(5\sigma_\tau)$: el delay spread $\sigma_\tau$ comprime $B_c$ en frecuencia; el Doppler spread $f_{D,\text{max}}$ comprime $T_c$ en tiempo. Velocidades altas → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápidamente.
 
@@ -260,7 +264,11 @@ $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r 
 
 La envolvente tiene un valor medio $\bar{r}$ — pero a diferencia de una señal AWGN pura, tiene una cola izquierda no nula: existe una probabilidad de que $r$ caiga muy cerca de cero (deep fade), independientemente de cuál sea la potencia media.
 
-La **SNR instantánea** $\gamma = r^2/\bar{\gamma}$ — la potencia instantánea normalizada — sigue una distribución **exponencial**:
+La **SNR instantánea** se obtiene normalizando la potencia instantánea $r^2$ por la potencia media del canal $\mathbb{E}[r^2] = 2\sigma^2$ y escalando por la SNR media $\bar{\gamma}$:
+
+$$\gamma = \frac{r^2}{2\sigma^2}\,\bar{\gamma}$$
+
+Cuando $r$ sigue una distribución de Rayleigh, la potencia $r^2$ sigue una distribución exponencial. Al escalar por la constante $\bar{\gamma}/(2\sigma^2)$, $\gamma$ sigue también una distribución **exponencial** de media $\bar{\gamma}$:
 
 $$f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}\exp\!\left(-\frac{\gamma}{\bar{\gamma}}\right)$$
 
