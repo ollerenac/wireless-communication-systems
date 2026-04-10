@@ -86,7 +86,7 @@ Con el exponente $n$ correcto, el modelo predice bien la potencia media recibida
 
 ### 3. Shadowing
 
-Imagina que mides la potencia recibida en 60 puntos distintos del mismo barrio, todos a exactamente 1 km de la misma antena. El modelo log-distancia predice un único valor de PL para esa distancia. Las medidas reales, sin embargo, se dispersan alrededor de esa predicción en un rango de ±15–20 dB. La causa no es ruido de medida: es la disposición particular de edificios, muros y obstáculos entre la antena y cada punto — diferente en cada ubicación, impredecible de antemano.
+Imagina que mides la potencia recibida en 60 puntos distintos del mismo vecindario, todos a exactamente 1 km de la misma antena. El modelo log-distancia predice un único valor de PL para esa distancia. Las medidas reales, sin embargo, se dispersan alrededor de esa predicción en un rango de ±15–20 dB. La causa no es ruido de medida: es la disposición particular de edificios, muros y obstáculos entre la antena y cada punto — diferente en cada ubicación, impredecible de antemano.
 
 Modelar cada obstáculo individualmente es inviable. En cambio, se trata el efecto acumulado como una variable aleatoria: la pérdida a una distancia $d$ ya no es un número fijo sino la suma de la predicción media más una desviación aleatoria que depende del entorno específico de cada ubicación.
 
