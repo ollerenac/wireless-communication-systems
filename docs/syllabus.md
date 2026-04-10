@@ -2,12 +2,12 @@
 
 ## Sistemas de Comunicaciones Inalámbricas
 
-**Nivel**: Máster Universitario (MSc / MEng)
-**Modalidad**: Autónoma, acceso abierto
-**Sesiones**: 15 sesiones semanales
-**Sitio web**: [ollerenac.github.io/wireless-communication-systems](https://ollerenac.github.io/wireless-communication-systems/)
-**Repositorio**: [github.com/ollerenac/wireless-communication-systems](https://github.com/ollerenac/wireless-communication-systems)
-**Licencia**: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+- **Nivel**: Máster Universitario (MSc / MEng)
+- **Modalidad**: Autónoma, acceso abierto
+- **Sesiones**: 15 sesiones semanales
+- **Sitio web**: [ollerenac.github.io/wireless-communication-systems](https://ollerenac.github.io/wireless-communication-systems/)
+- **Repositorio**: [github.com/ollerenac/wireless-communication-systems](https://github.com/ollerenac/wireless-communication-systems)
+- **Licencia**: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
 ---
 
