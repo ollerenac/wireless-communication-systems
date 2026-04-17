@@ -260,7 +260,11 @@ La potencia de ruido térmico en un receptor de ancho de banda $B$ es:
 
 $$P_n = N_0 \cdot B$$
 
-donde $N_0$ es la densidad espectral unilateral de ruido (W/Hz), determinada por la temperatura del sistema. Combinando ambas expresiones, $\gamma = P_r / (N_0 B)$: la SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido.
+donde $N_0$ es la densidad espectral unilateral de ruido (W/Hz), determinada por la temperatura del sistema:
+
+$$N_0 = k_B T$$
+
+con $k_B = 1{,}38 \times 10^{-23}$ J/K la constante de Boltzmann y $T$ la temperatura de ruido equivalente del receptor (típicamente 290 K en condiciones estándar, lo que da $N_0 \approx -174$ dBm/Hz). Combinando ambas expresiones, $\gamma = P_r / (N_0 B)$: la SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido.
 
 **BER en AWGN** — la conexión entre $\gamma$, la función Q y la BER se construye mejor desde la geometría de la detección.
 
