@@ -246,23 +246,51 @@ Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: de
 
 Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué **valor** toma la amplitud de la señal recibida en un instante concreto?
 
-Para conectar con lo que viene, es útil recordar qué determina si un bit se recibe correctamente.
+---
 
-En el receptor, la señal llega mezclada con **ruido térmico** — una perturbación aleatoria e inevitable generada en los circuitos electrónicos. El detector compara la señal recibida con un umbral: si la señal está suficientemente por encima del ruido, el bit se decodifica correctamente; si el ruido la empuja al otro lado del umbral, se produce un error. La relación entre la potencia de la señal y la potencia del ruido es la **SNR** (*Signal-to-Noise Ratio*) $\gamma$. Cuanto mayor es $\gamma$, más separada está la señal del umbral de decisión y menor es la probabilidad de error — la **BER** (*Bit Error Rate*).
+### 6. SNR, BER y el Efecto del Fading
+
+Para responder a esa pregunta necesitamos primero establecer el marco que conecta la potencia recibida con la probabilidad de error — el marco SNR/BER — y luego ver cómo el multipath lo perturba.
+
+**SNR instantánea** — la relación entre la potencia de la señal $P_r$ y la potencia del ruido $P_n$ en el receptor:
+
+$$\gamma = \frac{P_r}{P_n}$$
+
+La potencia de ruido térmico en un receptor de ancho de banda $B$ es:
+
+$$P_n = N_0 \cdot B$$
+
+donde $N_0$ es la densidad espectral unilateral de ruido (W/Hz), determinada por la temperatura del sistema. Combinando ambas expresiones, $\gamma = P_r / (N_0 B)$: la SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido.
+
+**BER en AWGN** — en un canal sin fading, la probabilidad de error de bit para BPSK es una función determinista de $\gamma$:
+
+$$\text{BER} = Q\!\left(\sqrt{2\gamma}\right)$$
+
+donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es la función Q gaussiana — la probabilidad de que una variable normal estándar supere el umbral $x$. A mayor $\gamma$, el argumento de $Q$ crece y la BER cae exponencialmente. Esta es la relación cuantitativa entre SNR y tasa de error que toda la ingeniería de enlace busca optimizar.
 
 ![SNR y BER: umbral de decisión en BPSK](figures/snr-ber-decision.png)
 
-La figura muestra el proceso de detección para BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). La señal recibida no es un valor exacto sino una distribución gaussiana centrada en el símbolo transmitido, cuya anchura $\sigma_n$ depende del ruido térmico. El detector coloca el umbral de decisión en 0: todo lo que llega por encima de 0 se decide como bit 1; todo lo que llega por debajo, como bit 0. La **zona de error** (rojo) es la fracción de la distribución que cruza el umbral — la probabilidad de que el ruido haya desplazado la señal al lado equivocado.
+La figura muestra el proceso de detección para BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). La señal recibida no es un valor exacto sino una distribución gaussiana centrada en el símbolo transmitido, cuya anchura $\sigma_n$ depende del ruido térmico. El detector coloca el umbral de decisión en 0: todo lo que llega por encima de 0 se decide como bit 1; todo lo que llega por debajo, como bit 0. La **zona de error** (rojo) es la fracción de la distribución que cruza el umbral.
 
-En el panel izquierdo (SNR alta), las dos distribuciones están bien separadas: la zona de error es pequeña y la BER es baja. En el panel derecho (SNR baja), el ruido es grande relativo a la señal — las distribuciones se solapan y la zona de error crece sustancialmente. La SNR $\gamma = A^2/\sigma_n^2$ captura exactamente esa relación: a mayor $\gamma$, mayor separación entre señal y umbral, menor zona de error, menor BER.
+En el panel izquierdo (SNR alta), las dos distribuciones están bien separadas: la BER es baja. En el panel derecho (SNR baja), las distribuciones se solapan y la BER crece. La SNR $\gamma = A^2/\sigma_n^2$ captura exactamente esa relación: $A$ es la amplitud del símbolo y $\sigma_n^2$ la varianza del ruido.
 
-El link budget de las secciones 1–3 calculó la **potencia media recibida** en función de la distancia, el entorno y el shadowing. Dividida por la potencia de ruido del receptor, esa potencia media da la **SNR media** $\bar{\gamma}$. Si el canal fuera puramente AWGN, $\gamma$ sería constante e igual a $\bar{\gamma}$, y la BER quedaría fijada.
+**SNR media vs. SNR instantánea** — el link budget de las secciones 1–3 calculó la potencia media recibida $\bar{P}_r$ en función de la distancia, el entorno y el shadowing. La **SNR media** es:
 
-El problema es el multipath fading. Las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. Cuando se suman destructivamente, la amplitud recibida cae — a veces de forma drástica. En esos instantes, la SNR instantánea $\gamma$ desciende muy por debajo de $\bar{\gamma}$: aunque el promedio sea confortable (digamos $\bar{\gamma} = 20$ dB), hay momentos en que $\gamma$ cae a 0 dB o menos. Esos instantes de baja SNR — los **deep fades** — son los que producen ráfagas de errores de bit, aunque el nivel medio de señal sea perfectamente adecuado. Para calcular la BER real es necesario conocer la distribución estadística de esas fluctuaciones de $\gamma$.
+$$\bar{\gamma} = \frac{\bar{P}_r}{P_n}$$
+
+Si el canal fuera puramente AWGN, $\gamma = \bar{\gamma}$ sería constante y la BER quedaría completamente determinada por $Q(\sqrt{2\bar{\gamma}})$.
+
+**El problema del multipath fading**: las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. La potencia recibida $P_r$ — y por tanto $\gamma$ — fluctúa aleatoriamente en torno a $\bar{P}_r$. En los instantes de suma destructiva, $\gamma$ desciende muy por debajo de $\bar{\gamma}$: aunque el promedio sea confortable (digamos $\bar{\gamma} = 20$ dB), hay momentos en que $\gamma$ cae a 0 dB o menos. Esos instantes — los **deep fades** — producen ráfagas de errores de bit aunque el nivel medio de señal sea perfectamente adecuado.
+
+En presencia de fading, $\gamma$ es una **variable aleatoria** con su propia distribución $f(\gamma)$. La BER media ya no es $Q(\sqrt{2\bar{\gamma}})$ sino el promedio de $Q(\sqrt{2\gamma})$ sobre todas las realizaciones del canal:
+
+$$\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{2\gamma}\right) f(\gamma)\, d\gamma$$
+
+Esta integral requiere conocer $f(\gamma)$ — la distribución estadística de la SNR instantánea, que a su vez depende de la distribución de la amplitud recibida. Esa es exactamente la pregunta que responden las secciones siguientes.
 
 ---
 
-### 6. Rayleigh Fading
+### 7. Rayleigh Fading
 
 Para obtener esa distribución estadística de $\gamma$ hay que responder primero a una pregunta más física: ¿cómo se suma en el receptor el conjunto de todos los caminos multitrayecto? La respuesta a esa pregunta revela de dónde vienen las componentes $I$ y $Q$, y por qué la envolvente resultante sigue una distribución de Rayleigh.
 
@@ -320,7 +348,7 @@ El modelo Rayleigh asume que no existe ninguna componente directa entre transmis
 
 ---
 
-### 7. Rician Fading
+### 8. Rician Fading
 
 La derivación I/Q de la sección anterior asumió que todas las fases $\phi_i$ son uniformemente distribuidas en $[0, 2\pi)$, de modo que las medias de $I$ y $Q$ son exactamente cero. Esa suposición corresponde a un entorno NLOS sin camino directo entre transmisor y receptor. Ahora consideramos qué ocurre cuando **sí existe un camino LOS**: una componente con amplitud fija $A$ que llega con fase $\phi_\text{LOS}$ prácticamente constante (el camino directo no cambia de longitud de manera aleatoria).
 
@@ -367,7 +395,7 @@ Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parám
 
 ---
 
-### 8. Modelos de Canal Estandarizados (3GPP TR 38.901)
+### 9. Modelos de Canal Estandarizados (3GPP TR 38.901)
 
 Los parámetros de las secciones anteriores — $n$, $\sigma_\text{sh}$, $\sigma_\tau$, $f_{D,\text{max}}$, $K$ — no se inventan ni se eligen por conveniencia. Provienen de **campañas de medición de canal**: cientos de miles de medidas realizadas en distintas ciudades, bandas de frecuencia y condiciones de despliegue. El proceso es sistemático — se transmite una señal de prueba de banda ancha, se registra la respuesta al impulso del canal $h(\tau, t)$ en múltiples posiciones y se ajustan los parámetros estadísticos a los datos medidos. 3GPP recoge esos resultados en el estándar **TR 38.901** para que fabricantes, operadores e investigadores evalúen sus sistemas sobre el mismo canal de referencia, haciendo los resultados de simulación comparables y representativos de despliegues reales.
 
