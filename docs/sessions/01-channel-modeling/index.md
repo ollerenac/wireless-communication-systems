@@ -433,9 +433,19 @@ Este término es **determinista** — no aleatorio. Los $N-1$ caminos dispersos 
 
 $$I = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I \neq 0} + \tilde{I}_\text{scatter}, \qquad Q = \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q \neq 0} + \tilde{Q}_\text{scatter}$$
 
-donde $\tilde{I}_\text{scatter}$ y $\tilde{Q}_\text{scatter}$ son gaussianas de media cero y varianza $\sigma^2$ (igual que en Rayleigh). Con el término LOS, $I$ y $Q$ siguen siendo gaussianas de varianza $\sigma^2$, pero ahora con **media no nula**: $I \sim \mathcal{N}(\mu_I, \sigma^2)$, $Q \sim \mathcal{N}(\mu_Q, \sigma^2)$. En el diagrama fasorial, el cúmulo de puntos ya no está centrado en el origen — está desplazado al punto $(\mu_I, \mu_Q)$, que es el fasor LOS.
+donde $\tilde{I}_\text{scatter}$ y $\tilde{Q}_\text{scatter}$ son gaussianas de media cero y varianza $\sigma^2$ — exactamente las mismas componentes aleatorias del modelo Rayleigh. El modelo Rician añade encima de ellas una componente fija: el fasor LOS.
 
-**De dónde sale la PDF de Rician**: con $I$ y $Q$ ahora gaussianas de media no nula ($\mu_I, \mu_Q$) y varianza $\sigma^2$, la envolvente $r = \sqrt{I^2 + Q^2}$ ya no tiene su cúmulo centrado en el origen — está desplazado hacia el fasor LOS de amplitud $A = \sqrt{\mu_I^2 + \mu_Q^2}$. El efecto es intuitivo: la componente LOS actúa como un "ancla" que mantiene el fasor resultante alejado del origen, reduciendo la probabilidad de deep fades.
+Con esa suma, $I$ y $Q$ siguen siendo gaussianas de varianza $\sigma^2$, pero ahora con **media no nula**: $I \sim \mathcal{N}(\mu_I, \sigma^2)$, $Q \sim \mathcal{N}(\mu_Q, \sigma^2)$. En el diagrama fasorial, el cúmulo de puntos ya no está centrado en el origen — está desplazado al punto $(\mu_I, \mu_Q)$, que es la posición del fasor LOS.
+
+Vale la pena detenerse en qué representa cada cantidad:
+
+- $r = \sqrt{I^2 + Q^2}$ — la **magnitud del fasor resultante**: variable aleatoria, fluctúa en cada instante según la realización de los caminos scatter. Es la envolvente de la señal recibida.
+- $A = \sqrt{\mu_I^2 + \mu_Q^2}$ — la **amplitud del fasor LOS**: valor **determinista**, constante. Representa la distancia del origen al centro del cúmulo en el diagrama fasorial.
+- $\sigma^2$ — la **varianza de cada componente scatter** ($\tilde{I}$ y $\tilde{Q}$): mide cuán disperso está el cúmulo alrededor de su centro LOS. No es la varianza de $r$ — es la varianza de los ecos aleatorios que rodean la componente directa.
+
+La distribución de Rician queda completamente determinada por estos dos parámetros independientes: $A$ controla dónde está el centro del cúmulo; $\sigma^2$ controla cuán disperso es ese cúmulo.
+
+**De dónde sale la PDF de Rician**: con el cúmulo desplazado al punto $(A\cos\phi_\text{LOS},\ A\sin\phi_\text{LOS})$, la envolvente $r$ — la distancia desde el origen hasta ese cúmulo — ya no tiende a cero frecuentemente. La componente LOS actúa como un "ancla" que mantiene el fasor resultante alejado del origen, reduciendo la probabilidad de deep fades.
 
 La distribución resultante — la **distribución de Rician** — incorpora dos términos que reflejan esa geometría:
 
