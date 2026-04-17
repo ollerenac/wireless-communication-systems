@@ -153,7 +153,15 @@ $\sigma_\tau$ mide cuánto tiempo tardan en llegar todos los ecos significativos
 
 $$B_c \approx \frac{1}{5\,\sigma_\tau}$$
 
-La relación viene directamente de la dualidad de Fourier: $H(f)$ es la transformada de Fourier de $h(\tau)$, por lo que una función extendida en $\tau$ produce una función que varía rápidamente en $f$, y viceversa. Cuanto más dispersos están los ecos en el dominio de los retardos (mayor $\sigma_\tau$), más rápido varía $H(f)$ en frecuencia y menor es el rango sobre el que puede considerarse constante. El factor 5 es una convención práctica (criterio del 50% de correlación). $B_c$ define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de $B_c$ ven esencialmente el mismo canal; separadas por más de $B_c$, ven canales independientes.
+La relación se deduce directamente de la dualidad de Fourier. Por definición:
+
+$$H(f) = \int_{-\infty}^{\infty} h(\tau)\, e^{-j2\pi f \tau}\, d\tau$$
+
+El factor $e^{-j2\pi f \tau}$ es el que vincula las dos variables: para que $H(f)$ cambie apreciablemente al variar $f$, basta con que $f\tau$ cambie en $\sim 1$ radián. Si $h(\tau)$ tiene ecos significativos hasta un retardo máximo del orden de $\sigma_\tau$, entonces $H(f)$ completa una variación apreciable cuando $\Delta f \cdot \sigma_\tau \sim 1$, es decir:
+
+$$\Delta f \sim \frac{1}{\sigma_\tau}$$
+
+Esta es la relación inversa fundamental: **mayor dispersión en $\tau$ implica menor ancho de banda coherente en $f$**. Un canal con ecos muy retardados (grande $\sigma_\tau$) tiene una respuesta frecuencial $H(f)$ que fluctúa rápidamente — los picos y valles de $|H(f)|$ están muy juntos. Un canal con ecos casi simultáneos (pequeño $\sigma_\tau$) tiene $H(f)$ casi plana — un rango amplio de frecuencias ve el mismo canal. El factor 5 en $B_c \approx 1/(5\sigma_\tau)$ es una convención práctica (criterio del 50% de correlación). $B_c$ define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de $B_c$ ven esencialmente el mismo canal; separadas por más de $B_c$, ven canales independientes.
 
 La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el régimen de operación:
 
