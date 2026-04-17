@@ -282,7 +282,13 @@ Las campanas no son puntos fijos sino distribuciones porque el ruido térmico $n
 
 $$n \sim \mathcal{N}(0,\, \sigma_n^2)$$
 
-Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, $\sigma_n$ (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus **puntos de inflexión** — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza $\sigma_n^2$ es simplemente $\sigma_n$ al cuadrado; no tiene interpretación geométrica directa en la curva, pero sí física: es la potencia del ruido $P_n$. Mayor $\sigma_n$ significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo. La amplitud recibida cuando se transmite $+A$ es:
+Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, $\sigma_n$ (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus **puntos de inflexión** — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza $\sigma_n^2$ es simplemente $\sigma_n$ al cuadrado; no tiene interpretación geométrica directa en la curva, pero sí física: es la potencia del ruido $P_n$. Mayor $\sigma_n$ significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo.
+
+![Distribución gaussiana: media μ y desviación estándar σ](figures/gaussian-sigma.webp)
+
+La figura muestra la regla práctica que relaciona $\sigma_n$ con el área bajo la campana: el intervalo $[\mu - \sigma_n,\ \mu + \sigma_n]$ encierra el 68% de las realizaciones; $\pm 2\sigma_n$ el 95%; $\pm 3\sigma_n$ el 99,7%. En el contexto de BPSK, $\mu = A$ (el símbolo transmitido) y la zona de error es todo lo que cae por debajo del umbral en 0 — es decir, la cola izquierda de la campana. Esa cola crece rápidamente cuando $\sigma_n$ se acerca a $A$: si $\sigma_n \ll A$ la cola es despreciable; si $\sigma_n \approx A$ el solapamiento con el umbral es significativo.
+
+La amplitud recibida cuando se transmite $+A$ es:
 
 $$r = A + n$$
 
