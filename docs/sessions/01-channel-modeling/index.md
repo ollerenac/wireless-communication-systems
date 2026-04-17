@@ -373,7 +373,7 @@ $I$ y $Q$ son, por tanto, **sumas de muchas variables aleatorias independientes*
 
 ![Derivación de Rayleigh: diagrama fasorial e histogramas I/Q](figures/rayleigh-derivation.png)
 
-La imagen izquierda muestra la imagen fasorial: cada flecha de color representa un camino multitrayecto ($I_i + jQ_i$), con amplitud $a_i$ y fase $\phi_i$ aleatorias. La flecha negra gruesa es la **suma vectorial** $I + jQ$ — el fasor resultante que ve el receptor. En cada nuevo instante de tiempo, las amplitudes y fases cambian, y el punto extremo de la flecha negra recorre la región sombreada de manera aleatoria. La imagen derecha muestra los histogramas de $I$ y $Q$ obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL.
+La imagen izquierda muestra el diagrama fasorial: cada flecha de color representa un camino multitrayecto ($I_i + jQ_i$), con amplitud $a_i$ y fase $\phi_i$ aleatorias. La flecha negra gruesa es la **suma vectorial** $I + jQ$ — el fasor resultante que ve el receptor. En cada nuevo instante, las amplitudes y fases de los caminos cambian porque el terminal se mueve o los objetos del entorno varían (el efecto temporal estudiado en §5), y el extremo de la flecha negra recorre la región sombreada de forma aleatoria. La imagen derecha muestra los histogramas de $I$ y $Q$ obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL. Con $I$ y $Q$ gaussianas e independientes, el siguiente paso es calcular la distribución de su magnitud — la envolvente $r = \sqrt{I^2 + Q^2}$.
 
 La **envolvente** de la señal — la amplitud del fasor resultante — es:
 
