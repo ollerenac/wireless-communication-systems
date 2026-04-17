@@ -355,6 +355,8 @@ La cadena lógica es: derivar $f(r)$ → obtener $f(\gamma)$ → calcular $\over
 
 **De dónde vienen las componentes I y Q**: hay que rastrearlas desde sus orígenes físicos.
 
+El punto de partida es que cualquier señal sinusoidal de frecuencia $f_c$ puede escribirse como combinación lineal de $\cos(2\pi f_c t)$ y $\sin(2\pi f_c t)$ — la **base ortogonal** del espacio de señales a esa frecuencia. Son ortogonales en el sentido de que su producto integrado en un período es cero: lo que ocurre en la componente coseno no afecta a la componente seno. Los factores de escala que acompañan a cada portadora se llaman $I$ (*in-phase*) y $Q$ (*quadrature*). La razón de usar esta descomposición es estratégica: la suma directa de los ecos $\sum a_i \cos(2\pi f_c t + \phi_i)$ no tiene una distribución estadística manejable, pero al descomponerla en componentes I y Q se obtienen dos sumas escalares — $I = \sum I_i$ y $Q = \sum Q_i$ — a las que sí se puede aplicar el TCL para obtener gaussianas. Es el artificio que hace derivable $f(r)$.
+
 Considera un transmisor que emite una portadora $\cos(2\pi f_c t)$. Cada uno de los $N$ caminos multitrayecto llega al receptor con una amplitud $a_i$ y un desfase de fase acumulado $\phi_i$ (debido a la diferencia de longitud de camino). La contribución del camino $i$ es:
 
 $$s_i(t) = a_i \cos(2\pi f_c t + \phi_i)$$
