@@ -131,7 +131,7 @@ Cada término de la suma es un eco: la **delta de Dirac** $\delta(\tau - \tau_i)
 
 La dependencia en $t$ — la segunda variable — aparece porque el canal no es estático: cuando el terminal o los objetos del entorno se mueven, las longitudes de los caminos cambian. Un camino que antes llegaba en $\tau_i$ ahora llega en $\tau_i(t)$, con una amplitud $a_i(t)$ y una fase $\phi_i(t)$ distintas. El canal es, por tanto, una función de **dos variables independientes**: $\tau$ describe la estructura del canal en el dominio de los retardos; $t$ describe cómo evoluciona esa estructura en el tiempo.
 
-Con la respuesta impulsional definida, el siguiente paso es cuantificar cuánto se dispersan los ecos en tiempo. Tres parámetros lo describen:
+Con la respuesta impulsional definida, el siguiente paso es cuantificar cuánto se dispersan los ecos en tiempo. Tres parámetros lo describen, en este orden porque existe una dependencia estricta: $\sigma_\tau$ no puede calcularse sin $\bar{\tau}$, y $B_c$ no puede obtenerse sin $\sigma_\tau$:
 
 **Mean excess delay** $\bar{\tau}$ — el "centro de masa" de la energía multitrayecto en el eje de retardos, ponderado por la potencia de cada camino:
 
@@ -143,13 +143,17 @@ No tiene consecuencias directas de diseño por sí solo, pero es el punto de ref
 
 $$\sigma_\tau = \sqrt{\overline{\tau^2} - \bar{\tau}^2}$$
 
+donde $\overline{\tau^2}$ es el mismo promedio ponderado por potencia aplicado a $\tau_i^2$:
+
+$$\overline{\tau^2} = \frac{\sum_i |a_i|^2 \tau_i^2}{\sum_i |a_i|^2}$$
+
 $\sigma_\tau$ mide cuánto tiempo tardan en llegar todos los ecos significativos después del primero — es decir, la "duración de la memoria" del canal. Un canal con $\sigma_\tau$ grande tiene ecos que llegan muy dispersos en el tiempo; uno con $\sigma_\tau$ pequeño tiene ecos casi simultáneos. Valores típicos: interiores de oficina ~30 ns, urbano ~300 ns, suburbano ~1 µs.
 
 **Coherence bandwidth** $B_c$ — el rango de frecuencias sobre el que el canal se comporta de forma aproximadamente uniforme:
 
 $$B_c \approx \frac{1}{5\,\sigma_\tau}$$
 
-Para entender de dónde viene esta relación: la respuesta en frecuencia del canal $H(f)$ es la transformada de Fourier de $h(\tau)$. Si los ecos se extienden durante $\sigma_\tau$ segundos en el dominio temporal, $H(f)$ varía significativamente en un rango de frecuencias del orden de $1/\sigma_\tau$. El factor 5 es una convención práctica (criterio del 50% de correlación). $B_c$ define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de $B_c$ ven esencialmente el mismo canal; separadas por más de $B_c$, ven canales independientes.
+La relación viene directamente de la dualidad de Fourier: $H(f)$ es la transformada de Fourier de $h(\tau)$, por lo que una función extendida en $\tau$ produce una función que varía rápidamente en $f$, y viceversa. Cuanto más dispersos están los ecos en el dominio de los retardos (mayor $\sigma_\tau$), más rápido varía $H(f)$ en frecuencia y menor es el rango sobre el que puede considerarse constante. El factor 5 es una convención práctica (criterio del 50% de correlación). $B_c$ define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de $B_c$ ven esencialmente el mismo canal; separadas por más de $B_c$, ven canales independientes.
 
 La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el régimen de operación:
 
@@ -166,6 +170,8 @@ En el panel izquierdo (flat fading), $B_s$ es estrecho y cae en un tramo aproxim
 Este es uno de los problemas centrales que motiva el diseño de OFDM (sesión 03): dividir el ancho de banda total en cientos de subportadoras estrechas, cada una con $B_s \ll B_c$, de modo que cada subportadora opera en flat fading aunque el canal global sea frequency-selective.
 
 Todo lo visto en esta sección — $h(\tau)$, $\sigma_\tau$, $B_c$, flat fading, FSF — describe el canal **en un instante congelado**. Es una fotografía. Lo que no dice es con qué rapidez cambia esa fotografía cuando el terminal o los objetos del entorno se mueven.
+
+Vale la pena notar que el multipath tiene dos consecuencias distintas sobre la señal recibida, y esta sección solo ha cubierto una de ellas. Los efectos temporales y frecuenciales — ISI, $\sigma_\tau$, $B_c$ — son la primera consecuencia, y son los que determinan si el canal distorsiona la forma espectral de la señal. La segunda consecuencia es energética: cuando los ecos se suman con fases aleatorias, la potencia recibida fluctúa de forma aleatoria a escala de centímetros, produciendo caídas bruscas (*deep fades*) que el modelo log-distance no captura. Estas fluctuaciones de potencia a pequeña escala no se abordan aquí porque requieren un tratamiento estadístico diferente — la distribución de la envolvente de la señal — que se desarrolla en la sección 6.
 
 ---
 
