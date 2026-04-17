@@ -199,11 +199,29 @@ El panel izquierdo muestra cuatro caminos multitrayecto llegando al receptor mó
 
 El panel derecho muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una **única frecuencia** $f_0$ — el tono negro vertical. El receptor, sin embargo, recibe **múltiples copias** de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos del panel izquierdo. El conjunto de todos estos desplazamientos forma el **Doppler spread**, que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.
 
-**Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
+Para entender de dónde viene esa curva y cómo conduce al coherence time, necesitamos responder dos preguntas: ¿qué supuesto físico produce la forma en "U"? ¿y qué herramienta matemática traduce esa forma al tiempo de coherencia?
+
+**Supuesto de dispersión isotrópica — el modelo de Jakes**: en un entorno urbano denso, hay tantos reflexores distribuidos en todas las direcciones que los ecos llegan con igual probabilidad desde cualquier ángulo $\theta \in [0°, 360°]$. Este es el supuesto de **isotropía**, y es la hipótesis central del modelo de Jakes. Bajo isotropía, el desplazamiento Doppler $f_D = f_{D,\text{max}}\cos\theta$ no se distribuye uniformemente: los ángulos próximos a $\theta = 0°$ y $\theta = 180°$ producen casi el mismo $f_D$ porque $\cos\theta$ varía muy lentamente en esas zonas — muchos ángulos distintos generan casi el mismo desplazamiento. En cambio, cerca de $\theta = 90°$ el desplazamiento es cero pero la densidad angular no compensa. El resultado es que la energía Doppler se acumula en los extremos $\pm f_{D,\text{max}}$, produciendo la forma en "U" visible en la figura.
+
+**De la forma en "U" al coherence time — Wiener-Khinchin**: para medir cuánto cambia el canal con el tiempo se usa la **función de autocorrelación temporal**:
+
+$$R(\Delta t) = \mathbb{E}\!\left[h^*(t)\, h(t + \Delta t)\right]$$
+
+$R(0) = 1$ significa canal idéntico; $R(\Delta t) \to 0$ significa canal independiente. Por el **teorema de Wiener-Khinchin**, $R(\Delta t)$ es la transformada de Fourier inversa del espectro Doppler. La transformada inversa de la densidad espectral en "U" del modelo de Jakes resulta ser exactamente la función de Bessel de primera especie y orden cero:
+
+$$R(\Delta t) = J_0\!\left(2\pi f_{D,\text{max}}\, \Delta t\right)$$
+
+Esta es la contribución central del modelo de Jakes: proporciona una expresión analítica cerrada para la autocorrelación temporal del canal bajo el supuesto de isotropía.
+
+**Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
-El coeficiente 0,423 proviene del modelo de Jakes: la función de autocorrelación temporal del canal es $R(\Delta t) = J_0(2\pi f_{D,\text{max}} \Delta t)$, donde $J_0$ es la función de Bessel de primera especie y orden cero. $T_c$ se define como el retardo $\Delta t$ al que $R(T_c) = 0{,}5$ (criterio del 50% de correlación), lo que resuelve a $2\pi f_{D,\text{max}} T_c \approx 2{,}657$, es decir, $T_c \approx 0{,}423/f_{D,\text{max}}$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$; la constante exacta depende del criterio de correlación elegido.
+$T_c$ se define como el retardo $\Delta t$ al que la autocorrelación cae al 50% de su valor inicial: $R(T_c) = J_0(2\pi f_{D,\text{max}}\, T_c) = 0{,}5$. Resolviendo numéricamente se obtiene $2\pi f_{D,\text{max}}\, T_c \approx 2{,}657$, de donde:
+
+$$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
+
+El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver $J_0(x) = 0{,}5$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$; la constante exacta depende del criterio de correlación elegido.
 
 Nótese la dualidad con $B_c \approx 1/(5\sigma_\tau)$: el delay spread $\sigma_\tau$ comprime $B_c$ en frecuencia; el Doppler spread $f_{D,\text{max}}$ comprime $T_c$ en tiempo. Velocidades altas → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápidamente.
 
