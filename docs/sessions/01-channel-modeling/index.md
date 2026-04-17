@@ -330,6 +330,8 @@ $$\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{\gamma}\right) f(\gamma
 
 Esta integral requiere conocer $f(\gamma)$ — la distribución estadística de la SNR instantánea, que a su vez depende de la distribución de la amplitud recibida. Esa es exactamente la pregunta que responden las secciones siguientes.
 
+Vale la pena detenerse en por qué se usa la BER como criterio de calidad y no directamente la potencia recibida. La razón es que la potencia recibida sola no determina si la comunicación es exitosa — lo que importa es si los bits llegan correctos. Un sistema puede tener potencia recibida suficiente pero alta BER si la modulación es demasiado agresiva para el $\gamma$ disponible; o puede tener baja potencia pero BER aceptable si la modulación es conservadora. La BER es el criterio de calidad *observable y relevante para el usuario*: cuántos bits se reciben mal. En diseño de sistemas, se fija una BER objetivo (típicamente $10^{-3}$ a $10^{-6}$ según la aplicación) y se despeja el $\gamma$ mínimo necesario — lo que determina la potencia mínima de transmisión, la máxima distancia, y el orden de modulación sostenible. El fading degrada el sistema precisamente porque hace que $\gamma$ caiga por debajo de ese umbral mínimo en los instantes de deep fade, disparando la BER aunque el nivel medio de señal sea adecuado.
+
 ---
 
 ### 7. Rayleigh Fading
