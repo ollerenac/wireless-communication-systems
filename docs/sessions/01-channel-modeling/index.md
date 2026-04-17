@@ -286,7 +286,15 @@ $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{
 
 donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es exactamente el **área de la cola** de una gaussiana estándar más allá del umbral $x$ — el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
-Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes: en BPSK, la potencia de la señal recibida es $P_r = A^2$ (valor cuadrático medio del símbolo) y la potencia del ruido es $P_n = \sigma_n^2$ (varianza del ruido), de modo que $\gamma = A^2/\sigma_n^2$. Sustituyendo, $A/\sigma_n = \sqrt{\gamma}$:
+Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
+
+La **potencia** de una señal aleatoria se define como su valor cuadrático medio: $P_n = \mathbb{E}[n^2]$. El ruido térmico tiene media cero — $\mathbb{E}[n] = 0$ — por lo que su varianza es:
+
+$$\sigma_n^2 = \mathbb{E}[n^2] - \bigl(\mathbb{E}[n]\bigr)^2 = \mathbb{E}[n^2]$$
+
+Potencia y varianza son la misma operación matemática ($\mathbb{E}[n^2]$), e iguales precisamente porque el ruido tiene media cero. Si $n$ está en voltios y la impedancia de referencia es $1\ \Omega$, entonces $\sigma_n^2\ \text{V}^2 / 1\ \Omega = \sigma_n^2\ \text{W}$, que se convierte a dBm de la forma habitual.
+
+Del mismo modo, $P_r = A^2$ porque la potencia del símbolo BPSK es $\mathbb{E}[s^2] = A^2$ (los dos símbolos $\pm A$ tienen el mismo valor cuadrático). Por tanto $\gamma = A^2/\sigma_n^2$. Sustituyendo, $A/\sigma_n = \sqrt{\gamma}$:
 
 $$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
 
