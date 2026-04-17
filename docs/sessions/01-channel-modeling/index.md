@@ -415,7 +415,7 @@ El resultado es una BER que decae como $1/\bar{\gamma}$ — **linealmente** con 
 
 ![Rayleigh fading: PDF, distribución de SNR y BER](figures/rayleigh-ber.png)
 
-La imagen izquierda muestra la PDF de la envolvente Rayleigh: aunque la envolvente tiene un valor medio $\bar{r}$, hay una probabilidad no despreciable de que caiga por debajo del umbral de detección (zona roja) — esos instantes producen errores. la imagen central muestra la distribución exponencial de la SNR instantánea $\gamma$: la cola izquierda pesada confirma que existe una fracción significativa del tiempo con $\gamma$ muy baja. La imagen derecha compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
+La imagen izquierda muestra la PDF de la envolvente Rayleigh: la distribución tiene su máximo cerca del origen, lo que refleja que los valores bajos de $r$ (deep fades) son estadísticamente frecuentes. La zona roja marca la región de amplitud insuficiente para una detección correcta — cuando $r$ cae ahí, la SNR instantánea es demasiado baja y se producen errores. La imagen central muestra la distribución exponencial de la SNR instantánea $\gamma$: su moda está en $\gamma = 0$, confirmando que los instantes de SNR muy baja son los más probables individualmente. La imagen derecha compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
 
 El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.
 
@@ -425,7 +425,7 @@ El modelo Rayleigh asume que no existe ninguna componente directa entre transmis
 
 La derivación I/Q de la sección anterior asumió que todas las fases $\phi_i$ son uniformemente distribuidas en $[0, 2\pi)$, de modo que las medias de $I$ y $Q$ son exactamente cero. Esa suposición corresponde a un entorno NLOS sin camino directo entre transmisor y receptor. Ahora consideramos qué ocurre cuando **sí existe un camino LOS**: una componente con amplitud fija $A$ que llega con fase $\phi_\text{LOS}$ prácticamente constante (el camino directo no cambia de longitud de manera aleatoria).
 
-**Impacto del LOS en el diagrama fasorial**: por la misma identidad trigonométrica de la sección 6, el camino LOS aporta:
+**Impacto del LOS en el diagrama fasorial**: por la misma identidad trigonométrica de §7, el camino LOS aporta:
 
 $$s_\text{LOS}(t) = A\cos(2\pi f_c t + \phi_\text{LOS}) = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I} \cos(2\pi f_c t) - \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q} \sin(2\pi f_c t)$$
 
@@ -445,7 +445,7 @@ $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0
 
 Nótese que cuando $A = 0$ (sin LOS), $I_0(0) = 1$ y la expresión se reduce exactamente a la PDF de Rayleigh de la sección 6 — Rayleigh es el caso límite de Rician sin componente directa.
 
-**El factor K de Rician**: es conveniente expresar la distribución en función de la relación entre la potencia LOS y la potencia de las componentes dispersas. La potencia de la componente LOS es $A^2/2$ (valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$). La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
+**El factor K de Rician**: es conveniente expresar la distribución en función de la relación entre la potencia LOS y la potencia de las componentes dispersas. La potencia de la componente LOS es $A^2/2$ — el valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$, que integrado en un período da $A^2 \cdot \langle\cos^2\rangle = A^2/2$. La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
 
 $$K = \frac{A^2/2}{\sigma^2 + \sigma^2} = \frac{A^2}{2\sigma^2}$$
 
@@ -459,7 +459,7 @@ Con este parámetro, los dos extremos quedan perfectamente caracterizados:
 
 ![Distribución de Rician para distintos valores de K](figures/rayleigh-rician-pdf.png)
 
-La figura muestra la PDF de la envolvente para K = 0 (Rayleigh), 1, $\sqrt{10}$ y 10. Con K = 0, la PDF tiene su máximo cerca del origen y una cola izquierda ancha — los deep fades son frecuentes. Al aumentar K, el pico se desplaza hacia la derecha y la distribución se estrecha: la envolvente es más predecible y concentrada alrededor de su valor medio. Para K = 10 (10 dB), la PDF se asemeja a una gaussiana estrecha — el canal se comporta casi como AWGN.
+La figura muestra la PDF de la envolvente para K = 0 (Rayleigh), 1, $\sqrt{10}$ y 10. Con K = 0, la PDF tiene su máximo cerca del origen — los valores bajos de envolvente son frecuentes y los deep fades son probables. Al aumentar K, el pico se desplaza hacia la derecha y la distribución se estrecha: la envolvente es más predecible y concentrada alrededor de su valor medio. Para K = 10 (10 dB), la PDF se asemeja a una gaussiana estrecha — el canal se comporta casi como AWGN.
 
 !!! example "Ejemplo numérico"
     Un enlace en interiores (corredor de oficinas, $f = 5{,}8\ \text{GHz}$) con potencia total recibida $\Omega = -60\ \text{dBm}$ y $K = 4$ (6 dB). El factor K relaciona las potencias LOS y difusa: $K/(K+1) = 4/5 = 80\,\%$ de la potencia total está concentrada en la componente LOS; las componentes dispersas aportan sólo el 20 % restante. El fasor resultante rara vez se aleja del valor LOS dominante, por lo que la probabilidad de deep fading es mucho menor que en Rayleigh fading puro con la misma potencia media.
