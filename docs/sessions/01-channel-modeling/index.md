@@ -308,7 +308,7 @@ donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área
 
 El área $Q(A/\sigma_n)$ es la **BER**: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos del canal ($A$ y $\sigma_n$). El siguiente paso es reescribirla en términos de $\gamma$ — la SNR — que es el parámetro de diseño que el ingeniero controla, no las amplitudes individuales.
 
-Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
+Esta expresión es consistente con la definición general $\gamma = P_r/P_n$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
 
 La **potencia** de una señal aleatoria se define como su valor cuadrático medio: $P_n = \mathbb{E}[n^2]$. El ruido térmico tiene media cero — $\mathbb{E}[n] = 0$ — por lo que su varianza es:
 
