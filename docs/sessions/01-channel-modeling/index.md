@@ -239,7 +239,7 @@ Ambos paneles muestran la amplitud recibida en dB en una sola frecuencia, varian
 
 | Dimensión | Parámetro de dispersión | Parámetro de coherencia | Régimen |
 |-----------|------------------------|------------------------|---------|
-| Frecuencia ($\tau$) | Delay spread $\sigma_\tau$ | Coherence bandwidth $B_c \approx 1/5\sigma_\tau$ | Flat / Frequency-selective |
+| Retardo ($\tau$) | Delay spread $\sigma_\tau$ | Coherence bandwidth $B_c \approx 1/5\sigma_\tau$ | Flat / Frequency-selective |
 | Tiempo ($t$) | Doppler spread $f_{D,\text{max}}$ | Coherence time $T_c \approx 0.423/f_{D,\text{max}}$ | Slow / Fast fading |
 
 Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: determinan la longitud del cyclic prefix en OFDM, la densidad de pilotos en la cuadrícula tiempo-frecuencia, la frecuencia de actualización del estimador de canal y el máximo orden de modulación que puede sostenerse de forma fiable.
