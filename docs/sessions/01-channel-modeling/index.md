@@ -323,7 +323,9 @@ $$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
 
 En la imagen izquierda (SNR alta), las distribuciones están bien separadas y la zona de error es pequeña. En la imagen derecha (SNR baja), se solapan y la zona de error crece. La fórmula cuantifica exactamente esa relación: a mayor $\gamma$, mayor argumento de $Q$, menor cola, menor BER.
 
-**SNR media vs. SNR instantánea** — el link budget de las secciones 1–3 calculó la potencia media recibida $\bar{P}_r$ en función de la distancia, el entorno y el shadowing. La **SNR media** es:
+**SNR media vs. SNR instantánea** — la fórmula BER $= Q(\sqrt{\gamma})$ asume implícitamente que $\gamma$ es un valor fijo y conocido. Esa suposición es válida en un canal puramente AWGN, donde el único efecto es el ruido térmico y la potencia recibida no varía. Pero en un canal real con multipath esa suposición se rompe — la potencia recibida fluctúa, y con ella $\gamma$. Para ver por qué, es necesario distinguir entre la SNR media y la SNR instantánea.
+
+El link budget de las secciones 1–3 calculó la potencia media recibida $\bar{P}_r$ en función de la distancia, el entorno y el shadowing. La **SNR media** es:
 
 $$\bar{\gamma} = \frac{\bar{P}_r}{P_n}$$
 
