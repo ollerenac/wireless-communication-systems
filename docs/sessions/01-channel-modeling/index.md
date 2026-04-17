@@ -391,15 +391,21 @@ Los parámetros de esta expresión tienen interpretación directa:
 
 A diferencia de una señal AWGN donde la amplitud recibida es prácticamente constante, la distribución de Rayleigh asigna probabilidad no nula a valores de $r$ muy cercanos a cero: en esos instantes la suma de los ecos es casi completamente destructiva — los **deep fades** — y la SNR instantánea cae drásticamente.
 
-La **SNR instantánea** se obtiene normalizando la potencia instantánea $r^2$ por la potencia media del canal $\mathbb{E}[r^2] = 2\sigma^2$ y escalando por la SNR media $\bar{\gamma}$:
+**De la envolvente $r$ a la SNR instantánea $\gamma$**: la SNR en cada instante es el ratio entre la potencia recibida instantánea y la potencia del ruido:
+
+$$\gamma = \frac{P_r}{P_n} = \frac{r^2}{P_n}$$
+
+Para expresar $\gamma$ en términos de la SNR media $\bar{\gamma}$, se usa el hecho de que la potencia media recibida en un canal Rayleigh es $\mathbb{E}[r^2] = 2\sigma^2$, de donde $P_n = 2\sigma^2/\bar{\gamma}$. Sustituyendo:
 
 $$\gamma = \frac{r^2}{2\sigma^2}\,\bar{\gamma}$$
 
-Cuando $r$ sigue una distribución de Rayleigh, la potencia $r^2$ sigue una distribución exponencial. Al escalar por la constante $\bar{\gamma}/(2\sigma^2)$, $\gamma$ sigue también una distribución **exponencial** de media $\bar{\gamma}$:
+Esta expresión muestra que $\gamma$ es proporcional a $r^2$: cuando la envolvente $r$ es grande (suma constructiva de ecos), la SNR instantánea es alta; cuando $r$ es pequeña (deep fade), $\gamma$ cae.
+
+**De $f(r)$ a $f(\gamma)$**: como $\gamma \propto r^2$, la distribución de $\gamma$ se obtiene por cambio de variable a partir de la distribución de Rayleigh. El resultado es una distribución **exponencial** de media $\bar{\gamma}$:
 
 $$f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}\exp\!\left(-\frac{\gamma}{\bar{\gamma}}\right)$$
 
-La distribución exponencial tiene una **cola izquierda pesada**: aunque la SNR media sea $\bar{\gamma}$, hay una fracción significativa del tiempo en que $\gamma$ es mucho menor que $\bar{\gamma}$. Esos instantes de baja SNR son los que generan errores.
+La característica más importante de esta distribución es que su valor más probable es $\gamma = 0$ — la moda está en el origen. Esto significa que, aunque la SNR media sea $\bar{\gamma}$, el valor instantáneo más frecuente estadísticamente es el más bajo. Hay una fracción significativa del tiempo en que $\gamma \ll \bar{\gamma}$ — esos instantes de SNR muy baja son los deep fades que disparan la BER.
 
 **De la BER en AWGN a la BER en fading**: en un canal AWGN con SNR fija $\gamma$, la BER para BPSK es determinista: $\text{BER}_{\text{AWGN}}(\gamma) = Q(\sqrt{\gamma})$. En un canal Rayleigh, $\gamma$ es aleatoria — la BER efectiva es el **promedio** de $\text{BER}_{\text{AWGN}}(\gamma)$ sobre todas las posibles realizaciones de $\gamma$:
 
