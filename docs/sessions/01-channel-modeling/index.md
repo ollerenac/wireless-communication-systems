@@ -282,7 +282,7 @@ Las campanas no son puntos fijos sino distribuciones porque el ruido térmico $n
 
 $$n \sim \mathcal{N}(0,\, \sigma_n^2)$$
 
-Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. La varianza $\sigma_n^2$ controla cuánto se dispersa: mayor $\sigma_n^2$, campanas más anchas. La amplitud recibida cuando se transmite $+A$ es:
+Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, $\sigma_n$ (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus **puntos de inflexión** — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza $\sigma_n^2$ es simplemente $\sigma_n$ al cuadrado; no tiene interpretación geométrica directa en la curva, pero sí física: es la potencia del ruido $P_n$. Mayor $\sigma_n$ significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo. La amplitud recibida cuando se transmite $+A$ es:
 
 $$r = A + n$$
 
