@@ -290,11 +290,15 @@ cuya PDF es una gaussiana centrada en $+A$ con anchura $\sigma_n$ — la campana
 
 El detector coloca el umbral en 0: decide bit 1 si $r > 0$, bit 0 si $r < 0$. La **zona de error** (rojo) es la cola de la campana que cruza ese umbral — la probabilidad de que el ruido haya empujado la amplitud al lado equivocado. La imagen izquierda (SNR alta) muestra campanas bien separadas y zona de error pequeña; la imagen derecha (SNR baja) muestra campanas solapadas y zona de error grande.
 
-Algebraicamente, dado que $+A$ fue enviado, el error ocurre cuando $r < 0$, es decir cuando $n < -A$:
+Algebraicamente, dado que $+A$ fue enviado, el error ocurre cuando $r < 0$, es decir cuando $n < -A$. El objetivo es calcular el área de esa cola, pero $n \sim \mathcal{N}(0, \sigma_n^2)$ es una gaussiana de varianza arbitraria — no existe una tabla o función directa para calcular su área de cola. La solución es **normalizar**: dividir ambos lados de la desigualdad entre $\sigma_n > 0$ no cambia el sentido de la desigualdad ni el evento, solo reescribe la condición en términos de una nueva variable $Z = n/\sigma_n$:
+
+$$n < -A \;\Longleftrightarrow\; \frac{n}{\sigma_n} < -\frac{A}{\sigma_n}$$
+
+La variable $Z = n/\sigma_n$ sigue una gaussiana estándar $\mathcal{N}(0,1)$ — media cero, varianza uno — para la cual sí existe una función estándar que calcula áreas de cola: la función $Q$. Por la simetría de $\mathcal{N}(0,1)$ alrededor de cero, $P(Z < -x) = P(Z > x) = Q(x)$. Aplicando con $x = A/\sigma_n$:
 
 $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{\sigma_n}\right) = Q\!\left(\frac{A}{\sigma_n}\right)$$
 
-donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área de la cola derecha** de una gaussiana estándar más allá del umbral $x$ — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
+donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área de la cola derecha** de la gaussiana estándar más allá del umbral $x$ — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
 Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
 
