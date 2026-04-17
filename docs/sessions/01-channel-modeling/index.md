@@ -99,7 +99,7 @@ La elección de una distribución gaussiana en dB tiene dos justificaciones. La 
 
 ![Shadowing: medidas reales vs. predicción del modelo](figures/shadowing-scatter.png)
 
-El panel izquierdo muestra medidas simuladas dispersas alrededor de la curva $\overline{\text{PL}}(d)$: cada punto es una ubicación real con su disposición única de obstáculos. La flecha roja marca $X_\sigma$ — la desviación de esa ubicación concreta respecto a la predicción media. Las bandas $\pm\sigma$ y $\pm 2\sigma$ encierran aproximadamente el 68% y el 95% de las ubicaciones posibles. El panel derecho muestra el histograma de los residuos a distancia fija: la campana gaussiana confirma por qué $\mathcal{N}(0, \sigma^2)$ es el modelo correcto.
+La imagen izquierda muestra medidas simuladas dispersas alrededor de la curva $\overline{\text{PL}}(d)$: cada punto es una ubicación real con su disposición única de obstáculos. La flecha roja marca $X_\sigma$ — la desviación de esa ubicación concreta respecto a la predicción media. Las bandas $\pm\sigma$ y $\pm 2\sigma$ encierran aproximadamente el 68% y el 95% de las ubicaciones posibles. La imagen derecha muestra el histograma de los residuos a distancia fija: la campana gaussiana confirma por qué $\mathcal{N}(0, \sigma^2)$ es el modelo correcto.
 
 La figura siguiente resume las tres contribuciones estudiadas hasta aquí, representadas sobre los mismos ejes de distancia y path loss:
 
@@ -119,9 +119,9 @@ En un entorno urbano, la señal transmitida no viaja únicamente en línea recta
 
 ![Multipath propagation: caminos físicos y respuesta impulsional](figures/multipath-channel.png)
 
-El panel izquierdo muestra tres caminos de ejemplo. El **camino directo** (verde) recorre la distancia mínima y llega primero, con el menor retardo $\tau_1$ y la mayor amplitud $a_1$. Los caminos reflejados (azul, rojo) recorren distancias mayores: llegan más tarde ($\tau_2 > \tau_1$, $\tau_3 > \tau_2$) y con menor amplitud ($a_2 < a_1$, $a_3 < a_2$) porque cada reflexión introduce pérdidas adicionales.
+La imagen izquierda muestra tres caminos de ejemplo. El **camino directo** (verde) recorre la distancia mínima y llega primero, con el menor retardo $\tau_1$ y la mayor amplitud $a_1$. Los caminos reflejados (azul, rojo) recorren distancias mayores: llegan más tarde ($\tau_2 > \tau_1$, $\tau_3 > \tau_2$) y con menor amplitud ($a_2 < a_1$, $a_3 < a_2$) porque cada reflexión introduce pérdidas adicionales.
 
-**El experimento mental del impulso**: supón que el transmisor emite un pulso perfectamente corto — un impulso de Dirac $\delta(t)$. El receptor no recibe un único pulso sino una secuencia de ecos, uno por cada camino, llegando en tiempos distintos. El panel derecho de la figura muestra exactamente eso: la **respuesta impulsional del canal** $h(\tau)$, con tres impulsos en $\tau_1$, $\tau_2$ y $\tau_3$ de amplitudes $a_1$, $a_2$ y $a_3$. El canal queda completamente caracterizado por esa "huella".
+**El experimento mental del impulso**: supón que el transmisor emite un pulso perfectamente corto — un impulso de Dirac $\delta(t)$. El receptor no recibe un único pulso sino una secuencia de ecos, uno por cada camino, llegando en tiempos distintos. La imagen derecha de la figura muestra exactamente eso: la **respuesta impulsional del canal** $h(\tau)$, con tres impulsos en $\tau_1$, $\tau_2$ y $\tau_3$ de amplitudes $a_1$, $a_2$ y $a_3$. El canal queda completamente caracterizado por esa "huella".
 
 Formalizando: si el camino $i$ llega con retardo $\tau_i$, atenuación $a_i$ y desfase $\phi_i$, su contribución a la señal recibida es una copia de la señal transmitida desplazada $\tau_i$ segundos, escalada por $a_i$ y rotada en fase $e^{j\phi_i}$. La suma de todas las contribuciones es la respuesta impulsional del canal en banda base equivalente:
 
@@ -171,9 +171,9 @@ La relación entre $B_c$ y el ancho de banda de la señal $B_s$ determina el ré
 
 ![Flat fading vs frequency-selective fading](figures/flat-vs-selective-fading.png)
 
-La curva negra en ambos paneles es la misma: la respuesta en frecuencia $|H(f)|$ del canal, con sus picos y valles. Lo que cambia es el tamaño de $B_s$ respecto a $B_c$.
+La curva negra en ambas imágenes es la misma: la respuesta en frecuencia $|H(f)|$ del canal, con sus picos y valles. Lo que cambia es el tamaño de $B_s$ respecto a $B_c$.
 
-En el panel izquierdo (flat fading), $B_s$ es estrecho y cae en un tramo aproximadamente plano de $|H(f)|$: todas las frecuencias de la señal ven la misma ganancia, el canal se comporta como un multiplicador. En el panel derecho (frequency-selective fading), $B_s$ es ancho y abarca múltiples picos y valles de $|H(f)|$: cada segmento de la señal recibe una atenuación distinta, la forma espectral queda distorsionada y aparece ISI en el dominio temporal.
+En la imagen izquierda (flat fading), $B_s$ es estrecho y cae en un tramo aproximadamente plano de $|H(f)|$: todas las frecuencias de la señal ven la misma ganancia, el canal se comporta como un multiplicador. En la imagen derecha (frequency-selective fading), $B_s$ es ancho y abarca múltiples picos y valles de $|H(f)|$: cada segmento de la señal recibe una atenuación distinta, la forma espectral queda distorsionada y aparece ISI en el dominio temporal.
 
 Este es uno de los problemas centrales que motiva el diseño de OFDM (sesión 03): dividir el ancho de banda total en cientos de subportadoras estrechas, cada una con $B_s \ll B_c$, de modo que cada subportadora opera en flat fading aunque el canal global sea frequency-selective.
 
@@ -195,9 +195,9 @@ donde $\theta$ es el ángulo entre la dirección de movimiento y la dirección d
 
 ![Doppler effect: geometría y espectro](figures/doppler-spectrum-v2.png)
 
-El panel izquierdo muestra cuatro caminos multitrayecto llegando al receptor móvil desde ángulos distintos. Cada uno produce un desplazamiento Doppler diferente según $f_D = (v/\lambda)\cos\theta$: el camino frontal (verde, $\theta=0°$) se desplaza al máximo positivo; el camino trasero (rojo, $\theta=180°$) al máximo negativo; los intermedios quedan entre ambos extremos.
+La imagen izquierda muestra cuatro caminos multitrayecto llegando al receptor móvil desde ángulos distintos. Cada uno produce un desplazamiento Doppler diferente según $f_D = (v/\lambda)\cos\theta$: el camino frontal (verde, $\theta=0°$) se desplaza al máximo positivo; el camino trasero (rojo, $\theta=180°$) al máximo negativo; los intermedios quedan entre ambos extremos.
 
-El panel derecho muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una **única frecuencia** $f_0$ — el tono negro vertical. El receptor, sin embargo, recibe **múltiples copias** de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos del panel izquierdo. El conjunto de todos estos desplazamientos forma el **Doppler spread**, que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.
+La imagen derecha muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una **única frecuencia** $f_0$ — el tono negro vertical. El receptor, sin embargo, recibe **múltiples copias** de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos dla imagen izquierda. El conjunto de todos estos desplazamientos forma el **Doppler spread**, que se extiende entre $-f_{D,\text{max}}$ y $+f_{D,\text{max}}$. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.
 
 Para entender de dónde viene esa curva y cómo conduce al coherence time, necesitamos responder dos preguntas: ¿qué supuesto físico produce la forma en "U"? ¿y qué herramienta matemática traduce esa forma al tiempo de coherencia?
 
@@ -233,7 +233,7 @@ La relación entre $T_s$ (duración de un símbolo) y $T_c$ determina el régime
 
 ![Slow fading vs fast fading](figures/slow-vs-fast-fading.png)
 
-Ambos paneles muestran la amplitud recibida en dB en una sola frecuencia, variando en el tiempo. En slow fading (arriba), $T_c$ es grande — el canal cambia lentamente y un símbolo de duración $T_s \ll T_c$ ve un canal prácticamente constante. En fast fading (abajo), $T_c$ es pequeño — el canal completa varias fluctuaciones dentro de un símbolo de duración $T_s \gg T_c$, lo que hace imposible asumir que el canal es estático durante la recepción.
+Ambas imágenes muestran la amplitud recibida en dB en una sola frecuencia, variando en el tiempo. En slow fading (arriba), $T_c$ es grande — el canal cambia lentamente y un símbolo de duración $T_s \ll T_c$ ve un canal prácticamente constante. En fast fading (abajo), $T_c$ es pequeño — el canal completa varias fluctuaciones dentro de un símbolo de duración $T_s \gg T_c$, lo que hace imposible asumir que el canal es estático durante la recepción.
 
 **Los cuatro parámetros que caracterizan $h(\tau, t)$**: la función de dos variables queda completamente descrita por dos pares duales:
 
@@ -290,7 +290,7 @@ Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$
 
 $$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
 
-En el panel izquierdo (SNR alta), las distribuciones están bien separadas y la zona de error es pequeña. En el panel derecho (SNR baja), se solapan y la zona de error crece. La fórmula cuantifica exactamente esa relación: a mayor $\gamma$, mayor argumento de $Q$, menor cola, menor BER.
+En la imagen izquierda (SNR alta), las distribuciones están bien separadas y la zona de error es pequeña. En la imagen derecha (SNR baja), se solapan y la zona de error crece. La fórmula cuantifica exactamente esa relación: a mayor $\gamma$, mayor argumento de $Q$, menor cola, menor BER.
 
 **SNR media vs. SNR instantánea** — el link budget de las secciones 1–3 calculó la potencia media recibida $\bar{P}_r$ en función de la distancia, el entorno y el shadowing. La **SNR media** es:
 
@@ -330,7 +330,7 @@ $I$ y $Q$ son, por tanto, **sumas de muchas variables aleatorias independientes*
 
 ![Derivación de Rayleigh: diagrama fasorial e histogramas I/Q](figures/rayleigh-derivation.png)
 
-El panel izquierdo muestra la imagen fasorial: cada flecha de color representa un camino multitrayecto ($I_i + jQ_i$), con amplitud $a_i$ y fase $\phi_i$ aleatorias. La flecha negra gruesa es la **suma vectorial** $I + jQ$ — el fasor resultante que ve el receptor. En cada nuevo instante de tiempo, las amplitudes y fases cambian, y el punto extremo de la flecha negra recorre la región sombreada de manera aleatoria. El panel derecho muestra los histogramas de $I$ y $Q$ obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL.
+La imagen izquierda muestra la imagen fasorial: cada flecha de color representa un camino multitrayecto ($I_i + jQ_i$), con amplitud $a_i$ y fase $\phi_i$ aleatorias. La flecha negra gruesa es la **suma vectorial** $I + jQ$ — el fasor resultante que ve el receptor. En cada nuevo instante de tiempo, las amplitudes y fases cambian, y el punto extremo de la flecha negra recorre la región sombreada de manera aleatoria. La imagen derecha muestra los histogramas de $I$ y $Q$ obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL.
 
 La **envolvente** de la señal — la amplitud del fasor resultante — es:
 
@@ -360,7 +360,7 @@ El resultado es una BER que decae como $1/\bar{\gamma}$ — **linealmente** con 
 
 ![Rayleigh fading: PDF, distribución de SNR y BER](figures/rayleigh-ber.png)
 
-El panel izquierdo muestra la PDF de la envolvente Rayleigh: aunque la envolvente tiene un valor medio $\bar{r}$, hay una probabilidad no despreciable de que caiga por debajo del umbral de detección (zona roja) — esos instantes producen errores. El panel central muestra la distribución exponencial de la SNR instantánea $\gamma$: la cola izquierda pesada confirma que existe una fracción significativa del tiempo con $\gamma$ muy baja. El panel derecho compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
+La imagen izquierda muestra la PDF de la envolvente Rayleigh: aunque la envolvente tiene un valor medio $\bar{r}$, hay una probabilidad no despreciable de que caiga por debajo del umbral de detección (zona roja) — esos instantes producen errores. la imagen central muestra la distribución exponencial de la SNR instantánea $\gamma$: la cola izquierda pesada confirma que existe una fracción significativa del tiempo con $\gamma$ muy baja. La imagen derecha compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
 
 El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.
 
