@@ -306,7 +306,7 @@ $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{
 
 donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área de la cola derecha** de la gaussiana estándar más allá del umbral $x$ — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
-Este resultado es la **BER**: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos del canal ($A$ y $\sigma_n$). El siguiente paso es reescribirla en términos de $\gamma$ — la SNR — que es el parámetro de diseño que el ingeniero controla, no las amplitudes individuales.
+El área $Q(A/\sigma_n)$ es la **BER**: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos del canal ($A$ y $\sigma_n$). El siguiente paso es reescribirla en términos de $\gamma$ — la SNR — que es el parámetro de diseño que el ingeniero controla, no las amplitudes individuales.
 
 Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
 
