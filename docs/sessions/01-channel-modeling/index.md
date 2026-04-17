@@ -272,21 +272,29 @@ La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de
 
 Con $\gamma$ definido, la pregunta natural es: ¿cómo se traduce ese valor en probabilidad de error de bit? Esa relación — la curva BER vs. SNR — es el índice de calidad fundamental de cualquier sistema de comunicaciones digitales.
 
-**BER en AWGN** — la conexión entre $\gamma$, la función Q y la BER se construye mejor desde la geometría de la detección.
+**BER en AWGN** — para entender cómo $\gamma$ determina la probabilidad de error, partimos de la figura.
 
 ![SNR y BER: umbral de decisión en BPSK](figures/snr-ber-decision.png)
 
-La figura muestra BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). La señal recibida no es un valor exacto sino una distribución gaussiana centrada en el símbolo transmitido, porque el ruido térmico $n \sim \mathcal{N}(0, \sigma_n^2)$ desplaza el valor recibido:
+La figura muestra BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). El eje horizontal es la **amplitud recibida** $r$. Cada campana es la **función de densidad de probabilidad (PDF)** de la amplitud recibida para ese símbolo: indica con qué probabilidad el receptor medirá cada valor de amplitud si ese símbolo fue transmitido.
+
+Las campanas no son puntos fijos sino distribuciones porque el ruido térmico $n$ desplaza aleatoriamente la amplitud recibida respecto al símbolo transmitido. El ruido sigue una distribución normal con media cero y varianza $\sigma_n^2$:
+
+$$n \sim \mathcal{N}(0,\, \sigma_n^2)$$
+
+Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. La varianza $\sigma_n^2$ controla cuánto se dispersa: mayor $\sigma_n^2$, campanas más anchas. La amplitud recibida cuando se transmite $+A$ es:
 
 $$r = A + n$$
 
-El detector coloca el umbral en 0: decide bit 1 si $r > 0$, bit 0 si $r < 0$. La **zona de error** (rojo) es la cola de la distribución que cruza ese umbral — la probabilidad de que el ruido haya empujado la señal al lado equivocado.
+cuya PDF es una gaussiana centrada en $+A$ con anchura $\sigma_n$ — la campana derecha de la figura izquierda.
+
+El detector coloca el umbral en 0: decide bit 1 si $r > 0$, bit 0 si $r < 0$. La **zona de error** (rojo) es la cola de la campana que cruza ese umbral — la probabilidad de que el ruido haya empujado la amplitud al lado equivocado. La imagen izquierda (SNR alta) muestra campanas bien separadas y zona de error pequeña; la imagen derecha (SNR baja) muestra campanas solapadas y zona de error grande.
 
 Algebraicamente, dado que $+A$ fue enviado, el error ocurre cuando $r < 0$, es decir cuando $n < -A$:
 
 $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{\sigma_n}\right) = Q\!\left(\frac{A}{\sigma_n}\right)$$
 
-donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es exactamente el **área de la cola** de una gaussiana estándar más allá del umbral $x$ — el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
+donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área de la cola derecha** de una gaussiana estándar más allá del umbral $x$ — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
 Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
 
