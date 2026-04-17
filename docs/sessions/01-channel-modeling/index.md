@@ -345,7 +345,13 @@ Vale la pena detenerse en por qué se usa la BER como criterio de calidad y no d
 
 ### 7. Rayleigh Fading
 
-Para obtener esa distribución estadística de $\gamma$ hay que responder primero a una pregunta más física: ¿cómo se suma en el receptor el conjunto de todos los caminos multitrayecto? La respuesta a esa pregunta revela de dónde vienen las componentes $I$ y $Q$, y por qué la envolvente resultante sigue una distribución de Rayleigh.
+Hasta aquí, $\gamma$ era un número fijo: la SNR de un canal AWGN determinista. Con el multipath fading eso cambia fundamentalmente — la amplitud recibida $r$ ya no es un valor constante sino una **variable aleatoria** que fluctúa en cada instante dependiendo de cómo se suman los ecos. Como consecuencia, la SNR instantánea $\gamma = r^2/P_n$ también es una variable aleatoria con su propia distribución $f(\gamma)$. Y dado que $\gamma$ es aleatoria, la BER ya no es un número fijo sino que también fluctúa — lo que tiene sentido como métrica de rendimiento es su **valor esperado** (promedio estadístico) sobre todas las posibles realizaciones del canal:
+
+$$\overline{\text{BER}} = \mathbb{E}_\gamma\!\left[Q\!\left(\sqrt{\gamma}\right)\right] = \int_0^\infty Q\!\left(\sqrt{\gamma}\right) f(\gamma)\, d\gamma$$
+
+La barra sobre BER y sobre $\bar{\gamma}$ indica exactamente eso: un promedio sobre la distribución de la variable aleatoria. Para evaluar esta integral necesitamos conocer $f(\gamma)$, la distribución de la SNR instantánea. Esa distribución depende directamente de cómo se distribuye la amplitud $r$ — que es lo que el modelo de Rayleigh describe.
+
+La cadena lógica es: derivar $f(r)$ → obtener $f(\gamma)$ → calcular $\overline{\text{BER}}$ en función de $\bar{\gamma}$. Para derivar $f(r)$ hay que entender cómo se forma $r$ a partir de la suma de los caminos multitrayecto — y ahí es donde entran las componentes $I$ y $Q$.
 
 **De dónde vienen las componentes I y Q**: hay que rastrearlas desde sus orígenes físicos.
 
@@ -387,9 +393,9 @@ $$f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}\exp\!\left(-\frac{\gamma}{\bar{\gamm
 
 La distribución exponencial tiene una **cola izquierda pesada**: aunque la SNR media sea $\bar{\gamma}$, hay una fracción significativa del tiempo en que $\gamma$ es mucho menor que $\bar{\gamma}$. Esos instantes de baja SNR son los que generan errores.
 
-**De la BER en AWGN a la BER en fading**: en un canal AWGN con SNR fija $\gamma$, la BER para BPSK es determinista: $\text{BER}_{\text{AWGN}}(\gamma) = Q(\sqrt{2\gamma})$. En un canal Rayleigh, $\gamma$ es aleatoria — la BER efectiva es el **promedio** de $\text{BER}_{\text{AWGN}}(\gamma)$ sobre todas las posibles realizaciones de $\gamma$:
+**De la BER en AWGN a la BER en fading**: en un canal AWGN con SNR fija $\gamma$, la BER para BPSK es determinista: $\text{BER}_{\text{AWGN}}(\gamma) = Q(\sqrt{\gamma})$. En un canal Rayleigh, $\gamma$ es aleatoria — la BER efectiva es el **promedio** de $\text{BER}_{\text{AWGN}}(\gamma)$ sobre todas las posibles realizaciones de $\gamma$:
 
-$$\text{BER}_{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) f_\gamma(\gamma)\, d\gamma = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{1 + \bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
+$$\text{BER}_{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{\gamma}\right) f_\gamma(\gamma)\, d\gamma = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{2 + \bar{\gamma}}}\right) \approx \frac{1}{2\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
 
 El resultado es una BER que decae como $1/\bar{\gamma}$ — **linealmente** con la SNR media — en lugar de la caída exponencial del canal AWGN. La diferencia es enorme en la práctica.
 
