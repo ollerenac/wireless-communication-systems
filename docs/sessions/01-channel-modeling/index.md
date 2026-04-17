@@ -456,17 +456,19 @@ $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0
 
 La conexión con Rayleigh es directa: cuando $A = 0$ (sin LOS), $I_0(0) = 1$ y la expresión se reduce exactamente a la PDF de Rayleigh — Rayleigh es el caso límite de Rician sin componente directa.
 
-**El factor K de Rician**: es conveniente expresar la distribución en función de la relación entre la potencia LOS y la potencia de las componentes dispersas. La potencia de la componente LOS es $A^2/2$ — el valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$, que integrado en un período da $A^2 \cdot \langle\cos^2\rangle = A^2/2$. La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
+**El factor K de Rician**: la PDF de Rician depende de dos parámetros, $A$ y $\sigma^2$, pero por separado no dicen mucho — un $A$ grande puede ser irrelevante si $\sigma^2$ también es grande, y viceversa. Lo que determina la severidad del fading es la *proporción* entre la potencia LOS y la potencia dispersa: cuanto mayor sea esa proporción, más dominante es la componente directa y menos probable el deep fading. Esa proporción es el **factor K de Rician**.
+
+La potencia de la componente LOS es $A^2/2$ — el valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$, que promediado en un período da $A^2 \cdot \langle\cos^2\rangle = A^2/2$. La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
 
 $$K = \frac{A^2/2}{\sigma^2 + \sigma^2} = \frac{A^2}{2\sigma^2}$$
 
-Con este parámetro, los dos extremos quedan perfectamente caracterizados:
+K es adimensional y captura la severidad del fading en un solo número, independientemente de la potencia total recibida. Los dos extremos quedan así perfectamente caracterizados:
 
-- $K = 0$ ($A = 0$): sin LOS → Rayleigh fading
-- $K \to \infty$ ($\sigma \to 0$): sin dispersión → canal puramente determinista, equivalente a AWGN
-- $K = 1$–$10$ (0–10 dB): LOS parcial, típico en interiores, picoceldas y enlaces punto a punto
+- $K = 0$ ($A = 0$): sin LOS → Rayleigh fading — severidad máxima, la envolvente puede caer hasta cero.
+- $K \to \infty$ ($\sigma \to 0$): sin dispersión → el canal es determinista, la envolvente es constante igual a $A$ y el fading desaparece completamente. La BER converge a la de AWGN — el mejor resultado posible para un SNR dado.
+- $K = 1$–$10$ (0–10 dB): LOS parcial, típico en interiores, picoceldas y enlaces punto a punto.
 
-**Efecto sobre la BER**: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia $A$ — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que $K$ crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER.
+**Efecto sobre la BER**: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia $A$ — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que $K$ crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER. En este sentido, $K$ funciona como un indicador directo de la calidad del canal: $K = 0$ es el peor caso (Rayleigh), $K \to \infty$ es el mejor (AWGN).
 
 ![Distribución de Rician para distintos valores de K](figures/rayleigh-rician-pdf.png)
 
