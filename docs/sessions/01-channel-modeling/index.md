@@ -383,7 +383,13 @@ Geométricamente, $r$ es la distancia desde el origen hasta el extremo del fasor
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0$$
 
-La envolvente tiene un valor medio $\bar{r}$ — pero a diferencia de una señal AWGN pura, tiene una cola izquierda no nula: existe una probabilidad de que $r$ caiga muy cerca de cero (deep fade), independientemente de cuál sea la potencia media.
+Los parámetros de esta expresión tienen interpretación directa:
+
+- $\sigma^2$ es la varianza de cada componente gaussiana — tanto de $I$ como de $Q$. Representa la potencia media de los caminos dispersos: mayor $\sigma^2$ implica más energía multitrayecto y mayor amplitud media recibida.
+- El factor $r$ en el numerador no es arbitrario: proviene del cambio de coordenadas cartesianas $(I, Q)$ a polares $(r, \theta)$. Al integrar la PDF gaussiana 2D sobre todos los puntos a distancia $r$ del origen (un anillo de radio $r$ y anchura $dr$), el área del anillo es proporcional a $r$ — de ahí el factor.
+- El dominio $r \geq 0$ refleja que la envolvente es una magnitud (distancia al origen), siempre no negativa.
+
+A diferencia de una señal AWGN donde la amplitud recibida es prácticamente constante, la distribución de Rayleigh asigna probabilidad no nula a valores de $r$ muy cercanos a cero: en esos instantes la suma de los ecos es casi completamente destructiva — los **deep fades** — y la SNR instantánea cae drásticamente.
 
 La **SNR instantánea** se obtiene normalizando la potencia instantánea $r^2$ por la potencia media del canal $\mathbb{E}[r^2] = 2\sigma^2$ y escalando por la SNR media $\bar{\gamma}$:
 
