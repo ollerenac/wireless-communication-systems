@@ -262,29 +262,39 @@ $$P_n = N_0 \cdot B$$
 
 donde $N_0$ es la densidad espectral unilateral de ruido (W/Hz), determinada por la temperatura del sistema. Combinando ambas expresiones, $\gamma = P_r / (N_0 B)$: la SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido.
 
-**BER en AWGN** — en un canal sin fading, la probabilidad de error de bit para BPSK es una función determinista de $\gamma$:
-
-$$\text{BER} = Q\!\left(\sqrt{2\gamma}\right)$$
-
-donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es la función Q gaussiana — la probabilidad de que una variable normal estándar supere el umbral $x$. A mayor $\gamma$, el argumento de $Q$ crece y la BER cae exponencialmente. Esta es la relación cuantitativa entre SNR y tasa de error que toda la ingeniería de enlace busca optimizar.
+**BER en AWGN** — la conexión entre $\gamma$, la función Q y la BER se construye mejor desde la geometría de la detección.
 
 ![SNR y BER: umbral de decisión en BPSK](figures/snr-ber-decision.png)
 
-La figura muestra el proceso de detección para BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). La señal recibida no es un valor exacto sino una distribución gaussiana centrada en el símbolo transmitido, cuya anchura $\sigma_n$ depende del ruido térmico. El detector coloca el umbral de decisión en 0: todo lo que llega por encima de 0 se decide como bit 1; todo lo que llega por debajo, como bit 0. La **zona de error** (rojo) es la fracción de la distribución que cruza el umbral.
+La figura muestra BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). La señal recibida no es un valor exacto sino una distribución gaussiana centrada en el símbolo transmitido, porque el ruido térmico $n \sim \mathcal{N}(0, \sigma_n^2)$ desplaza el valor recibido:
 
-En el panel izquierdo (SNR alta), las dos distribuciones están bien separadas: la BER es baja. En el panel derecho (SNR baja), las distribuciones se solapan y la BER crece. La SNR $\gamma = A^2/\sigma_n^2$ captura exactamente esa relación: $A$ es la amplitud del símbolo y $\sigma_n^2$ la varianza del ruido.
+$$r = A + n$$
+
+El detector coloca el umbral en 0: decide bit 1 si $r > 0$, bit 0 si $r < 0$. La **zona de error** (rojo) es la cola de la distribución que cruza ese umbral — la probabilidad de que el ruido haya empujado la señal al lado equivocado.
+
+Algebraicamente, dado que $+A$ fue enviado, el error ocurre cuando $r < 0$, es decir cuando $n < -A$:
+
+$$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{\sigma_n}\right) = Q\!\left(\frac{A}{\sigma_n}\right)$$
+
+donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es exactamente el **área de la cola** de una gaussiana estándar más allá del umbral $x$ — el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
+
+Sustituyendo la definición $\gamma = A^2/\sigma_n^2$, es decir $A/\sigma_n = \sqrt{\gamma}$:
+
+$$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
+
+En el panel izquierdo (SNR alta), las distribuciones están bien separadas y la zona de error es pequeña. En el panel derecho (SNR baja), se solapan y la zona de error crece. La fórmula cuantifica exactamente esa relación: a mayor $\gamma$, mayor argumento de $Q$, menor cola, menor BER.
 
 **SNR media vs. SNR instantánea** — el link budget de las secciones 1–3 calculó la potencia media recibida $\bar{P}_r$ en función de la distancia, el entorno y el shadowing. La **SNR media** es:
 
 $$\bar{\gamma} = \frac{\bar{P}_r}{P_n}$$
 
-Si el canal fuera puramente AWGN, $\gamma = \bar{\gamma}$ sería constante y la BER quedaría completamente determinada por $Q(\sqrt{2\bar{\gamma}})$.
+Si el canal fuera puramente AWGN, $\gamma = \bar{\gamma}$ sería constante y la BER quedaría completamente determinada por $Q(\sqrt{\bar{\gamma}})$.
 
 **El problema del multipath fading**: las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. La potencia recibida $P_r$ — y por tanto $\gamma$ — fluctúa aleatoriamente en torno a $\bar{P}_r$. En los instantes de suma destructiva, $\gamma$ desciende muy por debajo de $\bar{\gamma}$: aunque el promedio sea confortable (digamos $\bar{\gamma} = 20$ dB), hay momentos en que $\gamma$ cae a 0 dB o menos. Esos instantes — los **deep fades** — producen ráfagas de errores de bit aunque el nivel medio de señal sea perfectamente adecuado.
 
-En presencia de fading, $\gamma$ es una **variable aleatoria** con su propia distribución $f(\gamma)$. La BER media ya no es $Q(\sqrt{2\bar{\gamma}})$ sino el promedio de $Q(\sqrt{2\gamma})$ sobre todas las realizaciones del canal:
+En presencia de fading, $\gamma$ es una **variable aleatoria** con su propia distribución $f(\gamma)$. La BER media ya no es $Q(\sqrt{\bar{\gamma}})$ sino el promedio de $Q(\sqrt{\gamma})$ sobre todas las realizaciones del canal:
 
-$$\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{2\gamma}\right) f(\gamma)\, d\gamma$$
+$$\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{\gamma}\right) f(\gamma)\, d\gamma$$
 
 Esta integral requiere conocer $f(\gamma)$ — la distribución estadística de la SNR instantánea, que a su vez depende de la distribución de la amplitud recibida. Esa es exactamente la pregunta que responden las secciones siguientes.
 
