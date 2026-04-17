@@ -286,7 +286,7 @@ $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{
 
 donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es exactamente el **área de la cola** de una gaussiana estándar más allá del umbral $x$ — el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
-Sustituyendo la definición $\gamma = A^2/\sigma_n^2$, es decir $A/\sigma_n = \sqrt{\gamma}$:
+Esta expresión es consistente con la definición general $\gamma = P_r/(N_0 B)$ introducida antes: en BPSK, la potencia de la señal recibida es $P_r = A^2$ (valor cuadrático medio del símbolo) y la potencia del ruido es $P_n = \sigma_n^2$ (varianza del ruido), de modo que $\gamma = A^2/\sigma_n^2$. Sustituyendo, $A/\sigma_n = \sqrt{\gamma}$:
 
 $$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
 
