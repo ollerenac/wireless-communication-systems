@@ -244,7 +244,7 @@ Ambas imágenes muestran la amplitud recibida en dB en una sola frecuencia, vari
 
 Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: determinan la longitud del cyclic prefix en OFDM, la densidad de pilotos en la cuadrícula tiempo-frecuencia, la frecuencia de actualización del estimador de canal y el máximo orden de modulación que puede sostenerse de forma fiable.
 
-Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué **valor** toma la amplitud de la señal recibida en un instante concreto?
+Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué **valor** toma la amplitud de la señal recibida en un instante concreto? Para responderla necesitamos tres conceptos que se construyen en este orden: primero la **SNR** ($\gamma$), que relaciona la potencia de la señal con la potencia del ruido; luego la **BER**, que traduce $\gamma$ en probabilidad de error de bit; y finalmente el **efecto del fading**, que muestra por qué en presencia de multipath $\gamma$ no es un valor fijo sino una variable aleatoria — y por qué su distribución estadística es la clave para estimar la calidad real del enlace.
 
 ---
 
