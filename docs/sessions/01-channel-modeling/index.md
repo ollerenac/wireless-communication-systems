@@ -435,15 +435,16 @@ $$I = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I \neq 0} + \tilde{I}_\text{scatter
 
 donde $\tilde{I}_\text{scatter}$ y $\tilde{Q}_\text{scatter}$ son gaussianas de media cero y varianza $\sigma^2$ (igual que en Rayleigh). Con el término LOS, $I$ y $Q$ siguen siendo gaussianas de varianza $\sigma^2$, pero ahora con **media no nula**: $I \sim \mathcal{N}(\mu_I, \sigma^2)$, $Q \sim \mathcal{N}(\mu_Q, \sigma^2)$. En el diagrama fasorial, el cúmulo de puntos ya no está centrado en el origen — está desplazado al punto $(\mu_I, \mu_Q)$, que es el fasor LOS.
 
-**De dónde sale la PDF de Rician**: la envolvente $r = \sqrt{I^2 + Q^2}$ es la distancia desde el origen hasta ese cúmulo desplazado. Para obtener su distribución, hay que integrar la PDF gaussiana 2D sobre todos los puntos situados a distancia $r$ del origen — es decir, sobre el círculo de radio $r$:
+**De dónde sale la PDF de Rician**: con $I$ y $Q$ ahora gaussianas de media no nula ($\mu_I, \mu_Q$) y varianza $\sigma^2$, la envolvente $r = \sqrt{I^2 + Q^2}$ ya no tiene su cúmulo centrado en el origen — está desplazado hacia el fasor LOS de amplitud $A = \sqrt{\mu_I^2 + \mu_Q^2}$. El efecto es intuitivo: la componente LOS actúa como un "ancla" que mantiene el fasor resultante alejado del origen, reduciendo la probabilidad de deep fades.
 
-$$f_R(r) = \int_0^{2\pi} \frac{r}{2\pi\sigma^2} \exp\!\left(-\frac{(I-\mu_I)^2 + (Q-\mu_Q)^2}{2\sigma^2}\right) d\theta$$
-
-Expandiendo el cuadrado y usando la identidad $\mu_I^2 + \mu_Q^2 = A^2$ (porque $A^2\cos^2\phi_\text{LOS} + A^2\sin^2\phi_\text{LOS} = A^2$), la integral sobre el ángulo $\theta$ produce exactamente $\int_0^{2\pi} e^{(rA/\sigma^2)\cos\theta}\,d\theta = 2\pi\, I_0(rA/\sigma^2)$, donde $I_0(\cdot)$ es la **función de Bessel modificada de orden cero** — simplemente el nombre que recibe esa integral estándar. El resultado es la **distribución de Rician**:
+La distribución resultante — la **distribución de Rician** — incorpora dos términos que reflejan esa geometría:
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\!\left(\frac{rA}{\sigma^2}\right), \quad r \geq 0$$
 
-Nótese que cuando $A = 0$ (sin LOS), $I_0(0) = 1$ y la expresión se reduce exactamente a la PDF de Rayleigh de la sección 6 — Rayleigh es el caso límite de Rician sin componente directa.
+- El factor $\exp(-(r^2 + A^2)/2\sigma^2)$ penaliza tanto la distancia de $r$ al origen como la distancia del LOS al origen — cuanto más separados estén $r$ y $A$, menor es la probabilidad.
+- $I_0(rA/\sigma^2)$ es la **función de Bessel modificada de orden cero** — un factor de acoplamiento entre la envolvente $r$ y la amplitud LOS $A$ que aumenta cuando ambas son similares. No es necesario conocer su forma analítica; basta con saber que $I_0(0) = 1$ y que crece cuando su argumento crece.
+
+La conexión con Rayleigh es directa: cuando $A = 0$ (sin LOS), $I_0(0) = 1$ y la expresión se reduce exactamente a la PDF de Rayleigh — Rayleigh es el caso límite de Rician sin componente directa.
 
 **El factor K de Rician**: es conveniente expresar la distribución en función de la relación entre la potencia LOS y la potencia de las componentes dispersas. La potencia de la componente LOS es $A^2/2$ — el valor cuadrático medio de $A\cos(2\pi f_c t + \phi_\text{LOS})$, que integrado en un período da $A^2 \cdot \langle\cos^2\rangle = A^2/2$. La potencia total de las componentes dispersas es $\sigma_I^2 + \sigma_Q^2 = 2\sigma^2$. El cociente define el **factor K**:
 
