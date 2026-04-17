@@ -306,17 +306,18 @@ $$P(\text{error} \mid +A) = P(n < -A) = P\!\left(\frac{n}{\sigma_n} < -\frac{A}{
 
 donde $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du$ es el **área de la cola derecha** de la gaussiana estándar más allá del umbral $x$ — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía $-A$.
 
-El área $Q(A/\sigma_n)$ es la **BER**: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos del canal ($A$ y $\sigma_n$). El siguiente paso es reescribirla en términos de $\gamma$ — la SNR — que es el parámetro de diseño que el ingeniero controla, no las amplitudes individuales.
+El área $Q(A/\sigma_n)$ es la **BER**: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos $A$ y $\sigma_n$. El siguiente paso es reescribirla en términos de $\gamma = P_r/P_n$ — el parámetro de diseño que el ingeniero controla.
 
-Esta expresión es consistente con la definición general $\gamma = P_r/P_n$ introducida antes. Para verlo, es necesario entender por qué la potencia del ruido $P_n$ es igual a la varianza $\sigma_n^2$.
+Para ello se identifican los dos ingredientes de $\gamma$ en el contexto BPSK:
 
-La **potencia** de una señal aleatoria se define como su valor cuadrático medio: $P_n = \mathbb{E}[n^2]$. El ruido térmico tiene media cero — $\mathbb{E}[n] = 0$ — por lo que su varianza es:
+- **Potencia de la señal**: $P_r = A^2$, porque los símbolos $\pm A$ tienen valor cuadrático medio $\mathbb{E}[s^2] = A^2$.
+- **Potencia del ruido**: $P_n = \sigma_n^2$, porque la potencia de una señal aleatoria es su valor cuadrático medio $\mathbb{E}[n^2]$, y para ruido de media cero $\mathbb{E}[n^2] = \sigma_n^2$ (varianza = potencia). Normalizado a $1\ \Omega$, $\sigma_n^2\ \text{V}^2$ equivale directamente a $\sigma_n^2\ \text{W}$, convertible a dBm.
 
-$$\sigma_n^2 = \mathbb{E}[n^2] - \bigl(\mathbb{E}[n]\bigr)^2 = \mathbb{E}[n^2]$$
+Por tanto:
 
-Potencia y varianza son la misma operación matemática ($\mathbb{E}[n^2]$), e iguales precisamente porque el ruido tiene media cero. Si $n$ está en voltios y la impedancia de referencia es $1\ \Omega$, entonces $\sigma_n^2\ \text{V}^2 / 1\ \Omega = \sigma_n^2\ \text{W}$, que se convierte a dBm de la forma habitual.
+$$\gamma = \frac{P_r}{P_n} = \frac{A^2}{\sigma_n^2} \quad \Longrightarrow \quad \frac{A}{\sigma_n} = \sqrt{\gamma}$$
 
-Del mismo modo, $P_r = A^2$ porque la potencia del símbolo BPSK es $\mathbb{E}[s^2] = A^2$ (los dos símbolos $\pm A$ tienen el mismo valor cuadrático). Por tanto $\gamma = A^2/\sigma_n^2$. Sustituyendo, $A/\sigma_n = \sqrt{\gamma}$:
+Sustituyendo en $Q(A/\sigma_n)$:
 
 $$\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}$$
 
