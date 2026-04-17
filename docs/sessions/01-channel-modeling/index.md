@@ -268,7 +268,9 @@ con $k_B = 1{,}38 \times 10^{-23}$ J/K la constante de Boltzmann y $T$ la temper
 
 $$\gamma = \frac{P_r}{N_0 B}$$
 
-La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido.
+La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido. Reducir $B$ baja $P_n$ y sube $\gamma$, pero tiene un coste directo: un receptor de ancho de banda $B$ solo puede procesar señales de hasta $B$ Hz — reducirlo limita la tasa de datos máxima. En la práctica, $B$ se elige igual al ancho de banda mínimo necesario para la señal; no se reduce arbitrariamente.
+
+Con $\gamma$ definido, la pregunta natural es: ¿cómo se traduce ese valor en probabilidad de error de bit? Esa relación — la curva BER vs. SNR — es el índice de calidad fundamental de cualquier sistema de comunicaciones digitales.
 
 **BER en AWGN** — la conexión entre $\gamma$, la función Q y la BER se construye mejor desde la geometría de la detección.
 
