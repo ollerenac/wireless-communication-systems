@@ -251,7 +251,11 @@ Resolviendo numéricamente se obtiene $2\pi f_{D,\text{max}}\, T_c \approx 2{,}6
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
-El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver $J_0(x) = 0{,}5$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$: velocidad alta → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápido y hay que reestimarlo con frecuencia.
+El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver $J_0(x) = 0{,}5$. La constante exacta depende del criterio de correlación elegido; lo que sí es universal es la relación inversa con $f_{D,\text{max}}$:
+
+- Mayor velocidad del terminal → mayor $f_{D,\text{max}}$
+- Mayor $f_{D,\text{max}}$ → menor $T_c$
+- Menor $T_c$ → el canal cambia más rápido → hay que reestimarlo con mayor frecuencia
 
 Nótese la dualidad con $B_c \approx 1/(5\sigma_\tau)$: el delay spread $\sigma_\tau$ comprime $B_c$ en frecuencia; el Doppler spread $f_{D,\text{max}}$ comprime $T_c$ en tiempo. Velocidades altas → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápidamente.
 
