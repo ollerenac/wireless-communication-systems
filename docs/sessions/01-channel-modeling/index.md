@@ -353,6 +353,10 @@ La barra sobre BER y sobre $\bar{\gamma}$ indica exactamente eso: un promedio so
 
 La cadena lógica es: derivar $f(r)$ → obtener $f(\gamma)$ → calcular $\overline{\text{BER}}$ en función de $\bar{\gamma}$. Para derivar $f(r)$ hay que entender cómo se forma $r$ a partir de la suma de los caminos multitrayecto — y ahí es donde entran las componentes $I$ y $Q$.
 
+**Por qué modelamos $a_i$ y $\phi_i$ como variables aleatorias**: este es el paso conceptual más importante de toda la sección, y conviene hacerlo explícito. En cualquier posición concreta del terminal, cada amplitud $a_i$ y cada fase $\phi_i$ tiene un valor exacto y determinista: están completamente determinados por la geometría del entorno — la posición de cada reflexor, el material de cada superficie, la longitud exacta de cada camino. El problema es que no los conocemos y que cambian cada vez que el terminal se desplaza unos pocos centímetros. En lugar de predecir esos valores exactos — imposible en un entorno urbano real — adoptamos un **enfoque estadístico**: los modelamos como variables aleatorias con distribuciones plausibles y derivamos la distribución de la amplitud resultante $r$. Esa distribución captura el comportamiento del canal sobre todas las posibles posiciones del terminal y es lo que permite calcular la $\overline{\text{BER}}$ como métrica de diseño.
+
+La distribución de $\phi_i$ se justifica físicamente. La fase acumulada por el camino $i$ es $\phi_i = 2\pi d_i / \lambda$, donde $d_i$ es la longitud del camino. A 2 GHz, $\lambda \approx 15$ cm; un camino de 10 m acumula $\phi_i = 2\pi \times 10/0{,}15 \approx 2\pi \times 67$ — es decir, 67 vueltas completas. No conocemos $d_i$ con precisión de centímetros, y la fracción de vuelta sobrante después de descartar los múltiplos enteros de $2\pi$ es efectivamente aleatoria: **$\phi_i$ se modela como una variable aleatoria uniforme en $[0, 2\pi)$**. Esta suposición no es un truco matemático — es la consecuencia directa de que las longitudes de camino son órdenes de magnitud mayores que $\lambda$.
+
 **De dónde vienen las componentes I y Q**: hay que rastrearlas desde sus orígenes físicos.
 
 El punto de partida es que cualquier señal sinusoidal de frecuencia $f_c$ puede escribirse como combinación lineal de $\cos(2\pi f_c t)$ y $\sin(2\pi f_c t)$ — la **base ortogonal** del espacio de señales a esa frecuencia. Son ortogonales en el sentido de que su producto integrado en un período es cero: lo que ocurre en la componente coseno no afecta a la componente seno. Los factores de escala que acompañan a cada portadora se llaman $I$ (*in-phase*) y $Q$ (*quadrature*). La razón de usar esta descomposición es estratégica: la suma directa de los ecos $\sum a_i \cos(2\pi f_c t + \phi_i)$ no tiene una distribución estadística manejable, pero al descomponerla en componentes I y Q se obtienen dos sumas escalares — $I = \sum I_i$ y $Q = \sum Q_i$ — a las que sí se puede aplicar el TCL para obtener gaussianas. Es el artificio que hace derivable $f(r)$.
@@ -369,7 +373,13 @@ Cada camino aporta dos proyecciones: una sobre la portadora coseno ($I_i$) y otr
 
 $$s(t) = \underbrace{\left(\sum_{i=1}^N a_i \cos\phi_i\right)}_{I} \cos(2\pi f_c t) \;-\; \underbrace{\left(\sum_{i=1}^N a_i \sin\phi_i\right)}_{Q} \sin(2\pi f_c t)$$
 
-$I$ y $Q$ son, por tanto, **sumas de muchas variables aleatorias independientes** — cada $a_i$ y $\phi_i$ es aleatoria e independiente de los demás caminos. Cuando $N$ es grande (entorno urbano: decenas o centenares de caminos), el **teorema central del límite** (TCL) garantiza que $I$ y $Q$ convergen a distribuciones gaussianas de media cero e igual varianza $\sigma^2$. El hecho de que ambas tengan media cero refleja que, sin LOS, las fases $\phi_i$ se distribuyen uniformemente en $[0, 2\pi)$: los términos $\cos\phi_i$ toman valores positivos y negativos con igual frecuencia, por lo que su **media estadística** es $\mathbb{E}[\cos\phi_i] = 0$, y lo mismo para $\sin\phi_i$. Esto no significa que la señal sea destructiva en cada instante — en cada realización concreta, $I$ y $Q$ toman valores distintos de cero y la señal existe con una amplitud determinada. Lo que es cero es el promedio estadístico sobre todas las posibles realizaciones del canal. Esa es exactamente la condición que define una gaussiana centrada en cero — y la que distingue a Rayleigh (sin LOS, $\mathbb{E}[I] = \mathbb{E}[Q] = 0$) de Rician (con LOS, donde la componente directa introduce una media no nula).
+$I$ y $Q$ son, por tanto, **sumas de muchas variables aleatorias independientes** — cada $a_i$ y $\phi_i$ es aleatoria e independiente de los demás caminos, porque cada camino refleja en un objeto físicamente distinto. El **teorema central del límite** (TCL) garantiza que $I$ y $Q$ convergen a gaussianas cuando se cumplen tres condiciones — y las tres se satisfacen aquí en NLOS:
+
+1. **Muchos sumandos**: en entornos urbanos hay decenas o centenares de caminos activos.
+2. **Independencia**: cada $I_i = a_i\cos\phi_i$ depende solo del camino $i$; los demás caminos no afectan su valor.
+3. **Ninguno domina**: en ausencia de LOS, todos los caminos tienen amplitudes $a_i$ comparables; ningún término individual concentra la mayor parte de la energía. Esta es la condición que se violará en Rician, donde el camino directo sí domina.
+
+Cuando las tres se cumplen, el resultado son gaussianas de media cero e igual varianza $\sigma^2$. La media cero se sigue de que $\phi_i \sim \text{Uniforme}[0, 2\pi)$: los términos $\cos\phi_i$ toman valores positivos y negativos con igual frecuencia, de modo que $\mathbb{E}[\cos\phi_i] = 0$, y lo mismo para $\sin\phi_i$. Esto no significa que la señal sea cero en cada instante — en cada realización concreta, $I$ y $Q$ toman valores distintos de cero. Lo que es cero es el **promedio estadístico** sobre todas las posibles posiciones del terminal. Esa es exactamente la condición que distingue a Rayleigh (sin LOS: $\mathbb{E}[I] = \mathbb{E}[Q] = 0$, cúmulo centrado en el origen) de Rician (con LOS: la componente directa introduce una media no nula y desplaza el cúmulo).
 
 ![Derivación de Rayleigh: diagrama fasorial e histogramas I/Q](figures/rayleigh-derivation.png)
 
@@ -417,13 +427,24 @@ El resultado es una BER que decae como $1/\bar{\gamma}$ — **linealmente** con 
 
 La imagen izquierda muestra la PDF de la envolvente Rayleigh: la distribución tiene su máximo cerca del origen, lo que refleja que los valores bajos de $r$ (deep fades) son estadísticamente frecuentes. La zona roja marca la región de amplitud insuficiente para una detección correcta — cuando $r$ cae ahí, la SNR instantánea es demasiado baja y se producen errores. La imagen central muestra la distribución exponencial de la SNR instantánea $\gamma$: su moda está en $\gamma = 0$, confirmando que los instantes de SNR muy baja son los más probables individualmente. La imagen derecha compara directamente la BER en AWGN y en Rayleigh fading: para alcanzar una BER de $10^{-3}$, el canal Rayleigh requiere aproximadamente **17 dB más de SNR** que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.
 
+La diferencia entre Rayleigh y Rician, vista desde el modelo estadístico, es exactamente una: en Rayleigh **todos** los N caminos tienen fase aleatoria; en Rician **uno** de ellos — el directo — tiene amplitud y fase deterministas. Ese único cambio en las suposiciones produce una distribución diferente:
+
+| | Rayleigh (NLOS) | Rician (LOS) |
+|---|---|---|
+| Caminos scatter | $a_i$ aleatorio, $\phi_i \sim \text{Unif}[0,2\pi)$ | ídem |
+| Camino LOS | no existe | $A$ determinista, $\phi_\text{LOS}$ determinista |
+| $\mathbb{E}[I]$, $\mathbb{E}[Q]$ | 0, 0 | $\mu_I \neq 0$, $\mu_Q \neq 0$ |
+| Centro del cúmulo fasorial | origen | punto $(\mu_I, \mu_Q)$ |
+| PDF de la envolvente $r$ | Rayleigh | Rician |
+| Deep fades | frecuentes ($r$ puede caer a 0) | poco probables ($r \approx A$ la mayor parte del tiempo) |
+
 El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.
 
 ---
 
 ### 8. Rician Fading
 
-La derivación I/Q de la sección anterior asumió que todas las fases $\phi_i$ son uniformemente distribuidas en $[0, 2\pi)$, de modo que las medias de $I$ y $Q$ son exactamente cero. Esa suposición corresponde a un entorno NLOS sin camino directo entre transmisor y receptor. Ahora consideramos qué ocurre cuando **sí existe un camino LOS**: una componente con amplitud fija $A$ que llega con fase $\phi_\text{LOS}$ prácticamente constante (el camino directo no cambia de longitud de manera aleatoria).
+La tabla al final de §7 resume el cambio: en Rician, uno de los $N$ caminos deja de ser aleatorio. En Rayleigh todos los caminos tenían amplitudes y fases aleatorias, y eso hacía que $\mathbb{E}[I] = \mathbb{E}[Q] = 0$. Ahora existe un **camino LOS** con amplitud fija $A$ y fase $\phi_\text{LOS}$ prácticamente constante — el camino directo recorre una distancia casi invariante porque el obstáculo eres tú mismo y el transmisor, no un reflexor en movimiento. Al ser determinista, ese término no fluctúa, no promedía a cero y desplaza la media de $I$ y $Q$ fuera del origen. Ese desplazamiento es el mecanismo completo de Rician.
 
 **Impacto del LOS en el diagrama fasorial**: por la misma identidad trigonométrica de §7, el camino LOS aporta:
 
