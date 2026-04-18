@@ -134,6 +134,8 @@ El shadowing explica la variabilidad lenta. Pero incluso un terminal completamen
 
 ### 4. Multipath Propagation
 
+Los modelos de las secciones anteriores asumían implícitamente que la señal viaja por **una sola trayectoria** del transmisor al receptor. El shadowing reconocía que esa trayectoria atraviesa obstáculos aleatorios, pero los trataba como un único factor de atenuación acumulado — no distinguía entre caminos. Ese modelo explica bien la variabilidad de potencia a escala de metros, pero deja sin respuesta un fenómeno diferente: ¿por qué un terminal completamente estacionario muestra fluctuaciones de señal de varios decibelios al desplazarse apenas unos centímetros? La causa no es la atenuación por obstáculos — es que la señal llega por múltiples caminos simultáneos que se suman con fases distintas.
+
 En un entorno urbano, la señal transmitida no viaja únicamente en línea recta hacia el receptor. Se refleja en fachadas de edificios, se difracta en esquinas, se dispersa en vehículos y objetos. El receptor recibe simultáneamente varias copias de la misma señal, cada una llegando por un camino distinto.
 
 ![Multipath propagation: caminos físicos y respuesta impulsional](figures/multipath-channel.png)
