@@ -306,11 +306,15 @@ La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de
 
 Con $\gamma$ definido, la pregunta natural es: ¿cómo se traduce ese valor en probabilidad de error de bit? Esa relación — la curva BER vs. SNR — es el índice de calidad fundamental de cualquier sistema de comunicaciones digitales.
 
-**BER con SNR fija — el caso base**: antes de ver cómo el fading complica el análisis, hay que derivar la BER en el escenario más simple: γ es un valor fijo y conocido. Este es el caso de un canal donde la única fuente de aleatoriedad es el ruido térmico — lo que se denomina canal AWGN. El objetivo no es estudiar AWGN por sí mismo, sino obtener la expresión BER = $Q(\sqrt{\gamma})$, que será la pieza central de la integral de fading $\int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma$ que aparece en §7 y §8. Partimos de la figura.
+El objetivo de esta sub-sección es obtener un **número fijo** que caracterice el rendimiento del enlace: la BER media $\overline{\text{BER}}$. Para llegar a ella hay que recorrer tres pasos. Primero, derivar BER $= Q(\sqrt{\gamma})$ para el caso donde $\gamma$ es constante. Segundo, reconocer que en presencia de fading $\gamma$ es una variable aleatoria — y por tanto la BER también lo es. Tercero, calcular el promedio: $\overline{\text{BER}} = \int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma$. Esa integral requiere conocer $f(\gamma)$, la distribución de la SNR instantánea — y son precisamente los modelos de Rayleigh (§7) y Rician (§8) los que la proporcionan.
+
+**BER con SNR fija — el caso base**: antes de ver cómo el fading complica el análisis, hay que derivar la BER en el escenario más simple: $\gamma$ es un valor fijo y conocido. Este es el caso de un canal donde la única fuente de aleatoriedad es el ruido térmico — lo que se denomina canal AWGN. El objetivo no es estudiar AWGN por sí mismo, sino obtener la expresión BER $= Q(\sqrt{\gamma})$, que será la pieza central de la integral de fading $\int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma$ que aparece en §7 y §8. Partimos de la figura.
 
 ![SNR y BER: umbral de decisión en BPSK](figures/snr-ber-decision.png)
 
-La figura muestra BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). El eje horizontal es la **amplitud recibida** $r$. Cada campana es la **función de densidad de probabilidad (PDF)** de la amplitud recibida para ese símbolo: indica con qué probabilidad el receptor medirá cada valor de amplitud si ese símbolo fue transmitido.
+Una **función de densidad de probabilidad (PDF)** describe cómo se reparte la probabilidad de una variable aleatoria continua. Su altura en un punto $x$ indica qué tan probable es observar valores cercanos a $x$; el **área bajo la curva** entre dos límites es la probabilidad de que la variable caiga en ese intervalo. El área total es siempre 1 — la variable toma algún valor con certeza.
+
+La figura muestra BPSK — el caso más simple, con dos símbolos: $+A$ (bit 1) y $-A$ (bit 0). El eje horizontal es la **amplitud recibida** $r$. Cada campana es la **PDF** de la amplitud recibida para ese símbolo: indica con qué probabilidad el receptor medirá cada valor de amplitud si ese símbolo fue transmitido.
 
 Las campanas no son puntos fijos sino distribuciones porque el ruido térmico $n$ desplaza aleatoriamente la amplitud recibida respecto al símbolo transmitido. El ruido sigue una distribución normal con media cero y varianza $\sigma_n^2$:
 
