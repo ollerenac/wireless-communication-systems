@@ -306,7 +306,7 @@ La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de
 
 Con $\gamma$ definido, la pregunta natural es: ¿cómo se traduce ese valor en probabilidad de error de bit? Esa relación — la curva BER vs. SNR — es el índice de calidad fundamental de cualquier sistema de comunicaciones digitales.
 
-**BER en AWGN** — para entender cómo $\gamma$ determina la probabilidad de error, partimos de la figura.
+**BER con SNR fija — el caso base**: antes de ver cómo el fading complica el análisis, hay que derivar la BER en el escenario más simple: γ es un valor fijo y conocido. Este es el caso de un canal donde la única fuente de aleatoriedad es el ruido térmico — lo que se denomina canal AWGN. El objetivo no es estudiar AWGN por sí mismo, sino obtener la expresión BER = $Q(\sqrt{\gamma})$, que será la pieza central de la integral de fading $\int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma$ que aparece en §7 y §8. Partimos de la figura.
 
 ![SNR y BER: umbral de decisión en BPSK](figures/snr-ber-decision.png)
 
