@@ -105,7 +105,11 @@ $$\log(\alpha_1 \times \alpha_2 \times \cdots \times \alpha_N) = \log\alpha_1 + 
 
 Ahora sí: es una suma de $N$ variables aleatorias independientes. Cuando $N$ es grande, el TCL garantiza que esa suma converge a una distribución gaussiana. Resultado: el **logaritmo** de la atenuación total es gaussiano.
 
-¿Para qué sirve? Porque en ingeniería expresamos la pérdida en **dB**, y los dB son exactamente el logaritmo ($\text{dB} = 10\log_{10}(\cdot)$). Decir "el logaritmo de la atenuación es gaussiano" equivale a decir que la desviación de la pérdida en dB sigue una distribución normal. Eso es exactamente $X_\sigma \sim \mathcal{N}(0, \sigma^2)$: el modelo se aplica directamente en dB, sin ninguna transformación adicional. A esta distribución en escala lineal (donde la potencia es lognormal) se la llama distribución **log-normal** — de ahí el nombre de *log-normal shadowing*.
+¿Para qué sirve? La pérdida adicional por shadowing en dB es, por definición:
+
+$$X_\sigma\ [\text{dB}] = 10\log_{10}\!\left(\frac{1}{\alpha_1 \cdot \alpha_2 \cdots \alpha_N}\right) = -10\log_{10}(\alpha_1 \cdot \alpha_2 \cdots \alpha_N)$$
+
+Pero acabamos de demostrar que $\log(\alpha_1 \cdots \alpha_N)$ es gaussiano. Los dB son exactamente eso — un logaritmo escalado por $10/\ln 10 \approx 4{,}34$. Escalar una gaussiana por una constante da otra gaussiana. Por tanto, $X_\sigma$ en dB es gaussiana: $X_\sigma \sim \mathcal{N}(0, \sigma^2)$. No hay transformación adicional — "el logaritmo de la atenuación es gaussiano" y "$X_\sigma$ en dB es gaussiano" son la misma afirmación escrita de dos maneras distintas. A la distribución de la potencia en escala lineal (que es el exponencial de una gaussiana) se la llama **log-normal** — de ahí el nombre de *log-normal shadowing*.
 
 ![Shadowing: medidas reales vs. predicción del modelo](figures/shadowing-scatter.png)
 
