@@ -243,15 +243,15 @@ $$R(\Delta t) = J_0\!\left(2\pi f_{D,\text{max}}\, \Delta t\right)$$
 
 Esta es la contribución central del modelo de Jakes: proporciona una expresión analítica cerrada para la autocorrelación temporal del canal bajo el supuesto de isotropía.
 
-**Coherence time** $T_c$ — el dual temporal del coherence bandwidth: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes: así como $B_c$ definía el rango de frecuencias sobre el que el canal es uniforme, $T_c$ define el intervalo de tiempo durante el que el canal puede considerarse estático. Dos medidas del canal separadas por menos de $T_c$ son similares; separadas por más de $T_c$, son prácticamente independientes:
+**Coherence time** $T_c$ — $R(\Delta t)$ responde exactamente la pregunta que necesitamos: dado que el canal en el instante $t$ tiene cierta respuesta, ¿cuánto tiempo después sigue siendo suficientemente similar para no necesitar reestimarlo? Cuando $\Delta t$ es pequeño, $J_0(2\pi f_{D,\text{max}}\,\Delta t) \approx 1$ — el canal casi no ha cambiado. A medida que $\Delta t$ crece, $J_0$ decrece — el canal se decorrelaciona. Se necesita un criterio práctico que defina el umbral a partir del cual el canal se considera "suficientemente diferente": la convención habitual es $R(T_c) = 0{,}5$, es decir, el instante en que la correlación ha caído al 50% de su valor inicial. Aplicando esa condición:
+
+$$J_0\!\left(2\pi f_{D,\text{max}}\, T_c\right) = 0{,}5$$
+
+Resolviendo numéricamente se obtiene $2\pi f_{D,\text{max}}\, T_c \approx 2{,}657$, de donde:
 
 $$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
 
-$T_c$ se define como el retardo $\Delta t$ al que la autocorrelación cae al 50% de su valor inicial: $R(T_c) = J_0(2\pi f_{D,\text{max}}\, T_c) = 0{,}5$. Resolviendo numéricamente se obtiene $2\pi f_{D,\text{max}}\, T_c \approx 2{,}657$, de donde:
-
-$$T_c \approx \frac{0{,}423}{f_{D,\text{max}}}$$
-
-El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver $J_0(x) = 0{,}5$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$; la constante exacta depende del criterio de correlación elegido.
+El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver $J_0(x) = 0{,}5$. Para este curso basta retener la relación inversa con $f_{D,\text{max}}$: velocidad alta → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápido y hay que reestimarlo con frecuencia.
 
 Nótese la dualidad con $B_c \approx 1/(5\sigma_\tau)$: el delay spread $\sigma_\tau$ comprime $B_c$ en frecuencia; el Doppler spread $f_{D,\text{max}}$ comprime $T_c$ en tiempo. Velocidades altas → $f_{D,\text{max}}$ grande → $T_c$ pequeño → el canal cambia rápidamente.
 
