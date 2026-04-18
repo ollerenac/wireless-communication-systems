@@ -88,12 +88,17 @@ Con el exponente $n$ correcto, el modelo predice bien la potencia media recibida
 
 Imagina que mides la potencia recibida en 60 puntos distintos del mismo vecindario, todos a exactamente 1 km de la misma antena. El modelo log-distancia predice un único valor de PL para esa distancia. Las medidas reales, sin embargo, se dispersan alrededor de esa predicción en un rango de ±15–20 dB. La causa no es ruido de medida: es la disposición particular de edificios, muros y obstáculos entre la antena y cada punto — diferente en cada ubicación, impredecible de antemano.
 
-Modelar cada obstáculo individualmente es inviable. En cambio, se trata el efecto acumulado como una variable aleatoria: la pérdida a una distancia $d$ ya no es un número fijo sino la suma de la predicción media más una desviación aleatoria que depende del entorno específico de cada ubicación.
+Modelar cada obstáculo individualmente es inviable. La alternativa es separar la pérdida total en dos partes con roles distintos:
+
+- **Lo que se puede predecir**: la pérdida media a esa distancia, que el modelo log-distancia ya calcula. Todas las ubicaciones a distancia $d$ comparten este valor en promedio — es la componente sistemática, determinista.
+- **Lo que no se puede predecir**: la desviación concreta de esta ubicación respecto a ese promedio. Depende de qué edificios, muros y árboles se interponen exactamente entre la antena y este punto — diferente en cada caso, imposible de conocer de antemano. Esta es la componente aleatoria.
+
+En dB, las pérdidas se suman — y por eso la fórmula es aditiva:
 
 $$\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma$$
 
-- $\overline{\text{PL}}(d)$ — la barra indica **valor medio**: es exactamente la predicción del modelo log-distancia, es decir, la pérdida esperada promediada sobre todas las posibles ubicaciones a distancia $d$.
-- $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ — la desviación aleatoria en dB en una ubicación concreta, con media cero (no introduce sesgo) y desviación típica $\sigma$ entre 4 y 12 dB según el entorno.
+- $\overline{\text{PL}}(d)$ — la barra indica **valor medio**: la pérdida esperada promediada sobre todas las posibles ubicaciones a distancia $d$. Es determinista: dado $d$, este valor está fijo.
+- $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ — la desviación aleatoria de esta ubicación concreta respecto a ese promedio. Tiene media cero porque $\overline{\text{PL}}(d)$ ya es, por definición, el promedio — las desviaciones individuales se cancelan entre sí al promediar. Su desviación típica $\sigma$ vale entre 4 y 12 dB según el entorno.
 
 La elección de una distribución gaussiana en dB tiene dos justificaciones. La primera es empírica: las medidas de campo en entornos urbanos muestran consistentemente que los residuos $\text{PL}_{\text{medido}} - \overline{\text{PL}}(d)$ siguen una campana gaussiana. La segunda es teórica, y parte de una observación física: el frente de onda atraviesa $N$ obstáculos en serie — una pared, un árbol, otro edificio — y cada obstáculo $i$ multiplica la potencia recibida por un factor $\alpha_i < 1$ (atenuación parcial, aleatoria, independiente del resto). La atenuación total es un **producto**:
 
