@@ -226,7 +226,12 @@ La imagen derecha muestra lo que ocurre en el dominio de la frecuencia. El trans
 
 Para entender de dónde viene esa curva y cómo conduce al coherence time, necesitamos responder dos preguntas: ¿qué supuesto físico produce la forma en "U"? ¿y qué herramienta matemática traduce esa forma al tiempo de coherencia?
 
-**Supuesto de dispersión isotrópica — el modelo de Jakes**: en un entorno urbano denso, hay tantos reflexores distribuidos en todas las direcciones que los ecos llegan con igual probabilidad desde cualquier ángulo $\theta \in [0°, 360°]$. Este es el supuesto de **isotropía**, y es la hipótesis central del modelo de Jakes. Bajo isotropía, el desplazamiento Doppler $f_D = f_{D,\text{max}}\cos\theta$ no se distribuye uniformemente: los ángulos próximos a $\theta = 0°$ y $\theta = 180°$ producen casi el mismo $f_D$ porque $\cos\theta$ varía muy lentamente en esas zonas — muchos ángulos distintos generan casi el mismo desplazamiento en frecuencia Doppler. En cambio, cerca de $\theta = 90°$ el desplazamiento es cero pero la densidad angular no compensa. El resultado es que la energía Doppler se acumula en los extremos $\pm f_{D,\text{max}}$, produciendo la forma en "U" visible en la figura.
+**Supuesto de dispersión isotrópica — el modelo de Jakes**: en un entorno urbano denso, hay tantos reflexores distribuidos en todas las direcciones que los ecos llegan con igual probabilidad desde cualquier ángulo $\theta \in [0°, 360°]$. Este es el supuesto de **isotropía**, y es la hipótesis central del modelo de Jakes. Bajo isotropía, el desplazamiento en frecuencia Doppler $f_D = f_{D,\text{max}}\cos\theta$ no se distribuye uniformemente, aunque los ángulos sí lo sean. La razón es que $\cos\theta$ no es lineal en $\theta$ — su velocidad de cambio depende del ángulo:
+
+- **Cerca de $\theta = 0°$ y $180°$**: $\cos\theta$ varía muy lentamente (su derivada es cero en esos puntos). Un rango amplio de ángulos distintos produce casi el mismo $f_D$ — toda esa energía angular se acumula en una banda estrecha de frecuencias. El resultado es una densidad espectral alta en los extremos $\pm f_{D,\text{max}}$ — los picos de la "U".
+- **Cerca de $\theta = 90°$**: $\cos\theta$ cambia con la mayor rapidez posible. Un pequeño rango de ángulos produce un rango amplio de valores de $f_D$, dispersando la energía en lugar de acumularla. El resultado es una densidad espectral baja en torno a $f_D = 0$ — el valle de la "U".
+
+El resultado conjunto es la forma en "U" visible en la figura: energía concentrada en los extremos $\pm f_{D,\text{max}}$ y reducida en el centro.
 
 **De la forma en "U" al coherence time — Wiener-Khinchin**: para medir cuánto cambia el canal con el tiempo se usa la **función de autocorrelación temporal**:
 
