@@ -284,7 +284,7 @@ Los cuatro parámetros de la tabla caracterizan la **estructura** del canal — 
 
 ### 6. SNR, BER y el Efecto del Fading
 
-Para responder a esa pregunta necesitamos primero establecer el marco que conecta la potencia recibida con la probabilidad de error — el marco SNR/BER — y luego ver cómo el multipath lo perturba.
+Las secciones anteriores describieron cómo el canal dispersa la señal en retardo y en frecuencia, y cómo varía en el tiempo. Lo que aún no hemos respondido es la pregunta más directa desde el punto de vista del usuario: **¿llegan los bits correctos?** Responderla requiere dos ingredientes. El primero es la **SNR** — cuánta potencia de señal hay respecto al ruido en el receptor, el margen que separa la señal del error. El segundo es la **BER** — cómo se traduce ese margen en probabilidad concreta de error de bit, la métrica que el usuario sí puede observar. Con esos dos conceptos en mano aparece el problema real del fading: en un canal con multipath, la SNR no es un valor fijo sino una variable aleatoria que fluctúa con cada realización del canal — y eso cambia completamente cómo se evalúa el rendimiento del sistema.
 
 **SNR instantánea** — la relación entre la potencia de la señal $P_r$ y la potencia del ruido $P_n$ en el receptor:
 
