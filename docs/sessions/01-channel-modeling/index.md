@@ -468,7 +468,21 @@ K es adimensional y captura la severidad del fading en un solo número, independ
 - $K \to \infty$ ($\sigma \to 0$): sin dispersión → el canal es determinista, la envolvente es constante igual a $A$ y el fading desaparece completamente. La BER converge a la de AWGN — el mejor resultado posible para un SNR dado.
 - $K = 1$–$10$ (0–10 dB): LOS parcial, típico en interiores, picoceldas y enlaces punto a punto.
 
-**Efecto sobre la BER**: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia $A$ — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que $K$ crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER. En este sentido, $K$ funciona como un indicador directo de la calidad del canal: $K = 0$ es el peor caso (Rayleigh), $K \to \infty$ es el mejor (AWGN).
+**Por qué K entra en la BER final**: el objetivo de esta sección, igual que en Rayleigh, es evaluar la BER media:
+
+$$\overline{\text{BER}} = \int_0^\infty Q(\sqrt{\gamma})\, f_\gamma(\gamma)\, d\gamma$$
+
+Para ello necesitamos $f_\gamma(\gamma)$ — la distribución del SNR instantáneo $\gamma = r^2/(2\sigma_n^2)$. Esa distribución queda determinada por dos cantidades independientes: el SNR medio $\bar\gamma$ (cuánta potencia total recibe el receptor frente al ruido) y la *estructura interna* del canal (cuánto de esa potencia es LOS frente a dispersa). K captura exactamente esa estructura interna. Dos canales con el mismo $\bar\gamma$ y el mismo $K$ producen la misma $f_\gamma(\gamma)$ y por tanto la misma $\overline{\text{BER}}$, aunque $A$ y $\sigma^2$ sean distintos en valor absoluto. Así, $K$ y $\bar\gamma$ juntos son los dos únicos parámetros que determinan completamente el rendimiento del sistema en fading Rician.
+
+**Efecto sobre la BER**: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia $A$ — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que $K$ crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER:
+
+| $K$ | Situación física | Efecto en $\overline{\text{BER}}$ |
+|-----|-----------------|----------------------------------|
+| 0 | Sin LOS — Rayleigh | Peor caso: $\overline{\text{BER}} \approx 1/(2\bar\gamma)$, caída lineal |
+| 1–10 (0–10 dB) | LOS parcial, interiores | BER intermedia, caída más rápida que lineal |
+| $\to\infty$ | Canal determinista | Mejor caso: $\overline{\text{BER}} \to Q(\sqrt{\bar\gamma})$, igual que AWGN |
+
+$K$ funciona así como un indicador directo de la calidad del enlace: cuantifica en un solo número cuánto se aleja el canal del peor caso (Rayleigh, $K=0$) hacia el mejor caso posible (AWGN, $K\to\infty$).
 
 ![Distribución de Rician para distintos valores de K](figures/rayleigh-rician-pdf.png)
 
