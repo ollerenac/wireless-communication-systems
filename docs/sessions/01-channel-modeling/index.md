@@ -95,7 +95,17 @@ $$\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma$$
 - $\overline{\text{PL}}(d)$ — la barra indica **valor medio**: es exactamente la predicción del modelo log-distancia, es decir, la pérdida esperada promediada sobre todas las posibles ubicaciones a distancia $d$.
 - $X_\sigma \sim \mathcal{N}(0, \sigma^2)$ — la desviación aleatoria en dB en una ubicación concreta, con media cero (no introduce sesgo) y desviación típica $\sigma$ entre 4 y 12 dB según el entorno.
 
-La elección de una distribución gaussiana en dB tiene dos justificaciones. La primera es empírica: las medidas de campo en entornos urbanos muestran consistentemente que los residuos $\text{PL}_{\text{medido}} - \overline{\text{PL}}(d)$ siguen una campana gaussiana. La segunda es teórica: cada obstáculo multiplica la potencia por un factor aleatorio en escala lineal; el producto de muchos factores aleatorios independientes tiene logaritmo gaussiano por el teorema central del límite. En escala lineal, la potencia sigue una distribución **log-normal** — de ahí el nombre de log-normal shadowing.
+La elección de una distribución gaussiana en dB tiene dos justificaciones. La primera es empírica: las medidas de campo en entornos urbanos muestran consistentemente que los residuos $\text{PL}_{\text{medido}} - \overline{\text{PL}}(d)$ siguen una campana gaussiana. La segunda es teórica, y parte de una observación física: el frente de onda atraviesa $N$ obstáculos en serie — una pared, un árbol, otro edificio — y cada obstáculo $i$ multiplica la potencia recibida por un factor $\alpha_i < 1$ (atenuación parcial, aleatoria, independiente del resto). La atenuación total es un **producto**:
+
+$$\text{atenuación total} = \alpha_1 \times \alpha_2 \times \cdots \times \alpha_N$$
+
+El TCL no aplica directamente a productos, pero sí a sumas. El truco es tomar el logaritmo — que convierte productos en sumas:
+
+$$\log(\alpha_1 \times \alpha_2 \times \cdots \times \alpha_N) = \log\alpha_1 + \log\alpha_2 + \cdots + \log\alpha_N$$
+
+Ahora sí: es una suma de $N$ variables aleatorias independientes. Cuando $N$ es grande, el TCL garantiza que esa suma converge a una distribución gaussiana. Resultado: el **logaritmo** de la atenuación total es gaussiano.
+
+¿Para qué sirve? Porque en ingeniería expresamos la pérdida en **dB**, y los dB son exactamente el logaritmo ($\text{dB} = 10\log_{10}(\cdot)$). Decir "el logaritmo de la atenuación es gaussiano" equivale a decir que la desviación de la pérdida en dB sigue una distribución normal. Eso es exactamente $X_\sigma \sim \mathcal{N}(0, \sigma^2)$: el modelo se aplica directamente en dB, sin ninguna transformación adicional. A esta distribución en escala lineal (donde la potencia es lognormal) se la llama distribución **log-normal** — de ahí el nombre de *log-normal shadowing*.
 
 ![Shadowing: medidas reales vs. predicción del modelo](figures/shadowing-scatter.png)
 
