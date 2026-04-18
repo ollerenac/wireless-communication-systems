@@ -172,6 +172,8 @@ $$\overline{\tau^2} = \frac{\sum_i |a_i|^2 \tau_i^2}{\sum_i |a_i|^2}$$
 
 $\sigma_\tau$ mide cuánto tiempo tardan en llegar todos los ecos significativos después del primero — es decir, la "duración de la memoria" del canal. Un canal con $\sigma_\tau$ grande tiene ecos que llegan muy dispersos en el tiempo; uno con $\sigma_\tau$ pequeño tiene ecos casi simultáneos. Valores típicos: interiores de oficina ~30 ns, urbano ~300 ns, suburbano ~1 µs.
 
+Conocer $\sigma_\tau$ plantea inmediatamente la pregunta de diseño: ¿qué ancho de banda de señal puede usarse sin que esa memoria cause problemas? Si se transmite con ancho de banda $B_s$, los símbolos tienen una duración aproximada de $T_s \approx 1/B_s$. Cuando $T_s < \sigma_\tau$, el símbolo termina antes de que hayan llegado todos sus ecos — los ecos del símbolo $n$ se solapan con el símbolo $n+1$ y producen ISI. Para evitarlo, se necesita $T_s \gg \sigma_\tau$, es decir, $B_s \ll 1/\sigma_\tau$. El umbral de ancho de banda por debajo del cual el canal no distorsiona la señal es el **coherence bandwidth** $B_c \approx 1/\sigma_\tau$ — la consecuencia directa de $\sigma_\tau$ en el dominio de la frecuencia.
+
 **Coherence bandwidth** $B_c$ — el rango de frecuencias sobre el que el canal se comporta de forma aproximadamente uniforme:
 
 $$B_c \approx \frac{1}{5\,\sigma_\tau}$$
