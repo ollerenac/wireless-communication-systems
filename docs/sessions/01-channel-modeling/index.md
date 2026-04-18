@@ -152,7 +152,9 @@ Cada término de la suma es un eco: la **delta de Dirac** $\delta(\tau - \tau_i)
 
 La dependencia en $t$ — la segunda variable — aparece porque el canal no es estático: cuando el terminal o los objetos del entorno se mueven, las longitudes de los caminos cambian. Un camino que antes llegaba en $\tau_i$ ahora llega en $\tau_i(t)$, con una amplitud $a_i(t)$ y una fase $\phi_i(t)$ distintas. El canal es, por tanto, una función de **dos variables independientes**: $\tau$ describe la estructura del canal en el dominio de los retardos; $t$ describe cómo evoluciona esa estructura en el tiempo.
 
-Con la respuesta impulsional definida, el siguiente paso es cuantificar cuánto se dispersan los ecos en tiempo. Tres parámetros lo describen, en este orden porque existe una dependencia estricta: $\sigma_\tau$ no puede calcularse sin $\bar{\tau}$, y $B_c$ no puede obtenerse sin $\sigma_\tau$:
+Con la respuesta impulsional definida, tenemos una descripción completa del canal — pero demasiado detallada para ser útil en diseño. Conocer cada $\tau_i$, $a_i$ y $\phi_i$ individualmente no responde la pregunta práctica que importa: **¿los ecos llegan tan dispersos en el tiempo que un símbolo interfiere con el siguiente?** Esa pregunta solo depende de cuán extendida está la "nube" de ecos en el eje $\tau$, no de la posición exacta de cada uno. Lo que se necesita es un número escalar que resuma esa extensión — y de ese número se podrá deducir directamente si el canal distorsiona la señal o no, y con qué margen se debe diseñar el sistema.
+
+Tres parámetros lo describen, en este orden porque existe una dependencia estricta: $\sigma_\tau$ no puede calcularse sin $\bar{\tau}$, y $B_c$ no puede obtenerse sin $\sigma_\tau$:
 
 **Mean excess delay** $\bar{\tau}$ — el "centro de masa" de la energía multitrayecto en el eje de retardos, ponderado por la potencia de cada camino:
 
