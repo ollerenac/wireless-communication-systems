@@ -320,7 +320,7 @@ Las campanas no son puntos fijos sino distribuciones porque el ruido térmico $n
 
 $$n \sim \mathcal{N}(0,\, \sigma_n^2)$$
 
-Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, $\sigma_n$ (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus **puntos de inflexión** — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza $\sigma_n^2$ es simplemente $\sigma_n$ al cuadrado; no tiene interpretación geométrica directa en la curva, pero sí física: es la potencia del ruido $P_n$. Mayor $\sigma_n$ significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo.
+Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, $\sigma_n$ (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus **puntos de inflexión** — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza $\sigma_n^2$ es simplemente $\sigma_n$ al cuadrado. Su interpretación física es la **potencia del ruido** $P_n$, y el razonamiento es el siguiente: la potencia eléctrica de una señal $x$ en una resistencia de 1 Ω es $x^2$ (W); para una señal aleatoria, la potencia promedio es $\mathbb{E}[x^2]$, el valor cuadrático medio. Existe una identidad estadística general: $\mathbb{E}[x^2] = \text{Var}(x) + (\mathbb{E}[x])^2$. Aplicada al ruido, cuya media es cero, el término $(\mathbb{E}[n])^2 = 0$ desaparece y queda $\mathbb{E}[n^2] = \text{Var}(n) = \sigma_n^2$. Por tanto, $P_n = \mathbb{E}[n^2] = \sigma_n^2$ — la varianza y la potencia son la misma cantidad, no por definición sino porque el ruido tiene media cero. Mayor $\sigma_n$ significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo.
 
 ![Distribución gaussiana: media μ y desviación estándar σ](figures/gaussian-sigma.webp)
 
@@ -371,7 +371,11 @@ Si el canal fuera puramente AWGN, $\gamma = \bar{\gamma}$ sería constante y la 
 
 **El problema del multipath fading**: las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. La potencia recibida $P_r$ — y por tanto $\gamma$ — fluctúa aleatoriamente en torno a $\bar{P}_r$. En los instantes de suma destructiva, $\gamma$ desciende muy por debajo de $\bar{\gamma}$: aunque el promedio sea confortable (digamos $\bar{\gamma} = 20$ dB), hay momentos en que $\gamma$ cae a 0 dB o menos. Esos instantes — los **deep fades** — producen ráfagas de errores de bit aunque el nivel medio de señal sea perfectamente adecuado.
 
-En presencia de fading, $\gamma$ es una **variable aleatoria** con su propia distribución $f(\gamma)$. La BER media ya no es $Q(\sqrt{\bar{\gamma}})$ sino el promedio de $Q(\sqrt{\gamma})$ sobre todas las realizaciones del canal:
+En presencia de fading, $\gamma$ es una **variable aleatoria** con su propia distribución $f(\gamma)$. Como BER $= Q(\sqrt{\gamma})$ y $\gamma$ es aleatoria, la BER también es aleatoria — en un instante puede ser $10^{-6}$, en otro $10^{-1}$. Un valor único y representativo ya no existe, y usar $Q(\sqrt{\bar{\gamma}})$ como si el canal fuera AWGN sería **incorrecto**: $Q$ es una función no lineal, y para funciones no lineales el promedio de la función no es igual a la función del promedio — siempre se cumple que:
+
+$$\overline{\text{BER}} = \mathbb{E}\!\left[Q\!\left(\sqrt{\gamma}\right)\right] > Q\!\left(\sqrt{\bar{\gamma}}\right)$$
+
+Es decir, el fading **siempre degrada la BER** respecto a lo que predice el AWGN con la misma SNR media — incluso cuando $\bar{\gamma}$ es idéntico. La única métrica correcta es el promedio de $Q(\sqrt{\gamma})$ sobre todas las realizaciones del canal:
 
 $$\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{\gamma}\right) f(\gamma)\, d\gamma$$
 
