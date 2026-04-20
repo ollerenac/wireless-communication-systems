@@ -21,7 +21,7 @@ Al finalizar esta sesión, el estudiante será capaz de:
 
 ## Introducción
 
-En la Sesión 01 caracterizamos el canal inalámbrico: aprendimos que la señal recibida es $y = h \cdot s + n$, donde $h$ recoge los efectos de path loss, shadowing y fading, y $n$ es ruido gaussiano. Calculamos la BER de BPSK sobre canal Rayleigh y obtuvimos la fórmula $P_b \approx 1/(4\bar{\gamma})$ — pero la usamos sin demostrarla. Una pregunta quedó implícitamente abierta: ¿de dónde viene exactamente esa BER? ¿Qué tiene de especial la modulación BPSK para que se exprese de esa manera?
+En la Sesión 01 caracterizamos el canal inalámbrico: aprendimos que la señal recibida es $y = h \cdot s + n$, donde $h$ recoge los efectos de path loss, shadowing y fading, y $n$ es ruido gaussiano. Calculamos la BER de BPSK sobre canal Rayleigh con la convención $\bar{\gamma} = \text{SNR} = P_r/P_n$ y obtuvimos $P_b \approx 1/(2\bar{\gamma})$ — pero la usamos sin demostrarla. Una pregunta quedó implícitamente abierta: ¿de dónde viene exactamente esa BER? ¿Qué tiene de especial la modulación BPSK para que se exprese de esa manera?
 
 La respuesta exige entender cómo el receptor toma decisiones: dado un valor recibido $y$, ¿qué símbolo fue enviado? Esta pregunta de detección es el núcleo de la modulación digital. Cuando la respondemos para AWGN puro, obtenemos la BER en función del SNR instantáneo; cuando la promediamos sobre la distribución del canal (exponencial para Rayleigh), recuperamos la fórmula de la Sesión 01. La Sesión 02 cierra ese ciclo y lo extiende a familias de modulaciones de mayor orden.
 
@@ -89,7 +89,7 @@ Las dos campanas gaussianas representan las distribuciones de $y$ cuando se env�
 
 $$P_b^{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) \cdot \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}\,d\gamma = \frac{1}{2}\!\left(1 - \sqrt{\frac{\bar{\gamma}}{1+\bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
 
-La integral tiene solución cerrada gracias a la forma exponencial de la PDF de Rayleigh; para SNR alto, la aproximación $1/(4\bar{\gamma})$ reproduce exactamente la fórmula de la Sesión 01.
+La integral tiene solución cerrada gracias a la forma exponencial de la PDF de Rayleigh. El resultado, expresado con la convención $\gamma_b = E_b/N_0$ de esta sesión, es $P_b \approx 1/(4\bar{\gamma}_b)$. Esto es consistente con la Sesión 01, que usaba $\bar{\gamma} = \text{SNR} = P_r/P_n$: para BPSK, $\gamma = P_r/P_n = 2\,E_b/N_0 = 2\gamma_b$, de modo que $1/(2\bar{\gamma}) = 1/(4\bar{\gamma}_b)$ — la misma expresión con distinta etiqueta de SNR.
 
 ---
 
