@@ -468,7 +468,21 @@ A diferencia de una señal AWGN donde la amplitud recibida es prácticamente con
 
 $$\gamma = \frac{P_r}{P_n} = \frac{r^2}{P_n}$$
 
-Para expresar $\gamma$ en términos de la SNR media $\bar{\gamma}$, se usa el hecho de que la potencia media recibida en un canal Rayleigh es $\mathbb{E}[r^2] = 2\sigma^2$, de donde $P_n = 2\sigma^2/\bar{\gamma}$. Sustituyendo:
+Para expresar $\gamma$ en términos de la SNR media $\bar{\gamma}$ hay que identificar $P_n$ en función de los parámetros del modelo. Son dos pasos.
+
+**Paso 1 — potencia media recibida**: la potencia recibida instantánea es $r^2$, así que la potencia media es $\bar{P}_r = \mathbb{E}[r^2]$. Este valor sale directamente de la descomposición I/Q, sin necesidad de integrar la PDF de Rayleigh:
+
+$$\mathbb{E}[r^2] = \mathbb{E}[I^2 + Q^2] = \mathbb{E}[I^2] + \mathbb{E}[Q^2]$$
+
+Como $I \sim \mathcal{N}(0,\sigma^2)$ tiene media cero, su valor cuadrático medio coincide con su varianza: $\mathbb{E}[I^2] = \sigma^2$. Lo mismo para $Q$. Por tanto:
+
+$$\bar{P}_r = \mathbb{E}[r^2] = \sigma^2 + \sigma^2 = 2\sigma^2$$
+
+**Paso 2 — despejar $P_n$**: la SNR media se definió como $\bar{\gamma} = \bar{P}_r / P_n$. Despejando $P_n$:
+
+$$P_n = \frac{\bar{P}_r}{\bar{\gamma}} = \frac{2\sigma^2}{\bar{\gamma}}$$
+
+Sustituyendo en $\gamma = r^2/P_n$:
 
 $$\gamma = \frac{r^2}{2\sigma^2}\,\bar{\gamma}$$
 
