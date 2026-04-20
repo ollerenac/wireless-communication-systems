@@ -1,0 +1,2077 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Fundamentos del canal inalámbrico: path loss, shadowing, multipath fading y modelos estadísticos de Rayleigh y Rician.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/01-channel-modeling/">
+      
+      
+        <link rel="prev" href="../../syllabus/">
+      
+      
+        <link rel="next" href="../02-digital-modulation/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Sesión 01 — Modelado del Canal Inalámbrico - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sesion-01-modelado-del-canal-inalambrico" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sesión 01 — Modelado del Canal Inalámbrico
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-perdida-de-propagacion-en-espacio-libre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Pérdida de Propagación en Espacio Libre
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-modelo-log-distancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Modelo Log-Distancia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-shadowing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Shadowing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-multipath-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Multipath Propagation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-doppler-effect-y-coherence-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Doppler Effect y Coherence Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-snr-ber-y-el-efecto-del-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. SNR, BER y el Efecto del Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-rayleigh-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Rayleigh Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-rician-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rician Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-modelos-de-canal-estandarizados-3gpp-tr-38901" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Modelos de Canal Estandarizados (3GPP TR 38.901)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5-presupuesto-de-enlace-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5 — Presupuesto de Enlace Completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-parametros-tr-38901-y-caracterizacion-completa-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Parámetros TR 38.901 y Caracterización Completa del Canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="En desarrollo">
+    </span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-perdida-de-propagacion-en-espacio-libre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Pérdida de Propagación en Espacio Libre
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-modelo-log-distancia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Modelo Log-Distancia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-shadowing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Shadowing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-multipath-propagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Multipath Propagation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-doppler-effect-y-coherence-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Doppler Effect y Coherence Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-snr-ber-y-el-efecto-del-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. SNR, BER y el Efecto del Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-rayleigh-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Rayleigh Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-rician-fading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Rician Fading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-modelos-de-canal-estandarizados-3gpp-tr-38901" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Modelos de Canal Estandarizados (3GPP TR 38.901)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5-presupuesto-de-enlace-completo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5 — Presupuesto de Enlace Completo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-parametros-tr-38901-y-caracterizacion-completa-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Parámetros TR 38.901 y Caracterización Completa del Canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sesion-01-modelado-del-canal-inalambrico">Sesión 01 — Modelado del Canal Inalámbrico</h1>
+<h2 id="objetivos-de-aprendizaje">Objetivos de Aprendizaje</h2>
+<p>Al finalizar esta sesión, el estudiante será capaz de:</p>
+<ol>
+<li>Calcular la potencia recibida usando el modelo de pérdida de propagación en espacio libre y el modelo log-distancia</li>
+<li>Modelar el shadowing mediante una variable aleatoria log-normal y estimar su impacto en el link budget</li>
+<li>Describir el fenómeno de multipath propagation y sus consecuencias en el dominio temporal y frecuencial</li>
+<li>Derivar las distribuciones de Rayleigh y Rician para la envolvente de la señal en canales con fading</li>
+<li>Calcular el coherence bandwidth y el coherence time a partir de parámetros del canal</li>
+</ol>
+<hr />
+<h2 id="introduccion">Introducción</h2>
+<p>El canal inalámbrico es el elemento más impredecible y limitante de cualquier sistema de comunicaciones. A diferencia de los canales guiados (fibra óptica, cable coaxial), el canal inalámbrico somete a la señal a una combinación de efectos que degradan su calidad de forma simultánea:</p>
+<ul>
+<li><strong>Path loss</strong>: la potencia de la señal disminuye con la distancia</li>
+<li><strong>Shadowing</strong>: obstáculos como edificios y colinas atenúan la señal de forma aleatoria</li>
+<li><strong>Multipath fading</strong>: múltiples reflexiones, difracciones y dispersiones crean versiones retardadas de la señal que interfieren entre sí</li>
+</ul>
+<p>Comprender y modelar estos efectos es indispensable para todo lo que viene después en este curso: desde el diseño de modulaciones robustas hasta el dimensionamiento de sistemas MIMO y la gestión del espectro en redes 5G. <strong>El canal inalámbrico es la razón por la que existen la mayoría de los problemas que estudiaremos.</strong></p>
+<hr />
+<h2 id="teoria">Teoría</h2>
+<h3 id="1-perdida-de-propagacion-en-espacio-libre">1. Pérdida de Propagación en Espacio Libre</h3>
+<p>La <strong>ecuación de Friis</strong> describe la potencia recibida en ausencia de obstáculos:</p>
+<div class="arithmatex">\[P_r = P_t G_t G_r \left(\frac{\lambda}{4\pi d}\right)^2\]</div>
+<p>donde:</p>
+<ul>
+<li><span class="arithmatex">\(P_t\)</span>: potencia transmitida</li>
+<li><span class="arithmatex">\(G_t, G_r\)</span>: ganancias de antena transmisora y receptora</li>
+<li><span class="arithmatex">\(\lambda = c/f\)</span>: longitud de onda</li>
+<li><span class="arithmatex">\(d\)</span>: distancia entre transmisor y receptor</li>
+</ul>
+<p>El factor <span class="arithmatex">\((\lambda/4\pi d)^2\)</span> tiene una interpretación física directa: una antena isotrópica irradia su potencia uniformemente sobre la superficie de una esfera de área <span class="arithmatex">\(4\pi d^2\)</span>; la densidad de potencia en el receptor cae como <span class="arithmatex">\(1/d^2\)</span>. La antena receptora captura de esa esfera un área efectiva proporcional a <span class="arithmatex">\(\lambda^2\)</span> — a mayor longitud de onda (menor frecuencia), la antena "ve" más grande el frente de onda y capta más potencia. La combinación de ambos efectos produce el factor <span class="arithmatex">\((\lambda/4\pi d)^2\)</span>. Esto explica por qué, a la misma distancia, un enlace a 900 MHz tiene menos path loss que uno a 2,4 GHz: la frecuencia más baja tiene mayor longitud de onda y mayor área efectiva de captación.</p>
+<p>En decibelios, la <strong>pérdida de propagación en espacio libre</strong> es:</p>
+<div class="arithmatex">\[\text{PL}_{\text{FS}}(d)\ [\text{dB}] = 20\log_{10}(4\pi d / \lambda) = 20\log_{10}(d) + 20\log_{10}(f) - 147{,}55\]</div>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p>Para <span class="arithmatex">\(f = 2{,}4\ \text{GHz}\)</span> y <span class="arithmatex">\(d = 100\ \text{m}\)</span>:
+<span class="arithmatex">\(\text{PL}_{\text{FS}} = 20\log_{10}(100) + 20\log_{10}(2{,}4\times10^9) - 147{,}55 \approx 80\ \text{dB}\)</span></p>
+</div>
+<p>El modelo de Friis es exacto en condiciones de espacio libre, pero las medidas en entornos urbanos muestran sistemáticamente pérdidas que superan esta predicción en 10, 20 o incluso 30 dB — y la discrepancia no es aleatoria: crece de forma ordenada con la distancia y depende del tipo de entorno.</p>
+<hr />
+<h3 id="2-modelo-log-distancia">2. Modelo Log-Distancia</h3>
+<p>En entornos reales, la pérdida de propagación sigue un modelo empírico más general:</p>
+<div class="arithmatex">\[\text{PL}(d)\ [\text{dB}] = \text{PL}(d_0) + 10n\log_{10}\!\left(\frac{d}{d_0}\right)\]</div>
+<p>donde:</p>
+<ul>
+<li><span class="arithmatex">\(d_0\)</span>: distancia de referencia (típicamente 1 m en interiores, 100 m en exteriores)</li>
+<li><span class="arithmatex">\(n\)</span>: <strong>exponente de pérdida de propagación</strong> (path loss exponent)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Entorno</th>
+<th><span class="arithmatex">\(n\)</span> típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espacio libre</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Urbano (macrocelda)</td>
+<td>2,7 – 3,5</td>
+</tr>
+<tr>
+<td>Suburbano</td>
+<td>3 – 5</td>
+</tr>
+<tr>
+<td>Interior (sin obstáculos)</td>
+<td>1,6 – 1,8</td>
+</tr>
+<tr>
+<td>Interior (con obstáculos)</td>
+<td>4 – 6</td>
+</tr>
+</tbody>
+</table>
+<p>El valor <span class="arithmatex">\(n &lt; 2\)</span> en interiores sin obstáculos puede parecer paradójico — ¿cómo puede haber <em>menos</em> pérdida que en espacio libre? La explicación es el <strong>efecto guía de onda</strong>: en un pasillo largo con paredes paralelas, el techo y el suelo actúan como reflectores que "canalizan" la señal a lo largo del eje del pasillo, de forma similar a como una guía de onda metálica confina la energía electromagnética. La energía que en espacio libre se dispersaría hacia los lados queda atrapada y se propaga con menos pérdida que <span class="arithmatex">\(1/d^2\)</span>.</p>
+<p>Con el exponente <span class="arithmatex">\(n\)</span> correcto, el modelo predice bien la potencia media recibida a cada distancia. El problema es que dos terminales situados exactamente a la misma distancia de la misma estación base pueden diferir en más de 15 dB — y esa variación cambia lentamente mientras el usuario se desplaza, no con la frecuencia portadora.</p>
+<hr />
+<h3 id="3-shadowing">3. Shadowing</h3>
+<p>Imagina que mides la potencia recibida en 60 puntos distintos del mismo vecindario, todos a exactamente 1 km de la misma antena. El modelo log-distancia predice un único valor de PL para esa distancia. Las medidas reales, sin embargo, se dispersan alrededor de esa predicción en un rango de ±15–20 dB. La causa no es ruido de medida: es la disposición particular de edificios, muros y obstáculos entre la antena y cada punto — diferente en cada ubicación, impredecible de antemano.</p>
+<p>Modelar cada obstáculo individualmente es inviable. La alternativa es separar la pérdida total en dos partes con roles distintos:</p>
+<ul>
+<li><strong>Lo que se puede predecir</strong>: la pérdida media a esa distancia, que el modelo log-distancia ya calcula. Todas las ubicaciones a distancia <span class="arithmatex">\(d\)</span> comparten este valor en promedio — es la componente sistemática, determinista.</li>
+<li><strong>Lo que no se puede predecir</strong>: la desviación concreta de esta ubicación respecto a ese promedio. Depende de qué edificios, muros y árboles se interponen exactamente entre la antena y este punto — diferente en cada caso, imposible de conocer de antemano. Esta es la componente aleatoria.</li>
+</ul>
+<p>En dB, las pérdidas se suman — y por eso la fórmula es aditiva:</p>
+<div class="arithmatex">\[\text{PL}(d)\ [\text{dB}] = \overline{\text{PL}}(d) + X_\sigma\]</div>
+<ul>
+<li><span class="arithmatex">\(\overline{\text{PL}}(d)\)</span> — la barra indica <strong>valor medio</strong>: la pérdida esperada promediada sobre todas las posibles ubicaciones a distancia <span class="arithmatex">\(d\)</span>. Es determinista: dado <span class="arithmatex">\(d\)</span>, este valor está fijo.</li>
+<li><span class="arithmatex">\(X_\sigma \sim \mathcal{N}(0, \sigma^2)\)</span> — la desviación aleatoria de esta ubicación concreta respecto a ese promedio. Tiene media cero porque <span class="arithmatex">\(\overline{\text{PL}}(d)\)</span> ya es, por definición, el promedio — las desviaciones individuales se cancelan entre sí al promediar. Su desviación típica <span class="arithmatex">\(\sigma\)</span> vale entre 4 y 12 dB según el entorno.</li>
+</ul>
+<p>La elección de una distribución gaussiana en dB tiene dos justificaciones. La primera es empírica: las medidas de campo en entornos urbanos muestran consistentemente que los residuos <span class="arithmatex">\(\text{PL}_{\text{medido}} - \overline{\text{PL}}(d)\)</span> siguen una campana gaussiana. La segunda es teórica, y parte de una observación física: el frente de onda atraviesa <span class="arithmatex">\(N\)</span> obstáculos en serie — una pared, un árbol, otro edificio — y cada obstáculo <span class="arithmatex">\(i\)</span> multiplica la potencia recibida por un factor <span class="arithmatex">\(\alpha_i &lt; 1\)</span> (atenuación parcial, aleatoria, independiente del resto). La atenuación total es un <strong>producto</strong>:</p>
+<div class="arithmatex">\[\text{atenuación total} = \alpha_1 \times \alpha_2 \times \cdots \times \alpha_N\]</div>
+<p>El TCL no aplica directamente a productos, pero sí a sumas. El truco es tomar el logaritmo — que convierte productos en sumas:</p>
+<div class="arithmatex">\[\log(\alpha_1 \times \alpha_2 \times \cdots \times \alpha_N) = \log\alpha_1 + \log\alpha_2 + \cdots + \log\alpha_N\]</div>
+<p>Ahora sí: es una suma de <span class="arithmatex">\(N\)</span> variables aleatorias independientes. Cuando <span class="arithmatex">\(N\)</span> es grande, el TCL garantiza que esa suma converge a una distribución gaussiana. Resultado: el <strong>logaritmo</strong> de la atenuación total es gaussiano.</p>
+<p>¿Para qué sirve? La pérdida adicional por shadowing en dB es, por definición:</p>
+<div class="arithmatex">\[X_\sigma\ [\text{dB}] = 10\log_{10}\!\left(\frac{1}{\alpha_1 \cdot \alpha_2 \cdots \alpha_N}\right) = -10\log_{10}(\alpha_1 \cdot \alpha_2 \cdots \alpha_N)\]</div>
+<p>Pero acabamos de demostrar que <span class="arithmatex">\(\log(\alpha_1 \cdots \alpha_N)\)</span> es gaussiano. Los dB son exactamente eso — un logaritmo escalado por <span class="arithmatex">\(10/\ln 10 \approx 4{,}34\)</span>. Escalar una gaussiana por una constante da otra gaussiana. Por tanto, <span class="arithmatex">\(X_\sigma\)</span> en dB es gaussiana: <span class="arithmatex">\(X_\sigma \sim \mathcal{N}(0, \sigma^2)\)</span>. No hay transformación adicional — "el logaritmo de la atenuación es gaussiano" y "<span class="arithmatex">\(X_\sigma\)</span> en dB es gaussiano" son la misma afirmación escrita de dos maneras distintas. A la distribución de la potencia en escala lineal (que es el exponencial de una gaussiana) se la llama <strong>log-normal</strong> — de ahí el nombre de <em>log-normal shadowing</em>.</p>
+<p><img alt="Shadowing: medidas reales vs. predicción del modelo" src="figures/shadowing-scatter.png" /></p>
+<p>La imagen izquierda muestra medidas simuladas dispersas alrededor de la curva <span class="arithmatex">\(\overline{\text{PL}}(d)\)</span>: cada punto es una ubicación real con su disposición única de obstáculos. La flecha roja marca <span class="arithmatex">\(X_\sigma\)</span> — la desviación de esa ubicación concreta respecto a la predicción media. Las bandas <span class="arithmatex">\(\pm\sigma\)</span> y <span class="arithmatex">\(\pm 2\sigma\)</span> encierran aproximadamente el 68% y el 95% de las ubicaciones posibles. La imagen derecha muestra el histograma de los residuos a distancia fija: la campana gaussiana confirma por qué <span class="arithmatex">\(\mathcal{N}(0, \sigma^2)\)</span> es el modelo correcto.</p>
+<p>La figura siguiente resume las tres contribuciones estudiadas hasta aquí, representadas sobre los mismos ejes de distancia y path loss:</p>
+<p><img alt="Path loss: de Friis al shadowing" src="figures/path-loss-models.png" /></p>
+<p>La curva de <strong>Friis</strong> (<span class="arithmatex">\(n=2\)</span>) establece el límite inferior de pérdida en espacio libre: es determinista, sin dispersión. Las curvas de <strong>log-distancia</strong> (<span class="arithmatex">\(n=2.5\)</span>, <span class="arithmatex">\(3.5\)</span>, <span class="arithmatex">\(4.5\)</span>) muestran cómo el entorno físico modifica el slope — la divergencia respecto a Friis crece logarítmicamente con la distancia. Las <strong>bandas de shadowing</strong> (<span class="arithmatex">\(\pm\sigma\)</span> y <span class="arithmatex">\(\pm 2\sigma\)</span> alrededor de <span class="arithmatex">\(n=3.5\)</span>) representan la dispersión estadística que introduce el log-normal shadowing: para cualquier distancia dada, la potencia recibida no es un valor único sino una distribución gaussiana en dB, centrada en la curva del modelo log-distancia.</p>
+<p>Las tres capas comparten el mismo espacio: distancia vs. path loss. Esto cambia a partir de la siguiente sección. El multipath fading no opera a escala de metros sino de centímetros — a la escala de la longitud de onda — y su descripción requiere un framework matemático completamente distinto.</p>
+<p>El shadowing explica la variabilidad lenta. Pero incluso un terminal completamente estacionario, en un entorno sin objetos en movimiento, muestra fluctuaciones de señal de varios decibelios al desplazarse unos pocos centímetros. A esa escala, los edificios no se mueven — algo más está ocurriendo.</p>
+<hr />
+<h3 id="4-multipath-propagation">4. Multipath Propagation</h3>
+<p>Los modelos de las secciones anteriores asumían implícitamente que la señal viaja por <strong>una sola trayectoria</strong> del transmisor al receptor. El shadowing reconocía que esa trayectoria atraviesa obstáculos aleatorios, pero los trataba como un único factor de atenuación acumulado — no distinguía entre caminos. Ese modelo explica bien la variabilidad de potencia a escala de metros, pero deja sin respuesta un fenómeno diferente: ¿por qué un terminal completamente estacionario muestra fluctuaciones de señal de varios decibelios al desplazarse apenas unos centímetros? La causa no es la atenuación por obstáculos — es que la señal llega por múltiples caminos simultáneos que se suman con fases distintas.</p>
+<p>En un entorno urbano, la señal transmitida no viaja únicamente en línea recta hacia el receptor. Se refleja en fachadas de edificios, se difracta en esquinas, se dispersa en vehículos y objetos. El receptor recibe simultáneamente varias copias de la misma señal, cada una llegando por un camino distinto.</p>
+<p><img alt="Multipath propagation: caminos físicos y respuesta impulsional" src="figures/multipath-channel.png" /></p>
+<p>La imagen izquierda muestra tres caminos de ejemplo. El <strong>camino directo</strong> (verde) recorre la distancia mínima y llega primero, con el menor retardo <span class="arithmatex">\(\tau_1\)</span> y la mayor amplitud <span class="arithmatex">\(a_1\)</span>. Los caminos reflejados (azul, rojo) recorren distancias mayores: llegan más tarde (<span class="arithmatex">\(\tau_2 &gt; \tau_1\)</span>, <span class="arithmatex">\(\tau_3 &gt; \tau_2\)</span>) y con menor amplitud (<span class="arithmatex">\(a_2 &lt; a_1\)</span>, <span class="arithmatex">\(a_3 &lt; a_2\)</span>) porque cada reflexión introduce pérdidas adicionales.</p>
+<p><strong>El experimento mental del impulso</strong>: supón que el transmisor emite un pulso perfectamente corto — un impulso de Dirac <span class="arithmatex">\(\delta(t)\)</span>. El receptor no recibe un único pulso sino una secuencia de ecos, uno por cada camino, llegando en tiempos distintos. La imagen derecha de la figura muestra exactamente eso: la <strong>respuesta impulsional del canal</strong> <span class="arithmatex">\(h(\tau)\)</span>, con tres impulsos en <span class="arithmatex">\(\tau_1\)</span>, <span class="arithmatex">\(\tau_2\)</span> y <span class="arithmatex">\(\tau_3\)</span> de amplitudes <span class="arithmatex">\(a_1\)</span>, <span class="arithmatex">\(a_2\)</span> y <span class="arithmatex">\(a_3\)</span>. El canal queda completamente caracterizado por esa "huella".</p>
+<p>Formalizando: si el camino <span class="arithmatex">\(i\)</span> llega con retardo <span class="arithmatex">\(\tau_i\)</span>, atenuación <span class="arithmatex">\(a_i\)</span> y desfase <span class="arithmatex">\(\phi_i\)</span>, su contribución a la señal recibida es una copia de la señal transmitida desplazada <span class="arithmatex">\(\tau_i\)</span> segundos, escalada por <span class="arithmatex">\(a_i\)</span> y rotada en fase <span class="arithmatex">\(e^{j\phi_i}\)</span>. La suma de todas las contribuciones es la respuesta impulsional del canal en banda base equivalente:</p>
+<div class="arithmatex">\[h(\tau, t) = \sum_{i} a_i(t)\, e^{j\phi_i(t)}\, \delta(\tau - \tau_i(t))\]</div>
+<p>Cada término de la suma es un eco: la <strong>delta de Dirac</strong> <span class="arithmatex">\(\delta(\tau - \tau_i)\)</span> actúa como selector — extrae del eje de retardos exactamente el instante <span class="arithmatex">\(\tau_i\)</span> en que llega el camino <span class="arithmatex">\(i\)</span>. La amplitud <span class="arithmatex">\(a_i\)</span> y la fase <span class="arithmatex">\(e^{j\phi_i}\)</span> describen cuánto atenúa y cuánto desfasa ese camino específico.</p>
+<p>La dependencia en <span class="arithmatex">\(t\)</span> — la segunda variable — aparece porque el canal no es estático: cuando el terminal o los objetos del entorno se mueven, las longitudes de los caminos cambian. Un camino que antes llegaba en <span class="arithmatex">\(\tau_i\)</span> ahora llega en <span class="arithmatex">\(\tau_i(t)\)</span>, con una amplitud <span class="arithmatex">\(a_i(t)\)</span> y una fase <span class="arithmatex">\(\phi_i(t)\)</span> distintas. El canal es, por tanto, una función de <strong>dos variables independientes</strong>: <span class="arithmatex">\(\tau\)</span> describe la estructura del canal en el dominio de los retardos; <span class="arithmatex">\(t\)</span> describe cómo evoluciona esa estructura en el tiempo.</p>
+<p>Con la respuesta impulsional definida, tenemos una descripción completa del canal — pero demasiado detallada para ser útil en diseño. Conocer cada <span class="arithmatex">\(\tau_i\)</span>, <span class="arithmatex">\(a_i\)</span> y <span class="arithmatex">\(\phi_i\)</span> individualmente no responde la pregunta práctica que importa: <strong>¿los ecos llegan tan dispersos en el tiempo que un símbolo interfiere con el siguiente?</strong> Esa pregunta solo depende de cuán extendida está la "nube" de ecos en el eje <span class="arithmatex">\(\tau\)</span>, no de la posición exacta de cada uno. Lo que se necesita es un número escalar que resuma esa extensión — y de ese número se podrá deducir directamente si el canal distorsiona la señal o no, y con qué margen se debe diseñar el sistema.</p>
+<p>Tres parámetros lo describen, en este orden porque existe una dependencia estricta: <span class="arithmatex">\(\sigma_\tau\)</span> no puede calcularse sin <span class="arithmatex">\(\bar{\tau}\)</span>, y <span class="arithmatex">\(B_c\)</span> no puede obtenerse sin <span class="arithmatex">\(\sigma_\tau\)</span>:</p>
+<p><strong>Mean excess delay</strong> <span class="arithmatex">\(\bar{\tau}\)</span> — el "centro de masa" de la energía multitrayecto en el eje de retardos, ponderado por la potencia de cada camino:</p>
+<div class="arithmatex">\[\bar{\tau} = \frac{\sum_i |a_i|^2 \tau_i}{\sum_i |a_i|^2}\]</div>
+<p>No tiene consecuencias directas de diseño por sí solo, pero es el punto de referencia para calcular el parámetro que sí importa.</p>
+<p><strong>RMS delay spread</strong> <span class="arithmatex">\(\sigma_\tau\)</span> — la desviación estándar de los retardos respecto a <span class="arithmatex">\(\bar{\tau}\)</span>, ponderada por potencia:</p>
+<div class="arithmatex">\[\sigma_\tau = \sqrt{\overline{\tau^2} - \bar{\tau}^2}\]</div>
+<p>donde <span class="arithmatex">\(\overline{\tau^2}\)</span> es el mismo promedio ponderado por potencia aplicado a <span class="arithmatex">\(\tau_i^2\)</span>:</p>
+<div class="arithmatex">\[\overline{\tau^2} = \frac{\sum_i |a_i|^2 \tau_i^2}{\sum_i |a_i|^2}\]</div>
+<p><span class="arithmatex">\(\sigma_\tau\)</span> mide cuánto tiempo tardan en llegar todos los ecos significativos después del primero — es decir, la "duración de la memoria" del canal. Un canal con <span class="arithmatex">\(\sigma_\tau\)</span> grande tiene ecos que llegan muy dispersos en el tiempo; uno con <span class="arithmatex">\(\sigma_\tau\)</span> pequeño tiene ecos casi simultáneos. Valores típicos: interiores de oficina ~30 ns, urbano ~300 ns, suburbano ~1 µs.</p>
+<p>Conocer <span class="arithmatex">\(\sigma_\tau\)</span> plantea inmediatamente la pregunta de diseño: ¿qué ancho de banda de señal puede usarse sin que esa memoria cause problemas? Si se transmite con ancho de banda <span class="arithmatex">\(B_s\)</span>, los símbolos tienen una duración aproximada de <span class="arithmatex">\(T_s \approx 1/B_s\)</span>. Cuando <span class="arithmatex">\(T_s &lt; \sigma_\tau\)</span>, el símbolo termina antes de que hayan llegado todos sus ecos — los ecos del símbolo <span class="arithmatex">\(n\)</span> se solapan con el símbolo <span class="arithmatex">\(n+1\)</span> y producen ISI. Para evitarlo, se necesita <span class="arithmatex">\(T_s \gg \sigma_\tau\)</span>, es decir, <span class="arithmatex">\(B_s \ll 1/\sigma_\tau\)</span>. El umbral de ancho de banda por debajo del cual el canal no distorsiona la señal es el <strong>coherence bandwidth</strong> <span class="arithmatex">\(B_c \approx 1/\sigma_\tau\)</span> — la consecuencia directa de <span class="arithmatex">\(\sigma_\tau\)</span> en el dominio de la frecuencia.</p>
+<p><strong>Coherence bandwidth</strong> <span class="arithmatex">\(B_c\)</span> — el rango de frecuencias sobre el que el canal se comporta de forma aproximadamente uniforme:</p>
+<div class="arithmatex">\[B_c \approx \frac{1}{5\,\sigma_\tau}\]</div>
+<p>La relación se deduce directamente de la dualidad de Fourier. Por definición:</p>
+<div class="arithmatex">\[H(f) = \int_{-\infty}^{\infty} h(\tau)\, e^{-j2\pi f \tau}\, d\tau\]</div>
+<p>El factor <span class="arithmatex">\(e^{-j2\pi f \tau}\)</span> es el que vincula las dos variables: para que <span class="arithmatex">\(H(f)\)</span> cambie apreciablemente al variar <span class="arithmatex">\(f\)</span>, basta con que <span class="arithmatex">\(f\tau\)</span> cambie en <span class="arithmatex">\(\sim 1\)</span> radián. Si <span class="arithmatex">\(h(\tau)\)</span> tiene ecos significativos hasta un retardo máximo del orden de <span class="arithmatex">\(\sigma_\tau\)</span>, entonces <span class="arithmatex">\(H(f)\)</span> completa una variación apreciable cuando <span class="arithmatex">\(\Delta f \cdot \sigma_\tau \sim 1\)</span>, es decir:</p>
+<div class="arithmatex">\[\Delta f \sim \frac{1}{\sigma_\tau}\]</div>
+<p>Esta es la relación inversa fundamental: <strong>mayor dispersión en <span class="arithmatex">\(\tau\)</span> implica menor ancho de banda coherente en <span class="arithmatex">\(f\)</span></strong>. Un canal con ecos muy retardados (grande <span class="arithmatex">\(\sigma_\tau\)</span>) tiene una respuesta frecuencial <span class="arithmatex">\(H(f)\)</span> que fluctúa rápidamente — los picos y valles de <span class="arithmatex">\(|H(f)|\)</span> están muy juntos. Un canal con ecos casi simultáneos (pequeño <span class="arithmatex">\(\sigma_\tau\)</span>) tiene <span class="arithmatex">\(H(f)\)</span> casi plana — un rango amplio de frecuencias ve el mismo canal. El factor 5 en <span class="arithmatex">\(B_c \approx 1/(5\sigma_\tau)\)</span> es una convención práctica (criterio del 50% de correlación). <span class="arithmatex">\(B_c\)</span> define, por tanto, el "ancho de banda de correlación" del canal: dos componentes espectrales separadas por menos de <span class="arithmatex">\(B_c\)</span> ven esencialmente el mismo canal; separadas por más de <span class="arithmatex">\(B_c\)</span>, ven canales independientes.</p>
+<p>La relación entre <span class="arithmatex">\(B_c\)</span> y el ancho de banda de la señal <span class="arithmatex">\(B_s\)</span> determina el régimen de operación:</p>
+<ul>
+<li>
+<p><strong>Flat fading</strong> (<span class="arithmatex">\(B_s \ll B_c\)</span>): <span class="arithmatex">\(B_c\)</span> es la zona del espectro sobre la que el canal aplica una degradación uniforme. Si <span class="arithmatex">\(B_s\)</span> es mucho menor que <span class="arithmatex">\(B_c\)</span>, toda la señal cabe dentro de esa zona uniforme — el canal aplica <strong>una única ganancia</strong> a toda la señal, como multiplicar por un solo número complejo. Todas las frecuencias de la señal sufren la misma atenuación y el mismo desfase. No hay distorsión espectral: la señal sale del canal con la misma forma que entró, solo escalada y rotada en fase.</p>
+</li>
+<li>
+<p><strong>Frequency-selective fading</strong> (<span class="arithmatex">\(B_s \gg B_c\)</span>): cuando <span class="arithmatex">\(B_s\)</span> supera ampliamente <span class="arithmatex">\(B_c\)</span>, la señal ocupa varias zonas del espectro, cada una con su propia ganancia. El canal ya no aplica una degradación única — aplica <strong>ganancias diferentes a diferentes partes de la señal</strong>. Algunas frecuencias son muy atenuadas (los valles de <span class="arithmatex">\(|H(f)|\)</span>), otras lo son menos (los picos). En el dominio temporal, esto tiene una consecuencia directa: los ecos de un símbolo llegan dispersos durante <span class="arithmatex">\(\sigma_\tau\)</span> segundos. Si la duración de un símbolo <span class="arithmatex">\(T_s &lt; \sigma_\tau\)</span>, los ecos del símbolo <span class="arithmatex">\(n\)</span> todavía están llegando cuando el símbolo <span class="arithmatex">\(n+1\)</span> ya ha comenzado — los dos símbolos se mezclan en el receptor. Este solapamiento se denomina <strong>ISI</strong> (<em>inter-symbol interference</em>, interferencia entre símbolos) y es el principal obstáculo para la transmisión de alta velocidad en canales dispersivos.</p>
+</li>
+</ul>
+<p><img alt="Flat fading vs frequency-selective fading" src="figures/flat-vs-selective-fading.png" /></p>
+<p>La curva negra en ambas imágenes es la misma: la respuesta en frecuencia <span class="arithmatex">\(|H(f)|\)</span> del canal, con sus picos y valles. Lo que cambia es el tamaño de <span class="arithmatex">\(B_s\)</span> respecto a <span class="arithmatex">\(B_c\)</span>.</p>
+<p>En la imagen izquierda (flat fading), <span class="arithmatex">\(B_s\)</span> es estrecho y cae en un tramo aproximadamente plano de <span class="arithmatex">\(|H(f)|\)</span>: todas las frecuencias de la señal ven la misma ganancia, el canal se comporta como un multiplicador. En la imagen derecha (frequency-selective fading), <span class="arithmatex">\(B_s\)</span> es ancho y abarca múltiples picos y valles de <span class="arithmatex">\(|H(f)|\)</span>: cada segmento de la señal recibe una atenuación distinta, la forma espectral queda distorsionada y aparece ISI en el dominio temporal.</p>
+<p>Este es uno de los problemas centrales que motiva el diseño de OFDM (sesión 03): dividir el ancho de banda total en cientos de subportadoras estrechas, cada una con <span class="arithmatex">\(B_s \ll B_c\)</span>, de modo que cada subportadora opera en flat fading aunque el canal global sea frequency-selective.</p>
+<p>Todo lo visto en esta sección — <span class="arithmatex">\(h(\tau)\)</span>, <span class="arithmatex">\(\sigma_\tau\)</span>, <span class="arithmatex">\(B_c\)</span>, flat fading, FSF — describe el canal <strong>en un instante congelado</strong>. Es una fotografía. Lo que no dice es con qué rapidez cambia esa fotografía cuando el terminal o los objetos del entorno se mueven.</p>
+<p>Vale la pena notar que el multipath tiene dos consecuencias distintas sobre la señal recibida, y esta sección solo ha cubierto una de ellas. Los efectos temporales y frecuenciales — ISI, <span class="arithmatex">\(\sigma_\tau\)</span>, <span class="arithmatex">\(B_c\)</span> — son la primera consecuencia, y son los que determinan si el canal distorsiona la forma espectral de la señal. La segunda consecuencia es energética: cuando los ecos se suman con fases aleatorias, la potencia recibida fluctúa de forma aleatoria a escala de centímetros, produciendo caídas bruscas (<em>deep fades</em>) que el modelo log-distance no captura. Estas fluctuaciones de potencia a pequeña escala no se abordan aquí porque requieren un tratamiento estadístico diferente — la distribución de la envolvente de la señal — que se desarrolla en la sección 6.</p>
+<hr />
+<h3 id="5-doppler-effect-y-coherence-time">5. Doppler Effect y Coherence Time</h3>
+<p>Imagina un coche circulando a 120 km/h con una conexión 4G activa. A 2 GHz, la longitud de onda es <span class="arithmatex">\(\lambda = 15\)</span> cm. En 1 ms, el coche recorre 3,3 cm — aproximadamente <span class="arithmatex">\(\lambda/4\)</span>. En ese intervalo, la diferencia de camino hacia cada reflexor ha cambiado en una fracción de <span class="arithmatex">\(\lambda\)</span>, lo que equivale a una rotación de fase de varios grados en cada eco multitrayecto. La respuesta en frecuencia <span class="arithmatex">\(|H(f)|\)</span> — los picos y valles que vimos en la figura anterior — es ahora diferente. El canal que el receptor midió hace 1 ms ya no es válido. ¿Cuánto tiempo sigue siendo válida una estimación del canal? Esa es la pregunta que responde esta sección.</p>
+<p><strong>Mecanismo físico</strong>: cuando el terminal se mueve con velocidad <span class="arithmatex">\(v\)</span>, cada camino multitrayecto tiene una componente de velocidad distinta a lo largo de su dirección de llegada. Esa componente acorta o alarga el camino en cada ciclo de la portadora, produciendo un <strong>desplazamiento en frecuencia</strong> — el efecto Doppler:</p>
+<div class="arithmatex">\[f_D = \frac{v}{\lambda}\cos\theta\]</div>
+<p>donde <span class="arithmatex">\(\theta\)</span> es el ángulo entre la dirección de movimiento y la dirección de llegada del camino. Un camino que llega de frente (<span class="arithmatex">\(\theta=0°\)</span>) sufre el máximo desplazamiento positivo <span class="arithmatex">\(f_{D,\text{max}} = v/\lambda\)</span>; uno que llega por detrás (<span class="arithmatex">\(\theta=180°\)</span>) sufre el máximo negativo <span class="arithmatex">\(-f_{D,\text{max}}\)</span>; los que llegan en perpendicular (<span class="arithmatex">\(\theta=90°\)</span>) no tienen desplazamiento.</p>
+<p><img alt="Doppler effect: geometría y espectro" src="figures/doppler-spectrum-v2.png" /></p>
+<p>La imagen izquierda muestra cuatro caminos multitrayecto llegando al receptor móvil desde ángulos distintos. Cada uno produce un desplazamiento Doppler diferente según <span class="arithmatex">\(f_D = (v/\lambda)\cos\theta\)</span>: el camino frontal (verde, <span class="arithmatex">\(\theta=0°\)</span>) se desplaza al máximo positivo; el camino trasero (rojo, <span class="arithmatex">\(\theta=180°\)</span>) al máximo negativo; los intermedios quedan entre ambos extremos.</p>
+<p>La imagen derecha muestra lo que ocurre en el dominio de la frecuencia. El transmisor emite una <strong>única frecuencia</strong> <span class="arithmatex">\(f_0\)</span> — el tono negro vertical. El receptor, sin embargo, recibe <strong>múltiples copias</strong> de esa frecuencia, cada una desplazada por el Doppler de su camino: los cuatro círculos de colores corresponden exactamente a los cuatro caminos dla imagen izquierda. El conjunto de todos estos desplazamientos forma el <strong>Doppler spread</strong>, que se extiende entre <span class="arithmatex">\(-f_{D,\text{max}}\)</span> y <span class="arithmatex">\(+f_{D,\text{max}}\)</span>. La curva gris es el perfil espectral resultante para dispersión isotrópica (caminos igualmente distribuidos en todos los ángulos) — la forma en "U" característica del modelo de Jakes.</p>
+<p>Para entender de dónde viene esa curva y cómo conduce al coherence time, necesitamos responder dos preguntas: ¿qué supuesto físico produce la forma en "U"? ¿y qué herramienta matemática traduce esa forma al tiempo de coherencia?</p>
+<p><strong>Supuesto de dispersión isotrópica — el modelo de Jakes</strong>: en un entorno urbano denso, hay tantos reflexores distribuidos en todas las direcciones que los ecos llegan con igual probabilidad desde cualquier ángulo <span class="arithmatex">\(\theta \in [0°, 360°]\)</span>. Este es el supuesto de <strong>isotropía</strong>, y es la hipótesis central del modelo de Jakes. Bajo isotropía, el desplazamiento en frecuencia Doppler <span class="arithmatex">\(f_D = f_{D,\text{max}}\cos\theta\)</span> no se distribuye uniformemente, aunque los ángulos sí lo sean. La razón es que <span class="arithmatex">\(\cos\theta\)</span> no es lineal en <span class="arithmatex">\(\theta\)</span> — su velocidad de cambio depende del ángulo:</p>
+<ul>
+<li><strong>Cerca de <span class="arithmatex">\(\theta = 0°\)</span> y <span class="arithmatex">\(180°\)</span></strong>: <span class="arithmatex">\(\cos\theta\)</span> varía muy lentamente (su derivada es cero en esos puntos). Un rango amplio de ángulos distintos produce casi el mismo <span class="arithmatex">\(f_D\)</span> — toda esa energía angular se acumula en una banda estrecha de frecuencias. El resultado es una densidad espectral alta en los extremos <span class="arithmatex">\(\pm f_{D,\text{max}}\)</span> — los picos de la "U".</li>
+<li><strong>Cerca de <span class="arithmatex">\(\theta = 90°\)</span></strong>: <span class="arithmatex">\(\cos\theta\)</span> cambia con la mayor rapidez posible. Un pequeño rango de ángulos produce un rango amplio de valores de <span class="arithmatex">\(f_D\)</span>, dispersando la energía en lugar de acumularla. El resultado es una densidad espectral baja en torno a <span class="arithmatex">\(f_D = 0\)</span> — el valle de la "U".</li>
+</ul>
+<p>El resultado conjunto es la forma en "U" visible en la figura: energía concentrada en los extremos <span class="arithmatex">\(\pm f_{D,\text{max}}\)</span> y reducida en el centro.</p>
+<p><strong>De la forma en "U" al coherence time — Wiener-Khinchin</strong>: para medir cuánto cambia el canal con el tiempo se usa la <strong>función de autocorrelación temporal</strong>:</p>
+<div class="arithmatex">\[R(\Delta t) = \mathbb{E}\!\left[h^*(t)\, h(t + \Delta t)\right]\]</div>
+<p><span class="arithmatex">\(R(0) = 1\)</span> significa canal idéntico; <span class="arithmatex">\(R(\Delta t) \to 0\)</span> significa canal independiente. Por el <strong>teorema de Wiener-Khinchin</strong>, <span class="arithmatex">\(R(\Delta t)\)</span> es la transformada de Fourier inversa del espectro Doppler. La transformada inversa de la densidad espectral en "U" del modelo de Jakes resulta ser exactamente la función de Bessel de primera especie y orden cero:</p>
+<div class="arithmatex">\[R(\Delta t) = J_0\!\left(2\pi f_{D,\text{max}}\, \Delta t\right)\]</div>
+<p>Esta es la contribución central del modelo de Jakes: proporciona una expresión analítica cerrada para la autocorrelación temporal del canal bajo el supuesto de isotropía.</p>
+<p><strong>Coherence time</strong> <span class="arithmatex">\(T_c\)</span> — <span class="arithmatex">\(R(\Delta t)\)</span> responde exactamente la pregunta que necesitamos: dado que el canal en el instante <span class="arithmatex">\(t\)</span> tiene cierta respuesta, ¿cuánto tiempo después sigue siendo suficientemente similar para no necesitar reestimarlo? Cuando <span class="arithmatex">\(\Delta t\)</span> es pequeño, <span class="arithmatex">\(J_0(2\pi f_{D,\text{max}}\,\Delta t) \approx 1\)</span> — el canal casi no ha cambiado. A medida que <span class="arithmatex">\(\Delta t\)</span> crece, <span class="arithmatex">\(J_0\)</span> decrece — el canal se decorrelaciona. Se necesita un criterio práctico que defina el umbral a partir del cual el canal se considera "suficientemente diferente": la convención habitual es <span class="arithmatex">\(R(T_c) = 0{,}5\)</span>, es decir, el instante en que la correlación ha caído al 50% de su valor inicial. Aplicando esa condición:</p>
+<div class="arithmatex">\[J_0\!\left(2\pi f_{D,\text{max}}\, T_c\right) = 0{,}5\]</div>
+<p>Resolviendo numéricamente se obtiene <span class="arithmatex">\(2\pi f_{D,\text{max}}\, T_c \approx 2{,}657\)</span>, de donde:</p>
+<div class="arithmatex">\[T_c \approx \frac{0{,}423}{f_{D,\text{max}}}\]</div>
+<p>El coeficiente 0,423 no es un número arbitrario — es la consecuencia directa de resolver <span class="arithmatex">\(J_0(x) = 0{,}5\)</span>. La constante exacta depende del criterio de correlación elegido; lo que sí es universal es la relación inversa con <span class="arithmatex">\(f_{D,\text{max}}\)</span>:</p>
+<ul>
+<li>Mayor velocidad del terminal → mayor <span class="arithmatex">\(f_{D,\text{max}}\)</span></li>
+<li>Mayor <span class="arithmatex">\(f_{D,\text{max}}\)</span> → menor <span class="arithmatex">\(T_c\)</span></li>
+<li>Menor <span class="arithmatex">\(T_c\)</span> → el canal cambia más rápido → hay que reestimarlo con mayor frecuencia</li>
+</ul>
+<p>Nótese la dualidad con <span class="arithmatex">\(B_c \approx 1/(5\sigma_\tau)\)</span>: el delay spread <span class="arithmatex">\(\sigma_\tau\)</span> comprime <span class="arithmatex">\(B_c\)</span> en frecuencia; el Doppler spread <span class="arithmatex">\(f_{D,\text{max}}\)</span> comprime <span class="arithmatex">\(T_c\)</span> en tiempo. Velocidades altas → <span class="arithmatex">\(f_{D,\text{max}}\)</span> grande → <span class="arithmatex">\(T_c\)</span> pequeño → el canal cambia rápidamente.</p>
+<p>La relación entre <span class="arithmatex">\(T_s\)</span> (duración de un símbolo) y <span class="arithmatex">\(T_c\)</span> determina el régimen temporal:</p>
+<ul>
+<li>
+<p><strong>Slow fading</strong> (<span class="arithmatex">\(T_s \ll T_c\)</span>): el canal apenas cambia durante la transmisión de un símbolo. Una estimación del canal obtenida con un piloto sigue siendo válida varios símbolos después. Es el régimen habitual en la mayoría de los sistemas prácticos.</p>
+</li>
+<li>
+<p><strong>Fast fading</strong> (<span class="arithmatex">\(T_s \gg T_c\)</span>): el canal cambia múltiples veces dentro de un solo símbolo. El receptor no puede seguir el canal con suficiente rapidez. Es el caso de terminales muy rápidos o portadoras muy altas (mmWave con vehículos).</p>
+</li>
+</ul>
+<p><img alt="Slow fading vs fast fading" src="figures/slow-vs-fast-fading.png" /></p>
+<p>Ambas imágenes muestran la amplitud recibida en dB en una sola frecuencia, variando en el tiempo. En slow fading (arriba), <span class="arithmatex">\(T_c\)</span> es grande — el canal cambia lentamente y un símbolo de duración <span class="arithmatex">\(T_s \ll T_c\)</span> ve un canal prácticamente constante. En fast fading (abajo), <span class="arithmatex">\(T_c\)</span> es pequeño — el canal completa varias fluctuaciones dentro de un símbolo de duración <span class="arithmatex">\(T_s \gg T_c\)</span>, lo que hace imposible asumir que el canal es estático durante la recepción.</p>
+<p><strong>Los cuatro parámetros que caracterizan <span class="arithmatex">\(h(\tau, t)\)</span></strong>: la función de dos variables queda completamente descrita por dos pares duales:</p>
+<table>
+<thead>
+<tr>
+<th>Dimensión</th>
+<th>Parámetro de dispersión</th>
+<th>Parámetro de coherencia</th>
+<th>Régimen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Retardo (<span class="arithmatex">\(\tau\)</span>)</td>
+<td>Delay spread <span class="arithmatex">\(\sigma_\tau\)</span></td>
+<td>Coherence bandwidth <span class="arithmatex">\(B_c \approx 1/5\sigma_\tau\)</span></td>
+<td>Flat / Frequency-selective</td>
+</tr>
+<tr>
+<td>Tiempo (<span class="arithmatex">\(t\)</span>)</td>
+<td>Doppler spread <span class="arithmatex">\(f_{D,\text{max}}\)</span></td>
+<td>Coherence time <span class="arithmatex">\(T_c \approx 0.423/f_{D,\text{max}}\)</span></td>
+<td>Slow / Fast fading</td>
+</tr>
+</tbody>
+</table>
+<p>Estos cuatro parámetros son los datos de entrada del diseñador de sistemas: determinan la longitud del cyclic prefix en OFDM, la densidad de pilotos en la cuadrícula tiempo-frecuencia, la frecuencia de actualización del estimador de canal y el máximo orden de modulación que puede sostenerse de forma fiable.</p>
+<p>Los cuatro parámetros de la tabla caracterizan la <strong>estructura</strong> del canal — cómo se dispersa en frecuencia y cómo varía en el tiempo. Pero hay una pregunta que aún no hemos respondido: ¿qué <strong>valor</strong> toma la amplitud de la señal recibida en un instante concreto? Para responderla necesitamos tres conceptos que se construyen en este orden: primero la <strong>SNR</strong> (<span class="arithmatex">\(\gamma\)</span>), que relaciona la potencia de la señal con la potencia del ruido; luego la <strong>BER</strong>, que traduce <span class="arithmatex">\(\gamma\)</span> en probabilidad de error de bit; y finalmente el <strong>efecto del fading</strong>, que muestra por qué en presencia de multipath <span class="arithmatex">\(\gamma\)</span> no es un valor fijo sino una variable aleatoria — y por qué su distribución estadística es la clave para estimar la calidad real del enlace.</p>
+<hr />
+<h3 id="6-snr-ber-y-el-efecto-del-fading">6. SNR, BER y el Efecto del Fading</h3>
+<p>Las secciones anteriores describieron cómo el canal dispersa la señal en retardo y en frecuencia, y cómo varía en el tiempo. Lo que aún no hemos respondido es la pregunta más directa desde el punto de vista del usuario: <strong>¿llegan los bits correctos?</strong> Responderla requiere dos ingredientes. El primero es la <strong>SNR</strong> — cuánta potencia de señal hay respecto al ruido en el receptor, el margen que separa la señal del error. El segundo es la <strong>BER</strong> — cómo se traduce ese margen en probabilidad concreta de error de bit, la métrica que el usuario sí puede observar. Con esos dos conceptos en mano aparece el problema real del fading: en un canal con multipath, la SNR no es un valor fijo sino una variable aleatoria que toma un valor distinto en cada configuración concreta del canal — cada posición del terminal, cada conjunto de obstáculos, produce un valor específico de <span class="arithmatex">\(\gamma\)</span>. A cada una de esas configuraciones concretas se le llama una <strong>realización</strong> del proceso aleatorio. Y eso cambia completamente cómo se evalúa el rendimiento del sistema.</p>
+<p><strong>SNR instantánea</strong> — la relación entre la potencia de la señal <span class="arithmatex">\(P_r\)</span> y la potencia del ruido <span class="arithmatex">\(P_n\)</span> en el receptor:</p>
+<div class="arithmatex">\[\gamma = \frac{P_r}{P_n}\]</div>
+<p>La potencia de ruido térmico en un receptor de ancho de banda <span class="arithmatex">\(B\)</span> es:</p>
+<div class="arithmatex">\[P_n = N_0 \cdot B\]</div>
+<p>donde <span class="arithmatex">\(N_0\)</span> es la densidad espectral unilateral de ruido (W/Hz), determinada por la temperatura del sistema:</p>
+<div class="arithmatex">\[N_0 = k_B T\]</div>
+<p>con <span class="arithmatex">\(k_B = 1{,}38 \times 10^{-23}\)</span> J/K la constante de Boltzmann y <span class="arithmatex">\(T\)</span> la temperatura de ruido equivalente del receptor (típicamente 290 K en condiciones estándar, lo que da <span class="arithmatex">\(N_0 \approx -174\)</span> dBm/Hz). Combinando ambas expresiones:</p>
+<div class="arithmatex">\[\gamma = \frac{P_r}{N_0 B}\]</div>
+<p>La SNR sube cuando aumenta la potencia recibida o se reduce el ancho de banda de ruido. Reducir <span class="arithmatex">\(B\)</span> baja <span class="arithmatex">\(P_n\)</span> y sube <span class="arithmatex">\(\gamma\)</span>, pero tiene un coste directo: un receptor de ancho de banda <span class="arithmatex">\(B\)</span> solo puede procesar señales de hasta <span class="arithmatex">\(B\)</span> Hz — reducirlo limita la tasa de datos máxima. En la práctica, <span class="arithmatex">\(B\)</span> se elige igual al ancho de banda mínimo necesario para la señal; no se reduce arbitrariamente.</p>
+<p>Con <span class="arithmatex">\(\gamma\)</span> definido, la pregunta natural es: ¿cómo se traduce ese valor en probabilidad de error de bit? Esa relación — la curva BER vs. SNR — es el índice de calidad fundamental de cualquier sistema de comunicaciones digitales.</p>
+<p>El objetivo de esta sub-sección es obtener un <strong>número fijo</strong> que caracterice el rendimiento del enlace: la BER media <span class="arithmatex">\(\overline{\text{BER}}\)</span>. Para llegar a ella hay que recorrer tres pasos. Primero, derivar BER <span class="arithmatex">\(= Q(\sqrt{\gamma})\)</span> para el caso donde <span class="arithmatex">\(\gamma\)</span> es constante. Segundo, reconocer que en presencia de fading <span class="arithmatex">\(\gamma\)</span> es una variable aleatoria — y por tanto la BER también lo es. Tercero, calcular el promedio: <span class="arithmatex">\(\overline{\text{BER}} = \int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma\)</span>. Esa integral requiere conocer <span class="arithmatex">\(f(\gamma)\)</span>, la distribución de la SNR instantánea — y son precisamente los modelos de Rayleigh (§7) y Rician (§8) los que la proporcionan.</p>
+<p><strong>BER con SNR fija — el caso base</strong>: antes de ver cómo el fading complica el análisis, hay que derivar la BER en el escenario más simple: <span class="arithmatex">\(\gamma\)</span> es un valor fijo y conocido. Este es el caso de un canal donde la única fuente de aleatoriedad es el ruido térmico — lo que se denomina canal AWGN. El objetivo no es estudiar AWGN por sí mismo, sino obtener la expresión BER <span class="arithmatex">\(= Q(\sqrt{\gamma})\)</span>, que será la pieza central de la integral de fading <span class="arithmatex">\(\int Q(\sqrt{\gamma})\,f(\gamma)\,d\gamma\)</span> que aparece en §7 y §8. Partimos de la figura.</p>
+<p><img alt="SNR y BER: umbral de decisión en BPSK" src="figures/snr-ber-decision.png" /></p>
+<p>Una <strong>función de densidad de probabilidad (PDF)</strong> describe cómo se reparte la probabilidad de una variable aleatoria continua. Su altura en un punto <span class="arithmatex">\(x\)</span> indica qué tan probable es observar valores cercanos a <span class="arithmatex">\(x\)</span>; el <strong>área bajo la curva</strong> entre dos límites es la probabilidad de que la variable caiga en ese intervalo. El área total es siempre 1 — la variable toma algún valor con certeza.</p>
+<p>La figura muestra BPSK — el caso más simple, con dos símbolos: <span class="arithmatex">\(+A\)</span> (bit 1) y <span class="arithmatex">\(-A\)</span> (bit 0). El eje horizontal es la <strong>amplitud recibida</strong> <span class="arithmatex">\(r\)</span>. Cada campana es la <strong>PDF</strong> de la amplitud recibida para ese símbolo: indica con qué probabilidad el receptor medirá cada valor de amplitud si ese símbolo fue transmitido.</p>
+<p>Las campanas no son puntos fijos sino distribuciones porque el ruido térmico <span class="arithmatex">\(n\)</span> desplaza aleatoriamente la amplitud recibida respecto al símbolo transmitido. El ruido sigue una distribución normal con media cero y varianza <span class="arithmatex">\(\sigma_n^2\)</span>:</p>
+<div class="arithmatex">\[n \sim \mathcal{N}(0,\, \sigma_n^2)\]</div>
+<p>Media cero significa que el ruido no desplaza la señal en promedio — solo la dispersa. Geométricamente, <span class="arithmatex">\(\sigma_n\)</span> (la desviación estándar) es la distancia horizontal desde el centro de la campana hasta sus <strong>puntos de inflexión</strong> — donde la curva cambia de cóncava a convexa. Es una longitud en el eje de amplitud (voltios). La varianza <span class="arithmatex">\(\sigma_n^2\)</span> es simplemente <span class="arithmatex">\(\sigma_n\)</span> al cuadrado. Su interpretación física es la <strong>potencia del ruido</strong> <span class="arithmatex">\(P_n\)</span>, y el razonamiento es el siguiente: la potencia eléctrica de una señal <span class="arithmatex">\(x\)</span> en una resistencia de 1 Ω es <span class="arithmatex">\(x^2\)</span> (W); para una señal aleatoria, la potencia promedio es <span class="arithmatex">\(\mathbb{E}[x^2]\)</span>, el valor cuadrático medio. Existe una identidad estadística general: <span class="arithmatex">\(\mathbb{E}[x^2] = \text{Var}(x) + (\mathbb{E}[x])^2\)</span>. Aplicada al ruido, cuya media es cero, el término <span class="arithmatex">\((\mathbb{E}[n])^2 = 0\)</span> desaparece y queda <span class="arithmatex">\(\mathbb{E}[n^2] = \text{Var}(n) = \sigma_n^2\)</span>. Por tanto, <span class="arithmatex">\(P_n = \mathbb{E}[n^2] = \sigma_n^2\)</span> — la varianza y la potencia son la misma cantidad, no por definición sino porque el ruido tiene media cero. Mayor <span class="arithmatex">\(\sigma_n\)</span> significa campanas más anchas — el ruido desplaza la amplitud recibida en un rango mayor alrededor del símbolo.</p>
+<p><img alt="Distribución gaussiana: media μ y desviación estándar σ" src="figures/gaussian-sigma.webp" /></p>
+<p>La figura muestra la regla práctica que relaciona <span class="arithmatex">\(\sigma_n\)</span> con el área bajo la campana: el intervalo <span class="arithmatex">\([\mu - \sigma_n,\ \mu + \sigma_n]\)</span> encierra el 68% de las realizaciones; <span class="arithmatex">\(\pm 2\sigma_n\)</span> el 95%; <span class="arithmatex">\(\pm 3\sigma_n\)</span> el 99,7%. En el contexto de BPSK, <span class="arithmatex">\(\mu = A\)</span> (el símbolo transmitido) y la zona de error es todo lo que cae por debajo del umbral en 0 — es decir, la cola izquierda de la campana. Esa cola crece rápidamente cuando <span class="arithmatex">\(\sigma_n\)</span> se acerca a <span class="arithmatex">\(A\)</span>: si <span class="arithmatex">\(\sigma_n \ll A\)</span> la cola es despreciable; si <span class="arithmatex">\(\sigma_n \approx A\)</span> el solapamiento con el umbral es significativo.</p>
+<p>La amplitud recibida cuando se transmite <span class="arithmatex">\(+A\)</span> es:</p>
+<div class="arithmatex">\[r = A + n\]</div>
+<p>cuya PDF es una gaussiana centrada en <span class="arithmatex">\(+A\)</span> con anchura <span class="arithmatex">\(\sigma_n\)</span> — la campana derecha de la figura izquierda.</p>
+<p>El detector coloca el umbral en 0: decide bit 1 si <span class="arithmatex">\(r &gt; 0\)</span>, bit 0 si <span class="arithmatex">\(r &lt; 0\)</span>. La <strong>zona de error</strong> (rojo) es la cola de la campana que cruza ese umbral — la probabilidad de que el ruido haya empujado la amplitud al lado equivocado. La imagen izquierda (SNR alta) muestra campanas bien separadas y zona de error pequeña; la imagen derecha (SNR baja) muestra campanas solapadas y zona de error grande.</p>
+<p>Algebraicamente, dado que <span class="arithmatex">\(+A\)</span> fue enviado, el error ocurre cuando <span class="arithmatex">\(r &lt; 0\)</span>, es decir cuando <span class="arithmatex">\(n &lt; -A\)</span>. El objetivo es calcular el área de esa cola, pero <span class="arithmatex">\(n \sim \mathcal{N}(0, \sigma_n^2)\)</span> es una gaussiana de varianza arbitraria — no existe una tabla o función directa para calcular su área de cola. La solución es <strong>normalizar</strong>: dividir ambos lados de la desigualdad entre <span class="arithmatex">\(\sigma_n &gt; 0\)</span> no cambia el sentido de la desigualdad ni el evento, solo reescribe la condición en términos de una nueva variable <span class="arithmatex">\(Z = n/\sigma_n\)</span>:</p>
+<div class="arithmatex">\[n &lt; -A \;\Longleftrightarrow\; \frac{n}{\sigma_n} &lt; -\frac{A}{\sigma_n}\]</div>
+<p>La variable <span class="arithmatex">\(Z = n/\sigma_n\)</span> sigue una gaussiana estándar <span class="arithmatex">\(\mathcal{N}(0,1)\)</span> — media cero, varianza uno — para la cual sí existe una función estándar que calcula áreas de cola: la función <span class="arithmatex">\(Q\)</span>. Por la simetría de <span class="arithmatex">\(\mathcal{N}(0,1)\)</span> alrededor de cero, <span class="arithmatex">\(P(Z &lt; -x) = P(Z &gt; x) = Q(x)\)</span>. Aplicando con <span class="arithmatex">\(x = A/\sigma_n\)</span>:</p>
+<div class="arithmatex">\[P(\text{error} \mid +A) = P(n &lt; -A) = P\!\left(\frac{n}{\sigma_n} &lt; -\frac{A}{\sigma_n}\right) = Q\!\left(\frac{A}{\sigma_n}\right)\]</div>
+<p>donde <span class="arithmatex">\(Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^{\infty} e^{-u^2/2}\,du\)</span> es el <strong>área de la cola derecha</strong> de la gaussiana estándar más allá del umbral <span class="arithmatex">\(x\)</span> — exactamente el área roja de la figura. Por simetría, la misma probabilidad aplica cuando se envía <span class="arithmatex">\(-A\)</span>.</p>
+<p>El área <span class="arithmatex">\(Q(A/\sigma_n)\)</span> es la <strong>BER</strong>: la probabilidad de que un bit sea recibido incorrectamente, expresada en función de los parámetros físicos <span class="arithmatex">\(A\)</span> y <span class="arithmatex">\(\sigma_n\)</span>. El siguiente paso es reescribirla en términos de <span class="arithmatex">\(\gamma = P_r/P_n\)</span> — el parámetro de diseño que el ingeniero controla.</p>
+<p>Para ello se identifican los dos ingredientes de <span class="arithmatex">\(\gamma\)</span> en el contexto BPSK:</p>
+<ul>
+<li><strong>Potencia de la señal</strong>: <span class="arithmatex">\(P_r = A^2\)</span>, porque los símbolos <span class="arithmatex">\(\pm A\)</span> tienen valor cuadrático medio <span class="arithmatex">\(\mathbb{E}[s^2] = A^2\)</span>.</li>
+<li><strong>Potencia del ruido</strong>: <span class="arithmatex">\(P_n = \sigma_n^2\)</span>, porque la potencia de una señal aleatoria es su valor cuadrático medio <span class="arithmatex">\(\mathbb{E}[n^2]\)</span>, y para ruido de media cero <span class="arithmatex">\(\mathbb{E}[n^2] = \sigma_n^2\)</span> (varianza = potencia). Normalizado a <span class="arithmatex">\(1\ \Omega\)</span>, <span class="arithmatex">\(\sigma_n^2\ \text{V}^2\)</span> equivale directamente a <span class="arithmatex">\(\sigma_n^2\ \text{W}\)</span>, convertible a dBm.</li>
+</ul>
+<p>Por tanto:</p>
+<div class="arithmatex">\[\gamma = \frac{P_r}{P_n} = \frac{A^2}{\sigma_n^2} \quad \Longrightarrow \quad \frac{A}{\sigma_n} = \sqrt{\gamma}\]</div>
+<p>Sustituyendo en <span class="arithmatex">\(Q(A/\sigma_n)\)</span>:</p>
+<div class="arithmatex">\[\boxed{\text{BER} = Q\!\left(\sqrt{\gamma}\right)}\]</div>
+<p>En la imagen izquierda (SNR alta), las distribuciones están bien separadas y la zona de error es pequeña. En la imagen derecha (SNR baja), se solapan y la zona de error crece. La fórmula cuantifica exactamente esa relación: a mayor <span class="arithmatex">\(\gamma\)</span>, mayor argumento de <span class="arithmatex">\(Q\)</span>, menor cola, menor BER.</p>
+<p><strong>SNR media vs. SNR instantánea</strong> — la fórmula BER <span class="arithmatex">\(= Q(\sqrt{\gamma})\)</span> asume implícitamente que <span class="arithmatex">\(\gamma\)</span> es un valor fijo y conocido. Esa suposición es válida en un canal puramente AWGN, donde el único efecto es el ruido térmico y la potencia recibida no varía. Pero en un canal real con multipath esa suposición se rompe — la potencia recibida fluctúa, y con ella <span class="arithmatex">\(\gamma\)</span>. Para ver por qué, es necesario distinguir entre la SNR media y la SNR instantánea.</p>
+<p>El link budget de las secciones 1–3 calculó la potencia media recibida <span class="arithmatex">\(\bar{P}_r\)</span> en función de la distancia, el entorno y el shadowing. La <strong>SNR media</strong> es:</p>
+<div class="arithmatex">\[\bar{\gamma} = \frac{\bar{P}_r}{P_n}\]</div>
+<p>Si el canal fuera puramente AWGN, <span class="arithmatex">\(\gamma = \bar{\gamma}\)</span> sería constante y la BER quedaría completamente determinada por <span class="arithmatex">\(Q(\sqrt{\bar{\gamma}})\)</span>.</p>
+<p><strong>El problema del multipath fading</strong>: las múltiples réplicas de la señal llegan con fases aleatorias y se suman de forma constructiva o destructiva dependiendo de la posición exacta del receptor. La potencia recibida <span class="arithmatex">\(P_r\)</span> — y por tanto <span class="arithmatex">\(\gamma\)</span> — fluctúa aleatoriamente en torno a <span class="arithmatex">\(\bar{P}_r\)</span>. En los instantes de suma destructiva, <span class="arithmatex">\(\gamma\)</span> desciende muy por debajo de <span class="arithmatex">\(\bar{\gamma}\)</span>: aunque el promedio sea confortable (digamos <span class="arithmatex">\(\bar{\gamma} = 20\)</span> dB), hay momentos en que <span class="arithmatex">\(\gamma\)</span> cae a 0 dB o menos. Esos instantes — los <strong>deep fades</strong> — producen ráfagas de errores de bit aunque el nivel medio de señal sea perfectamente adecuado.</p>
+<p>En presencia de fading, <span class="arithmatex">\(\gamma\)</span> es una <strong>variable aleatoria</strong>. Conviene detenerse en lo que eso implica desde el punto de vista estadístico: decir que <span class="arithmatex">\(\gamma\)</span> es una variable aleatoria no es solo decir que "cambia" — es afirmar que sus valores siguen una <strong>ley de reparto</strong> bien definida. Esa ley es la función de densidad de probabilidad <span class="arithmatex">\(f(\gamma)\)</span>, y no es algo adicional que haya que buscar por separado: es inherente a la noción misma de variable aleatoria. Toda variable aleatoria continua tiene asociada una PDF que describe con qué densidad de probabilidad toma cada valor posible. Preguntar "¿cuál es la <span class="arithmatex">\(f(\gamma)\)</span> del fading?" equivale a preguntar "¿cuál es la distribución estadística de la SNR instantánea?" — y responderla es exactamente el objetivo de §7 y §8.</p>
+<p>Como BER <span class="arithmatex">\(= Q(\sqrt{\gamma})\)</span> y <span class="arithmatex">\(\gamma\)</span> es aleatoria, la BER también es aleatoria — en un instante puede ser <span class="arithmatex">\(10^{-6}\)</span>, en otro <span class="arithmatex">\(10^{-1}\)</span>. Un valor único y representativo ya no existe, y usar <span class="arithmatex">\(Q(\sqrt{\bar{\gamma}})\)</span> como si el canal fuera AWGN sería <strong>incorrecto</strong>: <span class="arithmatex">\(Q\)</span> es una función no lineal, y para funciones no lineales el promedio de la función no es igual a la función del promedio — siempre se cumple que:</p>
+<div class="arithmatex">\[\overline{\text{BER}} = \mathbb{E}\!\left[Q\!\left(\sqrt{\gamma}\right)\right] &gt; Q\!\left(\sqrt{\bar{\gamma}}\right)\]</div>
+<p>Es decir, el fading <strong>siempre degrada la BER</strong> respecto a lo que predice el AWGN con la misma SNR media — incluso cuando <span class="arithmatex">\(\bar{\gamma}\)</span> es idéntico. La única métrica correcta es el promedio de <span class="arithmatex">\(Q(\sqrt{\gamma})\)</span> ponderado por la probabilidad de cada valor de <span class="arithmatex">\(\gamma\)</span>, es decir, integrado contra su PDF:</p>
+<div class="arithmatex">\[\overline{\text{BER}} = \int_0^{\infty} Q\!\left(\sqrt{\gamma}\right) f(\gamma)\, d\gamma\]</div>
+<p>La forma de esta integral deja ver su significado: para cada valor posible de <span class="arithmatex">\(\gamma\)</span>, se calcula la BER que produciría (<span class="arithmatex">\(Q(\sqrt{\gamma})\)</span>) y se pondera por la probabilidad de que <span class="arithmatex">\(\gamma\)</span> tome ese valor (<span class="arithmatex">\(f(\gamma)\,d\gamma\)</span>). El resultado es la BER promedio sobre todos los valores posibles de <span class="arithmatex">\(\gamma\)</span>. Para evaluar esta integral hay que conocer <span class="arithmatex">\(f(\gamma)\)</span> — y esa distribución depende de cómo se distribuye la amplitud recibida, que es lo que los modelos de Rayleigh y Rician proporcionan.</p>
+<p>Vale la pena detenerse en por qué se usa la BER como criterio de calidad y no directamente la potencia recibida. La razón es que la potencia recibida sola no determina si la comunicación es exitosa — lo que importa es si los bits llegan correctos. Un sistema puede tener potencia recibida suficiente pero alta BER si la modulación es demasiado agresiva para el <span class="arithmatex">\(\gamma\)</span> disponible; o puede tener baja potencia pero BER aceptable si la modulación es conservadora. La BER es el criterio de calidad <em>observable y relevante para el usuario</em>: cuántos bits se reciben mal. En diseño de sistemas, se fija una BER objetivo (típicamente <span class="arithmatex">\(10^{-3}\)</span> a <span class="arithmatex">\(10^{-6}\)</span> según la aplicación) y se despeja el <span class="arithmatex">\(\gamma\)</span> mínimo necesario — lo que determina la potencia mínima de transmisión, la máxima distancia, y el orden de modulación sostenible. El fading degrada el sistema precisamente porque hace que <span class="arithmatex">\(\gamma\)</span> caiga por debajo de ese umbral mínimo en los instantes de deep fade, disparando la BER aunque el nivel medio de señal sea adecuado.</p>
+<hr />
+<h3 id="7-rayleigh-fading">7. Rayleigh Fading</h3>
+<p>Hasta aquí, <span class="arithmatex">\(\gamma\)</span> era un número fijo: la SNR de un canal AWGN determinista. Con el multipath fading eso cambia fundamentalmente — la amplitud recibida <span class="arithmatex">\(r\)</span> ya no es un valor constante sino una <strong>variable aleatoria</strong> que fluctúa en cada instante dependiendo de cómo se suman los ecos. Como consecuencia, la SNR instantánea <span class="arithmatex">\(\gamma = r^2/P_n\)</span> también es una variable aleatoria con su propia distribución <span class="arithmatex">\(f(\gamma)\)</span>. Y dado que <span class="arithmatex">\(\gamma\)</span> es aleatoria, la BER ya no es un número fijo sino que también fluctúa — lo que tiene sentido como métrica de rendimiento es su <strong>valor esperado</strong> (promedio estadístico) sobre todos los valores posibles de <span class="arithmatex">\(\gamma\)</span>:</p>
+<div class="arithmatex">\[\overline{\text{BER}} = \mathbb{E}_\gamma\!\left[Q\!\left(\sqrt{\gamma}\right)\right] = \int_0^\infty Q\!\left(\sqrt{\gamma}\right) f(\gamma)\, d\gamma\]</div>
+<p>La barra sobre BER y sobre <span class="arithmatex">\(\bar{\gamma}\)</span> indica exactamente eso: un promedio sobre la distribución de la variable aleatoria. Para evaluar esta integral necesitamos conocer <span class="arithmatex">\(f(\gamma)\)</span>, la distribución de la SNR instantánea. Esa distribución depende directamente de cómo se distribuye la amplitud <span class="arithmatex">\(r\)</span> — que es lo que el modelo de Rayleigh describe.</p>
+<p>La cadena lógica es: derivar <span class="arithmatex">\(f(r)\)</span> → obtener <span class="arithmatex">\(f(\gamma)\)</span> → calcular <span class="arithmatex">\(\overline{\text{BER}}\)</span> en función de <span class="arithmatex">\(\bar{\gamma}\)</span>. Para derivar <span class="arithmatex">\(f(r)\)</span> hay que entender cómo se forma <span class="arithmatex">\(r\)</span> a partir de la suma de los caminos multitrayecto — y ahí es donde entran las componentes <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span>.</p>
+<p><strong>Por qué modelamos <span class="arithmatex">\(a_i\)</span> y <span class="arithmatex">\(\phi_i\)</span> como variables aleatorias</strong>: ya hemos aplicado este razonamiento en §3. Ante la imposibilidad de modelar cada obstáculo individualmente, tratamos su efecto acumulado como una variable aleatoria <span class="arithmatex">\(X_\sigma \sim \mathcal{N}(0,\sigma^2)\)</span>. Aquí ocurre exactamente lo mismo, un nivel más abajo: en cualquier posición concreta del terminal, cada amplitud <span class="arithmatex">\(a_i\)</span> y cada fase <span class="arithmatex">\(\phi_i\)</span> tiene un valor exacto y determinista, completamente determinado por la geometría del entorno — posición de cada reflexor, material de cada superficie, longitud exacta de cada camino. Pero esos valores no los conocemos, y cambian cuando el terminal se desplaza unos pocos centímetros. La solución es la misma que en shadowing: modelarlos como variables aleatorias con distribuciones plausibles y derivar la distribución de la amplitud resultante <span class="arithmatex">\(r\)</span>. Esa distribución captura el comportamiento estadístico del canal sobre todas las posibles posiciones del terminal — y es la que permite calcular la <span class="arithmatex">\(\overline{\text{BER}}\)</span> como métrica de diseño.</p>
+<p>La distribución de <span class="arithmatex">\(\phi_i\)</span> se justifica físicamente. La fase acumulada por el camino <span class="arithmatex">\(i\)</span> es <span class="arithmatex">\(\phi_i = 2\pi d_i / \lambda\)</span>, donde <span class="arithmatex">\(d_i\)</span> es la longitud del camino. A 2 GHz, <span class="arithmatex">\(\lambda \approx 15\)</span> cm; un camino de 10 m acumula <span class="arithmatex">\(\phi_i = 2\pi \times 10/0{,}15 \approx 2\pi \times 67\)</span> — es decir, 67 vueltas completas. No conocemos <span class="arithmatex">\(d_i\)</span> con precisión de centímetros, y la fracción de vuelta sobrante después de descartar los múltiplos enteros de <span class="arithmatex">\(2\pi\)</span> es efectivamente aleatoria: <strong><span class="arithmatex">\(\phi_i\)</span> se modela como una variable aleatoria uniforme en <span class="arithmatex">\([0, 2\pi)\)</span></strong>. Esta suposición no es un truco matemático — es la consecuencia directa de que las longitudes de camino son órdenes de magnitud mayores que <span class="arithmatex">\(\lambda\)</span>.</p>
+<p>Con <span class="arithmatex">\(a_i\)</span> y <span class="arithmatex">\(\phi_i\)</span> modelados como variables aleatorias, el objetivo inmediato es derivar <span class="arithmatex">\(f(r)\)</span>, la distribución de la amplitud recibida <span class="arithmatex">\(r = \left|\sum_i a_i e^{j\phi_i}\right|\)</span>. El obstáculo es que la suma directa <span class="arithmatex">\(\sum a_i \cos(2\pi f_c t + \phi_i)\)</span> sigue siendo una función del tiempo — no es un número escalar, y el TCL no se puede aplicar directamente a una función temporal. Lo que se necesita es separar la <strong>parte aleatoria</strong> (que depende de <span class="arithmatex">\(a_i\)</span> y <span class="arithmatex">\(\phi_i\)</span>) de la <strong>parte temporal</strong> (que depende de <span class="arithmatex">\(t\)</span> y <span class="arithmatex">\(f_c\)</span>). Esa separación es exactamente lo que hace la descomposición en componentes I y Q: al descomponer cada eco en su proyección sobre <span class="arithmatex">\(\cos(2\pi f_c t)\)</span> y sobre <span class="arithmatex">\(\sin(2\pi f_c t)\)</span>, se obtienen dos sumas de escalares aleatorios — <span class="arithmatex">\(I = \sum a_i \cos\phi_i\)</span> y <span class="arithmatex">\(Q = \sum a_i \sin\phi_i\)</span> — completamente separadas de la variación temporal. La ortogonalidad de cos y sin (su producto integrado en un período es cero) garantiza que lo que ocurre en <span class="arithmatex">\(I\)</span> no afecta a <span class="arithmatex">\(Q\)</span> ni viceversa, lo que permite tratar ambas como variables aleatorias independientes. A esas dos sumas escalares sí se puede aplicar el TCL → <span class="arithmatex">\(I \sim \mathcal{N}(0, \sigma^2)\)</span>, <span class="arithmatex">\(Q \sim \mathcal{N}(0, \sigma^2)\)</span> → y de ahí se deriva <span class="arithmatex">\(f(r)\)</span> analíticamente.</p>
+<p><strong>De dónde vienen las componentes I y Q</strong>: hay que rastrearlas desde sus orígenes físicos.</p>
+<p>El punto de partida es que cualquier señal sinusoidal de frecuencia <span class="arithmatex">\(f_c\)</span> puede escribirse como combinación lineal de <span class="arithmatex">\(\cos(2\pi f_c t)\)</span> y <span class="arithmatex">\(\sin(2\pi f_c t)\)</span> — la <strong>base ortogonal</strong> del espacio de señales a esa frecuencia. Son ortogonales en el sentido de que su producto integrado en un período es cero: lo que ocurre en la componente coseno no afecta a la componente seno. Los factores de escala que acompañan a cada portadora se llaman <span class="arithmatex">\(I\)</span> (<em>in-phase</em>) y <span class="arithmatex">\(Q\)</span> (<em>quadrature</em>). La razón de usar esta descomposición es estratégica: la suma directa de los ecos <span class="arithmatex">\(\sum a_i \cos(2\pi f_c t + \phi_i)\)</span> no tiene una distribución estadística manejable, pero al descomponerla en componentes I y Q se obtienen dos sumas escalares — <span class="arithmatex">\(I = \sum I_i\)</span> y <span class="arithmatex">\(Q = \sum Q_i\)</span> — a las que sí se puede aplicar el TCL para obtener gaussianas. Es el artificio que hace derivable <span class="arithmatex">\(f(r)\)</span>.</p>
+<p>Considera un transmisor que emite una portadora <span class="arithmatex">\(\cos(2\pi f_c t)\)</span>. Cada uno de los <span class="arithmatex">\(N\)</span> caminos multitrayecto llega al receptor con una amplitud <span class="arithmatex">\(a_i\)</span> y un desfase de fase acumulado <span class="arithmatex">\(\phi_i\)</span> (debido a la diferencia de longitud de camino). La contribución del camino <span class="arithmatex">\(i\)</span> es:</p>
+<div class="arithmatex">\[s_i(t) = a_i \cos(2\pi f_c t + \phi_i)\]</div>
+<p>Aplicando la identidad trigonométrica <span class="arithmatex">\(\cos(\alpha + \beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta\)</span>:</p>
+<div class="arithmatex">\[s_i(t) = \underbrace{a_i \cos\phi_i}_{I_i} \cdot \cos(2\pi f_c t) \;-\; \underbrace{a_i \sin\phi_i}_{Q_i} \cdot \sin(2\pi f_c t)\]</div>
+<p>Cada camino aporta dos proyecciones: una sobre la portadora coseno (<span class="arithmatex">\(I_i\)</span>) y otra sobre la portadora seno desplazada 90° (<span class="arithmatex">\(Q_i\)</span>). Sumando los <span class="arithmatex">\(N\)</span> caminos, la señal total es:</p>
+<div class="arithmatex">\[s(t) = \underbrace{\left(\sum_{i=1}^N a_i \cos\phi_i\right)}_{I} \cos(2\pi f_c t) \;-\; \underbrace{\left(\sum_{i=1}^N a_i \sin\phi_i\right)}_{Q} \sin(2\pi f_c t)\]</div>
+<p><span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> son, por tanto, <strong>sumas de muchas variables aleatorias independientes</strong> — cada <span class="arithmatex">\(a_i\)</span> y <span class="arithmatex">\(\phi_i\)</span> es aleatoria e independiente de los demás caminos, porque cada camino refleja en un objeto físicamente distinto. El <strong>teorema central del límite</strong> (TCL) garantiza que <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> convergen a gaussianas cuando se cumplen tres condiciones — y las tres se satisfacen aquí en NLOS:</p>
+<ol>
+<li><strong>Muchos sumandos</strong>: en entornos urbanos hay decenas o centenares de caminos activos.</li>
+<li><strong>Independencia</strong>: cada <span class="arithmatex">\(I_i = a_i\cos\phi_i\)</span> depende solo del camino <span class="arithmatex">\(i\)</span>; los demás caminos no afectan su valor.</li>
+<li><strong>Ninguno domina</strong>: en ausencia de LOS, todos los caminos tienen amplitudes <span class="arithmatex">\(a_i\)</span> comparables; ningún término individual concentra la mayor parte de la energía. Esta es la condición que se violará en Rician, donde el camino directo sí domina.</li>
+</ol>
+<p>Cuando las tres se cumplen, el resultado son gaussianas de media cero e igual varianza <span class="arithmatex">\(\sigma^2\)</span>. La media cero se sigue de que <span class="arithmatex">\(\phi_i \sim \text{Uniforme}[0, 2\pi)\)</span>: los términos <span class="arithmatex">\(\cos\phi_i\)</span> toman valores positivos y negativos con igual frecuencia, de modo que <span class="arithmatex">\(\mathbb{E}[\cos\phi_i] = 0\)</span>, y lo mismo para <span class="arithmatex">\(\sin\phi_i\)</span>. Esto no significa que la señal sea cero en cada instante — en cada realización concreta, <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> toman valores distintos de cero. Lo que es cero es el <strong>promedio estadístico</strong> sobre todas las posibles posiciones del terminal. Esa es exactamente la condición que distingue a Rayleigh (sin LOS: <span class="arithmatex">\(\mathbb{E}[I] = \mathbb{E}[Q] = 0\)</span>, cúmulo centrado en el origen) de Rician (con LOS: la componente directa introduce una media no nula y desplaza el cúmulo).</p>
+<p><img alt="Derivación de Rayleigh: diagrama fasorial e histogramas I/Q" src="figures/rayleigh-derivation.png" /></p>
+<p>La imagen izquierda muestra el diagrama fasorial: cada flecha de color representa un camino multitrayecto (<span class="arithmatex">\(I_i + jQ_i\)</span>), con amplitud <span class="arithmatex">\(a_i\)</span> y fase <span class="arithmatex">\(\phi_i\)</span> aleatorias. La flecha negra gruesa es la <strong>suma vectorial</strong> <span class="arithmatex">\(I + jQ\)</span> — el fasor resultante que ve el receptor. En cada nuevo instante, las amplitudes y fases de los caminos cambian porque el terminal se mueve o los objetos del entorno varían (el efecto temporal estudiado en §5), y el extremo de la flecha negra recorre la región sombreada de forma aleatoria. La imagen derecha muestra los histogramas de <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> obtenidos de miles de realizaciones independientes: ambas componentes siguen distribuciones gaussianas centradas en cero, tal como predice el TCL. Con <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> gaussianas e independientes, el siguiente paso es calcular la distribución de su magnitud — la envolvente <span class="arithmatex">\(r = \sqrt{I^2 + Q^2}\)</span>. Este era el objetivo desde el principio: necesitábamos <span class="arithmatex">\(f(r)\)</span> para obtener <span class="arithmatex">\(f(\gamma)\)</span> y poder calcular <span class="arithmatex">\(\overline{\text{BER}}\)</span>. La descomposición en I y Q fue el camino para llegar a ella — sin ella, la suma aleatoria de ecos no tendría una distribución analítica tratable.</p>
+<p>La <strong>envolvente</strong> de la señal — la amplitud del fasor resultante — es:</p>
+<div class="arithmatex">\[r = \sqrt{I^2 + Q^2}\]</div>
+<p>Geométricamente, <span class="arithmatex">\(r\)</span> es la distancia desde el origen hasta el extremo del fasor negro. Como <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> son gaussianas independientes de igual varianza, <span class="arithmatex">\(r\)</span> sigue una distribución de <strong>Rayleigh</strong>:</p>
+<div class="arithmatex">\[f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0\]</div>
+<div class="admonition note">
+<p class="admonition-title">Por qué I y Q gaussianas con igual varianza implican una Rayleigh</p>
+<p>La conexión no es evidente — requiere un cambio de coordenadas. Partiendo de la PDF conjunta de <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span>:</p>
+<div class="arithmatex">\[f_{I,Q}(i,q) = \frac{1}{2\pi\sigma^2}\,e^{-(i^2+q^2)/2\sigma^2}\]</div>
+<p>Esta es una "diana": anillos concéntricos de igual densidad, porque la fórmula solo depende de <span class="arithmatex">\(i^2+q^2\)</span>. Esa simetría circular es consecuencia de que <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> tienen <strong>igual varianza</strong> — si fueran distintas, los anillos serían elipses.</p>
+<p><strong>Cambio a coordenadas polares</strong> (<span class="arithmatex">\(r\)</span>, <span class="arithmatex">\(\theta\)</span>): el Jacobiano de la transformación <span class="arithmatex">\((i,q)\to(r,\theta)\)</span> es <span class="arithmatex">\(r\)</span>, y <span class="arithmatex">\(i^2+q^2 = r^2\)</span>:</p>
+<div class="arithmatex">\[f_{r,\theta}(r,\theta) = \frac{r}{2\pi\sigma^2}\,e^{-r^2/2\sigma^2}\]</div>
+<p><strong>Marginalizar sobre <span class="arithmatex">\(\theta\)</span></strong>: la simetría circular hace que <span class="arithmatex">\(\theta\)</span> sea uniforme en <span class="arithmatex">\([0,2\pi)\)</span> e independiente de <span class="arithmatex">\(r\)</span>. Integrar sobre <span class="arithmatex">\(\theta\)</span> acumula el factor <span class="arithmatex">\(2\pi\)</span>:</p>
+<div class="arithmatex">\[f_r(r) = \int_0^{2\pi} \frac{r}{2\pi\sigma^2}\,e^{-r^2/2\sigma^2}\,d\theta = \frac{r}{\sigma^2}\,e^{-r^2/2\sigma^2}\]</div>
+<p>Ese es exactamente <span class="arithmatex">\(f_R(r)\)</span>. La <span class="arithmatex">\(r\)</span> en el numerador no viene de la gaussiana — viene del <strong>área del anillo</strong> <span class="arithmatex">\(2\pi r\,dr\)</span>: cuanto mayor es <span class="arithmatex">\(r\)</span>, mayor es el anillo y mayor la probabilidad de que el punto <span class="arithmatex">\((I,Q)\)</span> caiga en él, aunque la densidad gaussiana decrezca.</p>
+</div>
+<p>Los parámetros de esta expresión tienen interpretación directa:</p>
+<ul>
+<li><span class="arithmatex">\(\sigma^2\)</span> es la varianza de cada componente gaussiana — tanto de <span class="arithmatex">\(I\)</span> como de <span class="arithmatex">\(Q\)</span>. Representa la potencia media de los caminos dispersos: mayor <span class="arithmatex">\(\sigma^2\)</span> implica más energía multitrayecto y mayor amplitud media recibida.</li>
+<li>El factor <span class="arithmatex">\(r\)</span> en el numerador no es arbitrario: proviene del cambio de coordenadas cartesianas <span class="arithmatex">\((I, Q)\)</span> a polares <span class="arithmatex">\((r, \theta)\)</span>. Al integrar la PDF gaussiana 2D sobre todos los puntos a distancia <span class="arithmatex">\(r\)</span> del origen (un anillo de radio <span class="arithmatex">\(r\)</span> y anchura <span class="arithmatex">\(dr\)</span>), el área del anillo es proporcional a <span class="arithmatex">\(r\)</span> — de ahí el factor.</li>
+<li>El dominio <span class="arithmatex">\(r \geq 0\)</span> refleja que la envolvente es una magnitud (distancia al origen), siempre no negativa.</li>
+</ul>
+<p>A diferencia de una señal AWGN donde la amplitud recibida es prácticamente constante, la distribución de Rayleigh asigna probabilidad no nula a valores de <span class="arithmatex">\(r\)</span> muy cercanos a cero: en esos instantes la suma de los ecos es casi completamente destructiva — los <strong>deep fades</strong> — y la SNR instantánea cae drásticamente.</p>
+<p><strong>De la envolvente <span class="arithmatex">\(r\)</span> a la SNR instantánea <span class="arithmatex">\(\gamma\)</span></strong>: la SNR en cada instante es el ratio entre la potencia recibida instantánea y la potencia del ruido:</p>
+<div class="arithmatex">\[\gamma = \frac{P_r}{P_n} = \frac{r^2}{P_n}\]</div>
+<p>Para expresar <span class="arithmatex">\(\gamma\)</span> en términos de la SNR media <span class="arithmatex">\(\bar{\gamma}\)</span> hay que identificar <span class="arithmatex">\(P_n\)</span> en función de los parámetros del modelo. Son dos pasos.</p>
+<p><strong>Paso 1 — potencia media recibida</strong>: la potencia recibida instantánea es <span class="arithmatex">\(r^2\)</span>, así que la potencia media es <span class="arithmatex">\(\bar{P}_r = \mathbb{E}[r^2]\)</span>. Este valor sale directamente de la descomposición I/Q, sin necesidad de integrar la PDF de Rayleigh:</p>
+<div class="arithmatex">\[\mathbb{E}[r^2] = \mathbb{E}[I^2 + Q^2] = \mathbb{E}[I^2] + \mathbb{E}[Q^2]\]</div>
+<p>Como <span class="arithmatex">\(I \sim \mathcal{N}(0,\sigma^2)\)</span> tiene media cero, su valor cuadrático medio coincide con su varianza: <span class="arithmatex">\(\mathbb{E}[I^2] = \sigma^2\)</span>. Lo mismo para <span class="arithmatex">\(Q\)</span>. Por tanto:</p>
+<div class="arithmatex">\[\bar{P}_r = \mathbb{E}[r^2] = \sigma^2 + \sigma^2 = 2\sigma^2\]</div>
+<p><strong>Paso 2 — despejar <span class="arithmatex">\(P_n\)</span></strong>: la SNR media se definió como <span class="arithmatex">\(\bar{\gamma} = \bar{P}_r / P_n\)</span>. Despejando <span class="arithmatex">\(P_n\)</span>:</p>
+<div class="arithmatex">\[P_n = \frac{\bar{P}_r}{\bar{\gamma}} = \frac{2\sigma^2}{\bar{\gamma}}\]</div>
+<p>Sustituyendo en <span class="arithmatex">\(\gamma = r^2/P_n\)</span>:</p>
+<div class="arithmatex">\[\gamma = \frac{r^2}{2\sigma^2}\,\bar{\gamma}\]</div>
+<p>Esta expresión muestra que <span class="arithmatex">\(\gamma\)</span> es proporcional a <span class="arithmatex">\(r^2\)</span>: cuando la envolvente <span class="arithmatex">\(r\)</span> es grande (suma constructiva de ecos), la SNR instantánea es alta; cuando <span class="arithmatex">\(r\)</span> es pequeña (deep fade), <span class="arithmatex">\(\gamma\)</span> cae.</p>
+<p><strong>De <span class="arithmatex">\(f(r)\)</span> a <span class="arithmatex">\(f(\gamma)\)</span></strong>: como <span class="arithmatex">\(\gamma \propto r^2\)</span>, la distribución de <span class="arithmatex">\(\gamma\)</span> se obtiene por cambio de variable a partir de la distribución de Rayleigh. El resultado es una distribución <strong>exponencial</strong> de media <span class="arithmatex">\(\bar{\gamma}\)</span>:</p>
+<div class="arithmatex">\[f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}\exp\!\left(-\frac{\gamma}{\bar{\gamma}}\right)\]</div>
+<p>La característica más importante de esta distribución es que su valor más probable es <span class="arithmatex">\(\gamma = 0\)</span> — la moda está en el origen. Esto significa que, aunque la SNR media sea <span class="arithmatex">\(\bar{\gamma}\)</span>, el valor instantáneo más frecuente estadísticamente es el más bajo. Hay una fracción significativa del tiempo en que <span class="arithmatex">\(\gamma \ll \bar{\gamma}\)</span> — esos instantes de SNR muy baja son los deep fades que disparan la BER.</p>
+<p><strong>De la BER en AWGN a la BER en fading</strong>: en un canal AWGN con SNR fija <span class="arithmatex">\(\gamma\)</span>, la BER para BPSK es determinista: <span class="arithmatex">\(\text{BER}_{\text{AWGN}}(\gamma) = Q(\sqrt{\gamma})\)</span>. En un canal Rayleigh, <span class="arithmatex">\(\gamma\)</span> es aleatoria — la BER efectiva es el <strong>promedio</strong> de <span class="arithmatex">\(\text{BER}_{\text{AWGN}}(\gamma)\)</span> sobre todos los valores posibles de <span class="arithmatex">\(\gamma\)</span>:</p>
+<div class="arithmatex">\[\text{BER}_{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{\gamma}\right) f_\gamma(\gamma)\, d\gamma = \frac{1}{2}\left(1 - \sqrt{\frac{\bar{\gamma}}{2 + \bar{\gamma}}}\right) \approx \frac{1}{2\bar{\gamma}} \quad (\bar{\gamma} \gg 1)\]</div>
+<p>El resultado es una BER que decae como <span class="arithmatex">\(1/\bar{\gamma}\)</span> — <strong>linealmente</strong> con la SNR media — en lugar de la caída exponencial del canal AWGN. La diferencia es enorme en la práctica.</p>
+<p><img alt="Rayleigh fading: PDF, distribución de SNR y BER" src="figures/rayleigh-ber.png" /></p>
+<p>Los tres paneles son los tres pasos de la cadena <span class="arithmatex">\(f(r) \to f(\gamma) \to \overline{\text{BER}}\)</span>, leídos de izquierda a derecha.</p>
+<p><strong>Panel izquierdo — <span class="arithmatex">\(f_R(r)\)</span>, distribución de la envolvente</strong>: el eje horizontal es la amplitud recibida <span class="arithmatex">\(r\)</span>. La curva mostrada corresponde a un valor particular de <span class="arithmatex">\(\sigma\)</span>, pero su <strong>forma es universal</strong> para cualquier canal Rayleigh: siempre arranca en cero en <span class="arithmatex">\(r=0\)</span>, sube hasta un pico en <span class="arithmatex">\(r=\sigma\)</span>, y decae con cola larga. Lo que varía entre canales es la posición del pico — mayor <span class="arithmatex">\(\sigma\)</span> lo desplaza a la derecha, indicando ecos más potentes y menos deep fades — pero la probabilidad de deep fade nunca desaparece en un canal Rayleigh. La <strong>zona roja</strong> marca el umbral de amplitud por debajo del cual la detección falla — su área es directamente la probabilidad de deep fade, es decir, la fracción del tiempo en que el canal produce errores con independencia del nivel medio de señal.</p>
+<p><strong>Panel central — <span class="arithmatex">\(f_\gamma(\gamma)\)</span>, distribución de la SNR instantánea</strong>: el eje horizontal ya no es la amplitud sino la SNR <span class="arithmatex">\(\gamma = r^2\bar{\gamma}/(2\sigma^2)\)</span>. Como <span class="arithmatex">\(f_\gamma(\gamma) = (1/\bar{\gamma})\exp(-\gamma/\bar{\gamma})\)</span> es una exponencial, su punto más alto está en <span class="arithmatex">\(\gamma = 0\)</span>: los instantes de SNR nula o casi nula son los más probables individualmente. Esto confirma lo que el panel izquierdo mostraba en términos de amplitud: el canal Rayleigh pasa frecuentemente por estados de señal muy débil.</p>
+<p><strong>Panel derecho — BER vs <span class="arithmatex">\(\bar{\gamma}\)</span></strong>: el eje horizontal es ahora la SNR <strong>media</strong> <span class="arithmatex">\(\bar{\gamma}\)</span> en dB — el parámetro de diseño que el ingeniero controla. Las dos curvas muestran que AWGN y Rayleigh parten del mismo punto a SNR baja pero divergen rápidamente: la BER en AWGN cae de forma exponencial (la cola gaussiana decrece muy rápido), mientras que la BER en Rayleigh decae solo linealmente (<span class="arithmatex">\(\approx 1/2\bar{\gamma}\)</span>) porque la distribución exponencial de <span class="arithmatex">\(\gamma\)</span> asigna probabilidad sustancial a valores de SNR muy bajos sin importar cuánto suba <span class="arithmatex">\(\bar{\gamma}\)</span>. La consecuencia práctica: para alcanzar BER <span class="arithmatex">\(= 10^{-3}\)</span>, el canal Rayleigh requiere aproximadamente <strong>17 dB más de SNR media</strong> que el canal AWGN — esa es la penalización por fading sin ninguna técnica de mitigación.</p>
+<p>La diferencia entre Rayleigh y Rician, vista desde el modelo estadístico, es exactamente una: en Rayleigh <strong>todos</strong> los N caminos tienen fase aleatoria; en Rician <strong>uno</strong> de ellos — el directo — tiene amplitud y fase deterministas. Ese único cambio en las suposiciones produce una distribución diferente:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Rayleigh (NLOS)</th>
+<th>Rician (LOS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Caminos scatter</td>
+<td><span class="arithmatex">\(a_i\)</span> aleatorio, <span class="arithmatex">\(\phi_i \sim \text{Unif}[0,2\pi)\)</span></td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>Camino LOS</td>
+<td>no existe</td>
+<td><span class="arithmatex">\(A\)</span> determinista, <span class="arithmatex">\(\phi_\text{LOS}\)</span> determinista</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\mathbb{E}[I]\)</span>, <span class="arithmatex">\(\mathbb{E}[Q]\)</span></td>
+<td>0, 0</td>
+<td><span class="arithmatex">\(\mu_I \neq 0\)</span>, <span class="arithmatex">\(\mu_Q \neq 0\)</span></td>
+</tr>
+<tr>
+<td>Centro del cúmulo fasorial</td>
+<td>origen</td>
+<td>punto <span class="arithmatex">\((\mu_I, \mu_Q)\)</span></td>
+</tr>
+<tr>
+<td>PDF de la envolvente <span class="arithmatex">\(r\)</span></td>
+<td>Rayleigh</td>
+<td>Rician</td>
+</tr>
+<tr>
+<td>Deep fades</td>
+<td>frecuentes (<span class="arithmatex">\(r\)</span> puede caer a 0)</td>
+<td>poco probables (<span class="arithmatex">\(r \approx A\)</span> la mayor parte del tiempo)</td>
+</tr>
+</tbody>
+</table>
+<p>El modelo Rayleigh asume que no existe ninguna componente directa entre transmisor y receptor. En muchos escenarios reales — interiores con visión directa, enlaces punto a punto, picoceldas — esa suposición es demasiado pesimista.</p>
+<hr />
+<h3 id="8-rician-fading">8. Rician Fading</h3>
+<p>La tabla al final de §7 resume el cambio: en Rician, uno de los <span class="arithmatex">\(N\)</span> caminos deja de ser aleatorio. En Rayleigh todos los caminos tenían amplitudes y fases aleatorias, y eso hacía que <span class="arithmatex">\(\mathbb{E}[I] = \mathbb{E}[Q] = 0\)</span>. Ahora existe un <strong>camino LOS</strong> con amplitud fija <span class="arithmatex">\(A\)</span> y fase <span class="arithmatex">\(\phi_\text{LOS}\)</span> prácticamente constante — el camino directo recorre una distancia casi invariante porque el obstáculo eres tú mismo y el transmisor, no un reflexor en movimiento. Al ser determinista, ese término no fluctúa, no promedía a cero y desplaza la media de <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> fuera del origen. Ese desplazamiento es el mecanismo completo de Rician.</p>
+<p><strong>Impacto del LOS en el diagrama fasorial</strong>: por la misma identidad trigonométrica de §7, el camino LOS aporta:</p>
+<div class="arithmatex">\[s_\text{LOS}(t) = A\cos(2\pi f_c t + \phi_\text{LOS}) = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I} \cos(2\pi f_c t) - \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q} \sin(2\pi f_c t)\]</div>
+<p>Este término es <strong>determinista</strong> — no aleatorio. Los <span class="arithmatex">\(N-1\)</span> caminos dispersos restantes siguen siendo aleatorios con media cero, igual que en Rayleigh. La suma total da:</p>
+<div class="arithmatex">\[I = \underbrace{A\cos\phi_\text{LOS}}_{\mu_I \neq 0} + \tilde{I}_\text{scatter}, \qquad Q = \underbrace{A\sin\phi_\text{LOS}}_{\mu_Q \neq 0} + \tilde{Q}_\text{scatter}\]</div>
+<p>donde <span class="arithmatex">\(\tilde{I}_\text{scatter}\)</span> y <span class="arithmatex">\(\tilde{Q}_\text{scatter}\)</span> son gaussianas de media cero y varianza <span class="arithmatex">\(\sigma^2\)</span> — exactamente las mismas componentes aleatorias del modelo Rayleigh. El modelo Rician añade encima de ellas una componente fija: el fasor LOS.</p>
+<p>Con esa suma, <span class="arithmatex">\(I\)</span> y <span class="arithmatex">\(Q\)</span> siguen siendo gaussianas de varianza <span class="arithmatex">\(\sigma^2\)</span>, pero ahora con <strong>media no nula</strong>: <span class="arithmatex">\(I \sim \mathcal{N}(\mu_I, \sigma^2)\)</span>, <span class="arithmatex">\(Q \sim \mathcal{N}(\mu_Q, \sigma^2)\)</span>. En el diagrama fasorial, el cúmulo de puntos ya no está centrado en el origen — está desplazado al punto <span class="arithmatex">\((\mu_I, \mu_Q)\)</span>, que es la posición del fasor LOS.</p>
+<p>Vale la pena detenerse en qué representa cada cantidad:</p>
+<ul>
+<li><span class="arithmatex">\(r = \sqrt{I^2 + Q^2}\)</span> — la <strong>magnitud del fasor resultante</strong>: variable aleatoria, fluctúa en cada instante según la realización de los caminos scatter. Es la envolvente de la señal recibida.</li>
+<li><span class="arithmatex">\(A = \sqrt{\mu_I^2 + \mu_Q^2}\)</span> — la <strong>amplitud del fasor LOS</strong>: valor <strong>determinista</strong>, constante. Representa la distancia del origen al centro del cúmulo en el diagrama fasorial.</li>
+<li><span class="arithmatex">\(\sigma^2\)</span> — la <strong>varianza de cada componente scatter</strong> (<span class="arithmatex">\(\tilde{I}\)</span> y <span class="arithmatex">\(\tilde{Q}\)</span>): mide cuán disperso está el cúmulo alrededor de su centro LOS. No es la varianza de <span class="arithmatex">\(r\)</span> — es la varianza de los ecos aleatorios que rodean la componente directa.</li>
+</ul>
+<p>La distribución de Rician queda completamente determinada por estos dos parámetros independientes: <span class="arithmatex">\(A\)</span> controla dónde está el centro del cúmulo; <span class="arithmatex">\(\sigma^2\)</span> controla cuán disperso es ese cúmulo.</p>
+<p><strong>De dónde sale la PDF de Rician</strong>: con el cúmulo desplazado al punto <span class="arithmatex">\((A\cos\phi_\text{LOS},\ A\sin\phi_\text{LOS})\)</span>, la envolvente <span class="arithmatex">\(r\)</span> — la distancia desde el origen hasta ese cúmulo — ya no tiende a cero frecuentemente. La componente LOS actúa como un "ancla" que mantiene el fasor resultante alejado del origen, reduciendo la probabilidad de deep fades.</p>
+<p>La distribución resultante — la <strong>distribución de Rician</strong> — incorpora dos términos que reflejan esa geometría:</p>
+<div class="arithmatex">\[f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2 + A^2}{2\sigma^2}\right) I_0\!\left(\frac{rA}{\sigma^2}\right), \quad r \geq 0\]</div>
+<ul>
+<li>El factor <span class="arithmatex">\(\exp(-(r^2 + A^2)/2\sigma^2)\)</span> penaliza tanto la distancia de <span class="arithmatex">\(r\)</span> al origen como la distancia del LOS al origen — cuanto más separados estén <span class="arithmatex">\(r\)</span> y <span class="arithmatex">\(A\)</span>, menor es la probabilidad.</li>
+<li><span class="arithmatex">\(I_0(rA/\sigma^2)\)</span> es la <strong>función de Bessel modificada de orden cero</strong> — un factor de acoplamiento entre la envolvente <span class="arithmatex">\(r\)</span> y la amplitud LOS <span class="arithmatex">\(A\)</span> que aumenta cuando ambas son similares. No es necesario conocer su forma analítica; basta con saber que <span class="arithmatex">\(I_0(0) = 1\)</span> y que crece cuando su argumento crece.</li>
+</ul>
+<p>La conexión con Rayleigh es directa: cuando <span class="arithmatex">\(A = 0\)</span> (sin LOS), <span class="arithmatex">\(I_0(0) = 1\)</span> y la expresión se reduce exactamente a la PDF de Rayleigh — Rayleigh es el caso límite de Rician sin componente directa.</p>
+<p><strong>El factor K de Rician</strong>: la PDF de Rician depende de dos parámetros, <span class="arithmatex">\(A\)</span> y <span class="arithmatex">\(\sigma^2\)</span>, pero por separado no dicen mucho — un <span class="arithmatex">\(A\)</span> grande puede ser irrelevante si <span class="arithmatex">\(\sigma^2\)</span> también es grande, y viceversa. Lo que determina la severidad del fading es la <em>proporción</em> entre la potencia LOS y la potencia dispersa: cuanto mayor sea esa proporción, más dominante es la componente directa y menos probable el deep fading. Esa proporción es el <strong>factor K de Rician</strong>.</p>
+<p>La potencia de la componente LOS es <span class="arithmatex">\(A^2/2\)</span> — el valor cuadrático medio de <span class="arithmatex">\(A\cos(2\pi f_c t + \phi_\text{LOS})\)</span>, que promediado en un período da <span class="arithmatex">\(A^2 \cdot \langle\cos^2\rangle = A^2/2\)</span>. La potencia total de las componentes dispersas es <span class="arithmatex">\(\sigma_I^2 + \sigma_Q^2 = 2\sigma^2\)</span>. El cociente define el <strong>factor K</strong>:</p>
+<div class="arithmatex">\[K = \frac{A^2/2}{\sigma^2 + \sigma^2} = \frac{A^2}{2\sigma^2}\]</div>
+<p>K es adimensional y captura la severidad del fading en un solo número, independientemente de la potencia total recibida. Los dos extremos quedan así perfectamente caracterizados:</p>
+<ul>
+<li><span class="arithmatex">\(K = 0\)</span> (<span class="arithmatex">\(A = 0\)</span>): sin LOS → Rayleigh fading — severidad máxima, la envolvente puede caer hasta cero.</li>
+<li><span class="arithmatex">\(K \to \infty\)</span> (<span class="arithmatex">\(\sigma \to 0\)</span>): sin dispersión → el canal es determinista, la envolvente es constante igual a <span class="arithmatex">\(A\)</span> y el fading desaparece completamente. La BER converge a la de AWGN — el mejor resultado posible para un SNR dado.</li>
+<li><span class="arithmatex">\(K = 1\)</span>–<span class="arithmatex">\(10\)</span> (0–10 dB): LOS parcial, típico en interiores, picoceldas y enlaces punto a punto.</li>
+</ul>
+<p><strong>Por qué K entra en la BER final</strong>: el objetivo de esta sección, igual que en Rayleigh, es evaluar la BER media:</p>
+<div class="arithmatex">\[\overline{\text{BER}} = \int_0^\infty Q(\sqrt{\gamma})\, f_\gamma(\gamma)\, d\gamma\]</div>
+<p>Para ello necesitamos <span class="arithmatex">\(f_\gamma(\gamma)\)</span> — la distribución del SNR instantáneo <span class="arithmatex">\(\gamma = r^2/(2\sigma_n^2)\)</span>. Esa distribución queda determinada por dos cantidades independientes: el SNR medio <span class="arithmatex">\(\bar\gamma\)</span> (cuánta potencia total recibe el receptor frente al ruido) y la <em>estructura interna</em> del canal (cuánto de esa potencia es LOS frente a dispersa). K captura exactamente esa estructura interna. Dos canales con el mismo <span class="arithmatex">\(\bar\gamma\)</span> y el mismo <span class="arithmatex">\(K\)</span> producen la misma <span class="arithmatex">\(f_\gamma(\gamma)\)</span> y por tanto la misma <span class="arithmatex">\(\overline{\text{BER}}\)</span>, aunque <span class="arithmatex">\(A\)</span> y <span class="arithmatex">\(\sigma^2\)</span> sean distintos en valor absoluto. Así, <span class="arithmatex">\(K\)</span> y <span class="arithmatex">\(\bar\gamma\)</span> juntos son los dos únicos parámetros que determinan completamente el rendimiento del sistema en fading Rician.</p>
+<p><strong>Efecto sobre la BER</strong>: con LOS, el cúmulo de puntos en el diagrama fasorial está desplazado hacia <span class="arithmatex">\(A\)</span> — lejos del origen. El deep fading requiere que el ruido aleatorio sea suficientemente grande como para arrastrar el fasor resultante hasta cerca de cero, lo que ocurre con mucha menor frecuencia que en Rayleigh. A medida que <span class="arithmatex">\(K\)</span> crece, la PDF de la envolvente se estrecha y su pico se aleja del origen, reduciendo la probabilidad de deep fades y mejorando la BER:</p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(K\)</span></th>
+<th>Situación física</th>
+<th>Efecto en <span class="arithmatex">\(\overline{\text{BER}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Sin LOS — Rayleigh</td>
+<td>Peor caso: <span class="arithmatex">\(\overline{\text{BER}} \approx 1/(2\bar\gamma)\)</span>, caída lineal</td>
+</tr>
+<tr>
+<td>1–10 (0–10 dB)</td>
+<td>LOS parcial, interiores</td>
+<td>BER intermedia, caída más rápida que lineal</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\to\infty\)</span></td>
+<td>Canal determinista</td>
+<td>Mejor caso: <span class="arithmatex">\(\overline{\text{BER}} \to Q(\sqrt{\bar\gamma})\)</span>, igual que AWGN</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(K\)</span> funciona así como un indicador directo de la calidad del enlace: cuantifica en un solo número cuánto se aleja el canal del peor caso (Rayleigh, <span class="arithmatex">\(K=0\)</span>) hacia el mejor caso posible (AWGN, <span class="arithmatex">\(K\to\infty\)</span>).</p>
+<p><img alt="Distribución de Rician para distintos valores de K" src="figures/rayleigh-rician-pdf.png" /></p>
+<p>La figura muestra la PDF de la envolvente para K = 0 (Rayleigh), 1, <span class="arithmatex">\(\sqrt{10}\)</span> y 10. Con K = 0, la PDF tiene su máximo cerca del origen — los valores bajos de envolvente son frecuentes y los deep fades son probables. Al aumentar K, el pico se desplaza hacia la derecha y la distribución se estrecha: la envolvente es más predecible y concentrada alrededor de su valor medio. Para K = 10 (10 dB), la PDF se asemeja a una gaussiana estrecha — el canal se comporta casi como AWGN.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo numérico</p>
+<p>Un enlace en interiores (corredor de oficinas, <span class="arithmatex">\(f = 5{,}8\ \text{GHz}\)</span>) con potencia total recibida <span class="arithmatex">\(\Omega = -60\ \text{dBm}\)</span> y <span class="arithmatex">\(K = 4\)</span> (6 dB). El factor K relaciona las potencias LOS y difusa: <span class="arithmatex">\(K/(K+1) = 4/5 = 80\,\%\)</span> de la potencia total está concentrada en la componente LOS; las componentes dispersas aportan sólo el 20 % restante. El fasor resultante rara vez se aleja del valor LOS dominante, por lo que la probabilidad de deep fading es mucho menor que en Rayleigh fading puro con la misma potencia media.</p>
+</div>
+<p>Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parámetros — <span class="arithmatex">\(\sigma\)</span>, <span class="arithmatex">\(K\)</span>, <span class="arithmatex">\(\sigma_\tau\)</span>, <span class="arithmatex">\(f_D\)</span>, el exponente <span class="arithmatex">\(n\)</span> — deben venir de algún sitio. En diseño de sistemas reales, esos valores no se eligen arbitrariamente.</p>
+<hr />
+<h3 id="9-modelos-de-canal-estandarizados-3gpp-tr-38901">9. Modelos de Canal Estandarizados (3GPP TR 38.901)</h3>
+<p>Los parámetros de las secciones anteriores — <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(\sigma_\text{sh}\)</span>, <span class="arithmatex">\(\sigma_\tau\)</span>, <span class="arithmatex">\(f_{D,\text{max}}\)</span>, <span class="arithmatex">\(K\)</span> — no se inventan ni se eligen por conveniencia. Provienen de <strong>campañas de medición de canal</strong>: cientos de miles de medidas realizadas en distintas ciudades, bandas de frecuencia y condiciones de despliegue. El proceso es sistemático — se transmite una señal de prueba de banda ancha, se registra la respuesta al impulso del canal <span class="arithmatex">\(h(\tau, t)\)</span> en múltiples posiciones y se ajustan los parámetros estadísticos a los datos medidos. 3GPP recoge esos resultados en el estándar <strong>TR 38.901</strong> para que fabricantes, operadores e investigadores evalúen sus sistemas sobre el mismo canal de referencia, haciendo los resultados de simulación comparables y representativos de despliegues reales.</p>
+<p><strong>¿Por qué no usar siempre Rician si es más general?</strong> Rician contiene a Rayleigh como caso particular (<span class="arithmatex">\(K=0\)</span>), así que en principio podría usarse siempre. Hay tres razones prácticas para no hacerlo:</p>
+<ol>
+<li><strong>Complejidad analítica</strong>: la <span class="arithmatex">\(\overline{\text{BER}}\)</span> en Rician no tiene forma cerrada simple — requiere la función Q de Marcum y en general integración numérica. La de Rayleigh tiene expresión analítica limpia (<span class="arithmatex">\(\approx 1/(2\bar{\gamma})\)</span>), útil para dimensionamiento rápido y análisis de diversidad.</li>
+<li><strong>Estimación del parámetro K</strong>: Rician requiere conocer <span class="arithmatex">\(K\)</span>, que varía con el entorno, la frecuencia, la altura de las antenas y la geometría específica del enlace. Estimarlo con precisión exige campañas de medición; Rayleigh solo necesita <span class="arithmatex">\(\sigma\)</span>.</li>
+<li><strong>Diseño conservador</strong>: Rayleigh es el peor caso (<span class="arithmatex">\(K=0\)</span>, sin LOS). Diseñar para Rayleigh garantiza que el sistema funciona en el escenario más difícil; si existe LOS, el rendimiento real es mejor que el diseñado — ningún problema. Rician es más preciso cuando se conoce <span class="arithmatex">\(K\)</span>, pero Rayleigh es la referencia conservadora universal.</li>
+</ol>
+<p><strong>¿Qué modelos usa realmente TR 38.901?</strong> El estándar no aplica directamente Rayleigh o Rician como modelo global del canal. Usa modelos <strong>Clustered Delay Line (CDL)</strong> y <strong>Tapped Delay Line (TDL)</strong> — modelos estocásticos geométricos que especifican múltiples grupos de ecos (<em>clusters</em>), cada uno con potencia, retardo y ángulos de llegada y salida definidos por medición. La distinción LOS/NLOS sí aparece dentro de estos modelos:</p>
+<ul>
+<li><strong>CDL-A/B/C y TDL-A/B/C</strong> (NLOS): todos los clusters tienen fases aleatorias → fading por cluster esencialmente Rayleigh.</li>
+<li><strong>CDL-D/E y TDL-D/E</strong> (LOS): tienen una componente especular determinista (el camino directo) más clusters de scatter → comportamiento Rician por cluster, con <span class="arithmatex">\(K\)</span> especificado por el estándar.</li>
+</ul>
+<p>TR 38.901 contiene Rayleigh y Rician como casos especiales, pero los embebe en un modelo más rico que además captura estructura espacial, correlación angular entre antenas y rango de frecuencias hasta 100 GHz — dimensiones que Rayleigh/Rician solos no pueden modelar. Los modelos Rayleigh y Rician de §7 y §8 son las herramientas analíticas; TR 38.901 es su calibración empírica para simulación de sistema.</p>
+<p><strong>Estructura del modelo TR 38.901</strong>: el estándar define, para cada escenario de despliegue y condición LOS/NLOS, exactamente los parámetros que hemos desarrollado en esta sesión:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Concepto (sección)</th>
+<th>Rol en el diseño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Exponente <span class="arithmatex">\(n\)</span>, offset <span class="arithmatex">\(A\)</span></td>
+<td>Path loss log-distancia (§2)</td>
+<td>Dimensiona el link budget y el radio de celda</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sigma_\text{sh}\)</span></td>
+<td>Shadowing log-normal (§3)</td>
+<td>Determina el shadowing margin en el link budget</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sigma_\tau\)</span></td>
+<td>Delay spread (§4)</td>
+<td>Fija la longitud mínima del cyclic prefix en OFDM</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(B_c \approx 1/(5\sigma_\tau)\)</span></td>
+<td>Coherence bandwidth (§4)</td>
+<td>Decide si el canal es flat o frequency-selective</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(f_{D,\text{max}}\)</span>, <span class="arithmatex">\(T_c\)</span></td>
+<td>Doppler / coherence time (§5)</td>
+<td>Determina la frecuencia de actualización del estimador de canal</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(K\)</span> (LOS) / Rayleigh (NLOS)</td>
+<td>Distribución de la envolvente (§6–7)</td>
+<td>Fija la penalización por fading y el margen de fade</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Escenarios principales y parámetros típicos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Entorno</th>
+<th style="text-align: center;">Cond.</th>
+<th style="text-align: center;"><span class="arithmatex">\(n\)</span></th>
+<th style="text-align: center;"><span class="arithmatex">\(\sigma_\text{sh}\)</span> (dB)</th>
+<th style="text-align: center;"><span class="arithmatex">\(\sigma_\tau\)</span> típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>UMa</strong> (Urban Macro)</td>
+<td>Macrocelda urbana, BS sobre azotea</td>
+<td style="text-align: center;">LOS</td>
+<td style="text-align: center;">2,2</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">300 – 1 000 ns</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: center;">NLOS</td>
+<td style="text-align: center;">3,7</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">300 – 1 000 ns</td>
+</tr>
+<tr>
+<td><strong>UMi</strong> (Urban Micro)</td>
+<td>Picocelda en calle, BS bajo azotea</td>
+<td style="text-align: center;">LOS</td>
+<td style="text-align: center;">2,1</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">100 – 300 ns</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: center;">NLOS</td>
+<td style="text-align: center;">3,2</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">100 – 300 ns</td>
+</tr>
+<tr>
+<td><strong>InH</strong> (Indoor Hotspot)</td>
+<td>Oficina / corredor interior</td>
+<td style="text-align: center;">LOS</td>
+<td style="text-align: center;">1,7</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">20 – 70 ns</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: center;">NLOS</td>
+<td style="text-align: center;">3,5</td>
+<td style="text-align: center;">8,5</td>
+<td style="text-align: center;">20 – 70 ns</td>
+</tr>
+<tr>
+<td><strong>RMa</strong> (Rural Macro)</td>
+<td>Macrocelda rural</td>
+<td style="text-align: center;">LOS</td>
+<td style="text-align: center;">2,1</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">10 – 40 ns</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td style="text-align: center;">NLOS</td>
+<td style="text-align: center;">3,8</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">10 – 40 ns</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Por qué los valores difieren entre escenarios</strong>: los números no son arbitrarios — cada uno refleja la física del entorno:</p>
+<ul>
+<li><strong>InH tiene <span class="arithmatex">\(n\)</span> bajo (~1,7 en LOS)</strong>: en interiores con visión directa, los pasillos actúan como guías de onda parciales — la señal se propaga más eficientemente que en espacio libre. Además, las distancias son cortas (10–50 m), por lo que la absorción acumulada es pequeña.</li>
+<li><strong>InH tiene <span class="arithmatex">\(\sigma_\tau\)</span> pequeño (20–70 ns)</strong>: las dimensiones del entorno interior son reducidas (~10–50 m). Los caminos más largos (rebotes en paredes distantes) solo añaden unos pocos metros de recorrido extra → diferencias de retardo de decenas de nanosegundos, no cientos.</li>
+<li><strong>UMa tiene <span class="arithmatex">\(n\)</span> alto (3,7 NLOS) y <span class="arithmatex">\(\sigma_\tau\)</span> grande (hasta 1 µs)</strong>: en macroceldas urbanas, la señal debe rodear edificios altos y encuentra reflexiones en fachadas lejanas a 200–1 000 m. El camino libre no existe en NLOS; los caminos dispersos pueden diferir en longitud hasta 300 m → 1 µs de delay spread.</li>
+<li><strong><span class="arithmatex">\(\sigma_\text{sh}\)</span> mayor en NLOS que en LOS para todos los escenarios</strong>: sin camino directo, el shadowing depende de qué obstáculos concretos se interponen entre BS y UE — variabilidad mucho mayor que cuando el LOS domina.</li>
+</ul>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo integrador: enlace UMi NLOS a 3,5 GHz</p>
+<p><strong>Datos</strong>: BS a <span class="arithmatex">\(h = 10\)</span> m, UE a <span class="arithmatex">\(d = 200\)</span> m, <span class="arithmatex">\(f = 3{,}5\)</span> GHz, <span class="arithmatex">\(P_t = 23\)</span> dBm, <span class="arithmatex">\(G_t = G_r = 0\)</span> dBi.</p>
+<p><strong>1. Path loss (TR 38.901 UMi NLOS)</strong>:</p>
+<div class="arithmatex">\[PL = 36{,}7\log_{10}(d) + 22{,}7 + 26\log_{10}(f_\text{GHz}) \approx 36{,}7 \cdot 2{,}30 + 22{,}7 + 26 \cdot 0{,}544 \approx 122\ \text{dB}\]</div>
+<p><strong>2. Shadowing margin</strong>: con <span class="arithmatex">\(\sigma_\text{sh} = 7\)</span> dB y fiabilidad del 90 %, el margen es <span class="arithmatex">\(1{,}28 \times 7 \approx 9\)</span> dB.</p>
+<p><strong>3. Potencia recibida media</strong>: <span class="arithmatex">\(P_r = 23 - 122 - 9 = -108\)</span> dBm (sin margen de fade adicional).</p>
+<p><strong>4. Coherence bandwidth</strong>: con <span class="arithmatex">\(\sigma_\tau = 200\)</span> ns → <span class="arithmatex">\(B_c \approx 1/(5 \times 200\ \text{ns}) = 1\)</span> MHz. Un sistema con <span class="arithmatex">\(B_s = 100\)</span> MHz es altamente frequency-selective: necesita OFDM con cyclic prefix <span class="arithmatex">\(\geq \sigma_\tau = 200\)</span> ns.</p>
+<p><strong>5. Coherence time</strong>: a <span class="arithmatex">\(v = 30\)</span> km/h → <span class="arithmatex">\(f_{D,\text{max}} = (v/\lambda) = (8{,}3\ \text{m/s})/(0{,}086\ \text{m}) \approx 97\)</span> Hz → <span class="arithmatex">\(T_c \approx 0{,}423/97 \approx 4{,}4\)</span> ms. Con subportadoras de 30 kHz (NR <span class="arithmatex">\(\mu=1\)</span>), la duración de ranura es 0,5 ms <span class="arithmatex">\(\ll T_c\)</span>: slow fading — el canal es estable durante varias ranuras, lo que permite pilotos espaciados.</p>
+<p><strong>6. Modelo de fading</strong>: condición NLOS → Rayleigh fading (<span class="arithmatex">\(K = 0\)</span>). La BER de BPSK en este canal decae como <span class="arithmatex">\(1/(2\bar{\gamma})\)</span> para SNR alta — linealmente con la SNR media, no exponencialmente como en AWGN. Se necesitarán técnicas de mitigación (OFDM + codificación, MIMO) para operar fiablemente.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Uso en sesiones posteriores</p>
+<p>En las sesiones 06 (MIMO), 07 (Massive MIMO) y 09 (5G NR) utilizaremos los parámetros de TR 38.901 para calibrar las simulaciones. El escenario UMa NLOS con <span class="arithmatex">\(\sigma_\tau = 300\)</span> ns y <span class="arithmatex">\(n = 3{,}7\)</span> es el canal de referencia más habitual en la literatura de 5G.</p>
+</div>
+<hr />
+<h2 id="sintesis">Síntesis</h2>
+<p>El canal inalámbrico introduce <strong>cinco dimensiones de degradación</strong> que operan a escalas distintas y exigen soluciones distintas:</p>
+<ol>
+<li><strong>Path loss</strong> (escala: kilómetros) — determina el radio de cobertura y el link budget. Se controla con potencia de transmisión, ganancia de antena y frecuencia de portadora.</li>
+<li><strong>Shadowing</strong> (escala: decenas de metros) — introduce variabilidad estadística lenta debida a obstáculos en el entorno. Se gestiona con shadowing margins o diversidad de sitio.</li>
+<li><strong>Dispersión temporal y selectividad en frecuencia</strong> — el delay spread <span class="arithmatex">\(\sigma_\tau\)</span> fragmenta el canal en el dominio de la frecuencia. Cuando <span class="arithmatex">\(B_s \gg B_c\)</span>, cada subportadora ve un canal distinto (frequency-selective fading); cuando <span class="arithmatex">\(B_s \ll B_c\)</span>, el canal es flat. El parámetro de diseño clave es la longitud del cyclic prefix en OFDM (sesión 03).</li>
+<li><strong>Variación temporal y coherence time</strong> — el Doppler spread <span class="arithmatex">\(f_{D,\text{max}}\)</span>, causado por el movimiento del terminal, comprime el coherence time <span class="arithmatex">\(T_c\)</span>. Cuando <span class="arithmatex">\(T_s \ll T_c\)</span> (slow fading), el canal se puede estimar con pilotos dispersos; cuando <span class="arithmatex">\(T_s \gg T_c\)</span> (fast fading), el estimador de canal debe actualizarse símbolo a símbolo (sesión 08).</li>
+<li><strong>Distribución estadística de la envolvente</strong> — en entornos NLOS, la suma de muchos caminos produce una envolvente Rayleigh con deep fades frecuentes y una BER que decae solo como <span class="arithmatex">\(1/\bar{\gamma}\)</span>. La presencia de LOS añade un término determinista que desplaza el fasor resultante y reduce los deep fades — el canal pasa de Rayleigh (<span class="arithmatex">\(K=0\)</span>) a Rician (<span class="arithmatex">\(K&gt;0\)</span>). Conocer la distribución de la envolvente es el punto de partida para dimensionar técnicas de mitigación: codificación de canal (sesión 04), MIMO (sesión 06) o diversidad de recepción.</li>
+</ol>
+<p>Los parámetros que caracterizan estas cinco dimensiones — <span class="arithmatex">\(n\)</span>, <span class="arithmatex">\(\sigma_\text{sh}\)</span>, <span class="arithmatex">\(\sigma_\tau\)</span>, <span class="arithmatex">\(f_{D,\text{max}}\)</span>, <span class="arithmatex">\(K\)</span> — no se eligen arbitrariamente: los proporciona el estándar 3GPP TR 38.901, calibrado con campañas de medición reales para los escenarios de despliegue más comunes. El resto del curso puede verse como un catálogo de soluciones a los problemas que esta sesión ha identificado.</p>
+<hr />
+<h2 id="ejercicios">Ejercicios</h2>
+<h3 id="ejercicio-1">Ejercicio 1</h3>
+<p>Un sistema celular opera a <span class="arithmatex">\(f = 900\ \text{MHz}\)</span>. La estación base transmite con <span class="arithmatex">\(P_t = 2\ \text{W}\)</span> y antenas isotrópicas (<span class="arithmatex">\(G_t = G_r = 0\ \text{dBi}\)</span>). El exponente de pérdida de propagación es <span class="arithmatex">\(n = 3{,}5\)</span> y la distancia de referencia es <span class="arithmatex">\(d_0 = 100\ \text{m}\)</span>.</p>
+<p><strong>(a)</strong> Calcula la pérdida de propagación en espacio libre <span class="arithmatex">\(\text{PL}(d_0)\)</span> a la distancia de referencia.</p>
+<p><strong>(b)</strong> Calcula la potencia recibida en dBm a <span class="arithmatex">\(d = 1\ \text{km}\)</span>.</p>
+<p><strong>(c)</strong> Si el shadowing tiene <span class="arithmatex">\(\sigma = 8\ \text{dB}\)</span>, ¿qué shadowing margin adicional se necesita para garantizar cobertura al 90% de las ubicaciones? (Usa <span class="arithmatex">\(Q^{-1}(0{,}1) \approx 1{,}28\)</span>.)</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Pérdida en espacio libre a <span class="arithmatex">\(d_0 = 100\ \text{m}\)</span>, <span class="arithmatex">\(f = 900\ \text{MHz}\)</span>:</p>
+<div class="arithmatex">\[\lambda = c/f = 3\times10^8 / 9\times10^8 = 0{,}333\ \text{m}\]</div>
+<div class="arithmatex">\[\text{PL}(d_0) = 20\log_{10}\!\left(\frac{4\pi \cdot 100}{0{,}333}\right) = 20\log_{10}(3770) \approx 71{,}5\ \text{dB}\]</div>
+<p><strong>(b)</strong> Con el modelo log-distancia (<span class="arithmatex">\(d = 1000\ \text{m}\)</span>, <span class="arithmatex">\(d_0 = 100\ \text{m}\)</span>, <span class="arithmatex">\(n = 3{,}5\)</span>):</p>
+<div class="arithmatex">\[\text{PL}(1000) = 71{,}5 + 10 \times 3{,}5 \times \log_{10}(10) = 71{,}5 + 35 = 106{,}5\ \text{dB}\]</div>
+<div class="arithmatex">\[P_r\ [\text{dBm}] = P_t\ [\text{dBm}] - \text{PL} = 33\ \text{dBm} - 106{,}5\ \text{dB} = -73{,}5\ \text{dBm}\]</div>
+<p><strong>(c)</strong> Para cobertura al 90% de las ubicaciones con shadowing <span class="arithmatex">\(X_\sigma \sim \mathcal{N}(0, 8^2)\)</span>:</p>
+<p>El shadowing margin necesario es:</p>
+<div class="arithmatex">\[M_\sigma = Q^{-1}(0{,}1) \times \sigma = 1{,}28 \times 8 \approx 10{,}2\ \text{dB}\]</div>
+</details>
+<hr />
+<h3 id="ejercicio-2">Ejercicio 2</h3>
+<p>Un canal de comunicaciones móviles presenta una dispersión de retardo RMS <span class="arithmatex">\(\sigma_\tau = 5\ \mu\text{s}\)</span>.</p>
+<p><strong>(a)</strong> Calcula el ancho de banda de coherencia <span class="arithmatex">\(B_c\)</span>.</p>
+<p><strong>(b)</strong> Un sistema OFDM usa <span class="arithmatex">\(N = 256\)</span> subportadoras con un ancho de banda total de <span class="arithmatex">\(B = 10\ \text{MHz}\)</span>. ¿El canal es plano o selectivo en frecuencia para cada subportadora?</p>
+<p><strong>(c)</strong> El móvil se desplaza a <span class="arithmatex">\(v = 120\ \text{km/h}\)</span> y la portadora es <span class="arithmatex">\(f_c = 2\ \text{GHz}\)</span>. Calcula el tiempo de coherencia <span class="arithmatex">\(T_c\)</span> y determina si el canal es lento o rápido para una duración de símbolo OFDM de <span class="arithmatex">\(T_s = 100\ \mu\text{s}\)</span>.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Ancho de banda de coherencia:</p>
+<div class="arithmatex">\[B_c \approx \frac{1}{5\sigma_\tau} = \frac{1}{5 \times 5\times10^{-6}} = 40\ \text{kHz}\]</div>
+<p><strong>(b)</strong> Espaciado entre subportadoras: <span class="arithmatex">\(\Delta f = B/N = 10\ \text{MHz}/256 \approx 39\ \text{kHz}\)</span>.</p>
+<p>Como <span class="arithmatex">\(\Delta f \approx B_c\)</span>, el canal es <strong>ligeramente frequency-selective</strong> por subportadora. En la práctica se añade un cyclic prefix mayor que <span class="arithmatex">\(\sigma_\tau\)</span>.</p>
+<p><strong>(c)</strong> Velocidad: <span class="arithmatex">\(v = 120/3{,}6 \approx 33{,}3\ \text{m/s}\)</span>. Longitud de onda: <span class="arithmatex">\(\lambda = c/f_c = 0{,}15\ \text{m}\)</span>.</p>
+<div class="arithmatex">\[f_{D,\text{max}} = v/\lambda = 33{,}3/0{,}15 \approx 222\ \text{Hz}\]</div>
+<div class="arithmatex">\[T_c \approx \frac{0{,}423}{222} \approx 1{,}9\ \text{ms}\]</div>
+<p>Como <span class="arithmatex">\(T_s = 100\ \mu\text{s} \ll T_c = 1{,}9\ \text{ms}\)</span>, el canal es <strong>slow fading</strong> — el canal no cambia significativamente durante un símbolo OFDM.</p>
+</details>
+<hr />
+<h3 id="ejercicio-3">Ejercicio 3</h3>
+<p>En un canal Rayleigh con SNR medio <span class="arithmatex">\(\bar{\gamma} = 20\ \text{dB}\)</span>:</p>
+<p><strong>(a)</strong> Calcula la BER para modulación BPSK. Compara con la BER en canal AWGN con la misma SNR.</p>
+<p><strong>(b)</strong> ¿Cuántos dB adicionales de SNR se necesitan en el canal Rayleigh para alcanzar la misma BER que en AWGN a <span class="arithmatex">\(\bar{\gamma} = 10\ \text{dB}\)</span>?</p>
+<p><strong>(c)</strong> Un canal Rician con <span class="arithmatex">\(K = 5\ \text{dB}\)</span> y la misma potencia total. ¿Esperarías una BER mayor o menor que en Rayleigh? Justifica cualitativamente.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> <span class="arithmatex">\(\bar{\gamma} = 20\ \text{dB} = 100\)</span>. Usando la convención de §6: <span class="arithmatex">\(\gamma = \text{SNR} = P_r/P_n\)</span>, con BER <span class="arithmatex">\(= Q(\sqrt{\gamma})\)</span> en AWGN y <span class="arithmatex">\(\overline{\text{BER}} \approx 1/(2\bar{\gamma})\)</span> en Rayleigh.</p>
+<p>Canal Rayleigh:
+$<span class="arithmatex">\(\text{BER}_{\text{Rayleigh}} \approx \frac{1}{2\bar{\gamma}} = \frac{1}{200} = 5\times10^{-3}\)</span>$</p>
+<p>Canal AWGN:
+$<span class="arithmatex">\(\text{BER}_{\text{AWGN}} = Q\!\left(\sqrt{\bar{\gamma}}\right) = Q(\sqrt{100}) = Q(10) \approx 7{,}6\times10^{-24}\)</span>$</p>
+<p>La diferencia es de <strong>más de 20 órdenes de magnitud</strong> — el Rayleigh fading degrada dramáticamente la BER.</p>
+<p><strong>(b)</strong> En AWGN con <span class="arithmatex">\(\bar{\gamma} = 10\ \text{dB} = 10\)</span>:</p>
+<div class="arithmatex">\[\text{BER}_{\text{AWGN}} = Q\!\left(\sqrt{10}\right) = Q(3{,}16) \approx 7{,}9\times10^{-4}\]</div>
+<p>En Rayleigh, para obtener <span class="arithmatex">\(\overline{\text{BER}} \approx 7{,}9\times10^{-4}\)</span>:</p>
+<div class="arithmatex">\[\frac{1}{2\bar{\gamma}} = 7{,}9\times10^{-4} \Rightarrow \bar{\gamma} \approx 633 \approx 28\ \text{dB}\]</div>
+<p>Se necesitan aproximadamente <strong>18 dB adicionales</strong> — esta es la penalización por desvanecimiento sin técnicas de diversidad.</p>
+<p><strong>(c)</strong> Con <span class="arithmatex">\(K &gt; 0\)</span>, el camino LOS añade un término determinista <span class="arithmatex">\((\mu_I, \mu_Q) \neq (0,0)\)</span> al diagrama fasorial — el cúmulo de puntos se desplaza lejos del origen. Para que se produzca un deep fade, el ruido aleatorio de los caminos dispersos tendría que arrastrar el fasor resultante hasta cerca del origen, lo que ocurre con mucha menor probabilidad que en Rayleigh (<span class="arithmatex">\(K=0\)</span>, donde el cúmulo está centrado en el origen y el deep fade es frecuente). Por tanto, el canal Rician tiene <strong>menor variabilidad</strong> de envolvente y <strong>menor BER</strong> para el mismo <span class="arithmatex">\(\bar{\gamma}\)</span>. A medida que <span class="arithmatex">\(K \to \infty\)</span>, la dispersión del cúmulo desaparece y la BER converge a la del canal AWGN.</p>
+</details>
+<hr />
+<h3 id="ejercicio-4">Ejercicio 4</h3>
+<p>Sea la envolvente <span class="arithmatex">\(R\)</span> de un canal Rayleigh con parámetro <span class="arithmatex">\(\sigma = 1/\sqrt{2}\)</span> (potencia media unitaria).</p>
+<p><strong>(a)</strong> Escribe la función de distribución acumulada (CDF) de <span class="arithmatex">\(R\)</span> y simplifica para <span class="arithmatex">\(\sigma^2 = 1/2\)</span>.</p>
+<p><strong>(b)</strong> Calcula la <strong>probabilidad de interrupción</strong> (<em>outage probability</em>) <span class="arithmatex">\(P_{\text{out}}\)</span> para un umbral de potencia recibida <span class="arithmatex">\(\gamma_{\text{th}} = -10\ \text{dB}\)</span> respecto a la potencia media (es decir, <span class="arithmatex">\(r_{\text{th}}^2 / \mathbb{E}[R^2] = 0{,}1\)</span>).</p>
+<p><strong>(c)</strong> ¿Cuál es el umbral <span class="arithmatex">\(r_{\text{th}}\)</span> (en dB respecto a la potencia media) para que la probabilidad de interrupción sea del 1%?</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> La CDF de la distribución Rayleigh es:</p>
+<div class="arithmatex">\[F_R(r) = 1 - \exp\!\left(-\frac{r^2}{2\sigma^2}\right)\]</div>
+<p>Con <span class="arithmatex">\(\sigma^2 = 1/2\)</span> y potencia media <span class="arithmatex">\(\mathbb{E}[R^2] = 2\sigma^2 = 1\)</span>:</p>
+<div class="arithmatex">\[F_R(r) = 1 - e^{-r^2}\]</div>
+<p><strong>(b)</strong> El umbral de potencia <span class="arithmatex">\(\gamma_{\text{th}} = 0{,}1\)</span> corresponde a <span class="arithmatex">\(r_{\text{th}} = \sqrt{0{,}1} \approx 0{,}316\)</span>.</p>
+<div class="arithmatex">\[P_{\text{out}} = F_R(r_{\text{th}}) = 1 - e^{-0{,}1} \approx 0{,}095 \approx 9{,}5\,\%\]</div>
+<p>Un 9,5% de las posiciones aleatorias del móvil están en interrupción con este umbral.</p>
+<p><strong>(c)</strong> Para <span class="arithmatex">\(P_{\text{out}} = 0{,}01\)</span>:</p>
+<div class="arithmatex">\[1 - e^{-r_{\text{th}}^2} = 0{,}01 \Rightarrow r_{\text{th}}^2 = -\ln(0{,}99) \approx 0{,}01005\]</div>
+<p>En dB respecto a la potencia media (<span class="arithmatex">\(\mathbb{E}[R^2]=1\)</span>):</p>
+<div class="arithmatex">\[10\log_{10}(r_{\text{th}}^2) = 10\log_{10}(0{,}01005) \approx -20\ \text{dB}\]</div>
+<p>Para garantizar sólo el 1% de outage, la señal recibida puede caer hasta <strong>−20 dB</strong> respecto a su valor medio — lo que ilustra por qué el fading margin en el link budget es tan elevado.</p>
+</details>
+<hr />
+<h3 id="ejercicio-5-presupuesto-de-enlace-completo">Ejercicio 5 — Presupuesto de Enlace Completo</h3>
+<p>Un sistema LTE opera a <span class="arithmatex">\(f_c = 1{,}8\ \text{GHz}\)</span> con los siguientes parámetros:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Potencia de TX</td>
+<td><span class="arithmatex">\(P_t = 46\ \text{dBm}\)</span> (estación base)</td>
+</tr>
+<tr>
+<td>Ganancia de antena TX</td>
+<td><span class="arithmatex">\(G_t = 17\ \text{dBi}\)</span></td>
+</tr>
+<tr>
+<td>Ganancia de antena RX</td>
+<td><span class="arithmatex">\(G_r = 0\ \text{dBi}\)</span> (terminal móvil)</td>
+</tr>
+<tr>
+<td>Pérdidas de cable/cuerpo</td>
+<td><span class="arithmatex">\(L_{\text{misc}} = 3\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Figura de ruido del receptor</td>
+<td><span class="arithmatex">\(F = 9\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Ancho de banda de señal</td>
+<td><span class="arithmatex">\(B = 10\ \text{MHz}\)</span></td>
+</tr>
+<tr>
+<td>SNR mínima requerida</td>
+<td><span class="arithmatex">\(\text{SNR}_{\text{min}} = 0\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Exponente de pérdida (UMa NLOS)</td>
+<td><span class="arithmatex">\(n = 3{,}8\)</span>, <span class="arithmatex">\(d_0 = 100\ \text{m}\)</span></td>
+</tr>
+<tr>
+<td>Pérdida de referencia en <span class="arithmatex">\(d_0\)</span></td>
+<td><span class="arithmatex">\(\text{PL}(d_0) = 78\ \text{dB}\)</span></td>
+</tr>
+<tr>
+<td>Desviación de shadowing</td>
+<td><span class="arithmatex">\(\sigma = 10\ \text{dB}\)</span>, cobertura 90%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>(a)</strong> Calcula la sensibilidad del receptor <span class="arithmatex">\(S_{\min}\)</span> en dBm.</p>
+<p><strong>(b)</strong> Calcula la <strong>máxima pérdida de trayecto admisible</strong> (MAPL, <em>Maximum Allowable Path Loss</em>).</p>
+<p><strong>(c)</strong> Calcula el radio máximo de celda <span class="arithmatex">\(d_{\max}\)</span> en metros, incluyendo el margen de sombreado para 90% de cobertura (<span class="arithmatex">\(Q^{-1}(0{,}1) \approx 1{,}28\)</span>).</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Sensibilidad del receptor:</p>
+<p>La potencia de ruido térmico en <span class="arithmatex">\(B = 10\ \text{MHz}\)</span>:</p>
+<div class="arithmatex">\[N_0 = kTB = -174\ \text{dBm/Hz} + 10\log_{10}(10^7) = -174 + 70 = -104\ \text{dBm}\]</div>
+<p>Con figura de ruido <span class="arithmatex">\(F = 9\ \text{dB}\)</span>:</p>
+<div class="arithmatex">\[S_{\min} = N_0 + F + \text{SNR}_{\min} = -104 + 9 + 0 = -95\ \text{dBm}\]</div>
+<p><strong>(b)</strong> MAPL (Maximum Allowable Path Loss):</p>
+<div class="arithmatex">\[\text{MAPL} = P_t + G_t + G_r - L_{\text{misc}} - S_{\min} - M_\sigma\]</div>
+<p>donde el shadowing margin es <span class="arithmatex">\(M_\sigma = 1{,}28 \times 10 = 12{,}8\ \text{dB}\)</span>:</p>
+<div class="arithmatex">\[\text{MAPL} = 46 + 17 + 0 - 3 - (-95) - 12{,}8 = 142{,}2\ \text{dB}\]</div>
+<p><strong>(c)</strong> Radio de celda:</p>
+<div class="arithmatex">\[\text{MAPL} = \text{PL}(d_0) + 10n\log_{10}\!\left(\frac{d_{\max}}{d_0}\right)\]</div>
+<div class="arithmatex">\[142{,}2 = 78 + 38\log_{10}\!\left(\frac{d_{\max}}{100}\right)\]</div>
+<div class="arithmatex">\[\log_{10}\!\left(\frac{d_{\max}}{100}\right) = \frac{64{,}2}{38} = 1{,}689 \Rightarrow d_{\max} = 100 \times 10^{1{,}689} \approx 4{,}9\ \text{km}\]</div>
+<p>Este es el radio de celda máximo para garantizar una SNR de 0 dB en el 90% de las ubicaciones en un entorno UMa NLOS.</p>
+</details>
+<hr />
+<h3 id="ejercicio-6-parametros-tr-38901-y-caracterizacion-completa-del-canal">Ejercicio 6 — Parámetros TR 38.901 y Caracterización Completa del Canal</h3>
+<p>Un sistema 5G NR opera en el escenario <strong>UMa LOS</strong> a <span class="arithmatex">\(f_c = 2{,}6\ \text{GHz}\)</span>. El terminal se desplaza a <span class="arithmatex">\(v = 50\ \text{km/h}\)</span>. Según TR 38.901 UMa LOS, los parámetros de canal son: exponente <span class="arithmatex">\(n = 2{,}2\)</span>, <span class="arithmatex">\(\sigma_\text{sh} = 4\ \text{dB}\)</span>, delay spread <span class="arithmatex">\(\sigma_\tau = 100\ \text{ns}\)</span>, factor Rician <span class="arithmatex">\(K = 9\ \text{dB}\)</span>.</p>
+<p><strong>(a)</strong> Calcula el coherence bandwidth <span class="arithmatex">\(B_c\)</span>. Un sistema NR con numerología <span class="arithmatex">\(\mu = 1\)</span> usa subportadoras de 30 kHz y un ancho de banda de 40 MHz. ¿El canal es flat o frequency-selective para cada subportadora? ¿Y para el sistema completo?</p>
+<p><strong>(b)</strong> Calcula el Doppler spread máximo <span class="arithmatex">\(f_{D,\text{max}}\)</span> y el coherence time <span class="arithmatex">\(T_c\)</span>. La duración de una ranura NR con <span class="arithmatex">\(\mu = 1\)</span> es <span class="arithmatex">\(T_\text{slot} = 0{,}5\ \text{ms}\)</span>. ¿El canal es slow o fast fading a escala de ranura?</p>
+<p><strong>(c)</strong> Con <span class="arithmatex">\(K = 9\ \text{dB}\)</span>, calcula la fracción de potencia concentrada en la componente LOS (<span class="arithmatex">\(K/(K+1)\)</span>) y la fracción en los caminos dispersos. ¿Qué modelo de fading aplica — Rayleigh o Rician? ¿Esperarías una BER mayor o menor que en el escenario UMa NLOS (Rayleigh)?</p>
+<p><strong>(d)</strong> ¿Qué implicación práctica tiene el hecho de que <span class="arithmatex">\(T_c \gg T_\text{slot}\)</span> para el diseño del estimador de canal en 5G NR? (Respuesta cualitativa, 3–4 líneas.)</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Coherence bandwidth:</p>
+<div class="arithmatex">\[B_c \approx \frac{1}{5\sigma_\tau} = \frac{1}{5 \times 100\ \text{ns}} = 2\ \text{MHz}\]</div>
+<p>Ancho de banda por subportadora: <span class="arithmatex">\(\Delta f = 30\ \text{kHz} \ll B_c = 2\ \text{MHz}\)</span> → el canal es <strong>flat por subportadora</strong> — cada subportadora individual ve un canal prácticamente constante en frecuencia. Sin embargo, el sistema completo ocupa 40 MHz <span class="arithmatex">\(\gg B_c\)</span> → el canal es <strong>frequency-selective a escala de sistema</strong>: distintas subportadoras ven ganancias de canal distintas. Esta es precisamente la razón de usar OFDM — convierte un canal frequency-selective en muchos canales flat independientes.</p>
+<p><strong>(b)</strong> Velocidad: <span class="arithmatex">\(v = 50/3{,}6 \approx 13{,}9\ \text{m/s}\)</span>. Longitud de onda: <span class="arithmatex">\(\lambda = c/f_c = 3\times10^8/2{,}6\times10^9 \approx 0{,}115\ \text{m}\)</span>.</p>
+<div class="arithmatex">\[f_{D,\text{max}} = \frac{v}{\lambda} = \frac{13{,}9}{0{,}115} \approx 121\ \text{Hz}\]</div>
+<div class="arithmatex">\[T_c \approx \frac{0{,}423}{121} \approx 3{,}5\ \text{ms}\]</div>
+<p>Como <span class="arithmatex">\(T_\text{slot} = 0{,}5\ \text{ms} \ll T_c = 3{,}5\ \text{ms}\)</span>, el canal es <strong>slow fading</strong> a escala de ranura — el canal varía poco durante una ranura completa.</p>
+<p><strong>(c)</strong> <span class="arithmatex">\(K = 9\ \text{dB} \Rightarrow K_\text{lineal} = 10^{9/10} \approx 7{,}9\)</span>.</p>
+<div class="arithmatex">\[\frac{K}{K+1} = \frac{7{,}9}{8{,}9} \approx 89\,\%\ \text{(componente LOS)} \qquad \frac{1}{K+1} \approx 11\,\%\ \text{(dispersos)}\]</div>
+<p>Con <span class="arithmatex">\(K &gt; 0\)</span>, aplica el modelo <strong>Rician</strong>. La componente LOS concentra casi el 90 % de la potencia — el fasor resultante está fuertemente anclado al término determinista LOS y rara vez cae cerca del origen. En consecuencia, la BER será <strong>notablemente menor</strong> que en UMa NLOS (Rayleigh, <span class="arithmatex">\(K=0\)</span>), donde el cúmulo fasorial está centrado en el origen y los deep fades son frecuentes.</p>
+<p><strong>(d)</strong> Con <span class="arithmatex">\(T_c = 3{,}5\ \text{ms}\)</span> y <span class="arithmatex">\(T_\text{slot} = 0{,}5\ \text{ms}\)</span>, el canal tarda aproximadamente <span class="arithmatex">\(3{,}5/0{,}5 = 7\)</span> ranuras en cambiar de forma apreciable. Esto significa que una estimación de canal obtenida con pilotos en una ranura sigue siendo válida durante las siguientes 5–6 ranuras — no es necesario re-estimar el canal en cada ranura. En 5G NR, esta propiedad permite espaciar los símbolos de referencia (DMRS) sin degradar la estimación, reduciendo el overhead de pilotos y aumentando la eficiencia espectral efectiva del sistema.</p>
+</details>
+<hr />
+<h2 id="laboratorio-python">Laboratorio Python</h2>
+<p><a href="https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/01-channel-modeling/lab.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>En este laboratorio (~90 minutos) implementarás los modelos de canal estudiados en la sesión:</p>
+<ol>
+<li><strong>Simulación Rayleigh</strong>: genera la envolvente y verifica la distribución teórica (Ej. 1 — ~15 min)</li>
+<li><strong>Rician y factor K</strong>: compara distribuciones para K = 0, 1, 5, 10 dB (Ej. 2 — ~15 min)</li>
+<li><strong>BER vs SNR</strong>: curvas de BPSK sobre AWGN y Rayleigh, penalización por desvanecimiento (Ej. 3 — ~20 min)</li>
+<li><strong>CDF empírica y probabilidad de interrupción</strong>: calcula outage para distintos umbrales (Ej. 4 — ~15 min)</li>
+<li><strong>Link budget calculator</strong>: función completa con Friis + log-distancia + shadowing (Ej. 5 — ~25 min)</li>
+</ol>
+<hr />
+<h2 id="lecturas-recomendadas">Lecturas Recomendadas</h2>
+<ol>
+<li><strong>Goldsmith, A.</strong> — <em>Wireless Communications</em>, Cambridge University Press, 2005. Capítulos 2 y 3.</li>
+<li><strong>Tse, D. &amp; Viswanath, P.</strong> — <em>Fundamentals of Wireless Communication</em>, Cambridge University Press, 2005. Capítulo 2. (Disponible en abierto en el sitio web de los autores.)</li>
+<li><strong>Rappaport, T. S.</strong> — <em>Wireless Communications: Principles and Practice</em>, 2ª ed., Prentice Hall, 2002. Capítulos 3 y 4.</li>
+<li><strong>3GPP TR 38.901</strong> — <em>Study on channel model for frequencies from 0.5 to 100 GHz</em>, Release 17.</li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
