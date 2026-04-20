@@ -439,6 +439,23 @@ Geométricamente, $r$ es la distancia desde el origen hasta el extremo del fasor
 
 $$f_R(r) = \frac{r}{\sigma^2}\exp\!\left(-\frac{r^2}{2\sigma^2}\right), \quad r \geq 0$$
 
+!!! note "Por qué I y Q gaussianas con igual varianza implican una Rayleigh"
+    La conexión no es evidente — requiere un cambio de coordenadas. Partiendo de la PDF conjunta de $I$ y $Q$:
+
+    $$f_{I,Q}(i,q) = \frac{1}{2\pi\sigma^2}\,e^{-(i^2+q^2)/2\sigma^2}$$
+
+    Esta es una "diana": anillos concéntricos de igual densidad, porque la fórmula solo depende de $i^2+q^2$. Esa simetría circular es consecuencia de que $I$ y $Q$ tienen **igual varianza** — si fueran distintas, los anillos serían elipses.
+
+    **Cambio a coordenadas polares** ($r$, $\theta$): el Jacobiano de la transformación $(i,q)\to(r,\theta)$ es $r$, y $i^2+q^2 = r^2$:
+
+    $$f_{r,\theta}(r,\theta) = \frac{r}{2\pi\sigma^2}\,e^{-r^2/2\sigma^2}$$
+
+    **Marginalizar sobre $\theta$**: la simetría circular hace que $\theta$ sea uniforme en $[0,2\pi)$ e independiente de $r$. Integrar sobre $\theta$ acumula el factor $2\pi$:
+
+    $$f_r(r) = \int_0^{2\pi} \frac{r}{2\pi\sigma^2}\,e^{-r^2/2\sigma^2}\,d\theta = \frac{r}{\sigma^2}\,e^{-r^2/2\sigma^2}$$
+
+    Ese es exactamente $f_R(r)$. La $r$ en el numerador no viene de la gaussiana — viene del **área del anillo** $2\pi r\,dr$: cuanto mayor es $r$, mayor es el anillo y mayor la probabilidad de que el punto $(I,Q)$ caiga en él, aunque la densidad gaussiana decrezca.
+
 Los parámetros de esta expresión tienen interpretación directa:
 
 - $\sigma^2$ es la varianza de cada componente gaussiana — tanto de $I$ como de $Q$. Representa la potencia media de los caminos dispersos: mayor $\sigma^2$ implica más energía multitrayecto y mayor amplitud media recibida.
