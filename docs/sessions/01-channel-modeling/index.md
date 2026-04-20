@@ -759,23 +759,23 @@ En un canal Rayleigh con SNR medio $\bar{\gamma} = 20\ \text{dB}$:
 
 ??? example "Solución"
 
-    **(a)** $\bar{\gamma} = 20\ \text{dB} = 100$.
+    **(a)** $\bar{\gamma} = 20\ \text{dB} = 100$. Usando la convención de §6: $\gamma = \text{SNR} = P_r/P_n$, con BER $= Q(\sqrt{\gamma})$ en AWGN y $\overline{\text{BER}} \approx 1/(2\bar{\gamma})$ en Rayleigh.
 
     Canal Rayleigh:
-    $$\text{BER}_{\text{Rayleigh}} \approx \frac{1}{4\bar{\gamma}} = \frac{1}{400} = 2{,}5\times10^{-3}$$
+    $$\text{BER}_{\text{Rayleigh}} \approx \frac{1}{2\bar{\gamma}} = \frac{1}{200} = 5\times10^{-3}$$
 
-    Canal AWGN ($Q(x) \approx \frac{1}{2}e^{-x^2/2}$ para $x$ grande):
-    $$\text{BER}_{\text{AWGN}} = Q(\sqrt{2\bar{\gamma}}) = Q(\sqrt{200}) = Q(14{,}1) \approx 10^{-44}$$
+    Canal AWGN:
+    $$\text{BER}_{\text{AWGN}} = Q\!\left(\sqrt{\bar{\gamma}}\right) = Q(\sqrt{100}) = Q(10) \approx 7{,}6\times10^{-24}$$
 
-    La diferencia es de **más de 40 órdenes de magnitud** — el Rayleigh fading degrada dramáticamente la BER.
+    La diferencia es de **más de 20 órdenes de magnitud** — el Rayleigh fading degrada dramáticamente la BER.
 
     **(b)** En AWGN con $\bar{\gamma} = 10\ \text{dB} = 10$:
-    $$\text{BER}_{\text{AWGN}} = Q(\sqrt{20}) = Q(4{,}47) \approx 3{,}9\times10^{-6}$$
+    $$\text{BER}_{\text{AWGN}} = Q\!\left(\sqrt{10}\right) = Q(3{,}16) \approx 7{,}9\times10^{-4}$$
 
-    En Rayleigh, para obtener $\text{BER} \approx 3{,}9\times10^{-6}$:
-    $$\frac{1}{4\bar{\gamma}} = 3{,}9\times10^{-6} \Rightarrow \bar{\gamma} \approx 64{,}000 \approx 48\ \text{dB}$$
+    En Rayleigh, para obtener $\overline{\text{BER}} \approx 7{,}9\times10^{-4}$:
+    $$\frac{1}{2\bar{\gamma}} = 7{,}9\times10^{-4} \Rightarrow \bar{\gamma} \approx 633 \approx 28\ \text{dB}$$
 
-    Se necesitan aproximadamente **38 dB adicionales** — esta es la "penalización por desvanecimiento" sin técnicas de diversidad.
+    Se necesitan aproximadamente **18 dB adicionales** — esta es la penalización por desvanecimiento sin técnicas de diversidad.
 
     **(c)** Con $K > 0$, el camino LOS añade un término determinista $(\mu_I, \mu_Q) \neq (0,0)$ al diagrama fasorial — el cúmulo de puntos se desplaza lejos del origen. Para que se produzca un deep fade, el ruido aleatorio de los caminos dispersos tendría que arrastrar el fasor resultante hasta cerca del origen, lo que ocurre con mucha menor probabilidad que en Rayleigh ($K=0$, donde el cúmulo está centrado en el origen y el deep fade es frecuente). Por tanto, el canal Rician tiene **menor variabilidad** de envolvente y **menor BER** para el mismo $\bar{\gamma}$. A medida que $K \to \infty$, la dispersión del cúmulo desaparece y la BER converge a la del canal AWGN.
 
