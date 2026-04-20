@@ -770,9 +770,11 @@ En un canal Rayleigh con SNR medio $\bar{\gamma} = 20\ \text{dB}$:
     La diferencia es de **más de 20 órdenes de magnitud** — el Rayleigh fading degrada dramáticamente la BER.
 
     **(b)** En AWGN con $\bar{\gamma} = 10\ \text{dB} = 10$:
+
     $$\text{BER}_{\text{AWGN}} = Q\!\left(\sqrt{10}\right) = Q(3{,}16) \approx 7{,}9\times10^{-4}$$
 
     En Rayleigh, para obtener $\overline{\text{BER}} \approx 7{,}9\times10^{-4}$:
+
     $$\frac{1}{2\bar{\gamma}} = 7{,}9\times10^{-4} \Rightarrow \bar{\gamma} \approx 633 \approx 28\ \text{dB}$$
 
     Se necesitan aproximadamente **18 dB adicionales** — esta es la penalización por desvanecimiento sin técnicas de diversidad.
