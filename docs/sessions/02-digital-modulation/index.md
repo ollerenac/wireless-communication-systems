@@ -91,6 +91,8 @@ $$P_b^{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) \cdot \fr
 
 La integral tiene solución cerrada gracias a la forma exponencial de la PDF de Rayleigh. El resultado, expresado con la convención $\gamma_b = E_b/N_0$ de esta sesión, es $P_b \approx 1/(4\bar{\gamma}_b)$. Esto es consistente con la Sesión 01, que usaba $\bar{\gamma} = \text{SNR} = P_r/P_n$: para BPSK, $\gamma = P_r/P_n = 2\,E_b/N_0 = 2\gamma_b$, de modo que $1/(2\bar{\gamma}) = 1/(4\bar{\gamma}_b)$ — la misma expresión con distinta etiqueta de SNR.
 
+**¿Por qué Rayleigh y no Rician?** Tres razones. Primera: Rayleigh ($K=0$, NLOS) es el peor caso de fading — si el sistema funciona bajo Rayleigh, funcionará aún mejor bajo cualquier Rician con $K>0$, donde la componente LOS reduce la probabilidad de deep fading. Es el baseline de diseño conservador. Segunda: la integral anterior tiene solución cerrada precisamente porque la PDF exponencial de $\gamma$ bajo Rayleigh es la conjugada natural de la función $Q$; bajo Rician, la PDF de $\gamma$ involucra la función $I_0$ de Bessel y la BER media no admite forma cerrada simple — se evalúa numéricamente. Tercera: la Sesión 01 modeló el canal como NLOS (Rayleigh), de modo que el "cierre del círculo" es directo. Cuando el canal incluye componente LOS (Rician, $K>0$), la BER mejora monótonamente con $K$ y converge a la curva AWGN cuando $K\to\infty$ — como ilustró el Ejercicio 5C del laboratorio de la Sesión 01.
+
 ---
 
 ### 3. QPSK: Dos Dimensiones Ortogonales
