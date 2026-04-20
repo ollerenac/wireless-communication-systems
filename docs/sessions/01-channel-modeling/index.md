@@ -603,6 +603,19 @@ Los modelos de Rayleigh y Rician son tractables analíticamente, pero sus parám
 
 Los parámetros de las secciones anteriores — $n$, $\sigma_\text{sh}$, $\sigma_\tau$, $f_{D,\text{max}}$, $K$ — no se inventan ni se eligen por conveniencia. Provienen de **campañas de medición de canal**: cientos de miles de medidas realizadas en distintas ciudades, bandas de frecuencia y condiciones de despliegue. El proceso es sistemático — se transmite una señal de prueba de banda ancha, se registra la respuesta al impulso del canal $h(\tau, t)$ en múltiples posiciones y se ajustan los parámetros estadísticos a los datos medidos. 3GPP recoge esos resultados en el estándar **TR 38.901** para que fabricantes, operadores e investigadores evalúen sus sistemas sobre el mismo canal de referencia, haciendo los resultados de simulación comparables y representativos de despliegues reales.
 
+**¿Por qué no usar siempre Rician si es más general?** Rician contiene a Rayleigh como caso particular ($K=0$), así que en principio podría usarse siempre. Hay tres razones prácticas para no hacerlo:
+
+1. **Complejidad analítica**: la $\overline{\text{BER}}$ en Rician no tiene forma cerrada simple — requiere la función Q de Marcum y en general integración numérica. La de Rayleigh tiene expresión analítica limpia ($\approx 1/(2\bar{\gamma})$), útil para dimensionamiento rápido y análisis de diversidad.
+2. **Estimación del parámetro K**: Rician requiere conocer $K$, que varía con el entorno, la frecuencia, la altura de las antenas y la geometría específica del enlace. Estimarlo con precisión exige campañas de medición; Rayleigh solo necesita $\sigma$.
+3. **Diseño conservador**: Rayleigh es el peor caso ($K=0$, sin LOS). Diseñar para Rayleigh garantiza que el sistema funciona en el escenario más difícil; si existe LOS, el rendimiento real es mejor que el diseñado — ningún problema. Rician es más preciso cuando se conoce $K$, pero Rayleigh es la referencia conservadora universal.
+
+**¿Qué modelos usa realmente TR 38.901?** El estándar no aplica directamente Rayleigh o Rician como modelo global del canal. Usa modelos **Clustered Delay Line (CDL)** y **Tapped Delay Line (TDL)** — modelos estocásticos geométricos que especifican múltiples grupos de ecos (*clusters*), cada uno con potencia, retardo y ángulos de llegada y salida definidos por medición. La distinción LOS/NLOS sí aparece dentro de estos modelos:
+
+- **CDL-A/B/C y TDL-A/B/C** (NLOS): todos los clusters tienen fases aleatorias → fading por cluster esencialmente Rayleigh.
+- **CDL-D/E y TDL-D/E** (LOS): tienen una componente especular determinista (el camino directo) más clusters de scatter → comportamiento Rician por cluster, con $K$ especificado por el estándar.
+
+TR 38.901 contiene Rayleigh y Rician como casos especiales, pero los embebe en un modelo más rico que además captura estructura espacial, correlación angular entre antenas y rango de frecuencias hasta 100 GHz — dimensiones que Rayleigh/Rician solos no pueden modelar. Los modelos Rayleigh y Rician de §7 y §8 son las herramientas analíticas; TR 38.901 es su calibración empírica para simulación de sistema.
+
 **Estructura del modelo TR 38.901**: el estándar define, para cada escenario de despliegue y condición LOS/NLOS, exactamente los parámetros que hemos desarrollado en esta sesión:
 
 | Parámetro | Concepto (sección) | Rol en el diseño |
