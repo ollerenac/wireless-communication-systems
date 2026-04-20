@@ -662,7 +662,7 @@ TR 38.901 contiene Rayleigh y Rician como casos especiales, pero los embebe en u
 
     **5. Coherence time**: a $v = 30$ km/h → $f_{D,\text{max}} = (v/\lambda) = (8{,}3\ \text{m/s})/(0{,}086\ \text{m}) \approx 97$ Hz → $T_c \approx 0{,}423/97 \approx 4{,}4$ ms. Con subportadoras de 30 kHz (NR $\mu=1$), la duración de ranura es 0,5 ms $\ll T_c$: slow fading — el canal es estable durante varias ranuras, lo que permite pilotos espaciados.
 
-    **6. Modelo de fading**: condición NLOS → Rayleigh fading ($K = 0$). La BER de BPSK en este canal decae como $1/(4\bar{\gamma})$ — se necesitarán técnicas de mitigación (OFDM + codificación, MIMO) para operar fiablemente.
+    **6. Modelo de fading**: condición NLOS → Rayleigh fading ($K = 0$). La BER de BPSK en este canal decae como $1/(2\bar{\gamma})$ para SNR alta — linealmente con la SNR media, no exponencialmente como en AWGN. Se necesitarán técnicas de mitigación (OFDM + codificación, MIMO) para operar fiablemente.
 
 !!! note "Uso en sesiones posteriores"
     En las sesiones 06 (MIMO), 07 (Massive MIMO) y 09 (5G NR) utilizaremos los parámetros de TR 38.901 para calibrar las simulaciones. El escenario UMa NLOS con $\sigma_\tau = 300$ ns y $n = 3{,}7$ es el canal de referencia más habitual en la literatura de 5G.
