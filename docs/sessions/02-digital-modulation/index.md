@@ -41,13 +41,15 @@ La Sesión 01 asumió implícitamente que el receptor sabe cuánta amplitud lleg
 
 **El espacio de señales.** Cualquier conjunto de señales $\{s_m(t)\}_{m=1}^M$ puede representarse como un vector en un espacio euclídeo de dimensión $N \leq M$. La distancia euclídea entre dos señales es:
 
-$$d(s_i, s_j) = \sqrt{\int_0^{T_s} [s_i(t) - s_j(t)]^2\, dt}$$
+$$d(s_i, s_j) = \sqrt{\int_0^{T_s} [s_i(t) - s_j(t)]^2\, dt} \tag{2}$$
 
 Esta distancia determina cuán difícil es que el ruido confunda una señal con otra. Un sistema de modulación es, fundamentalmente, un diseño de geometría: colocar $M$ puntos en el espacio de señales de forma que las distancias sean las máximas posibles dado un presupuesto de energía.
 
 **Detección ML en AWGN.** Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de *maximum likelihood* (ML) selecciona el símbolo más cercano al punto recibido:
 
-$$\hat{m} = \arg\min_m \|y - s_m\|^2$$
+$$\hat{m} = \arg\min_m \|y - s_m\|^2 \tag{3}$$
+
+donde $\hat{m} \in \{1,\ldots,M\}$ es el índice del símbolo decidido, $y$ es la muestra recibida en el espacio de señales, $s_m$ es el vector del símbolo $m$, y $\|\cdot\|^2$ es la distancia euclídea al cuadrado entre el punto recibido y cada símbolo candidato.
 
 Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de *maximum likelihood* — no es una convención arbitraria.
 
