@@ -45,11 +45,11 @@ $$d(s_i, s_j) = \sqrt{\int_0^{T_s} [s_i(t) - s_j(t)]^2\, dt}$$
 
 Esta distancia determina cuán difícil es que el ruido confunda una señal con otra. Un sistema de modulación es, fundamentalmente, un diseño de geometría: colocar $M$ puntos en el espacio de señales de forma que las distancias sean las máximas posibles dado un presupuesto de energía.
 
-**Detección ML en AWGN.** Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de máxima verosimilitud (ML) selecciona el símbolo más cercano al punto recibido:
+**Detección ML en AWGN.** Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de *maximum likelihood* (ML) selecciona el símbolo más cercano al punto recibido:
 
 $$\hat{m} = \arg\min_m \|y - s_m\|^2$$
 
-Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de máxima verosimilitud — no es una convención arbitraria.
+Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de *maximum likelihood* — no es una convención arbitraria.
 
 La distancia entre el punto recibido y la frontera de decisión determina la probabilidad de error. Cuanto mayor es esa distancia en relación con la desviación estándar del ruido $\sqrt{N_0/2}$, menor es la BER.
 
