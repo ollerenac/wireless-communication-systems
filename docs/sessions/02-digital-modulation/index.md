@@ -45,7 +45,7 @@ $$d(s_i, s_j) = \sqrt{\int_0^{T_s} [s_i(t) - s_j(t)]^2\, dt} \tag{2}$$
 
 Esta distancia determina cuán difícil es que el ruido confunda una señal con otra. Un sistema de modulación es, fundamentalmente, un diseño de geometría: colocar $M$ puntos en el espacio de señales de forma que las distancias sean las máximas posibles dado un presupuesto de energía.
 
-**Detección ML en AWGN.** Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de *maximum likelihood* (ML) selecciona el símbolo más cercano al punto recibido:
+**Detección ML en AWGN.** Comenzamos con AWGN porque bajo este modelo el ruido es isotrópico — igual en todas las direcciones del espacio de señales — y el criterio ML se reduce a una regla geométrica limpia: bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de *maximum likelihood* (ML) selecciona el símbolo más cercano al punto recibido:
 
 $$\hat{m} = \arg\min_m \, d(y, s_m) \tag{3}$$
 
@@ -54,6 +54,10 @@ donde $\hat{m} \in \{1,\ldots,M\}$ es el índice del símbolo decidido, $y$ es l
 Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de *maximum likelihood* — no es una convención arbitraria.
 
 La distancia entre el punto recibido y la frontera de decisión determina la probabilidad de error. Cuanto mayor es esa distancia en relación con la desviación estándar del ruido $\sqrt{N_0/2}$, menor es la BER.
+
+![Detección ML en un espacio de señales de 4 símbolos](figures/ml-detection.png)
+
+El punto recibido $y$ (×) cae dentro de la región de decisión de $s_1$ (zona azul). Las distancias a los cuatro símbolos candidatos se muestran con líneas: la mínima, $d_{\min}$, determina la decisión $\hat{m}=1$. Las fronteras punteadas son las fronteras de decisión — el lugar geométrico equidistante entre símbolos vecinos.
 
 ---
 
