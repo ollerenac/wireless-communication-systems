@@ -104,6 +104,25 @@ $$\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2}{
 
 La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — exactamente el filtro adaptado. Ningún otro filtro extrae más información útil de $y(t)$.
 
+??? note "Desglose de la fórmula del SNR y la desigualdad de Cauchy-Schwarz"
+
+    **Numerador** — potencia de señal a la salida:
+    Si solo existiera señal (sin ruido), la salida del filtro en $t = T_s$ es la convolución de la ecuación (6) aplicada a $s(t)$. El cuadrado convierte amplitud en potencia.
+
+    **Denominador** — potencia de ruido a la salida:
+    El ruido de entrada es blanco con densidad espectral $N_0/2$. Al pasar por un filtro con respuesta $h_{MF}(t)$, la potencia de ruido en la salida es $\frac{N_0}{2}\cdot\int_0^{T_s} h_{MF}^2(t)\,dt$.
+
+    **La desigualdad de Cauchy-Schwarz** establece que para dos funciones cualesquiera $f$ y $g$:
+    $$\left|\int f(t)\,g(t)\,dt\right|^2 \leq \int f^2(t)\,dt \cdot \int g^2(t)\,dt$$
+
+    Aplicando esto al numerador con $f = s(t)$ y $g = h_{MF}(T_s-t)$:
+    $$\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2 \leq \underbrace{\int_0^{T_s} s^2(t)\,dt}_{E_s} \cdot \underbrace{\int_0^{T_s} h_{MF}^2(t)\,dt}_{\|h_{MF}\|^2}$$
+
+    Sustituyendo en $\text{SNR}_{out}$, el factor $\|h_{MF}\|^2$ aparece arriba y abajo y se cancela:
+    $$\text{SNR}_{out} \leq \frac{E_s \cdot \|h_{MF}\|^2}{\frac{N_0}{2}\cdot\|h_{MF}\|^2} = \frac{2E_s}{N_0}$$
+
+    El límite superior no depende del filtro elegido — solo de la energía de la señal y del ruido. La igualdad se alcanza cuando $f(t) = c\cdot g(t)$, es decir $s(t) = c\cdot h_{MF}(T_s-t)$, lo que implica $h_{MF}(t) = c\cdot s(T_s-t)$ — el filtro adaptado.
+
 Tras el filtro adaptado, la muestra en $t = T_s$ tiene distribución:
 
 $$y = \sqrt{E_b} + n_c, \qquad n_c \sim \mathcal{N}\!\left(0,\, \frac{N_0}{2}\right) \quad \text{(si se envió } s_1\text{)}$$
