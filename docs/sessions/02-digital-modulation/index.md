@@ -47,9 +47,9 @@ Esta distancia determina cuán difícil es que el ruido confunda una señal con 
 
 **Detección ML en AWGN.** Bajo ruido gaussiano blanco aditivo y símbolos equiprobables, el detector de *maximum likelihood* (ML) selecciona el símbolo más cercano al punto recibido:
 
-$$\hat{m} = \arg\min_m \|y - s_m\|^2 \tag{3}$$
+$$\hat{m} = \arg\min_m \, d(y, s_m) \tag{3}$$
 
-donde $\hat{m} \in \{1,\ldots,M\}$ es el índice del símbolo decidido, $y$ es la muestra recibida en el espacio de señales, $s_m$ es el vector del símbolo $m$, y $\|\cdot\|^2$ es la distancia euclídea al cuadrado entre el punto recibido y cada símbolo candidato.
+donde $\hat{m} \in \{1,\ldots,M\}$ es el índice del símbolo decidido, $y$ es la muestra recibida en el espacio de señales, y $d(y, s_m)$ es la distancia euclídea de la ecuación (2) entre el punto recibido y el símbolo candidato $s_m$.
 
 Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de *maximum likelihood* — no es una convención arbitraria.
 
