@@ -117,9 +117,11 @@ La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — e
     $$\left|\int f(t)\,g(t)\,dt\right|^2 \leq \int f^2(t)\,dt \cdot \int g^2(t)\,dt$$
 
     Aplicando esto al numerador con $f = s(t)$ y $g = h_{MF}(T_s-t)$:
+    
     $$\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2 \leq \underbrace{\int_0^{T_s} s^2(t)\,dt}_{E_s} \cdot \underbrace{\int_0^{T_s} h_{MF}^2(t)\,dt}_{\|h_{MF}\|^2}$$
 
     Sustituyendo en $\text{SNR}_{out}$, el factor $\|h_{MF}\|^2$ aparece arriba y abajo y se cancela:
+    
     $$\text{SNR}_{out} \leq \frac{E_s \cdot \|h_{MF}\|^2}{\frac{N_0}{2}\cdot\|h_{MF}\|^2} = \frac{2E_s}{N_0}$$
 
     El límite superior no depende del filtro elegido — solo de la energía de la señal y del ruido. La igualdad se alcanza cuando $f(t) = c\cdot g(t)$, es decir $s(t) = c\cdot h_{MF}(T_s-t)$, lo que implica $h_{MF}(t) = c\cdot s(T_s-t)$ — el filtro adaptado.
