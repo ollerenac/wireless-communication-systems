@@ -69,6 +69,9 @@ $E_b$ denota la **energía por bit** (en julios): la energía que el transmisor 
 
 El sistema de modulación más simple coloca dos puntos en el eje real: $s_1 = +\sqrt{E_b}$ y $s_2 = -\sqrt{E_b}$, separados por $d_{\min} = 2\sqrt{E_b}$. La frontera de decisión está en el origen.
 
+!!! note "¿Por qué $\pm\sqrt{E_b}$ y no otra amplitud?"
+    La posición de los símbolos es una consecuencia directa del presupuesto de energía. En el espacio de señales, la energía de un símbolo es su norma al cuadrado: $\|s_m\|^2 = E_b$. Como BPSK es unidimensional, $s_m$ es un número real y la condición se reduce a $s_m^2 = E_b$, de donde $s_m = \pm\sqrt{E_b}$. Si colocas los símbolos en $\pm A$, su energía es $A^2$; para que esa energía sea exactamente $E_b$, la amplitud debe ser $A = \sqrt{E_b}$. El $\sqrt{\cdot}$ no es una elección de diseño — es lo que obtienes al despejar la amplitud de la restricción de energía.
+
 #### 2.1 El Filtro Adaptado
 
 Antes de aplicar la regla de decisión, el receptor necesita extraer del continuo temporal $y(t)$ un número suficiente. Ese número es la salida del **filtro adaptado** (*matched filter*): el filtro cuya respuesta al impulso es la imagen especular de la señal transmitida, $h_{MF}(t) = s(T_s - t)$.
