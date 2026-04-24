@@ -85,7 +85,11 @@ En cada instante $t$ se multiplica el valor recibido por el valor esperado de la
 !!! note "¿Por qué $c = E_s$ cuando no hay ruido?"
     Si $y(t) = s_m(t)$, entonces $c = \int_0^{T_s} s_m^2(t)\,dt = E_s$, la energía del símbolo — no $s^3/3$, porque $s_m(t)$ es una función de $t$, no la variable $t$ misma. Para BPSK con pulso rectangular $s(t)=A$: $c = A^2 T_s = E_b$. En general, $E_s = \log_2(M)\cdot E_b$.
 
-Los filtros operan por convolución. La salida de un filtro con respuesta al impulso $h(t)$ evaluada en $t = T_s$ es $z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau$. Eligiendo $h(T_s - \tau) = s(\tau)$, es decir:
+Los filtros operan por convolución: dado un filtro con respuesta al impulso $h(t)$, su salida ante la entrada $y(t)$ es:
+
+$$z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau \tag{6}$$
+
+$z(T_s)$ es el escalar que sale del filtro al muestrearlo en $t = T_s$ — el número que pasará a la regla de decisión. Eligiendo $h(T_s - \tau) = s(\tau)$, es decir:
 
 $$h_{MF}(t) = s(T_s - t) \tag{5}$$
 
