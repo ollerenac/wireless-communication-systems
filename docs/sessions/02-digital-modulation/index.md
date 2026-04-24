@@ -65,6 +65,8 @@ El punto recibido $y$ (×) cae dentro de la región de decisión de $s_1$ (zona 
 
 ### 2. BPSK: El Caso de Dos Puntos
 
+$E_b$ denota la **energía por bit** (en julios): la energía que el transmisor invierte en transmitir un único bit. Para BPSK, cada símbolo transporta exactamente 1 bit, así que la energía por símbolo $E_s = E_b$.
+
 El sistema de modulación más simple coloca dos puntos en el eje real: $s_1 = +\sqrt{E_b}$ y $s_2 = -\sqrt{E_b}$, separados por $d_{\min} = 2\sqrt{E_b}$. La frontera de decisión está en el origen.
 
 #### 2.1 El Filtro Adaptado
