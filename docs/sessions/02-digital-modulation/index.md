@@ -74,13 +74,25 @@ El sistema de modulación más simple coloca dos puntos en el eje real: $s_1 = +
 
 #### 2.1 El Filtro Adaptado
 
-La señal recibida $y(t)$ es una función del tiempo — tiene un valor distinto en cada instante, es decir, infinitos valores durante el intervalo de símbolo $T_s$. La regla de decisión de la ecuación (3) opera sobre números, no sobre formas de onda, así que el receptor necesita primero comprimir esa función en un único escalar que conserve toda la información relevante para la decisión. Ese escalar es la salida del **filtro adaptado** (*matched filter*): el filtro cuya respuesta al impulso es la imagen especular de la señal transmitida, $h_{MF}(t) = s(T_s - t)$, muestreado en $t = T_s$.
+La señal recibida $y(t)$ es una función del tiempo — tiene un valor distinto en cada instante durante el intervalo $T_s$. La regla de decisión de la ecuación (3) opera sobre escalares, no sobre formas de onda, así que el receptor necesita comprimir $y(t)$ en un único número que conserve toda la información relevante para la decisión.
 
-¿Por qué este filtro y no otro? El criterio es maximizar el SNR a la salida en el instante de muestreo $t = T_s$. Aplicando la desigualdad de Cauchy-Schwarz a la energía de salida:
+La operación natural para medir cuánto se parece $y(t)$ a la señal transmitida $s(t)$ es la **correlación**:
 
-$$\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t) h_{MF}(T_s-t)\, dt\right|^2}{N_0/2 \cdot \int_0^{T_s} h_{MF}^2(t)\, dt} \leq \frac{\|s\|^2}{N_0/2} = \frac{2E_s}{N_0}$$
+$$c = \int_0^{T_s} y(t) \cdot s(t) \, dt \tag{4}$$
 
-La igualdad se alcanza cuando $h_{MF}(t) = c \cdot s(T_s - t)$ para cualquier constante $c$. El filtro adaptado no es un filtro "inteligente": es el que más se parece a la señal que busca, y por eso extrae de ella la mayor cantidad posible de energía antes de muestrear.
+En cada instante $t$ se multiplica el valor recibido por el valor esperado de la señal y se acumula. Si $y(t) \approx s(t)$ (poco ruido), el resultado es grande y positivo ($c \approx E_b$). Si $y(t) \approx -s(t)$ (se envió el símbolo opuesto), es grande y negativo ($c \approx -E_b$). El ruido, al ser simétrico, promedia a cero a lo largo de $T_s$.
+
+Los filtros operan por convolución. La salida de un filtro con respuesta al impulso $h(t)$ evaluada en $t = T_s$ es $z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau$. Eligiendo $h(T_s - \tau) = s(\tau)$, es decir:
+
+$$h_{MF}(t) = s(T_s - t) \tag{5}$$
+
+la convolución en $t = T_s$ produce exactamente la correlación de la ecuación (4). La inversión temporal $s(T_s - t)$ es el ajuste algebraico que convierte la convolución del filtro en correlación. Este es el **filtro adaptado** (*matched filter*): un correlador implementado como filtro lineal, diseñado específicamente para la señal que busca.
+
+¿Por qué este filtro es el óptimo y no otro? El criterio formal es maximizar el SNR a la salida en el instante de muestreo $t = T_s$. Aplicando la desigualdad de Cauchy-Schwarz:
+
+$$\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2}{N_0/2 \cdot \int_0^{T_s} h_{MF}^2(t)\,dt} \leq \frac{\|s\|^2}{N_0/2} = \frac{2E_s}{N_0}$$
+
+La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — exactamente el filtro adaptado. Ningún otro filtro extrae más información útil de $y(t)$.
 
 Tras el filtro adaptado, la muestra en $t = T_s$ tiene distribución:
 
