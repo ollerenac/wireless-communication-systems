@@ -27,7 +27,7 @@ $$y = h \cdot s + n \tag{1}$$
 
 donde $h$ es el coeficiente de canal complejo que recoge los efectos de path loss, shadowing y fading, $s$ es el símbolo transmitido, y $n \sim \mathcal{N}(0, N_0/2)$ es ruido gaussiano blanco aditivo.
 
-Calculamos la BER de BPSK sobre canal Rayleigh con la convención $\bar{\gamma} = \text{SNR} = P_r/P_n$ y obtuvimos $P_b \approx 1/(2\bar{\gamma})$ — pero la usamos sin demostrarla. Una pregunta quedó implícitamente abierta: ¿de dónde viene exactamente esa BER? ¿Qué tiene de especial la modulación BPSK para que se exprese de esa manera?
+Calculamos la BER de BPSK sobre canal Rayleigh con la convención $\bar{\gamma} = \text{SNR} = P_r/P_n$ y obtuvimos la BER $P_b \approx 1/(2\bar{\gamma})$ — pero la usamos sin demostrarla. Una pregunta quedó implícitamente abierta: ¿de dónde viene exactamente esa BER? ¿Qué tiene de especial la modulación BPSK para que se exprese de esa manera?
 
 La respuesta exige entender cómo el receptor toma decisiones: dado un valor recibido $y$, ¿qué símbolo fue enviado? Esta pregunta de detección es el núcleo de la modulación digital. Cuando la respondemos para AWGN puro, obtenemos la BER en función del SNR instantáneo; cuando la promediamos sobre la distribución del canal (exponencial para Rayleigh), recuperamos la fórmula de la Sesión 01. La Sesión 02 cierra ese ciclo y lo extiende a familias de modulaciones de mayor orden.
 
