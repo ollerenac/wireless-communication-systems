@@ -297,6 +297,7 @@ $$\text{Throughput} = N_{SC} \times k \times r \times \frac{14\ \text{símbolos/
 ¿Es ese nivel de potencia recibida coherente con la geometría de la Sesión 01? Un sistema UMa LOS a 300 m con $P_t = 43\ \text{dBm}$, $G_t = 17\ \text{dBi}$, $n = 2{,}2$:
 
 $$\text{PL}(300) = 78 + 22\log_{10}(3) \approx 78 + 10{,}5 = 88{,}5\ \text{dB}$$
+
 $$P_r = 43 + 17 - 88{,}5 = -28{,}5\ \text{dBm} \gg -75\ \text{dBm} \quad ✓$$
 
 A 300 m en LOS, el terminal tiene SNR muy por encima del mínimo para 64-QAM. Alejándolo hasta donde la SNR caiga a 14 dB ($P_r = -75\ \text{dBm}$):
