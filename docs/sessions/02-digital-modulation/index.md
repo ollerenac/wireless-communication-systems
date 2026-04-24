@@ -93,6 +93,9 @@ $z(T_s)$ es el escalar que sale del filtro al muestrearlo en $t = T_s$ — el n�
 
 $$h_{MF}(t) = s(T_s - t) \tag{5}$$
 
+!!! note "¿Qué significa $s(T_s - t)$?"
+    Cuando $t$ avanza de $0$ a $T_s$, el argumento $T_s - t$ retrocede de $T_s$ a $0$: la señal se lee de atrás hacia adelante, como reproducir una grabación al revés. Ejemplo con una rampa $s(t) = t$: $s(T_s - t) = T_s - t$ baja de $T_s$ a $0$ — exactamente el orden inverso. Para BPSK con pulso rectangular ($s(t) = A$ constante), la inversión no cambia nada, por lo que ese caso no ilustra la operación.
+
 la convolución en $t = T_s$ produce exactamente la correlación de la ecuación (4). La inversión temporal $s(T_s - t)$ es el ajuste algebraico que convierte la convolución del filtro en correlación. Este es el **filtro adaptado** (*matched filter*): un correlador implementado como filtro lineal, diseñado específicamente para la señal que busca.
 
 ¿Por qué este filtro es el óptimo y no otro? El criterio formal es maximizar el SNR a la salida en el instante de muestreo $t = T_s$. Aplicando la desigualdad de Cauchy-Schwarz:
