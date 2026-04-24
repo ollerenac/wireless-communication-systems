@@ -82,6 +82,9 @@ $$c = \int_0^{T_s} y(t) \cdot s(t) \, dt \tag{4}$$
 
 En cada instante $t$ se multiplica el valor recibido por el valor esperado de la señal y se acumula. Si $y(t) \approx s(t)$ (poco ruido), el resultado es grande y positivo ($c \approx E_b$). Si $y(t) \approx -s(t)$ (se envió el símbolo opuesto), es grande y negativo ($c \approx -E_b$). El ruido, al ser simétrico, promedia a cero a lo largo de $T_s$.
 
+!!! note "¿Por qué $c = E_s$ cuando no hay ruido?"
+    Si $y(t) = s_m(t)$, entonces $c = \int_0^{T_s} s_m^2(t)\,dt = E_s$, la energía del símbolo — no $s^3/3$, porque $s_m(t)$ es una función de $t$, no la variable $t$ misma. Para BPSK con pulso rectangular $s(t)=A$: $c = A^2 T_s = E_b$. En general, $E_s = \log_2(M)\cdot E_b$.
+
 Los filtros operan por convolución. La salida de un filtro con respuesta al impulso $h(t)$ evaluada en $t = T_s$ es $z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau$. Eligiendo $h(T_s - \tau) = s(\tau)$, es decir:
 
 $$h_{MF}(t) = s(T_s - t) \tag{5}$$
