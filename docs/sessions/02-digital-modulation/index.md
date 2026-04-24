@@ -74,7 +74,7 @@ El sistema de modulación más simple coloca dos puntos en el eje real: $s_1 = +
 
 #### 2.1 El Filtro Adaptado
 
-Antes de aplicar la regla de decisión, el receptor necesita extraer del continuo temporal $y(t)$ un número suficiente. Ese número es la salida del **filtro adaptado** (*matched filter*): el filtro cuya respuesta al impulso es la imagen especular de la señal transmitida, $h_{MF}(t) = s(T_s - t)$.
+La señal recibida $y(t)$ es una función del tiempo — tiene un valor distinto en cada instante, es decir, infinitos valores durante el intervalo de símbolo $T_s$. La regla de decisión de la ecuación (3) opera sobre números, no sobre formas de onda, así que el receptor necesita primero comprimir esa función en un único escalar que conserve toda la información relevante para la decisión. Ese escalar es la salida del **filtro adaptado** (*matched filter*): el filtro cuya respuesta al impulso es la imagen especular de la señal transmitida, $h_{MF}(t) = s(T_s - t)$, muestreado en $t = T_s$.
 
 ¿Por qué este filtro y no otro? El criterio es maximizar el SNR a la salida en el instante de muestreo $t = T_s$. Aplicando la desigualdad de Cauchy-Schwarz a la energía de salida:
 
