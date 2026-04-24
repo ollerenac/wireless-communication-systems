@@ -113,6 +113,7 @@ La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — e
     El ruido de entrada es blanco con densidad espectral $N_0/2$. Al pasar por un filtro con respuesta $h_{MF}(t)$, la potencia de ruido en la salida es $\frac{N_0}{2}\cdot\int_0^{T_s} h_{MF}^2(t)\,dt$.
 
     **La desigualdad de Cauchy-Schwarz** establece que para dos funciones cualesquiera $f$ y $g$:
+    
     $$\left|\int f(t)\,g(t)\,dt\right|^2 \leq \int f^2(t)\,dt \cdot \int g^2(t)\,dt$$
 
     Aplicando esto al numerador con $f = s(t)$ y $g = h_{MF}(T_s-t)$:
