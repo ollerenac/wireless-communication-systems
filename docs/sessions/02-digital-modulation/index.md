@@ -87,11 +87,11 @@ En cada instante $t$ se multiplica el valor recibido por el valor esperado de la
 
 Los filtros operan por convolución: dado un filtro con respuesta al impulso $h(t)$, su salida ante la entrada $y(t)$ es:
 
-$$z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau \tag{6}$$
+$$z(T_s) = \int_0^{T_s} y(\tau)\,h(T_s - \tau)\,d\tau \tag{5}$$
 
 $z(T_s)$ es el escalar que sale del filtro al muestrearlo en $t = T_s$ — el número que pasará a la regla de decisión. Eligiendo $h(T_s - \tau) = s(\tau)$, es decir:
 
-$$h_{MF}(t) = s(T_s - t) \tag{5}$$
+$$h_{MF}(t) = s(T_s - t) \tag{6}$$
 
 !!! note "¿Qué significa $s(T_s - t)$?"
     Cuando $t$ avanza de $0$ a $T_s$, el argumento $T_s - t$ retrocede de $T_s$ a $0$: la señal se lee de atrás hacia adelante, como reproducir una grabación al revés. Ejemplo con una rampa $s(t) = t$: $s(T_s - t) = T_s - t$ baja de $T_s$ a $0$ — exactamente el orden inverso. Para BPSK con pulso rectangular ($s(t) = A$ constante), la inversión no cambia nada, por lo que ese caso no ilustra la operación.
@@ -100,14 +100,14 @@ la convolución en $t = T_s$ produce exactamente la correlación de la ecuación
 
 ¿Por qué este filtro es el óptimo y no otro? El criterio formal es maximizar el SNR a la salida en el instante de muestreo $t = T_s$. Aplicando la desigualdad de Cauchy-Schwarz:
 
-$$\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2}{N_0/2 \cdot \int_0^{T_s} h_{MF}^2(t)\,dt} \leq \frac{\|s\|^2}{N_0/2} = \frac{2E_s}{N_0}$$
+$$\text{SNR}_{out} = \frac{\left|\int_0^{T_s} s(t)\,h_{MF}(T_s-t)\,dt\right|^2}{N_0/2 \cdot \int_0^{T_s} h_{MF}^2(t)\,dt} \leq \frac{\|s\|^2}{N_0/2} = \frac{2E_s}{N_0} \tag{7}$$
 
 La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — exactamente el filtro adaptado. Ningún otro filtro extrae más información útil de $y(t)$.
 
 ??? note "Desglose de la fórmula del SNR y la desigualdad de Cauchy-Schwarz"
 
     **Numerador** — potencia de señal a la salida:
-    Si solo existiera señal (sin ruido), la salida del filtro en $t = T_s$ es la convolución de la ecuación (6) aplicada a $s(t)$. El cuadrado convierte amplitud en potencia.
+    Si solo existiera señal (sin ruido), la salida del filtro en $t = T_s$ es la convolución de la ecuación (5) aplicada a $s(t)$. El cuadrado convierte amplitud en potencia.
 
     **Denominador** — potencia de ruido a la salida:
     El ruido de entrada es blanco con densidad espectral $N_0/2$. Al pasar por un filtro con respuesta $h_{MF}(t)$, la potencia de ruido en la salida es $\frac{N_0}{2}\cdot\int_0^{T_s} h_{MF}^2(t)\,dt$.
@@ -128,7 +128,7 @@ La igualdad se alcanza únicamente cuando $h_{MF}(t) = c \cdot s(T_s - t)$ — e
 
 Tras el filtro adaptado, la muestra en $t = T_s$ tiene distribución:
 
-$$y = \sqrt{E_b} + n_c, \qquad n_c \sim \mathcal{N}\!\left(0,\, \frac{N_0}{2}\right) \quad \text{(si se envió } s_1\text{)}$$
+$$y = \sqrt{E_b} + n_c, \qquad n_c \sim \mathcal{N}\!\left(0,\, \frac{N_0}{2}\right) \quad \text{(si se envió } s_1\text{)} \tag{8}$$
 
 #### 2.2 Derivación de la BER
 
@@ -138,7 +138,7 @@ $$P_e = P(y < 0) = P\!\left(n_c < -\sqrt{E_b}\right) = P\!\left(\frac{n_c}{\sqrt
 
 Por simetría de la constelación, $P(y > 0 \mid s_2)$ da el mismo resultado, de modo que la BER de BPSK es:
 
-$$\boxed{P_b^{\text{BPSK}} = Q\!\left(\sqrt{2\gamma_b}\right)}$$
+$$\boxed{P_b^{\text{BPSK}} = Q\!\left(\sqrt{2\gamma_b}\right)} \tag{9}$$
 
 donde $\gamma_b = E_b/N_0$ es la SNR por bit. La función $Q(x) = \frac{1}{\sqrt{2\pi}}\int_x^\infty e^{-t^2/2}\,dt$ es la probabilidad de que una variable gaussiana estándar supere $x$.
 
@@ -150,7 +150,7 @@ Las dos campanas gaussianas representan las distribuciones de $y$ cuando se env�
 
 **Cerrando el círculo con la Sesión 01.** Ahora podemos derivar la BER sobre canal Rayleigh que usamos sin prueba en la Sesión 01. Si $\gamma = |h|^2 \gamma_b$ es la SNR instantánea y $|h|$ sigue una distribución Rayleigh, entonces $\gamma$ sigue una distribución exponencial: $f_\gamma(\gamma) = \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}$. La BER media es:
 
-$$P_b^{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) \cdot \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}\,d\gamma = \frac{1}{2}\!\left(1 - \sqrt{\frac{\bar{\gamma}}{1+\bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1)$$
+$$P_b^{\text{Rayleigh}} = \int_0^\infty Q\!\left(\sqrt{2\gamma}\right) \cdot \frac{1}{\bar{\gamma}}e^{-\gamma/\bar{\gamma}}\,d\gamma = \frac{1}{2}\!\left(1 - \sqrt{\frac{\bar{\gamma}}{1+\bar{\gamma}}}\right) \approx \frac{1}{4\bar{\gamma}} \quad (\bar{\gamma} \gg 1) \tag{10}$$
 
 La integral tiene solución cerrada gracias a la forma exponencial de la PDF de Rayleigh. El resultado, expresado con la convención $\gamma_b = E_b/N_0$ de esta sesión, es $P_b \approx 1/(4\bar{\gamma}_b)$. Esto es consistente con la Sesión 01, que usaba $\bar{\gamma} = \text{SNR} = P_r/P_n$: para BPSK, $\gamma = P_r/P_n = 2\,E_b/N_0 = 2\gamma_b$, de modo que $1/(2\bar{\gamma}) = 1/(4\bar{\gamma}_b)$ — la misma expresión con distinta etiqueta de SNR.
 
@@ -178,7 +178,7 @@ Cada símbolo porta 2 bits: uno en I, otro en Q. La energía por símbolo es $E_
 
 La detección QPSK proyecta el vector recibido sobre I y Q por separado, tomando una decisión BPSK en cada eje. La componente I recibe $\pm\sqrt{E_s/2} = \pm\sqrt{E_b}$ más ruido $\mathcal{N}(0, N_0/2)$. Esto es exactamente el problema BPSK con energía $E_b$, de modo que:
 
-$$P_b^{\text{QPSK}} = Q\!\left(\sqrt{2\gamma_b}\right)$$
+$$P_b^{\text{QPSK}} = Q\!\left(\sqrt{2\gamma_b}\right) \tag{11}$$
 
 **La BER por bit de QPSK es idéntica a la de BPSK para el mismo $E_b/N_0$**, pero QPSK transmite 2 bits por símbolo. Dicho de otro modo: QPSK transporta el doble de información en el mismo ancho de banda con la misma BER. Esta equivalencia es la razón por la que BPSK y QPSK se representan juntas en las curvas de BER.
 
@@ -190,7 +190,7 @@ QPSK coloca un punto por cuadrante. La suposición que hacía era: una sola dist
 
 Para M = 16, 64, 256 o 1024, la constelación es una cuadrícula de $\sqrt{M} \times \sqrt{M}$ puntos igualmente espaciados. Con energía media por símbolo fija $E_s$, el número de puntos aumenta pero la potencia total no: los puntos deben estar más juntos. La distancia mínima entre puntos adyacentes es:
 
-$$d_{\min} = \sqrt{\frac{6E_s}{M-1}}$$
+$$d_{\min} = \sqrt{\frac{6E_s}{M-1}} \tag{12}$$
 
 Esta expresión se obtiene de la condición de energía media para una rejilla uniforme: $E_s = \frac{2(M-1)}{3}\left(\frac{d_{\min}}{2}\right)^2$, que es la energía media de la coordenada I (o Q) de una PAM de $\sqrt{M}$ niveles. Despejando $d_{\min}$:
 
@@ -202,11 +202,11 @@ A medida que M crece, $d_{\min}$ decrece como $1/\sqrt{M-1}$: el espacio entre p
 
 M-QAM se puede descomponer en dos √M-PAM independientes (I y Q). Un punto interior (el caso más frecuente para M grande) tiene cuatro vecinos más cercanos. La probabilidad de error de símbolo aproximada, válida para SNR moderada-alta con codificación Gray, es:
 
-$$P_s \approx 4\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3E_s}{(M-1)N_0}}\right)$$
+$$P_s \approx 4\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3E_s}{(M-1)N_0}}\right) \tag{13}$$
 
 El factor $(1-1/\sqrt{M})$ corrige el hecho de que los puntos del borde y la esquina tienen menos vecinos que los interiores (tienen 3 y 2 vecinos respectivamente). Expresando $E_s = \log_2(M)\cdot E_b$ e identificando $k = \log_2 M$ bits por símbolo:
 
-$$\boxed{P_b^{M\text{-QAM}} \approx \frac{4}{\log_2 M}\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3\log_2 M}{M-1}\cdot\frac{E_b}{N_0}}\right)}$$
+$$\boxed{P_b^{M\text{-QAM}} \approx \frac{4}{\log_2 M}\left(1 - \frac{1}{\sqrt{M}}\right)Q\!\left(\sqrt{\frac{3\log_2 M}{M-1}\cdot\frac{E_b}{N_0}}\right)} \tag{14}$$
 
 La figura siguiente muestra las constelaciones QPSK, 16-QAM y 64-QAM con las etiquetas de bits de Gray.
 
@@ -251,7 +251,7 @@ Para M-QAM 2D, el código Gray se construye asignando un código Gray a cada col
 
 **BER ≈ SER / log₂M.** Con codificación Gray y SNR moderada-alta, la mayoría de los errores de símbolo se producen con el vecino más cercano — que difiere en 1 bit. Por tanto:
 
-$$P_b \approx \frac{P_s}{\log_2 M}$$
+$$P_b \approx \frac{P_s}{\log_2 M} \tag{15}$$
 
 Sin Gray coding, la relación puede ser hasta $P_b \leq P_s$ (siempre mejor con Gray que sin él), pero la ganancia puede ser de varios dB en la curva de BER. En los sistemas reales, M-QAM siempre se implementa con Gray coding; los estándares (3GPP NR, IEEE 802.11) lo especifican explícitamente.
 
