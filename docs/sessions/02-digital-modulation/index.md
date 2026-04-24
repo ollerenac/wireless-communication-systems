@@ -51,7 +51,9 @@ $$\hat{m} = \arg\min_m \, d(y, s_m) \tag{3}$$
 
 donde $\hat{m} \in \{1,\ldots,M\}$ es el índice del símbolo decidido, $y$ es la muestra recibida en el espacio de señales, y $d(y, s_m)$ es la distancia euclídea de la ecuación (2) entre el punto recibido y el símbolo candidato $s_m$.
 
-Este resultado, a menudo presentado como "obvio", tiene una justificación: el ruido $n \sim \mathcal{N}(0, N_0/2)$ es simétrico, de modo que el vector recibido se distribuye alrededor del símbolo transmitido. El símbolo más cercano es el que tiene mayor probabilidad *a posteriori*. Detrás de cada umbral de decisión hay un argumento de *maximum likelihood* — no es una convención arbitraria.
+Este resultado, a menudo presentado como "obvio", tiene una justificación explícita. Como $y = s_m + n$ y el ruido $n \sim \mathcal{N}(0, N_0/2)$ tiene media cero, el punto recibido $y$ es una variable aleatoria centrada en el símbolo transmitido $s_m$ — la nube de posibles realizaciones de $y$ tiene forma de campana gaussiana centrada en $s_m$. Cuanto más lejos está un símbolo candidato $s_k$ de $y$, menos probable es que $s_k$ haya generado ese $y$.
+
+Formalmente, por el teorema de Bayes: $P(s_m \mid y) \propto P(y \mid s_m)\cdot P(s_m)$. Cuando todos los símbolos son equiprobables ($P(s_m) = 1/M$), maximizar la probabilidad *a posteriori* $P(s_m \mid y)$ equivale a maximizar la verosimilitud $P(y \mid s_m)$, que es una gaussiana centrada en $s_m$ — y por tanto se maximiza eligiendo el $s_m$ más cercano a $y$. Detrás de cada frontera de decisión hay este argumento de *maximum likelihood*, no una convención arbitraria.
 
 La distancia entre el punto recibido y la frontera de decisión determina la probabilidad de error. Cuanto mayor es esa distancia en relación con la desviación estándar del ruido $\sqrt{N_0/2}$, menor es la BER.
 
