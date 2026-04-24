@@ -76,7 +76,7 @@ El sistema de modulación más simple coloca dos puntos en el eje real: $s_1 = +
 
 La señal recibida $y(t)$ es una función del tiempo — tiene un valor distinto en cada instante durante el intervalo $T_s$. La regla de decisión de la ecuación (3) opera sobre escalares, no sobre formas de onda, así que el receptor necesita comprimir $y(t)$ en un único número que conserve toda la información relevante para la decisión.
 
-La operación natural para medir cuánto se parece $y(t)$ a la señal transmitida $s(t)$ es la **correlación**:
+La operación natural para medir cuánto se parece $y(t)$ a cada símbolo candidato $s_m(t)$ del alfabeto es la **correlación**:
 
 $$c = \int_0^{T_s} y(t) \cdot s(t) \, dt \tag{4}$$
 
