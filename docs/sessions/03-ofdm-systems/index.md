@@ -2,7 +2,6 @@
 title: "Sesión 03 — Sistemas OFDM e Implementación"
 session: 3
 description: "Multiportadora, DFT, prefijo cíclico y ecualización de un tap: cómo OFDM convierte un canal frequency-selective en N canales flat."
-status: published
 ---
 
 # Sesión 03 — Sistemas OFDM e Implementación

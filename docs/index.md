@@ -45,21 +45,21 @@ Un tratamiento riguroso y moderno de las comunicaciones inalámbricas — desde 
 
 | # | Título | Estado |
 |---|--------|:------:|
-| 01 | [Modelado del Canal Inalámbrico](#) | Próximamente |
-| 02 | [Modulación Digital y Análisis de BER](#) | Próximamente |
-| 03 | [Sistemas OFDM e Implementación](#) | Próximamente |
-| 04 | [Codificación de Canal: LDPC y Códigos Polares](#) | Próximamente |
-| 05 | [Acceso Múltiple: OFDMA, NOMA y Gestión de Recursos de Radio](#) | Próximamente |
-| 06 | [Fundamentos MIMO y Capacidad](#) | Próximamente |
-| 07 | [MIMO Masivo y Conformación de Haz Digital](#) | Próximamente |
-| 08 | [Estimación de Canal: Métodos Clásicos](#) | Próximamente |
-| 09 | [Arquitectura 5G NR: Interfaz Radio y Numerología](#) | Próximamente |
-| 10 | [Comunicaciones mmWave y Sub-THz](#) | Próximamente |
-| 11 | [Superficies Inteligentes Reconfigurables (RIS)](#) | Próximamente |
-| 12 | [Detección e Integración con Comunicaciones (ISAC)](#) | Próximamente |
-| 13 | [Radio Cognitiva y Gestión Dinámica de Espectro](#) | Próximamente |
-| 14 | [IA/ML para Comunicaciones Inalámbricas](#) | Próximamente |
-| 15 | [6G: Fronteras, Investigación Abierta y Redes Especializadas](#) | Próximamente |
+| 01 | [Modelado del Canal Inalámbrico](sessions/01-channel-modeling/index.md) | Disponible |
+| 02 | [Modulación Digital y Análisis de BER](sessions/02-digital-modulation/index.md) | Disponible |
+| 03 | [Sistemas OFDM e Implementación](sessions/03-ofdm-systems/index.md) | Disponible |
+| 04 | [Codificación de Canal: LDPC y Códigos Polares](sessions/04-channel-coding/index.md) | Disponible |
+| 05 | Acceso Múltiple: OFDMA, NOMA y Gestión de Recursos de Radio | Próximamente |
+| 06 | Fundamentos MIMO y Capacidad | Próximamente |
+| 07 | MIMO Masivo y Conformación de Haz Digital | Próximamente |
+| 08 | Estimación de Canal: Métodos Clásicos | Próximamente |
+| 09 | Arquitectura 5G NR: Interfaz Radio y Numerología | Próximamente |
+| 10 | Comunicaciones mmWave y Sub-THz | Próximamente |
+| 11 | Superficies Inteligentes Reconfigurables (RIS) | Próximamente |
+| 12 | Detección e Integración con Comunicaciones (ISAC) | Próximamente |
+| 13 | Radio Cognitiva y Gestión Dinámica de Espectro | Próximamente |
+| 14 | IA/ML para Comunicaciones Inalámbricas | Próximamente |
+| 15 | 6G: Fronteras, Investigación Abierta y Redes Especializadas | Próximamente |
 
 ---
 

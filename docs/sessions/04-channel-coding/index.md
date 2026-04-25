@@ -2,7 +2,6 @@
 title: "Sesión 04 — Codificación de Canal: LDPC y Códigos Polar"
 session: 4
 description: "Del límite de Shannon a los códigos que lo alcanzan: LDPC con belief propagation y Polar con cancelación sucesiva, tal como se usan en 5G NR."
-status: published
 ---
 
 # Sesión 04 — Codificación de Canal: LDPC y Códigos Polar

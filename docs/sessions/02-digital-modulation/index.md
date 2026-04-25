@@ -2,7 +2,6 @@
 title: "Sesión 02 — Modulación Digital y Análisis de BER"
 session: 2
 description: "De la geometría del espacio de señales a la BER: BPSK, QPSK, M-QAM, Gray coding y adaptación de enlace en 5G NR."
-status: published
 ---
 
 # Sesión 02 — Modulación Digital y Análisis de BER
