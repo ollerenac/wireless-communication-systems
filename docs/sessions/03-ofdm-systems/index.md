@@ -30,10 +30,10 @@ donde $h[l]$ son los coeficientes de los $L$ taps del canal (ecos con distintos 
 
 Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo. La Figura 1 resume el problema en sus tres dimensiones:
 
-![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
-/// caption
-**Figura 1.** Los ecos del canal $h[l]$ con distintos retardos *(panel superior izquierda)* producen una respuesta en frecuencia $|H(f)|$ no uniforme *(panel superior derecha)*: la coherence bandwidth $B_c \ll B$ implica que distintas frecuencias reciben ganancias distintas. En el dominio temporal *(panel inferior)*, esto se manifiesta como ISI: el eco de $s_0$ llega durante la recepción de $s_1$, $s_2$, … — el símbolo observado $y[n]$ mezcla $L$ transmisiones pasadas.
-///
+<figure markdown="span">
+  ![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
+  <figcaption markdown="1">**Figura 1.** Los ecos del canal $h[l]$ con distintos retardos *(panel superior izquierda)* producen una respuesta en frecuencia $|H(f)|$ no uniforme *(panel superior derecha)*: la coherence bandwidth $B_c \ll B$ implica que distintas frecuencias reciben ganancias distintas. En el dominio temporal *(panel inferior)*, esto se manifiesta como ISI: el eco de $s_0$ llega durante la recepción de $s_1$, $s_2$, … — el símbolo observado $y[n]$ mezcla $L$ transmisiones pasadas.</figcaption>
+</figure>
 
 La solución es elegante: en lugar de un símbolo ancho que sufre ISI, transmitir $N$ símbolos simultáneamente en $N$ subportadoras tan estrechas que cada una vea un canal plano. Sobre un canal plano la ecualización se reduce a una división escalar — exactamente un tap por subportadora. Este esquema se denomina **OFDM** (Orthogonal Frequency-Division Multiplexing), y su viabilidad práctica depende de un hecho algebraico: la Transformada Discreta de Fourier (DFT) genera y separa las $N$ subportadoras en tiempo $\mathcal{O}(N \log N)$, sin $N$ moduladores independientes.
 
