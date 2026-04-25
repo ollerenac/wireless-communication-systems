@@ -28,6 +28,21 @@ $$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n]$$
 
 donde $h[l]$ son los coeficientes de los $L$ taps del canal (ecos con distintos retardos y ganancias), $x[n]$ es el símbolo transmitido, y $w[n]$ es ruido AWGN.
 
+??? note "¿Qué es un tap del canal?"
+    Al digitalizar la señal a frecuencia de muestreo $f_s = B$, el canal continuo $h(\tau)$ se convierte en una secuencia discreta $h[0], h[1], \ldots, h[L-1]$. Cada posición $l$ representa un retardo de $l/B$ segundos; si hay energía en esa posición, existe un eco con ese retardo.
+
+    Por ejemplo, si el canal tiene tres caminos físicos:
+
+    | Camino | Retardo | Tap |
+    |--------|---------|-----|
+    | Rayo directo | 0 ns | $h[0] = 0.9$ |
+    | Reflexión en edificio | 200 ns | $h[4] = 0.5$ |
+    | Reflexión lejana | 700 ns | $h[14] = 0.2$ |
+
+    entonces $L = 15$ — no porque haya 15 ecos, sino porque el eco más tardío ocupa el tap 14. Los taps intermedios sin eco valen cero.
+
+    La longitud $L$ la determina el delay spread: $L = \lceil \tau_{\max} \cdot B \rceil$. Con $\tau_{\max} = 1\ \mu\text{s}$ y $B = 20\ \text{MHz}$, $L = 20$ taps. El panel superior izquierdo de la Figura 1 ilustra exactamente esta estructura.
+
 Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo. La Figura 1 resume el problema en sus tres dimensiones:
 
 <figure markdown="span">
