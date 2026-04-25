@@ -26,7 +26,14 @@ El símbolo recibido es la convolución del símbolo transmitido con el canal:
 
 $$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n]$$
 
-Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras — el detector de la Sesión 02 (umbral simple) falla por completo porque el modelo ya no es $y = s + n$. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo.
+donde $h[l]$ son los coeficientes de los $L$ taps del canal (ecos con distintos retardos y ganancias), $x[n]$ es el símbolo transmitido, y $w[n]$ es ruido AWGN.
+
+Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo.
+
+![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
+/// caption
+**Figura 1.** *Arriba izquierda:* respuesta impulsional del canal $h[l]$ con cuatro taps (ecos a distintos retardos). *Arriba derecha:* respuesta en frecuencia $|H(f)|$ — el canal es frequency-selective: distintas frecuencias tienen ganancias distintas. La coherence bandwidth $B_c$ es mucho menor que el ancho de banda de señal $B$. *Abajo:* representación temporal de la ISI: cada símbolo recibido es la suma de $L$ réplicas retardadas de los símbolos transmitidos; el eco del símbolo $s_0$ contamina la recepción de $s_1$, $s_2$, …
+///
 
 La solución es elegante: en lugar de un símbolo ancho que sufre ISI, transmitir $N$ símbolos simultáneamente, cada uno en una subportadora tan estrecha que el canal parezca plano. Si el canal es plano, la ecualización se reduce a una división por un escalar — exactamente un tap por subportadora. La eficiencia computacional de este esquema depende de poder generar y separar las $N$ subportadoras sin N moduladores independientes. La Transformada de Fourier Discreta (DFT) hace exactamente eso.
 
