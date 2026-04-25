@@ -28,14 +28,16 @@ $$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n]$$
 
 donde $h[l]$ son los coeficientes de los $L$ taps del canal (ecos con distintos retardos y ganancias), $x[n]$ es el símbolo transmitido, y $w[n]$ es ruido AWGN.
 
-Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo.
+Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo. La Figura 1 resume el problema en sus tres dimensiones:
 
 ![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
 /// caption
-**Figura 1.** *Arriba izquierda:* respuesta impulsional del canal $h[l]$ con cuatro taps (ecos a distintos retardos). *Arriba derecha:* respuesta en frecuencia $|H(f)|$ — el canal es frequency-selective: distintas frecuencias tienen ganancias distintas. La coherence bandwidth $B_c$ es mucho menor que el ancho de banda de señal $B$. *Abajo:* representación temporal de la ISI: cada símbolo recibido es la suma de $L$ réplicas retardadas de los símbolos transmitidos; el eco del símbolo $s_0$ contamina la recepción de $s_1$, $s_2$, …
+**Figura 1.** Los ecos del canal $h[l]$ con distintos retardos *(panel superior izquierda)* producen una respuesta en frecuencia $|H(f)|$ no uniforme *(panel superior derecha)*: la coherence bandwidth $B_c \ll B$ implica que distintas frecuencias reciben ganancias distintas. En el dominio temporal *(panel inferior)*, esto se manifiesta como ISI: el eco de $s_0$ llega durante la recepción de $s_1$, $s_2$, … — el símbolo observado $y[n]$ mezcla $L$ transmisiones pasadas.
 ///
 
-La solución es elegante: en lugar de un símbolo ancho que sufre ISI, transmitir $N$ símbolos simultáneamente, cada uno en una subportadora tan estrecha que el canal parezca plano. Si el canal es plano, la ecualización se reduce a una división por un escalar — exactamente un tap por subportadora. La eficiencia computacional de este esquema depende de poder generar y separar las $N$ subportadoras sin N moduladores independientes. La Transformada de Fourier Discreta (DFT) hace exactamente eso.
+La solución es elegante: en lugar de un símbolo ancho que sufre ISI, transmitir $N$ símbolos simultáneamente en $N$ subportadoras tan estrechas que cada una vea un canal plano. Sobre un canal plano la ecualización se reduce a una división escalar — exactamente un tap por subportadora. Este esquema se denomina **OFDM** (Orthogonal Frequency-Division Multiplexing), y su viabilidad práctica depende de un hecho algebraico: la Transformada Discreta de Fourier (DFT) genera y separa las $N$ subportadoras en tiempo $\mathcal{O}(N \log N)$, sin $N$ moduladores independientes.
+
+Queda, sin embargo, un problema pendiente: la convolución del canal es *lineal*, pero la DFT asume una convolución *circular*. El puente entre ambas es el **cyclic prefix** (CP) — un bloque de muestras de guarda que transforma la convolución lineal en circular antes de aplicar la FFT. Esta sesión construye esa cadena completa: símbolos QAM → IFFT → CP → canal → FFT → ecualización de un tap.
 
 ---
 
