@@ -96,11 +96,17 @@ El principio multiportadora queda así establecido: dividir el canal en $N$ subp
 
 ### 2. Ortogonalidad y la DFT
 
-Una señal OFDM de $N$ subportadoras se construye sumando $N$ exponenciales complejas:
+La §1 estableció que necesitamos $N$ subportadoras simultáneas, cada una lo suficientemente estrecha para ver un canal plano. La subportadora $k$ ocupa la frecuencia $k \cdot \Delta f$ y, en tiempo continuo, es una exponencial compleja $e^{j2\pi k \Delta f \cdot t}$. Cada subportadora transporta un símbolo M-QAM $X[k]$.
+
+Al muestrear a frecuencia $f_s = N \cdot \Delta f$ — es decir, $N$ muestras por símbolo OFDM de duración $T_s = 1/\Delta f$ — el instante $t = n/f_s$ convierte el exponente en:
+
+$$e^{j2\pi k \Delta f \cdot \frac{n}{N \cdot \Delta f}} = e^{j2\pi kn/N}$$
+
+El $\Delta f$ se cancela y el exponente queda en función únicamente de $k$ y $n$. La señal transmitida es la suma de las $N$ subportadoras moduladas por sus respectivos símbolos:
 
 $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0, 1, \ldots, N-1$$
 
-donde $X[k]$ es el símbolo M-QAM asignado a la subportadora $k$. Esta expresión es exactamente la **IFFT** del vector $\mathbf{X} = [X[0], X[1], \ldots, X[N-1]]^T$.
+Esta expresión es exactamente la **IFFT** del vector $\mathbf{X} = [X[0], X[1], \ldots, X[N-1]]^T$: el transmisor OFDM es una IFFT.
 
 **¿Por qué son ortogonales las subportadoras?** Las bases de la DFT satisfacen:
 
