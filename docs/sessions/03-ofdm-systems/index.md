@@ -102,18 +102,19 @@ Al muestrear a frecuencia $f_s = N \cdot \Delta f$ — es decir, $N$ muestras po
 
 $$e^{j2\pi k \Delta f \cdot \frac{n}{N \cdot \Delta f}} = e^{j2\pi kn/N}$$
 
-El $\Delta f$ se cancela y el exponente queda en función únicamente de $k$ y $n$. La señal transmitida es la suma de las $N$ subportadoras moduladas por sus respectivos símbolos:
+El $\Delta f$ se cancela y el exponente queda en función únicamente de $k$ y $n$. La señal transmitida $x[n]$ es la suma de las $N$ subportadoras, cada una ponderada por su símbolo $X[k]$:
 
 $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0, 1, \ldots, N-1$$
 
-Esta expresión es exactamente la **IFFT** del vector $\mathbf{X} = [X[0], X[1], \ldots, X[N-1]]^T$: el transmisor OFDM es una IFFT.
+Es importante distinguir los dos dominios: $X[k]$ vive en **frecuencia** — es el símbolo M-QAM asignado a la subportadora $k$, su amplitud y fase. $x[n]$ vive en **tiempo** — es la muestra $n$ de la señal física que se transmite. La IFFT es precisamente la operación que convierte el vector de frecuencia $\mathbf{X} = [X[0], \ldots, X[N-1]]^T$ en el bloque de tiempo $\mathbf{x} = [x[0], \ldots, x[N-1]]^T$: el transmisor OFDM es una IFFT.
 
 ??? note "La granularidad temporal $1/f_s$ como unidad fundamental"
     Al muestrear a $f_s$, se divide el tiempo en intervalos de $1/f_s$ segundos. Todo lo demás queda encadenado a esa granularidad:
 
-    - Un símbolo OFDM dura $N$ intervalos → $T_s = N/f_s$
-    - El espaciado entre subportadoras es $\Delta f = 1/T_s = f_s/N$ — un intervalo de frecuencia por cada intervalo de tiempo
-    - La subportadora $k$ completa exactamente $k$ ciclos completos en los $N$ intervalos del símbolo
+    - El símbolo OFDM tiene $N$ muestras porque hay $N$ subportadoras: la IFFT toma $N$ entradas en frecuencia $X[k]$ y produce $N$ salidas en tiempo $x[n]$. No es la resolución del ADC la que fija $N$ — es el número de subportadoras.
+    - El símbolo dura $T_s = N/f_s$ segundos — el tiempo de transmitir esas $N$ muestras a ritmo $f_s$.
+    - El espaciado entre subportadoras resulta $\Delta f = 1/T_s = f_s/N$, de modo que cada subportadora completa exactamente un número entero de ciclos en $T_s$.
+    - La subportadora $k$ completa exactamente $k$ ciclos completos en los $N$ intervalos del símbolo.
 
     Esto explica por qué el exponente colapsa a $e^{j2\pi kn/N}$ sin parámetros sueltos: $f_s$ y $\Delta f$ se cancelan porque están relacionados por $N$. Si $\Delta f$ no fuera exactamente $f_s/N$, la cancelación no ocurriría y la ortogonalidad se rompería.
 
