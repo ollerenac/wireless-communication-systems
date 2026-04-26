@@ -108,6 +108,17 @@ $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0,
 
 Esta expresión es exactamente la **IFFT** del vector $\mathbf{X} = [X[0], X[1], \ldots, X[N-1]]^T$: el transmisor OFDM es una IFFT.
 
+??? note "La granularidad temporal $1/f_s$ como unidad fundamental"
+    Al muestrear a $f_s$, se divide el tiempo en intervalos de $1/f_s$ segundos. Todo lo demás queda encadenado a esa granularidad:
+
+    - Un símbolo OFDM dura $N$ intervalos → $T_s = N/f_s$
+    - El espaciado entre subportadoras es $\Delta f = 1/T_s = f_s/N$ — un intervalo de frecuencia por cada intervalo de tiempo
+    - La subportadora $k$ completa exactamente $k$ ciclos completos en los $N$ intervalos del símbolo
+
+    Esto explica por qué el exponente colapsa a $e^{j2\pi kn/N}$ sin parámetros sueltos: $f_s$ y $\Delta f$ se cancelan porque están relacionados por $N$. Si $\Delta f$ no fuera exactamente $f_s/N$, la cancelación no ocurriría y la ortogonalidad se rompería.
+
+    La imagen mental: *un estroboscopio que dispara cada $1/f_s$ segundos; un símbolo OFDM son $N$ destellos; la subportadora $k$ completa exactamente $k$ vueltas entre el destello 0 y el destello $N-1$.*
+
 **¿Por qué son ortogonales las subportadoras?** Las bases de la DFT satisfacen:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi kn/N} e^{-j2\pi ln/N} = \begin{cases} 1 & k = l \\ 0 & k \neq l \end{cases}$$
