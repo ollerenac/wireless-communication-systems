@@ -90,6 +90,8 @@ $$N = \frac{B}{\Delta f} = \frac{20\ \text{MHz}}{15\ \text{kHz}} \approx 1333$$
 
 Para que la implementación hardware de la FFT sea eficiente, $N$ se elige como potencia de 2; el valor mínimo que supera las 1333 subportadoras necesarias es $N = 2048$. Las 715 posiciones sobrantes se usan como subportadoras de guarda en los bordes de banda para evitar interferencia con canales adyacentes.
 
+El principio multiportadora queda así establecido: dividir el canal en $N$ subportadoras estrechas convierte un problema de ecualización de complejidad $\mathcal{O}(L^2)$ en $N$ divisiones escalares independientes. Queda, sin embargo, la pregunta de implementación: ¿cómo se generan y separan $N$ subportadoras simultáneas sin $N$ moduladores físicos? La respuesta exige que las subportadoras sean *mutuamente ortogonales* — y que exista una operación única capaz de generarlas todas a la vez en el transmisor y separarlas todas a la vez en el receptor. Esa operación es la DFT.
+
 ---
 
 ### 2. Ortogonalidad y la DFT
