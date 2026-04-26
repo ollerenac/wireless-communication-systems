@@ -70,19 +70,25 @@ cada subportadora ve un canal aproximadamente plano, y la ecualización por subp
 
 **¿Cuántas subportadoras hacen falta?** Despejando $N$ de la condición $\Delta f \ll B_c$:
 
-$$N \gg \frac{B}{B_c} = \frac{B \cdot 5\sigma_\tau}{1} = 5 \cdot \sigma_\tau \cdot B$$
+$$N \gg \frac{B}{B_c} = 5 \cdot \sigma_\tau \cdot B$$
 
-Para un canal UMi con $\sigma_\tau = 100\ \text{ns}$ y $B = 20\ \text{MHz}$: $N \gg 5 \times 100 \times 10^{-9} \times 20 \times 10^6 = 10$. En la práctica se usa $N = 2048$ para tener amplio margen y poder añadir subportadoras de guarda en los bordes de banda.
+Para un canal Urban Macro con $\sigma_\tau = 1\ \mu\text{s}$ y $B = 20\ \text{MHz}$: $N \gg 5 \times 10^{-6} \times 20 \times 10^6 = 100$. Este es el piso mínimo para evitar ISI — cualquier $N$ por encima de 100 satisface la condición de ISI.
 
 Existe sin embargo una restricción opuesta. Si el canal varía rápidamente en el tiempo (alto Doppler), las subportadoras vecinas se mezclan — **inter-carrier interference** (ICI). La condición para evitar ICI es que $\Delta f \gg f_{D,\text{max}}$:
 
 $$\frac{B}{N} \gg f_{D,\text{max}} \Rightarrow N \ll \frac{B}{f_{D,\text{max}}}$$
 
-Estas dos desigualdades encuadran el rango de N válido:
+Estas dos desigualdades encuadran el rango de $N$ válido:
 
 $$\boxed{5\sigma_\tau B \ll N \ll \frac{B}{f_{D,\text{max}}}}$$
 
-Para el canal UMi del ejemplo, con $v = 120\ \text{km/h}$, $f_c = 2\ \text{GHz}$, $f_{D,\text{max}} \approx 222\ \text{Hz}$: $N \ll 20\times10^6/222 \approx 90{,}000$. Con $N = 2048$ se satisfacen holgadamente ambas condiciones.
+Con $v = 120\ \text{km/h}$, $f_c = 2\ \text{GHz}$, $f_{D,\text{max}} \approx 222\ \text{Hz}$: $N \ll 20\times10^6/222 \approx 90{,}000$. El rango válido es $100 \ll N \ll 90{,}000$.
+
+**¿Por qué 5G NR usa exactamente $N = 2048$?** El espaciado entre subportadoras $\Delta f$ no se elige al límite — se fija en $\Delta f = 15\ \text{kHz}$ (numerología $\mu = 0$ de 5G NR), un valor que deja margen cómodo frente al Doppler. De ahí se deriva $N$ directamente:
+
+$$N = \frac{B}{\Delta f} = \frac{20\ \text{MHz}}{15\ \text{kHz}} \approx 1333$$
+
+El algoritmo FFT exige potencias de 2, así que se redondea al siguiente valor: $N = 2048$. Las 715 posiciones sobrantes se usan como subportadoras de guarda en los bordes de banda para evitar interferencia con canales adyacentes.
 
 ---
 
