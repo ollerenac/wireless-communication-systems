@@ -120,11 +120,17 @@ Es importante distinguir los dos dominios: $X[k]$ vive en **frecuencia** — es 
 
     La imagen mental: *un estroboscopio que dispara cada $1/f_s$ segundos; un símbolo OFDM son $N$ destellos; la subportadora $k$ completa exactamente $k$ vueltas entre el destello 0 y el destello $N-1$.*
 
-**¿Por qué son ortogonales las subportadoras?** Las bases de la DFT satisfacen:
+**¿Por qué son ortogonales las subportadoras?** Para extraer el símbolo $X[k]$ de la señal recibida, el receptor multiplica muestra a muestra por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
-$$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi kn/N} e^{-j2\pi ln/N} = \begin{cases} 1 & k = l \\ 0 & k \neq l \end{cases}$$
+$$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} \;\propto\; \sum_{l} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
-Esta propiedad garantiza que el receptor puede recuperar cada $X[k]$ sin interferencia de las demás subportadoras: basta aplicar la FFT a la señal recibida. Dos subportadoras adyacentes tienen exactamente un ciclo de diferencia de fase en el intervalo $[0, N-1]$ — sus productos se cancelan en la suma.
+El término de interferencia vale 1 cuando $l = k$ y 0 en cualquier otro caso:
+
+$$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases}$$
+
+Por eso de la suma sobre $l$ solo sobrevive el término propio: el receptor recupera $X[k]$ sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT.
+
+¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero: las contribuciones de cada mitad del círculo se anulan mutuamente. Para subportadoras adyacentes ($|l-k| = 1$): una vuelta completa, suma cero. Para subportadoras dos posiciones aparte ($|l-k| = 2$): dos vueltas, suma cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
 
 **Por qué funciona sobre el canal.** Las exponenciales complejas $e^{j2\pi kn/N}$ son **autofunciones** de cualquier sistema LTI: si la entrada es $e^{j2\pi kn/N}$, la salida es $H[k]\, e^{j2\pi kn/N}$, donde $H[k]$ es la DFT del canal. Esta propiedad explica el corazón de OFDM: el canal convierte la entrada $X[k]$ en $H[k]X[k]$ subportadora a subportadora, sin mezclar las subportadoras entre sí. La ecualización queda reducida a una división escalar por subportadora.
 
