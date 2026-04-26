@@ -120,7 +120,7 @@ Es importante distinguir los dos dominios: $X[k]$ vive en **frecuencia** — es 
 
     La imagen mental: *un estroboscopio que dispara cada $1/f_s$ segundos; un símbolo OFDM son $N$ destellos; la subportadora $k$ completa exactamente $k$ vueltas entre el destello 0 y el destello $N-1$.*
 
-**¿Por qué son ortogonales las subportadoras?** Para extraer el símbolo $X[k]$ de la señal recibida, el receptor multiplica muestra a muestra por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
+**¿Por qué son ortogonales las subportadoras?** Para extraer el símbolo $X[k]$ de la señal recibida, el receptor multiplica muestra a muestra (x[n]) por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
@@ -130,7 +130,27 @@ $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 
 
 Por eso de la suma sobre $l$ solo sobrevive el término propio: el receptor recupera $X[k]$ sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT.
 
-¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero: las contribuciones de cada mitad del círculo se anulan mutuamente. Para subportadoras adyacentes ($|l-k| = 1$): una vuelta completa, suma cero. Para subportadoras dos posiciones aparte ($|l-k| = 2$): dos vueltas, suma cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
+¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
+
+??? note "¿Por qué la suma de vueltas completas es cero?"
+    Lo que es cero es la **suma vectorial** de todos los términos — no cada exponencial individual. Cada término tiene módulo 1 (está sobre el círculo unitario), pero al sumarlos como vectores el resultado neto es cero.
+
+    Ejemplo concreto con $N = 4$ y $l - k = 1$:
+
+    | $n$ | $e^{j2\pi n/4}$ | Dirección |
+    |-----|-----------------|-----------|
+    | 0 | $1$ | derecha |
+    | 1 | $j$ | arriba |
+    | 2 | $-1$ | izquierda |
+    | 3 | $-j$ | abajo |
+
+    Suma: $(1) + (j) + (-1) + (-j) = 0$. Los cuatro vectores están simétricamente repartidos — se cancelan por pares.
+
+    La prueba algebraica general: la suma es una serie geométrica con razón $r = e^{j2\pi(l-k)/N}$:
+
+    $$\sum_{n=0}^{N-1} r^n = \frac{1 - r^N}{1 - r} = \frac{1 - e^{j2\pi(l-k)}}{1 - e^{j2\pi(l-k)/N}}$$
+
+    El numerador es $1 - e^{j2\pi(l-k)}$. Como $l - k$ es un entero, $e^{j2\pi(l-k)} = 1$, y el numerador vale exactamente cero. El denominador no es cero porque $l \neq k$. Resultado: $0$.
 
 **Por qué funciona sobre el canal.** Las exponenciales complejas $e^{j2\pi kn/N}$ son **autofunciones** de cualquier sistema LTI: si la entrada es $e^{j2\pi kn/N}$, la salida es $H[k]\, e^{j2\pi kn/N}$, donde $H[k]$ es la DFT del canal. Esta propiedad explica el corazón de OFDM: el canal convierte la entrada $X[k]$ en $H[k]X[k]$ subportadora a subportadora, sin mezclar las subportadoras entre sí. La ecualización queda reducida a una división escalar por subportadora.
 
