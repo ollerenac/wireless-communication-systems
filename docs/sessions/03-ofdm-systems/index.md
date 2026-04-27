@@ -265,7 +265,9 @@ $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}$$
     Que $x[2]=0$ aunque $X[0]$ y $X[1]$ son no nulos es resultado de la interferencia destructiva de las dos subportadoras en ese instante temporal.
 
 **(b)** Verifica la ortogonalidad entre las subportadoras $k = 0$ y $k = 1$: calcula la suma
+
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi \cdot 0 \cdot n/N}\, e^{-j2\pi \cdot 1 \cdot n/N}$$
+
 y comprueba que vale 0.
 
 ??? example "Solución (b)"
