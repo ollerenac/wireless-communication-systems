@@ -243,16 +243,26 @@ $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}$$
 
 ??? example "Solución (a)"
 
-    Solo $X[0]$ y $X[1]$ son no nulos, así que:
+    Sustituimos $N = 4$ y los valores $X[0]=1$, $X[1]=1$, $X[2]=0$, $X[3]=0$ en la fórmula IFFT:
 
-    $$x[n] = \frac{1}{2}\left(1 + e^{j\pi n/2}\right)$$
+    $$x[n] = \frac{1}{\sqrt{4}}\sum_{k=0}^{3} X[k]\, e^{j2\pi kn/4}$$
 
-    | $n$ | $e^{j\pi n/2}$ | $x[n]$ |
-    |-----|----------------|--------|
-    | 0 | $1$ | $1$ |
-    | 1 | $j$ | $\tfrac{1}{2}(1+j)$ |
-    | 2 | $-1$ | $0$ |
-    | 3 | $-j$ | $\tfrac{1}{2}(1-j)$ |
+    Los términos $k=2$ y $k=3$ no contribuyen porque $X[2]=X[3]=0$:
+
+    $$x[n] = \frac{1}{2}\left[X[0]\,e^{j2\pi \cdot 0 \cdot n/4} + X[1]\,e^{j2\pi \cdot 1 \cdot n/4} + 0 + 0\right]
+           = \frac{1}{2}\left(1\cdot 1 + 1\cdot e^{j\pi n/2}\right)
+           = \frac{1}{2}\left(1 + e^{j\pi n/2}\right)$$
+
+    Evaluamos cada muestra usando $e^{j\theta} = \cos\theta + j\sin\theta$:
+
+    | $n$ | $\pi n/2$ | $e^{j\pi n/2}$ | $x[n] = \tfrac{1}{2}(1 + e^{j\pi n/2})$ |
+    |-----|-----------|----------------|------------------------------------------|
+    | 0 | $0$ | $1$ | $\tfrac{1}{2}(1+1) = 1$ |
+    | 1 | $\pi/2$ | $j$ | $\tfrac{1}{2}(1+j)$ |
+    | 2 | $\pi$ | $-1$ | $\tfrac{1}{2}(1-1) = 0$ |
+    | 3 | $3\pi/2$ | $-j$ | $\tfrac{1}{2}(1-j)$ |
+
+    Que $x[2]=0$ aunque $X[0]$ y $X[1]$ son no nulos es resultado de la interferencia destructiva de las dos subportadoras en ese instante temporal.
 
 **(b)** Verifica la ortogonalidad entre las subportadoras $k = 0$ y $k = 1$: calcula la suma
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi \cdot 0 \cdot n/N}\, e^{-j2\pi \cdot 1 \cdot n/N}$$
@@ -573,7 +583,7 @@ $$h[l] = \begin{cases} 0{,}8 & l = 0 \\ 0{,}6 & l = 8 \end{cases}$$
 
 ??? example "Solución (a)"
 
-    El canal tiene $L = 2$ caminos, con el camino más largo en $l = 8$. La longitud máxima que puede soportar el CP es $N_{CP} = 16 \geq L - 1 = 8 - 0 = 8$ ✓. El CP es más que suficiente.
+    El canal tiene **2 caminos** (taps $l=0$ y $l=8$), pero su longitud discreta es $L = 9$: la respuesta impulsional ocupa los índices $l = 0, 1, \ldots, 8$, aunque solo dos de ellos son no nulos. La condición CP exige $N_{CP} \geq L - 1 = 8$. Con $N_{CP} = 16 \geq 8$ ✓, el CP es más que suficiente — cubre hasta un tap de retardo $l = 16$.
 
 **(b)** Calcula $H[k]$ para $k = 0$ (subportadora DC) y $k = 8$.
 
