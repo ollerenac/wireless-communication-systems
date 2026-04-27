@@ -173,6 +173,21 @@ Por eso de la suma sobre $l$ solo sobrevive el término propio: el receptor recu
 
 **Por qué funciona sobre el canal.** Las exponenciales complejas $e^{j2\pi kn/N}$ son **autofunciones** de cualquier sistema LTI: si la entrada es $e^{j2\pi kn/N}$, la salida es $H[k]\, e^{j2\pi kn/N}$, donde $H[k]$ es la DFT del canal. Esta propiedad explica el corazón de OFDM: el canal convierte la entrada $X[k]$ en $H[k]X[k]$ subportadora a subportadora, sin mezclar las subportadoras entre sí. La ecualización queda reducida a una división escalar por subportadora.
 
+??? note "¿Qué significa autofunción y qué es $H[k]$?"
+    Una **autofunción** de un sistema es una señal que, al pasar por él, sale con la misma forma — solo multiplicada por una constante. En el caso de una subportadora $k$ a través del canal:
+
+    $$\text{entra: } e^{j2\pi kn/N} \quad\longrightarrow\quad \text{sale: } H[k]\cdot e^{j2\pi kn/N}$$
+
+    La exponencial sale intacta — misma frecuencia, misma forma — solo con la amplitud y fase modificadas por el escalar complejo $H[k]$. Cualquier otra señal (un pulso, por ejemplo) saldría deformada; las exponenciales complejas son las únicas que el canal no distorsiona en forma.
+
+    **¿De dónde sale $H[k]$?** Al calcular la salida del canal para la entrada $e^{j2\pi kn/N}$:
+
+    $$y[n] = \sum_{l=0}^{L-1} h[l]\, e^{j2\pi k(n-l)/N} = e^{j2\pi kn/N} \underbrace{\sum_{l=0}^{L-1} h[l]\, e^{-j2\pi kl/N}}_{H[k]}$$
+
+    El factor que aparece es exactamente la DFT de los taps del canal $h[l]$ evaluada en la frecuencia $k$. $H[k]$ es un número complejo distinto para cada subportadora — cuánto atenúa y cuánto rota en fase el canal a esa frecuencia concreta.
+
+    La consecuencia práctica: en tiempo, el canal es una convolución que mezcla $L$ símbolos. En frecuencia, es $N$ multiplicaciones escalares independientes — una por subportadora. La DFT *diagonaliza* el canal.
+
 La figura siguiente muestra el espectro de potencia de las $N$ subportadoras individuales y su superposición.
 
 ![Subportadoras OFDM en frecuencia](figures/ofdm-subcarriers.png)
