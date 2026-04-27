@@ -230,6 +230,48 @@ La figura siguiente muestra el espectro de potencia de las $N$ subportadoras ind
 
 Cada subportadora tiene forma de sinc en frecuencia, con nulos exactamente en los centros del resto de subportadoras. Cada una alcanza su máximo ($= 1$) en su propia frecuencia $k \cdot \Delta f$, donde todas las demás valen cero. Las subportadoras se solapan espectralmente — en ningún punto del eje de frecuencias hay separación vacía entre ellas — y sin embargo no interfieren entre sí porque la ortogonalidad garantiza la cancelación en la suma, no la separación física. Esto es lo que hace a OFDM más eficiente en espectro que los sistemas FDM con bandas de guarda.
 
+#### Ejercicio 2
+
+Considera un sistema OFDM con $N = 4$ subportadoras. El transmisor asigna los símbolos: $X[0] = 1$, $X[1] = 1$, $X[2] = 0$, $X[3] = 0$.
+
+**(a)** Calcula las 4 muestras en tiempo $x[0], x[1], x[2], x[3]$ usando la fórmula IFFT:
+$$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}$$
+
+**(b)** Verifica la ortogonalidad entre las subportadoras $k = 0$ y $k = 1$: calcula la suma
+$$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi \cdot 0 \cdot n/N}\, e^{-j2\pi \cdot 1 \cdot n/N}$$
+y comprueba que vale 0.
+
+**(c)** El canal tiene respuesta impulsional $h[0] = 1$, $h[1] = 0{,}5$ (dos caminos). Calcula $H[k]$ para $k = 0$ y $k = 1$ usando $H[k] = \sum_l h[l]\, e^{-j2\pi kl/N}$. ¿Qué símbolo llega al receptor en la subportadora $k = 1$? *(Supón que el cyclic prefix ha sido añadido y eliminado correctamente — se derivará en §3.)*
+
+??? example "Solución"
+
+    **(a)** Solo $X[0]$ y $X[1]$ son no nulos, así que:
+
+    $$x[n] = \frac{1}{2}\left(1 + e^{j2\pi n/4}\right) = \frac{1}{2}\left(1 + e^{j\pi n/2}\right)$$
+
+    | $n$ | $e^{j\pi n/2}$ | $x[n]$ |
+    |-----|----------------|--------|
+    | 0 | $1$ | $1$ |
+    | 1 | $j$ | $\tfrac{1}{2}(1+j)$ |
+    | 2 | $-1$ | $0$ |
+    | 3 | $-j$ | $\tfrac{1}{2}(1-j)$ |
+
+    **(b)** El exponente es $e^{-j2\pi \cdot 1 \cdot n/4} = e^{-j\pi n/2}$:
+
+    $$\frac{1}{4}\left(1 + e^{-j\pi/2} + e^{-j\pi} + e^{-j3\pi/2}\right) = \frac{1}{4}(1 - j - 1 + j) = \frac{1}{4}\cdot 0 = 0\ \checkmark$$
+
+    Los cuatro términos se cancelan por pares: $(1,-1)$ en la parte real y $(j,-j)$ en la imaginaria.
+
+    **(c)** $H[k] = h[0] + h[1]\, e^{-j2\pi k/4} = 1 + 0{,}5\, e^{-j\pi k/2}$
+
+    - $H[0] = 1 + 0{,}5 \cdot 1 = \mathbf{1{,}5}$ (suma constructiva: ambos caminos en fase)
+    - $H[1] = 1 + 0{,}5\, e^{-j\pi/2} = 1 - 0{,}5j$
+
+    El símbolo recibido en $k = 1$ (sin ruido):
+    $$Y[1] = H[1] \cdot X[1] = (1 - 0{,}5j) \cdot 1 = \mathbf{1 - 0{,}5j}$$
+
+    El canal no mezcla subportadoras — simplemente rota y escala $X[1]$. Para recuperar $X[1]$, el receptor divide: $\hat{X}[1] = Y[1]/H[1] = 1$.
+
 ---
 
 ### 3. El Prefijo Cíclico
