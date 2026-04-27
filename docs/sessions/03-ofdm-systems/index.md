@@ -92,6 +92,42 @@ Para que la implementación hardware de la FFT sea eficiente, $N$ se elige como 
 
 El principio multiportadora queda así establecido: dividir el canal en $N$ subportadoras estrechas convierte un problema de ecualización de complejidad $\mathcal{O}(L^2)$ en $N$ divisiones escalares independientes. Queda, sin embargo, la pregunta de implementación: ¿cómo se generan y separan $N$ subportadoras simultáneas sin $N$ moduladores físicos? La respuesta exige que las subportadoras sean *mutuamente ortogonales* — y que exista una operación única capaz de generarlas todas a la vez en el transmisor y separarlas todas a la vez en el receptor. Esa operación es la DFT.
 
+#### Ejercicio 1
+
+Un sistema OFDM opera en un canal con delay spread $\sigma_\tau = 5\ \mu\text{s}$ (entorno UMa típico) y ancho de banda total $B = 10\ \text{MHz}$.
+
+**(a)** ¿Cuántas subportadoras $N$ se necesitan como mínimo para que el canal sea plano en cada subportadora? Usa la condición $\Delta f \leq B_c/10$.
+
+**(b)** ¿Cuántas muestras de CP $N_{CP}$ se necesitan para cubrir $\tau_{\max} = 5\sigma_\tau$? ¿Cuál es el overhead de CP en porcentaje? *(Anticipo de §3 — puede dejarse pendiente hasta completar el Prefijo Cíclico.)*
+
+**(c)** Si la velocidad del terminal es $v = 100\ \text{km/h}$ y $f_c = 900\ \text{MHz}$, calcula $f_{D,\text{max}}$ y verifica que $N$ cumple la condición anti-ICI $\Delta f \gg f_{D,\text{max}}$.
+
+??? example "Solución"
+
+    **(a)** $B_c \approx 1/(5\sigma_\tau) = 1/(5\times5\times10^{-6}) = 40\ \text{kHz}$.
+
+    Condición: $\Delta f \leq B_c/10 = 4\ \text{kHz}$.
+
+    $\Delta f = B/N \leq 4\ \text{kHz} \Rightarrow N \geq B/4\ \text{kHz} = 10\times10^6/4000 = \mathbf{2500}$.
+
+    En la práctica se elegiría la potencia de 2 superior: $N = 4096$.
+
+    **(b)** $\tau_{\max} = 5\sigma_\tau = 25\ \mu\text{s}$. Período de muestreo: $T_{\text{samp}} = 1/B = 100\ \text{ns}$.
+
+    $N_{CP} = \lceil\tau_{\max}/T_{\text{samp}}\rceil = \lceil 25\times10^{-6} / 100\times10^{-9}\rceil = \lceil 250\rceil = \mathbf{250\ \text{muestras}}$.
+
+    Con $N = 4096$: overhead CP $= N_{CP}/(N + N_{CP}) = 250/(4096+250) = 250/4346 \approx \mathbf{5{,}7\%}$.
+
+    **(c)** $v = 100/3{,}6 \approx 27{,}8\ \text{m/s}$, $\lambda = c/f_c = 3\times10^8/9\times10^8 = 1/3\ \text{m}$.
+
+    $f_{D,\text{max}} = v/\lambda = 27{,}8/(1/3) \approx 83{,}3\ \text{Hz}$.
+
+    $\Delta f = B/N = 10\times10^6/4096 \approx 2{,}44\ \text{kHz}$.
+
+    Ratio: $\Delta f/f_{D,\text{max}} = 2440/83{,}3 \approx 29 \gg 1$ ✓
+
+    La condición anti-ICI se cumple con amplio margen: el Doppler desplaza las subportadoras menos del 3.4% del espaciado entre ellas.
+
 ---
 
 ### 2. Ortogonalidad y la DFT
@@ -366,44 +402,6 @@ Las técnicas de reducción de PAPR (clipping, tone reservation, SLM) se aplican
 
 ### Ejercicio 1
 
-Un sistema OFDM opera en un canal con delay spread $\sigma_\tau = 5\ \mu\text{s}$ (entorno UMa típico) y ancho de banda total $B = 10\ \text{MHz}$.
-
-**(a)** ¿Cuántas subportadoras $N$ se necesitan como mínimo para que el canal sea plano en cada subportadora? Usa la condición $\Delta f \leq B_c/10$.
-
-**(b)** ¿Cuántas muestras de CP $N_{CP}$ se necesitan para cubrir $\tau_{\max} = 5\sigma_\tau$? ¿Cuál es el overhead de CP en porcentaje?
-
-**(c)** Si la velocidad del terminal es $v = 100\ \text{km/h}$ y $f_c = 900\ \text{MHz}$, calcula $f_{D,\text{max}}$ y verifica que $N$ cumple la condición anti-ICI $\Delta f \gg f_{D,\text{max}}$.
-
-??? example "Solución"
-
-    **(a)** $B_c \approx 1/(5\sigma_\tau) = 1/(5\times5\times10^{-6}) = 40\ \text{kHz}$.
-
-    Condición: $\Delta f \leq B_c/10 = 4\ \text{kHz}$.
-
-    $\Delta f = B/N \leq 4\ \text{kHz} \Rightarrow N \geq B/4\ \text{kHz} = 10\times10^6/4000 = \mathbf{2500}$.
-
-    En la práctica se elegiría la potencia de 2 superior: $N = 4096$.
-
-    **(b)** $\tau_{\max} = 5\sigma_\tau = 25\ \mu\text{s}$. Período de muestreo: $T_{\text{samp}} = 1/B = 100\ \text{ns}$.
-
-    $N_{CP} = \lceil\tau_{\max}/T_{\text{samp}}\rceil = \lceil 25\times10^{-6} / 100\times10^{-9}\rceil = \lceil 250\rceil = \mathbf{250\ \text{muestras}}$.
-
-    Con $N = 4096$: overhead CP $= N_{CP}/(N + N_{CP}) = 250/(4096+250) = 250/4346 \approx \mathbf{5{,}7\%}$.
-
-    **(c)** $v = 100/3{,}6 \approx 27{,}8\ \text{m/s}$, $\lambda = c/f_c = 3\times10^8/9\times10^8 = 1/3\ \text{m}$.
-
-    $f_{D,\text{max}} = v/\lambda = 27{,}8/(1/3) \approx 83{,}3\ \text{Hz}$.
-
-    $\Delta f = B/N = 10\times10^6/4096 \approx 2{,}44\ \text{kHz}$.
-
-    Ratio: $\Delta f/f_{D,\text{max}} = 2440/83{,}3 \approx 29 \gg 1$ ✓
-
-    La condición anti-ICI se cumple con amplio margen: el Doppler desplaza las subportadoras menos del 3.4% del espaciado entre ellas.
-
----
-
-### Ejercicio 2
-
 Un sistema OFDM usa $N = 1024$ subportadoras, $N_{CP} = 72$ muestras de CP, de las cuales $N_{\text{guard}} = 100$ subportadoras son de guarda (bordes de banda) y $N_{\text{pilot}} = 64$ son pilotos.
 
 **(a)** Calcula el número de subportadoras de datos $N_{\text{data}}$.
@@ -431,7 +429,7 @@ Un sistema OFDM usa $N = 1024$ subportadoras, $N_{CP} = 72$ muestras de CP, de l
 
 ---
 
-### Ejercicio 3
+### Ejercicio 2
 
 Deriva la distribución del PAPR para una señal OFDM de $N$ subportadoras con símbolos QAM independientes y equiprobables.
 
@@ -463,7 +461,7 @@ Calcula el umbral $\gamma_0^{(1\%)}$ tal que el PAPR supera dicho umbral con pro
 
 ---
 
-### Ejercicio 4
+### Ejercicio 3
 
 Un operador despliega 5G NR en tres escenarios:
 
@@ -507,7 +505,7 @@ Un operador despliega 5G NR en tres escenarios:
 
 ---
 
-### Ejercicio 5
+### Ejercicio 4
 
 Considera un sistema OFDM con $N = 64$ subportadoras, $N_{CP} = 16$ muestras de CP, y un canal de dos caminos:
 
@@ -553,7 +551,7 @@ $$h[l] = \begin{cases} 0{,}8 & l = 0 \\ 0{,}6 & l = 8 \end{cases}$$
 
 ---
 
-### Ejercicio 6 — Diseño Completo del Sistema OFDM
+### Ejercicio 5 — Diseño Completo del Sistema OFDM
 
 Un operador quiere desplegar un enlace OFDM punto a punto en un enlace backhaul en entorno UMa. Los parámetros del canal (Sesión 01) son: $\sigma_\tau = 2\ \mu\text{s}$, $B_c = 100\ \text{kHz}$, $v = 0\ \text{km/h}$ (fijo). Los parámetros del sistema: $B = 20\ \text{MHz}$, $P_t = 30\ \text{dBm}$, $G_t = G_r = 20\ \text{dBi}$, $d = 5\ \text{km}$, $n = 3{,}5$ (NLOS), $\text{PL}(d_0=100\ \text{m}) = 95\ \text{dB}$, $F = 7\ \text{dB}$, $\sigma_{\text{sh}} = 8\ \text{dB}$, margen de cobertura 99% ($Q^{-1}(0{,}01) \approx 2{,}33$).
 
