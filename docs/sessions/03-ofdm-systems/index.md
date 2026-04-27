@@ -158,7 +158,7 @@ La figura siguiente muestra el espectro de potencia de las $N$ subportadoras ind
 
 ![Subportadoras OFDM en frecuencia](figures/ofdm-subcarriers.png)
 
-Cada subportadora tiene forma de sinc (en frecuencia continua), con nulos en los centros del resto de subportadoras. El panel izquierdo muestra las envolventes espectrales de cuatro subportadoras adyacentes: cada una alcanza su máximo exactamente donde las demás tienen un nulo. El panel derecho muestra la suma de todas las subportadoras — la suma forma un espectro de banda casi plana, con pendiente suave en los bordes. Este solapamiento es lo que hace eficiente en frecuencia a OFDM respecto a los sistemas FDM con guarda: no desperdicia espectro entre subportadoras. La clave es que la ortogonalidad, no la separación física, previene la interferencia.
+Cada subportadora tiene forma de sinc en frecuencia, con nulos exactamente en los centros del resto de subportadoras. Cada una alcanza su máximo ($= 1$) en su propia frecuencia $k \cdot \Delta f$, donde todas las demás valen cero. Las subportadoras se solapan espectralmente — en ningún punto del eje de frecuencias hay separación vacía entre ellas — y sin embargo no interfieren entre sí porque la ortogonalidad garantiza la cancelación en la suma, no la separación física. Esto es lo que hace a OFDM más eficiente en espectro que los sistemas FDM con bandas de guarda.
 
 ---
 
