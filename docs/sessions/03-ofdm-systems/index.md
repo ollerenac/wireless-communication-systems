@@ -333,6 +333,70 @@ El panel superior muestra el símbolo OFDM original de $N$ muestras (parte real)
 
 **Condición de diseño:** $N_{CP} \geq L - 1 = \lceil\tau_{\max}/T_{\text{samp}}\rceil$, donde $\tau_{\max}$ es el retardo máximo del canal y $T_{\text{samp}} = 1/B$ es el período de muestreo. En la práctica se elige $\tau_{\max} \approx 3\sigma_\tau$ para cubrir el 99% de la energía del canal.
 
+#### Ejercicio 3
+
+Considera un sistema OFDM con $N = 6$ muestras por símbolo y $N_{CP} = 2$ muestras de CP. Dos símbolos consecutivos tienen las siguientes muestras en tiempo (valores reales, sin normalización):
+
+$$x_1 = [3,\; 1,\; 4,\; 1,\; 5,\; 9] \qquad x_2 = [2,\; 6,\; 5,\; 3,\; 5,\; 8]$$
+
+**(a)** Construye la secuencia transmitida $\tilde{x}_1[m]$ de longitud $N + N_{CP} = 8$. ¿Qué muestras forman el CP y en qué posición se sitúan? Verifica que el CP aparece dos veces dentro de la trama transmitida.
+
+??? example "Solución (a)"
+
+    El CP son las **últimas** $N_{CP} = 2$ muestras del símbolo: $x_1[4] = 5$ y $x_1[5] = 9$.
+
+    Se anteponen al símbolo original:
+
+    $$\tilde{x}_1 = [\underbrace{5,\; 9}_{\text{CP}},\; 3,\; 1,\; 4,\; 1,\; \underbrace{5,\; 9}_{\text{cola}}]$$
+
+    Las posiciones 0–1 (CP) son idénticas a las posiciones 6–7 (cola del símbolo). Esa identidad — el CP es literalmente la misma secuencia que aparece al final — es la propiedad que el receptor explotará para detectar el inicio del símbolo.
+
+**(b)** Construye también $\tilde{x}_2$ y escribe la secuencia total recibida $y[n]$ para $n = 0, 1, \ldots, 15$ (canal ideal sin ruido ni distorsión).
+
+??? example "Solución (b)"
+
+    El CP de $x_2$ son sus últimas dos muestras: $x_2[4]=5$, $x_2[5]=8$.
+
+    $$\tilde{x}_2 = [\underbrace{5,\; 8}_{\text{CP}},\; 2,\; 6,\; 5,\; 3,\; \underbrace{5,\; 8}_{\text{cola}}]$$
+
+    La señal recibida es la concatenación de ambas tramas:
+
+    | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |
+    |-----|---|---|---|---|---|---|---|---|---|---|----|----|----|----|----|----|
+    | $y[n]$ | 5 | 9 | 3 | 1 | 4 | 1 | 5 | 9 | 5 | 8 | 2 | 6 | 5 | 3 | 5 | 8 |
+
+    El símbolo 1 ocupa $n = 0\text{–}7$ (CP en 0–1, datos en 2–7); el símbolo 2 ocupa $n = 8\text{–}15$ (CP en 8–9, datos en 10–15).
+
+**(c)** El receptor no sabe dónde empieza cada símbolo. Para detectar los instantes de inicio, evalúa el **correlador de CP**:
+
+$$P[d] = \sum_{m=0}^{N_{CP}-1} y[d+m]\cdot y[d+m+N]$$
+
+para $d = 0, 1, \ldots, 8$. Construye una tabla con todos los valores de $P[d]$. ¿En qué $d$ ocurren los máximos? ¿Qué mide $P[d]$ y por qué alcanza el máximo exactamente en el inicio del CP?
+
+??? example "Solución (c)"
+
+    Con $N_{CP}=2$ la suma tiene dos términos: $P[d] = y[d]\cdot y[d+6] + y[d+1]\cdot y[d+7]$.
+
+    | $d$ | $y[d]$ | $y[d+1]$ | $y[d+6]$ | $y[d+7]$ | $P[d]$ |
+    |-----|--------|----------|----------|----------|--------|
+    | 0 | 5 | 9 | 5 | 9 | $5\cdot5+9\cdot9=\mathbf{106}$ |
+    | 1 | 9 | 3 | 9 | 5 | $9\cdot9+3\cdot5=96$ |
+    | 2 | 3 | 1 | 5 | 8 | $3\cdot5+1\cdot8=23$ |
+    | 3 | 1 | 4 | 8 | 2 | $1\cdot8+4\cdot2=16$ |
+    | 4 | 4 | 1 | 2 | 6 | $4\cdot2+1\cdot6=14$ |
+    | 5 | 1 | 5 | 6 | 5 | $1\cdot6+5\cdot5=31$ |
+    | 6 | 5 | 9 | 5 | 3 | $5\cdot5+9\cdot3=52$ |
+    | 7 | 9 | 5 | 3 | 5 | $9\cdot3+5\cdot5=52$ |
+    | 8 | 5 | 8 | 5 | 8 | $5\cdot5+8\cdot8=\mathbf{89}$ |
+
+    Los máximos están en $d=0$ y $d=8$ — exactamente en el inicio del CP de cada símbolo. La separación entre picos es $N + N_{CP} = 8$, la duración total de cada trama.
+
+    **¿Por qué el máximo ocurre en el inicio del CP?** Cuando $d = d_0$ apunta al primer sample del CP, se tiene $y[d_0+m] = y[d_0+m+N]$ para todo $m = 0, \ldots, N_{CP}-1$ — porque esos dos grupos de muestras son copias idénticas (CP y cola del símbolo). El correlador se convierte en la suma de cuadrados:
+
+    $$P[d_0] = \sum_{m=0}^{N_{CP}-1} y[d_0+m]^2 = \text{energía del CP}$$
+
+    Para $d \neq d_0$, las muestras separadas por $N$ ya no son idénticas — provienen de distintas partes del símbolo — y el producto promedio cae. El receptor declara inicio de símbolo en el $d$ que maximiza $P[d]$.
+
 ---
 
 ### 4. Cadena OFDM Completa y Ecualización
