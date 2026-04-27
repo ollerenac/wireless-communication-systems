@@ -272,11 +272,13 @@ y comprueba que vale 0.
 
 ??? example "Solución (b)"
 
-    El exponente es $e^{-j\pi n/2}$:
+    Esta suma es el **producto interno** entre las subportadoras $k=0$ y $k=1$: el receptor multiplica muestra a muestra la subportadora $k=0$ — que es $e^{j2\pi \cdot 0 \cdot n/N} = 1$ — por la conjugada de la subportadora $k=1$ — que es $e^{-j2\pi \cdot 1 \cdot n/N}$ — y promedia sobre las $N$ muestras. Si el resultado es cero, las dos subportadoras son ortogonales: el receptor puede extraer $X[1]$ sin contaminación de $X[0]$, y viceversa.
 
-    $$\frac{1}{4}\left(1 + e^{-j\pi/2} + e^{-j\pi} + e^{-j3\pi/2}\right) = \frac{1}{4}(1 - j - 1 + j) = 0\ \checkmark$$
+    Combinando los dos exponentes ($e^{j0} \cdot e^{-j\pi n/2} = e^{-j\pi n/2}$) y sustituyendo $N=4$:
 
-    Los cuatro términos se cancelan por pares: $(1,-1)$ en la parte real y $(j,-j)$ en la imaginaria.
+    $$\frac{1}{4}\sum_{n=0}^{3} e^{-j\pi n/2} = \frac{1}{4}\left(1 + e^{-j\pi/2} + e^{-j\pi} + e^{-j3\pi/2}\right) = \frac{1}{4}(1 - j - 1 + j) = 0\ \checkmark$$
+
+    Los cuatro vectores están equirepartidos en el círculo unitario — se cancelan por pares: $(1,-1)$ en la parte real y $(j,-j)$ en la imaginaria.
 
 **(c)** El canal tiene respuesta impulsional $h[0] = 1$, $h[1] = 0{,}5$ (dos caminos). Calcula $H[k]$ para $k = 0$ y $k = 1$ usando $H[k] = \sum_l h[l]\, e^{-j2\pi kl/N}$. ¿Qué símbolo llega al receptor en la subportadora $k = 1$? *(Supón que el cyclic prefix ha sido añadido y eliminado correctamente — se derivará en §3.)*
 
