@@ -124,6 +124,25 @@ Es importante distinguir los dos dominios: $X[k]$ vive en **frecuencia** — es 
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
+??? note "¿Cómo se pasa de $x[n]$ a la suma sobre $X[l]$?"
+    La definición de $x[n]$ de la sección anterior es:
+
+    $$x[n] = \frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l]\, e^{j2\pi ln/N}$$
+
+    Se sustituye directamente dentro de la operación del receptor:
+
+    $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{N}\sum_{n=0}^{N-1} \left(\frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l]\, e^{j2\pi ln/N}\right) e^{-j2\pi kn/N}$$
+
+    El factor $1/\sqrt{N}$ y $X[l]$ no dependen de $n$, así que salen de la suma sobre $n$:
+
+    $$= \frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi ln/N}\, e^{-j2\pi kn/N}\right)$$
+
+    Los dos exponentes con el mismo índice $n$ se combinan:
+
+    $$= \frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)$$
+
+    Ese término interior es el que determina si la subportadora $l$ interfiere con $k$ o no.
+
 El término de interferencia vale 1 cuando $l = k$ y 0 en cualquier otro caso:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases}$$
