@@ -298,6 +298,7 @@ y comprueba que vale 0.
     - $H[1] = 1 + 0{,}5\, e^{-j\pi/2} = 1 - 0{,}5j$
 
     El símbolo recibido en $k = 1$ (sin ruido):
+    
     $$Y[1] = H[1] \cdot X[1] = (1 - 0{,}5j) \cdot 1 = \mathbf{1 - 0{,}5j}$$
 
     El canal no mezcla subportadoras — simplemente rota y escala $X[1]$. Para recuperar $X[1]$, el receptor divide: $\hat{X}[1] = Y[1]/H[1] = 1$.
