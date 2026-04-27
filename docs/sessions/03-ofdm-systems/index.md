@@ -272,13 +272,21 @@ y comprueba que vale 0.
 
 ??? example "Solución (b)"
 
-    Esta suma es el **producto interno** entre las subportadoras $k=0$ y $k=1$: el receptor multiplica muestra a muestra la subportadora $k=0$ — que es $e^{j2\pi \cdot 0 \cdot n/N} = 1$ — por la conjugada de la subportadora $k=1$ — que es $e^{-j2\pi \cdot 1 \cdot n/N}$ — y promedia sobre las $N$ muestras. Si el resultado es cero, las dos subportadoras son ortogonales: el receptor puede extraer $X[1]$ sin contaminación de $X[0]$, y viceversa.
+    Dos señales $\varphi_k[n]$ y $\varphi_l[n]$ son **ortogonales** cuando su producto interno es cero:
 
-    Combinando los dos exponentes ($e^{j0} \cdot e^{-j\pi n/2} = e^{-j\pi n/2}$) y sustituyendo $N=4$:
+    $$\langle \varphi_k,\, \varphi_l \rangle \;=\; \frac{1}{N}\sum_{n=0}^{N-1} \varphi_k[n]\,\varphi_l^*[n] \;=\; 0$$
+
+    El producto interno de dos señales discretas de longitud $N$ es su correlación normalizada: muestra a muestra, se multiplica una señal por la conjugada de la otra y se promedia. Si el resultado es cero, las dos señales no comparten ninguna componente en común — el receptor puede proyectar la señal recibida sobre cualquier subportadora y extraer solo su coeficiente, sin contaminación de las demás.
+
+    Para las subportadoras OFDM $\varphi_k[n] = e^{j2\pi kn/N}$, el producto interno entre $k=0$ y $k=1$ es:
+
+    $$\langle \varphi_0,\, \varphi_1 \rangle = \frac{1}{N}\sum_{n=0}^{N-1} \underbrace{e^{j2\pi \cdot 0 \cdot n/N}}_{=\,1}\cdot \underbrace{\left(e^{j2\pi \cdot 1 \cdot n/N}\right)^*}_{=\,e^{-j2\pi n/N}} = \frac{1}{N}\sum_{n=0}^{N-1} e^{-j2\pi n/N}$$
+
+    que es exactamente la suma del enunciado. Sustituyendo $N=4$:
 
     $$\frac{1}{4}\sum_{n=0}^{3} e^{-j\pi n/2} = \frac{1}{4}\left(1 + e^{-j\pi/2} + e^{-j\pi} + e^{-j3\pi/2}\right) = \frac{1}{4}(1 - j - 1 + j) = 0\ \checkmark$$
 
-    Los cuatro vectores están equirepartidos en el círculo unitario — se cancelan por pares: $(1,-1)$ en la parte real y $(j,-j)$ en la imaginaria.
+    Los cuatro vectores están equirepartidos en el círculo unitario y se cancelan por pares: $(1,-1)$ en la parte real y $(j,-j)$ en la imaginaria. La FFT del receptor no es más que $N$ de estos productos internos en paralelo, uno por subportadora.
 
 **(c)** El canal tiene respuesta impulsional $h[0] = 1$, $h[1] = 0{,}5$ (dos caminos). Calcula $H[k]$ para $k = 0$ y $k = 1$ usando $H[k] = \sum_l h[l]\, e^{-j2\pi kl/N}$. ¿Qué símbolo llega al receptor en la subportadora $k = 1$? *(Supón que el cyclic prefix ha sido añadido y eliminado correctamente — se derivará en §3.)*
 
