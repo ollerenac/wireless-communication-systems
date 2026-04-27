@@ -1,0 +1,1165 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Curso de máster en sistemas de comunicaciones inalámbricas — fundamentos, 5G/6G e IA aplicada">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/syllabus/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../sessions/01-channel-modeling/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Programa - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#programa-del-curso" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Programa
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../sessions/01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sistemas-de-comunicaciones-inalambricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistemas de Comunicaciones Inalámbricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publico-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Público Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerrequisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerrequisitos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultados-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultados de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesiones-del-curso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesiones del Curso
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-usar-este-curso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cómo Usar Este Curso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cómo Usar Este Curso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opcion-a-sitio-web-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opción A — Sitio web (recomendado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-b-clonar-el-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opción B — Clonar el repositorio
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licencia-y-atribucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licencia y Atribución
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sessions/04-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sistemas-de-comunicaciones-inalambricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sistemas de Comunicaciones Inalámbricas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#publico-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Público Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerrequisitos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerrequisitos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultados-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultados de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sesiones-del-curso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sesiones del Curso
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#como-usar-este-curso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cómo Usar Este Curso
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cómo Usar Este Curso">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opcion-a-sitio-web-recomendado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opción A — Sitio web (recomendado)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opcion-b-clonar-el-repositorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Opción B — Clonar el repositorio
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licencia-y-atribucion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licencia y Atribución
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="programa-del-curso">Programa del Curso</h1>
+<h2 id="sistemas-de-comunicaciones-inalambricas">Sistemas de Comunicaciones Inalámbricas</h2>
+<ul>
+<li><strong>Nivel</strong>: Máster Universitario (MSc / MEng)</li>
+<li><strong>Modalidad</strong>: Autónoma, acceso abierto</li>
+<li><strong>Sesiones</strong>: 15 sesiones semanales</li>
+<li><strong>Sitio web</strong>: <a href="https://ollerenac.github.io/wireless-communication-systems/">ollerenac.github.io/wireless-communication-systems</a></li>
+<li><strong>Repositorio</strong>: <a href="https://github.com/ollerenac/wireless-communication-systems">github.com/ollerenac/wireless-communication-systems</a></li>
+<li><strong>Licencia</strong>: <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></li>
+</ul>
+<hr />
+<h2 id="descripcion">Descripción</h2>
+<p>Este curso ofrece un tratamiento riguroso, a nivel de posgrado, de los sistemas de comunicaciones inalámbricas — desde los fundamentos de la capa física hasta las tecnologías más avanzadas de 5G y 6G. Cada sesión combina teoría matemática con un laboratorio práctico en Python, para que el estudiante desarrolle tanto profundidad analítica como habilidades de implementación.</p>
+<p>El curso se organiza en tres arcos temáticos:</p>
+<ol>
+<li><strong>Fundamentos de Capa Física</strong> (Sesiones 1–5): modelado de canal, modulación, OFDM, codificación de canal, acceso múltiple</li>
+<li><strong>Sistemas Multi-Antena</strong> (Sesiones 6–8): MIMO, MIMO masivo, estimación de canal</li>
+<li><strong>Tecnologías Avanzadas y Emergentes</strong> (Sesiones 9–15): 5G NR, mmWave, RIS, ISAC, radio cognitiva, IA/ML, 6G</li>
+</ol>
+<hr />
+<h2 id="publico-objetivo">Público Objetivo</h2>
+<p>Estudiantes de posgrado en ingeniería eléctrica, ingeniería de telecomunicaciones o áreas afines que buscan un tratamiento completo y moderno de los sistemas inalámbricos. El curso también es adecuado para profesionales de la industria que deseen incorporarse a la investigación en 5G/6G o al diseño inalámbrico basado en IA.</p>
+<hr />
+<h2 id="prerrequisitos">Prerrequisitos</h2>
+<p>El estudiante debe tener conocimientos sólidos a nivel de grado en las siguientes áreas:</p>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Contenidos clave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Señales y Sistemas</td>
+<td>Transformada de Fourier, convolución, filtrado, análisis en frecuencia</td>
+</tr>
+<tr>
+<td>Probabilidad y Estadística</td>
+<td>Variables aleatorias, distribuciones de probabilidad, esperanza, ruido gaussiano</td>
+</tr>
+<tr>
+<td>Comunicaciones Digitales</td>
+<td>Modulación en banda base, teorema de muestreo, filtro adaptado, SNR</td>
+</tr>
+<tr>
+<td>Álgebra Lineal</td>
+<td>Operaciones matriciales, descomposición en valores propios, SVD</td>
+</tr>
+<tr>
+<td>Programación</td>
+<td>Python básico (NumPy, Matplotlib); cuadernos Jupyter</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="resultados-de-aprendizaje">Resultados de Aprendizaje</h2>
+<p>Al finalizar este curso, el estudiante será capaz de:</p>
+<ol>
+<li>Modelar canales inalámbricos incluyendo pérdidas de propagación, sombreado y desvanecimiento multitrayecto</li>
+<li>Diseñar esquemas de modulación digital y calcular la tasa de error de bit (BER) analíticamente</li>
+<li>Implementar transceptores OFDM y sistemas de codificación de canal (LDPC, Polar) desde primeros principios</li>
+<li>Gestionar el acceso múltiple mediante OFDMA, NOMA y planificadores de recursos de radio</li>
+<li>Analizar la capacidad de canales MIMO y diseñar precodificadores (MRT, ZF, water-filling)</li>
+<li>Estimar el canal inalámbrico con métodos clásicos (LS, MMSE) y entender su contexto en 5G NR</li>
+<li>Evaluar tecnologías emergentes: 5G NR, mmWave, RIS, ISAC y radio cognitiva</li>
+<li>Aplicar técnicas de IA/ML al diseño de sistemas inalámbricos y describir las fronteras del 6G</li>
+</ol>
+<hr />
+<h2 id="sesiones-del-curso">Sesiones del Curso</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Título</th>
+<th>Contenidos</th>
+<th>Laboratorio Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>Modelado del Canal Inalámbrico</td>
+<td>Path loss, modelo log-distancia, sombreado log-normal, multitrayecto, Rayleigh/Rician, coherencia, Doppler, modelos 3GPP TR 38.901</td>
+<td>Rayleigh/Rician; BER vs SNR; CDF y probabilidad de interrupción; calculadora de presupuesto de enlace</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Modulación Digital y Análisis de BER</td>
+<td>BPSK, QPSK, M-QAM, codificación Gray, derivación de BER, diagramas de constelación, 1024-QAM en 5G NR</td>
+<td>Cadena TX-RX completa; curvas BER para BPSK/QPSK/16-QAM/64-QAM; constelaciones</td>
+</tr>
+<tr>
+<td>03</td>
+<td>Sistemas OFDM e Implementación</td>
+<td>Concepto multiportadora, transceptor IFFT/FFT, prefijo cíclico, ICI, eficiencia espectral, PAPR</td>
+<td>Transceptor OFDM completo; simulación sobre canal con desvanecimiento selectivo en frecuencia</td>
+</tr>
+<tr>
+<td>04</td>
+<td>Codificación de Canal: LDPC y Códigos Polares</td>
+<td>Límite de Shannon, grafo de Tanner LDPC, belief propagation, códigos Polares, SCD, selección en 5G NR</td>
+<td>LDPC y Polar; curvas BER waterfall; comparativa sin codificación</td>
+</tr>
+<tr>
+<td>05</td>
+<td>Acceso Múltiple: OFDMA, NOMA y Gestión de Recursos</td>
+<td>FDMA/TDMA/CDMA/OFDMA, asignación de subportadoras, NOMA con SIC, emparejamiento de usuarios, planificador proporcional-justo</td>
+<td>Asignación OFDMA multiusuario; NOMA con SIC; comparativa NOMA vs OMA; planificador proporcional-justo</td>
+</tr>
+<tr>
+<td>06</td>
+<td>Fundamentos MIMO y Capacidad</td>
+<td>SISO→MIMO, matriz de canal, SVD, relleno de agua, capacidad, compromiso diversidad-multiplexación, código Alamouti</td>
+<td>Capacidad MIMO vía SVD; water-filling; multiplexación espacial vs diversidad Alamouti</td>
+</tr>
+<tr>
+<td>07</td>
+<td>MIMO Masivo y Conformación de Haz Digital</td>
+<td>Endurecimiento del canal, propagación favorable, precodificadores MRT y ZF, contaminación de pilotos, arrays 64–512 antenas, beamforming híbrido</td>
+<td>Precodificadores MRT/ZF para M=8,32,128 antenas y K=4 usuarios; tasa suma vs #antenas</td>
+</tr>
+<tr>
+<td>08</td>
+<td>Estimación de Canal: Métodos Clásicos</td>
+<td>Estimación basada en pilotos, estimador LS, estimador MMSE, filtro de Wiener, cuadrícula de pilotos OFDM, SRS/DMRS en 5G NR</td>
+<td>Estimadores LS y MMSE sobre cuadrícula OFDM; MSE vs SNR; efecto de la densidad de pilotos</td>
+</tr>
+<tr>
+<td>09</td>
+<td>Arquitectura 5G NR: Interfaz Radio y Numerología</td>
+<td>Numerología μ y espaciado de subportadoras, estructura de trama y ranura NR, cuadrícula de recursos, FR1/FR2, HARQ, adaptación de enlace, tablas MCS</td>
+<td>Visualizador de cuadrícula NR para μ=0,1,2,3; adaptación de enlace con CQI; throughput vs SNR</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Comunicaciones mmWave y Sub-THz</td>
+<td>Espectro 24–100 GHz, propagación mmWave, arrays de antenas, beamforming híbrido, gestión de haz en 5G NR FR2, sub-THz para 6G, modelos de canal THz</td>
+<td>Pérdida de propagación mmWave vs frecuencia y distancia; patrones de array ULA; beamforming analógico</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Superficies Inteligentes Reconfigurables (RIS)</td>
+<td>RIS pasiva vs activa, campo cercano/lejano, canal en cascada, matriz de desfase, optimización de fases, RIS vs relé, estándarización 6G</td>
+<td>Optimización de fases; SNR vs #elementos RIS; mapas de cobertura con/sin RIS</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Detección e Integración con Comunicaciones (ISAC)</td>
+<td>Forma de onda dual, radar OFDM, estimación rango-Doppler, resolución en rango, compromiso detección-comunicación, aplicaciones V2X</td>
+<td>Forma de onda OFDM compartida; mapa rango-Doppler 2D FFT; SINR comms vs SNR radar</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Radio Cognitiva y Gestión Dinámica de Espectro</td>
+<td>Usuarios primarios/secundarios, detección de espectro (energía, filtro adaptado, ciclostacionaria), curva ROC, acceso dinámico al espectro, IoT/LPWAN: LoRa, NB-IoT, Sigfox</td>
+<td>Detector de energía; curva ROC (Pd vs Pfa); presupuestos de enlace LoRa/NB-IoT/Sigfox</td>
+</tr>
+<tr>
+<td>14</td>
+<td>IA/ML para Comunicaciones Inalámbricas</td>
+<td>Taxonomía ML para sistemas inalámbricos, CNN para clasificación de modulación (AMC), autoencoder TX+RX conjunto, DNN para estimación de canal, visión general de RL para asignación de recursos</td>
+<td>Clasificador CNN AMC; autoencoder con constelación aprendida; estimador DNN vs LS/MMSE</td>
+</tr>
+<tr>
+<td>15</td>
+<td>6G: Fronteras, Investigación Abierta y Redes Especializadas</td>
+<td>Requisitos ITU-R IMT-2030, canal THz y absorción molecular, MIMO libre de celdas, redes no terrestres (NTN) LEO/MEO/GEO, aprendizaje federado, hoja de ruta 6G</td>
+<td>Canal THz vs mmWave; presupuesto de enlace satélite LEO; FedAvg para estimación distribuida</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="evaluacion">Evaluación</h2>
+<p>Este es un curso abierto y autónomo sin evaluación calificada. Cada sesión incluye:</p>
+<ul>
+<li><strong>≥ 5 ejercicios</strong> con soluciones de referencia paso a paso</li>
+<li><strong>1 laboratorio Python</strong> (cuaderno Jupyter, ejecutable en Google Colab sin instalación local)</li>
+</ul>
+<p>Se recomienda al estudiante intentar los ejercicios de forma independiente antes de consultar las soluciones.</p>
+<hr />
+<h2 id="como-usar-este-curso">Cómo Usar Este Curso</h2>
+<h3 id="opcion-a-sitio-web-recomendado">Opción A — Sitio web (recomendado)</h3>
+<p>Navega las sesiones en el sitio web del curso. Cada página incluye apuntes de la sesión, ejercicios con soluciones desplegables y un botón <strong>Abrir en Colab</strong> para el cuaderno de laboratorio.</p>
+<h3 id="opcion-b-clonar-el-repositorio">Opción B — Clonar el repositorio</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ollerenac/wireless-communication-systems.git
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">cd</span><span class="w"> </span>wireless-communication-systems
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>mkdocs<span class="w"> </span>serve<span class="w">          </span><span class="c1"># vista previa en http://127.0.0.1:8000</span>
+</code></pre></div>
+<hr />
+<h2 id="licencia-y-atribucion">Licencia y Atribución</h2>
+<p>Todo el contenido del curso se publica bajo la licencia <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Atribución 4.0 Internacional (CC BY 4.0)</a>.</p>
+<p>Eres libre de compartir, adaptar y redistribuir este material para cualquier propósito — incluso comercial — siempre que se otorgue el crédito correspondiente:</p>
+<blockquote>
+<p><em>Sistemas de Comunicaciones Inalámbricas</em> por ollerenac, bajo licencia CC BY 4.0.
+Fuente: https://github.com/ollerenac/wireless-communication-systems</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
