@@ -526,9 +526,7 @@ def ofdm_tx(X, N_CP):
     print(np.allclose(x_cp[:N_CP], x_cp[N:]))  # True — CP idéntico a la cola  ✓
     ```
 
-    La figura siguiente muestra la señal en tiempo. El bloque naranja (CP) es visualmente idéntico al tramo final del símbolo:
-
-    ![Señal OFDM en tiempo con CP](figures/ofdm-time-domain.png)
+    El stem plot del notebook muestra las $N + N_{CP} = 80$ muestras discretas $\text{Re}\{x[n]\}$ en función del índice $n$. El bloque naranja (posiciones $0$ a $N_{CP}-1$) es visualmente idéntico al tramo final del símbolo (posiciones $N$ a $N+N_{CP}-1$) — esa identidad es exactamente la propiedad que el receptor usará para detectar el inicio de cada símbolo.
 
 ---
 
