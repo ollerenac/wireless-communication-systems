@@ -431,39 +431,249 @@ Con el CP en su lugar, la cadena OFDM completa es:
 | Ecualizador | Recupera $\hat{X}[k]$ a partir de $Y[k]$ y $H[k]$ | Deshace la distorsión del canal subportadora a subportadora |
 | QAM demapper | Símbolo complejo $\hat{X}[k]$ → bits | Decisión final |
 
-Los dos bloques que aún no hemos analizado en detalle son el **ecualizador** y la **estimación de $H[k]$** — que son precisamente lo que esta sección desarrolla. Cierra con una tabla de dualidades que sintetiza las relaciones de diseño entre todos los parámetros OFDM.
+A continuación se desarrolla cada bloque individualmente: qué **entra**, cuál es la **operación o desafío** que resuelve, qué **sale**, y cómo se implementa en Python. El código de cada bloque es exactamente el que usa el notebook de laboratorio.
 
 ---
 
-**Ecualizador de un tap.** La FFT del receptor entrega, para cada subportadora $k$:
+#### 4.1 QAM Mapper
 
-$$Y[k] = H[k]\,X[k] + W[k]$$
+**Entrada:** $k \cdot N$ bits $\in \{0,1\}$ — **Operación:** codificar grupos de $k = \log_2 M$ bits como puntos de la constelación M-QAM — **Salida:** $N$ símbolos complejos $X[k]$ con $\mathbb{E}[|X[k]|^2] = 1$
 
-$H[k]$ es la ganancia compleja del canal en esa frecuencia (calculada en §2) y $W[k]$ es el ruido. El problema de ecualización se reduce a: dado $Y[k]$ y $H[k]$, estima $X[k]$. La clave es que — gracias al CP — este problema es **escalar e independiente para cada $k$**: no hay mezcla entre subportadoras.
+El desafío es que la asignación bits→puntos no es arbitraria: se usa **Gray coding** para que puntos vecinos de la constelación difieran en exactamente 1 bit. Así, cuando el ruido confunde un símbolo con su vecino más cercano, se comete un solo error de bit en lugar de $k$.
 
-**Zero Forcing (ZF).** La solución directa es dividir por $H[k]$:
+??? note "Codificación Gray en QPSK"
+    Para QPSK ($M=4$, $k=2$), los dos bits $(b_0, b_1)$ determinan el cuadrante:
+
+    - $b_0 = 0 \Rightarrow I = +1$;  $b_0 = 1 \Rightarrow I = -1$
+    - $b_1 = 0 \Rightarrow Q = +1$;  $b_1 = 1 \Rightarrow Q = -1$
+
+    Los cuatro puntos resultantes son $(\pm 1 \pm j)/\sqrt{2}$. La normalización por $\sqrt{2}$ garantiza $\mathbb{E}[|X|^2] = 1$ independientemente del cuadrante.
+
+```python
+def qpsk_map(bits):
+    """2 bits → 1 símbolo QPSK de energía unitaria."""
+    b0, b1 = bits[0::2], bits[1::2]
+    I = 1 - 2 * b0    # 0 → +1,  1 → −1
+    Q = 1 - 2 * b1
+    return (I + 1j * Q) / np.sqrt(2)
+```
+
+??? example "Verificación"
+    ```python
+    bits = np.array([0, 0,  0, 1,  1, 0,  1, 1])
+    X = qpsk_map(bits)
+    # (+0.71+0.71j), (+0.71−0.71j), (−0.71+0.71j), (−0.71−0.71j)
+    print(np.mean(np.abs(X)**2))   # 1.0  ← energía unitaria ✓
+    ```
+
+---
+
+#### 4.2 IFFT + Añadir CP
+
+**Entrada:** $N$ símbolos $X[k]$ en frecuencia — **Operación:** IFFT + copiar cola al frente — **Salida:** trama $\tilde{x}[m]$ de longitud $N + N_{CP}$ en tiempo
+
+La IFFT genera las $N$ subportadoras simultáneamente:
+
+$$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}$$
+
+Sin el CP, al pasar por un canal multipath la convolución sería *lineal* y la FFT no podría invertirla limpiamente. Al copiar las últimas $N_{CP}$ muestras al frente, el canal "ve" una señal periódica y la convolución se vuelve *circular* — exactamente lo que la FFT del receptor puede deshacer.
+
+??? note "¿Por qué norm='ortho'?"
+    La opción `norm='ortho'` aplica el factor $1/\sqrt{N}$ en la IFFT y su inverso en la FFT, haciendo ambas unitarias: $\|x\|^2 = \|X\|^2$. La potencia de la señal en tiempo es igual a la potencia de los símbolos en frecuencia — conveniente para calibrar el nivel de ruido en el canal.
+
+```python
+def ofdm_tx(X, N_CP):
+    """IFFT + Añadir CP. Devuelve trama de longitud N + N_CP."""
+    x  = np.fft.ifft(X, norm='ortho')   # N muestras en tiempo
+    cp = x[-N_CP:]                       # últimas N_CP muestras
+    return np.concatenate([cp, x])       # [CP | símbolo]
+```
+
+??? example "Verificación"
+    ```python
+    x_cp = ofdm_tx(X_tx, N_CP)
+    print(len(x_cp))                            # N + N_CP = 80  ✓
+    print(np.allclose(x_cp[:N_CP], x_cp[N:]))  # True — CP idéntico a la cola  ✓
+    ```
+
+    La figura siguiente muestra la señal en tiempo. El bloque naranja (CP) es visualmente idéntico al tramo final del símbolo:
+
+    ![Señal OFDM en tiempo con CP](figures/ofdm-time-domain.png)
+
+---
+
+#### 4.3 Canal Multipath + AWGN
+
+**Entrada:** $\tilde{x}[m]$ de longitud $N + N_{CP}$ — **Operación:** convolución lineal con $h[l]$ + ruido gaussiano — **Salida:** $y[m] = (\tilde{x} \ast h)[m] + w[m]$
+
+El canal introduce dos perturbaciones simultáneas: los ecos mezclan muestras consecutivas (ISI) y el ruido térmico degrada el SNR. El desafío de implementación es calibrar el nivel de ruido correctamente a partir del $E_b/N_0$ deseado.
+
+??? note "Calibración del nivel de ruido"
+    Con $E_s = 1$ y $k$ bits/símbolo: $N_0 = E_s/(k \cdot \text{SNR}_{\text{lineal}})$. La varianza del ruido por componente (I o Q) es $\sigma_w^2 = N_0/2$.
+
+    $$\sigma_w^2 = \frac{1}{2\,k\,\text{SNR}_{\text{lineal}}}$$
+
+```python
+def apply_channel(x, h, SNR_dB, k=2):
+    """Convolución lineal con h + ruido AWGN calibrado a Eb/N0."""
+    y_ch   = np.convolve(x, h, mode='full')[:len(x)]
+    SNR    = 10 ** (SNR_dB / 10)
+    sigma2 = 1 / (2 * k * SNR)
+    noise  = (rng.normal(0, np.sqrt(sigma2), len(x)) +
+              1j * rng.normal(0, np.sqrt(sigma2), len(x)))
+    return y_ch + noise
+```
+
+??? example "Verificación (sin ruido)"
+    ```python
+    y = apply_channel(x_cp, h_channel, SNR_dB=100)
+    # Con canal normalizado (||h||²=1) y SNR muy alto, la potencia de salida ≈ potencia de entrada
+    ratio = np.mean(np.abs(y)**2) / np.mean(np.abs(x_cp)**2)
+    print(f'Ratio de potencia: {ratio:.4f}')   # ≈ 1.0  ✓
+    ```
+
+---
+
+#### 4.4 Eliminar CP + FFT
+
+**Entrada:** $y[m]$ de longitud $N + N_{CP}$ — **Operación:** descartar CP, FFT — **Salida:** $Y[k] = H[k]\,X[k] + W[k]$ — una ganancia escalar independiente por subportadora
+
+El receptor descarta las primeras $N_{CP}$ muestras (contaminadas por ISI del símbolo anterior) y aplica la FFT a las $N$ restantes. Gracias al CP, esas $N$ muestras son el resultado de una convolución *circular*, y la DFT convierte convolución circular en multiplicación puntual:
+
+$$\mathcal{F}\{x \circledast h\}[k] = X[k] \cdot H[k]$$
+
+Éste es el momento donde todo el trabajo previo converge: el canal, que en tiempo mezclaba $L$ muestras, aparece en frecuencia como $N$ escalares independientes $H[k]$ — uno por subportadora.
+
+```python
+def ofdm_rx(y, N, N_CP):
+    """Eliminar CP + FFT. Devuelve Y[k] = H[k]·X[k] + W[k]."""
+    x = y[N_CP:]                       # descartar CP: quedan N muestras limpias
+    Y = np.fft.fft(x, norm='ortho')    # FFT: convolución circular → multiplicación
+    return Y
+```
+
+??? example "Verificación (sin ruido, canal conocido)"
+    ```python
+    H = np.fft.fft(h_channel, n=N)
+    Y = ofdm_rx(y_sin_ruido, N, N_CP)
+    residual = np.max(np.abs(Y - H * X_tx))
+    print(f'Residual máximo |Y − H·X|: {residual:.2e}')   # < 1e-10  ✓
+    ```
+
+---
+
+#### 4.5 Ecualizador Zero Forcing (ZF)
+
+**Entrada:** $Y[k]$, $H[k]$ conocido — **Operación:** división escalar por subportadora — **Salida:** $\hat{X}^{ZF}[k] = Y[k]/H[k]$
+
+Con $Y[k] = H[k]\,X[k] + W[k]$, la solución directa es dividir por $H[k]$:
 
 $$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
 
-El canal queda perfectamente cancelado, pero el ruido se amplifica por $1/|H[k]|$. Cuando la subportadora $k$ está en *deep fade* ($|H[k]| \ll 1$), la amplificación $1/|H[k]| \gg 1$ destruye el SNR efectivo aunque el SNR medio sea alto. El ZF es óptimo cuando el canal es fuerte y uniforme; es perjudicial en canales frequency-selective con nulos profundos.
+El canal queda perfectamente cancelado, pero el ruido se amplifica por $1/|H[k]|$. El SNR efectivo en la subportadora $k$ es:
 
-**MMSE.** El ecualizador *Minimum Mean Square Error* balancea cancelación del canal y amplificación del ruido:
+$$\text{SNR}^{ZF}[k] = |H[k]|^2 \cdot \text{SNR}_0$$
 
-$$\hat{X}^{MMSE}[k] = \frac{H^*[k]}{|H[k]|^2 + N_0/\sigma_s^2}\,Y[k]$$
+En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el SNR global sea alto. El ZF es óptimo solo cuando el canal es fuerte y uniforme en todas las subportadoras.
 
-Cada término tiene un rol concreto:
+```python
+H       = np.fft.fft(h_channel, n=N)   # DFT del canal (N puntos)
+X_hat   = Y / H                         # una división escalar por subportadora
+```
 
-- **$H^*[k]$ (numerador):** rotación conjugada que deshace la rotación de fase introducida por el canal.
-- **$|H[k]|^2$ (denominador):** energía del canal — cuanto más fuerte el canal, mayor la ganancia del ecualizador.
-- **$N_0/\sigma_s^2 = 1/\text{SNR}_k$ (denominador):** actúa como regulizador. Cuando el canal es débil, este término domina el denominador y limita la ganancia del ecualizador en lugar de dejarla crecer sin control.
+??? example "Verificación"
+    ```python
+    k_min = np.argmin(np.abs(H))
+    snr_zf_min = np.abs(H[k_min])**2 * SNR_lin
+    print(f'Subportadora más débil: k={k_min}, |H|={np.abs(H[k_min]):.3f}')
+    print(f'SNR efectivo ZF: {10*np.log10(snr_zf_min):.1f} dB')
+    ```
 
-La fórmula puede reescribirse como el producto del ZF por un **factor de contracción**:
+---
 
-$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}_k}}_{\text{contracción} \in (0,1)} \cdot Y[k]$$
+#### 4.6 Ecualizador MMSE
 
-Cuando el canal es fuerte ($|H[k]|^2 \gg 1/\text{SNR}$): contracción → 1, MMSE → ZF. Cuando la subportadora está en *deep fade* ($|H[k]|^2 \ll 1/\text{SNR}$): contracción → 0, el ecualizador devuelve cero antes que amplificar ruido de forma incontrolada.
+**Entrada:** $Y[k]$, $H[k]$, SNR — **Operación:** inversión regularizada del canal — **Salida:** $\hat{X}^{MMSE}[k]$ con ruido acotado en *fades*
 
-**Estimación del canal.** Para conocer $H[k]$ en el receptor, el transmisor inserta **subportadoras piloto** — posiciones con símbolo conocido $X_p[k]$. El receptor calcula $\hat{H}[k] = Y[k]/X_p[k]$ en esas posiciones e interpola al resto de subportadoras. La densidad de pilotos necesaria depende de la coherence bandwidth (cuánto varía $H[k]$ en frecuencia) y de la coherence time (cuánto varía en el tiempo). Este tema se desarrolla en la Sesión 08.
+El MMSE balancea cancelación del canal y amplificación del ruido mediante un **factor de contracción** que vale 1 cuando el canal es fuerte y cae hacia 0 en *deep fade*:
+
+$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\text{contracción} \in (0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + N_0/\sigma_s^2}\,Y[k]$$
+
+El término $1/\text{SNR}$ actúa como regularizador: impide que la ganancia crezca sin límite cuando $H[k] \to 0$.
+
+??? note "Los dos límites del MMSE"
+    - **Canal fuerte** ($|H[k]|^2 \gg 1/\text{SNR}$): contracción → 1, MMSE → ZF. Equivalentes.
+    - **Deep fade** ($|H[k]|^2 \ll 1/\text{SNR}$): contracción → 0. El MMSE devuelve un estimado cercano a cero; el ZF devuelve ruido amplificado con varianza $\sigma_w^2/|H[k]|^2 \to \infty$.
+
+```python
+SNR_lin   = 10 ** (SNR_dB / 10)
+X_hat     = (np.conj(H) / (np.abs(H)**2 + 1/SNR_lin)) * Y
+```
+
+??? example "Verificación"
+    La figura compara BER de ZF y MMSE sobre el canal de referencia. A SNR baja, MMSE supera a ZF en las subportadoras débiles; a SNR alta ambos convergen:
+
+    ![BER ZF vs MMSE](figures/ofdm-ber-equalizers.png)
+
+---
+
+#### 4.7 Estimación de Canal con Pilotos
+
+**Entrada:** $Y[k_p]$ en posiciones piloto + símbolo conocido $X_p$ — **Operación:** estimación LS + interpolación — **Salida:** $\hat{H}[k]$ para todas las subportadoras
+
+En la práctica $H[k]$ es desconocido. El transmisor reserva ciertas subportadoras como **pilotos** — transmite un símbolo conocido $X_p$ — y el receptor estima la ganancia del canal en esas posiciones mediante mínimos cuadrados (LS):
+
+$$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p}$$
+
+Luego interpola al resto de subportadoras. El desafío es que si los pilotos están demasiado separados en frecuencia, la interpolación no captura las variaciones de $H[k]$ — se produce aliasing en el dominio del retardo.
+
+??? note "Densidad mínima de pilotos"
+    $H[k]$ varía suavemente a escala $B_c$. Para capturarla sin aliasing, el espaciado entre pilotos debe satisfacer:
+
+    $$\Delta k_p \cdot \Delta f \ll B_c \quad\Longrightarrow\quad \Delta k_p \ll \frac{B_c}{\Delta f}$$
+
+    Con $B_c = 2\ \text{MHz}$ y $\Delta f = 30\ \text{kHz}$: $\Delta k_p \ll 66$. Un piloto cada 8 subportadoras es más que suficiente.
+
+```python
+pilot_spacing = 8
+pilot_idx     = np.arange(0, N, pilot_spacing)
+X_pilot       = np.ones(len(pilot_idx))            # pilotos BPSK: valor conocido = +1
+
+# Estimación LS en posiciones piloto
+H_ls = Y[pilot_idx] / X_pilot
+
+# Interpolación lineal al resto de subportadoras
+H_est = np.interp(np.arange(N), pilot_idx, H_ls)
+```
+
+??? example "Verificación"
+    ```python
+    H_true = np.fft.fft(h_channel, n=N)
+    mse    = np.mean(np.abs(H_est - H_true)**2)
+    print(f'MSE estimación: {mse:.2e}')   # pequeño sin ruido; crece con SNR bajo
+    ```
+
+---
+
+#### 4.8 BER End-to-End
+
+**Entrada:** bits aleatorios + parámetros del sistema — **Operación:** cadena completa TX→canal→RX — **Salida:** curva BER vs $E_b/N_0$
+
+Con todos los bloques en su lugar, la cadena completa permite medir el rendimiento real del sistema y compararlo con la cota teórica de AWGN:
+
+![BER OFDM end-to-end: ZF vs MMSE vs AWGN](figures/ofdm-ber-equalizers.png)
+
+Tres observaciones clave que debe extraer el estudiante de esta figura:
+
+1. **OFDM + ZF degradado vs AWGN:** las subportadoras en *deep fade* contribuyen desproporcionadamente a la BER total. La figura siguiente muestra que unas pocas subportadoras débiles elevan la BER global varios dB por encima de la referencia AWGN:
+
+    ![BER por subportadora](figures/ofdm-per-subcarrier-ber.png)
+
+2. **MMSE mejora ZF a SNR baja:** el regularizador limita la amplificación de ruido en los *fades* → menor BER global a SNR bajas.
+
+3. **Convergencia a SNR alta:** cuando $|H[k]|^2 \gg 1/\text{SNR}$ en todas las subportadoras, ZF y MMSE son equivalentes y ambos se aproximan a la cota AWGN.
+
+La brecha residual entre OFDM y AWGN no es un defecto del sistema — es la penalización de operar sobre un canal frequency-selective sin diversidad frecuencial. La codificación de canal (Sesión 04) y el *link adaptation* (Sesión 06) explotan esa diversidad para cerrar la brecha.
 
 #### Tabla de Dualidades OFDM
 
