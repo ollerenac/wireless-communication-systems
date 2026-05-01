@@ -417,17 +417,53 @@ Con el CP en su lugar, la cadena OFDM completa es:
                          Receptor (RX)
 ```
 
-**Ecualizador de un tap.** Dado $Y[k] = H[k] X[k] + W[k]$, la estimación del símbolo transmitido mediante el ecualizador *Zero Forcing* (ZF) es:
+**Lectura bloque a bloque.** Cada bloque de la cadena tiene un rol preciso que conecta directamente con la teoría de §1–§3:
 
-$$\hat{X}[k] = \frac{Y[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
+| Bloque | Qué hace | Por qué es necesario |
+|--------|----------|----------------------|
+| QAM mapper | Agrupa $k = \log_2 M$ bits y los codifica como símbolo complejo $X[k]$ | Convierte bits en amplitud + fase transmisibles |
+| IFFT ($N$ pts) | Transforma los $N$ símbolos en frecuencia en $N$ muestras en tiempo | Genera simultáneamente las $N$ subportadoras ortogonales sin $N$ moduladores físicos |
+| Añadir CP | Copia las últimas $N_{CP}$ muestras al frente del símbolo | Convierte la convolución lineal del canal en circular (§3) |
+| DAC | Muestras digitales → señal analógica RF | Interfaz con el medio físico |
+| **Canal h(t) + AWGN** | Convoluciona la señal con los ecos y añade ruido | El mundo real — no controlable |
+| Eliminar CP | Descarta las primeras $N_{CP}$ muestras (ISI del símbolo anterior) | Deja solo la convolución circular limpia |
+| FFT ($N$ pts) | Separa las $N$ subportadoras | Por la propiedad del CP: $Y[k] = H[k]\,X[k] + W[k]$ — sin mezcla entre subportadoras |
+| Ecualizador | Recupera $\hat{X}[k]$ a partir de $Y[k]$ y $H[k]$ | Deshace la distorsión del canal subportadora a subportadora |
+| QAM demapper | Símbolo complejo $\hat{X}[k]$ → bits | Decisión final |
 
-El ruido se amplifica por $1/H[k]$ — en subportadoras donde el canal tiene ganancia baja (deep fade), el ZF amplifica el ruido. El ecualizador MMSE (*Minimum Mean Square Error*) mitiga esto:
+Los dos bloques que aún no hemos analizado en detalle son el **ecualizador** y la **estimación de $H[k]$** — que son precisamente lo que esta sección desarrolla. Cierra con una tabla de dualidades que sintetiza las relaciones de diseño entre todos los parámetros OFDM.
 
-$$\hat{X}[k] = \frac{H^*[k]}{|H[k]|^2 + N_0/\sigma_s^2} Y[k]$$
+---
 
-que degrada graciosamente en fades profundos (no amplifica ruido descontroladamente). El ecualizador MMSE se reduce al ZF cuando $|H[k]|^2 \gg N_0/\sigma_s^2$.
+**Ecualizador de un tap.** La FFT del receptor entrega, para cada subportadora $k$:
 
-**Estimación del canal.** Para conocer $H[k]$, el transmisor inserta **subportadoras piloto** — subportadoras con símbolos conocidos. El receptor estima $H[k]$ en los pilotos e interpola entre ellos. Este tema se desarrolla en detalle en la Sesión 08.
+$$Y[k] = H[k]\,X[k] + W[k]$$
+
+$H[k]$ es la ganancia compleja del canal en esa frecuencia (calculada en §2) y $W[k]$ es el ruido. El problema de ecualización se reduce a: dado $Y[k]$ y $H[k]$, estima $X[k]$. La clave es que — gracias al CP — este problema es **escalar e independiente para cada $k$**: no hay mezcla entre subportadoras.
+
+**Zero Forcing (ZF).** La solución directa es dividir por $H[k]$:
+
+$$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
+
+El canal queda perfectamente cancelado, pero el ruido se amplifica por $1/|H[k]|$. Cuando la subportadora $k$ está en *deep fade* ($|H[k]| \ll 1$), la amplificación $1/|H[k]| \gg 1$ destruye el SNR efectivo aunque el SNR medio sea alto. El ZF es óptimo cuando el canal es fuerte y uniforme; es perjudicial en canales frequency-selective con nulos profundos.
+
+**MMSE.** El ecualizador *Minimum Mean Square Error* balancea cancelación del canal y amplificación del ruido:
+
+$$\hat{X}^{MMSE}[k] = \frac{H^*[k]}{|H[k]|^2 + N_0/\sigma_s^2}\,Y[k]$$
+
+Cada término tiene un rol concreto:
+
+- **$H^*[k]$ (numerador):** rotación conjugada que deshace la rotación de fase introducida por el canal.
+- **$|H[k]|^2$ (denominador):** energía del canal — cuanto más fuerte el canal, mayor la ganancia del ecualizador.
+- **$N_0/\sigma_s^2 = 1/\text{SNR}_k$ (denominador):** actúa como regulizador. Cuando el canal es débil, este término domina el denominador y limita la ganancia del ecualizador en lugar de dejarla crecer sin control.
+
+La fórmula puede reescribirse como el producto del ZF por un **factor de contracción**:
+
+$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}_k}}_{\text{contracción} \in (0,1)} \cdot Y[k]$$
+
+Cuando el canal es fuerte ($|H[k]|^2 \gg 1/\text{SNR}$): contracción → 1, MMSE → ZF. Cuando la subportadora está en *deep fade* ($|H[k]|^2 \ll 1/\text{SNR}$): contracción → 0, el ecualizador devuelve cero antes que amplificar ruido de forma incontrolada.
+
+**Estimación del canal.** Para conocer $H[k]$ en el receptor, el transmisor inserta **subportadoras piloto** — posiciones con símbolo conocido $X_p[k]$. El receptor calcula $\hat{H}[k] = Y[k]/X_p[k]$ en esas posiciones e interpola al resto de subportadoras. La densidad de pilotos necesaria depende de la coherence bandwidth (cuánto varía $H[k]$ en frecuencia) y de la coherence time (cuánto varía en el tiempo). Este tema se desarrolla en la Sesión 08.
 
 #### Tabla de Dualidades OFDM
 
@@ -440,6 +476,8 @@ que degrada graciosamente en fades profundos (no amplifica ruido descontroladame
 | Condición CP: $T_{CP} > \tau_{\max}$ | $\leftrightarrow$ | Condición flat: $\Delta f \ll B_c$ |
 | Coherence time $T_c$ | $\leftrightarrow$ | Doppler spread $f_{D,\text{max}} = 1/(2\pi T_c)$|
 | Condición slow fading: $T_s \ll T_c$ | $\leftrightarrow$ | Condición sin ICI: $\Delta f \gg f_{D,\text{max}}$ |
+
+**Cómo usar la tabla para diseñar.** El diseñador elige $N$, $N_{CP}$ y $B$ — estos determinan todos los valores de la tabla. El canal impone las restricciones ($B_c$, $\tau_{\max}$, $f_{D,\text{max}}$) que no son controlables. La tensión central de diseño es que $N$ aparece en dos condiciones con efectos opuestos: aumentar $N$ estrecha $\Delta f$ (favorable para ISI: $\Delta f \ll B_c$) pero alarga $T_s$ (desfavorable para Doppler: $T_s \ll T_c$). Elegir $N$ es encontrar el equilibrio entre estas dos restricciones — exactamente el boxplot de §1. La numerología de 5G NR resuelve esto escalando $\Delta f$ según el entorno, como veremos en §5.
 
 ---
 
@@ -465,6 +503,14 @@ El período de símbolo y la longitud del CP se reducen proporcionalmente, permi
 - **mmWave ($\sigma_\tau \approx 30\ \text{ns}$):** $\tau_{\max} > 90\ \text{ns}$ → $\mu \leq 3$ (120 kHz)
 
 La alta SCS en mmWave también proporciona mayor robustez frente al Doppler, ya que $\Delta f / f_{D,\text{max}}$ aumenta.
+
+Elegida la numerología, el rendimiento útil del sistema depende de cuánta capacidad se destina a overhead. OFDM tiene tres fuentes de pérdida que no existen en una portadora única:
+
+1. **CP** — ocupa una fracción $N_{CP}/(N + N_{CP})$ del tiempo de transmisión. Es el precio de la circularidad.
+2. **Subportadoras de guarda** — las posiciones en los bordes del espectro protegen frente a interferencia con canales adyacentes pero no transportan datos.
+3. **Pilotos DMRS** — las subportadoras reservadas para estimar $H[k]$ en el receptor consumen espectro útil.
+
+La eficiencia espectral neta integra las tres penalizaciones:
 
 #### Eficiencia Espectral y Overhead
 
