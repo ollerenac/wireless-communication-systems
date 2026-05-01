@@ -439,6 +439,24 @@ A continuación se desarrolla cada bloque individualmente: qué **entra**, cuál
 
 **Entrada:** $k \cdot N$ bits $\in \{0,1\}$ — **Operación:** codificar grupos de $k = \log_2 M$ bits como puntos de la constelación M-QAM — **Salida:** $N$ símbolos complejos $X[k]$ con $\mathbb{E}[|X[k]|^2] = 1$
 
+??? note "Un símbolo no es una onda — es un número"
+    La salida del mapper es un escalar complejo $X[k] = I + jQ$: un punto en el plano complejo, sin extensión temporal. No es una onda; no tiene forma de onda propia.
+
+    Para convertirse en señal transmisible, ese número recorre la siguiente cadena:
+
+    ```
+    símbolo (I+jQ) → pulse shaping → señal BB continua → ×portadora → señal RF
+    número complejo    filtro h_PS(t)   x_I(t), x_Q(t)    mezclador    x_RF(t)
+    ```
+
+    El **pulse shaping** distribuye la energía del símbolo en el tiempo mediante un filtro — normalmente un *root raised cosine* (RRC). Su doble función: dar forma continua a la señal y limitar el ancho de banda ocupado sin ISI entre símbolos consecutivos (criterio de Nyquist). En sistemas de portadora única (UMTS/WCDMA, Bluetooth, modems de cable DOCSIS) este bloque es explícito y aparece en el hardware o en el DSP.
+
+    El **mezclador** multiplica la señal banda base compleja por la portadora:
+
+    $$x_{\text{RF}}(t) = I(t)\cos(2\pi f_c t) - Q(t)\sin(2\pi f_c t)$$
+
+    produciendo la señal de radiofrecuencia real lista para el amplificador y la antena. Hasta ese punto todo el procesado opera en banda base — en Python, con números complejos — sin necesidad de definir $f_c$.
+
 El desafío es que la asignación bits→puntos no es arbitraria: se usa **Gray coding** para que puntos vecinos de la constelación difieran en exactamente 1 bit. Así, cuando el ruido confunde un símbolo con su vecino más cercano, se comete un solo error de bit en lugar de $k$.
 
 ??? note "Codificación Gray en QPSK"
@@ -477,6 +495,18 @@ La IFFT genera las $N$ subportadoras simultáneamente:
 $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}$$
 
 Sin el CP, al pasar por un canal multipath la convolución sería *lineal* y la FFT no podría invertirla limpiamente. Al copiar las últimas $N_{CP}$ muestras al frente, el canal "ve" una señal periódica y la convolución se vuelve *circular* — exactamente lo que la FFT del receptor puede deshacer.
+
+??? note "La IFFT como pulse shaping implícito — por qué OFDM no necesita ese bloque"
+    En un transmisor de **portadora única**, entre el mapper y el DAC existe un bloque explícito de pulse shaping que convierte el tren de símbolos discretos en una señal continua con espectro acotado. En OFDM ese bloque no aparece en el diagrama — la IFFT lo reemplaza implícitamente.
+
+    La razón: la IFFT sobre una ventana rectangular de $N$ muestras produce, en frecuencia, una función sinc centrada en cada subportadora. La sinc tiene nulos exactamente en las frecuencias de todas las demás subportadoras — esa es la ortogonalidad demostrada en §2. El espectro total del símbolo OFDM queda acotado sin ningún filtro adicional.
+
+    | Sistema | Pulse shaping | Rol |
+    |---------|--------------|-----|
+    | UMTS, Bluetooth, cable DOCSIS | RRC explícito en el DSP | Limita espectro, cumple Nyquist |
+    | OFDM (LTE, 5G NR, Wi-Fi) | Ninguno — la IFFT lo hace implícitamente | La ortogonalidad entre sincs garantiza la separación |
+
+    El precio de eliminar el pulse shaping es que todos los símbolos $X[k]$ se suman en el mismo bloque de tiempo, produciendo una amplitud variable alta (PAPR elevado). Ese es el reto característico de OFDM que se analiza en §5.
 
 ??? note "¿Por qué norm='ortho'?"
     La opción `norm='ortho'` aplica el factor $1/\sqrt{N}$ en la IFFT y su inverso en la FFT, haciendo ambas unitarias: $\|x\|^2 = \|X\|^2$. La potencia de la señal en tiempo es igual a la potencia de los símbolos en frecuencia — conveniente para calibrar el nivel de ruido en el canal.
