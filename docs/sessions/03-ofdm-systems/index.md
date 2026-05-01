@@ -514,21 +514,23 @@ El canal introduce dos perturbaciones simultáneas: los ecos mezclan muestras co
     $$\sigma_w^2 = \frac{1}{2\,k\,\text{SNR}_{\text{lineal}}}$$
 
 ```python
-def apply_channel(x, h, SNR_dB, k=2):
-    """Convolución lineal con h + ruido AWGN calibrado a Eb/N0."""
-    y_ch   = np.convolve(x, h, mode='full')[:len(x)]
-    SNR    = 10 ** (SNR_dB / 10)
-    sigma2 = 1 / (2 * k * SNR)
-    noise  = (rng.normal(0, np.sqrt(sigma2), len(x)) +
-              1j * rng.normal(0, np.sqrt(sigma2), len(x)))
-    return y_ch + noise
+def apply_channel(x_signal, h):
+    """Convolución lineal con h: simula el canal multipath."""
+    return np.convolve(x_signal, h, mode='full')[:len(x_signal)]
+
+# El ruido se añade por separado, calibrado al Eb/N0 del punto de simulación:
+SNR_lin = 10 ** (SNR_dB / 10)
+sigma2  = 1 / (2 * k * SNR_lin)          # varianza por componente I o Q
+noise   = (rng.normal(0, np.sqrt(sigma2), N + N_CP) +
+           1j * rng.normal(0, np.sqrt(sigma2), N + N_CP))
+y_noisy = apply_channel(x_cp, h_channel) + noise
 ```
 
 ??? example "Verificación (sin ruido)"
     ```python
-    y = apply_channel(x_cp, h_channel, SNR_dB=100)
-    # Con canal normalizado (||h||²=1) y SNR muy alto, la potencia de salida ≈ potencia de entrada
-    ratio = np.mean(np.abs(y)**2) / np.mean(np.abs(x_cp)**2)
+    y = apply_channel(x_cp, h_channel)
+    # Canal normalizado: ||h||² = 1 → potencia de salida ≈ potencia de entrada
+    ratio = np.mean(np.abs(y[:N+N_CP])**2) / np.mean(np.abs(x_cp)**2)
     print(f'Ratio de potencia: {ratio:.4f}')   # ≈ 1.0  ✓
     ```
 
@@ -545,19 +547,25 @@ $$\mathcal{F}\{x \circledast h\}[k] = X[k] \cdot H[k]$$
 Éste es el momento donde todo el trabajo previo converge: el canal, que en tiempo mezclaba $L$ muestras, aparece en frecuencia como $N$ escalares independientes $H[k]$ — uno por subportadora.
 
 ```python
-def ofdm_rx(y, N, N_CP):
-    """Eliminar CP + FFT. Devuelve Y[k] = H[k]·X[k] + W[k]."""
-    x = y[N_CP:]                       # descartar CP: quedan N muestras limpias
-    Y = np.fft.fft(x, norm='ortho')    # FFT: convolución circular → multiplicación
-    return Y
+def ofdm_rx_with_channel(y_received, N, N_CP, h, equalize='zf', SNR_dB=30):
+    """Eliminar CP + FFT + ecualización. El paso de esta sección es el CP+FFT."""
+    x = y_received[N_CP:]               # descartar CP: quedan N muestras limpias
+    Y = np.fft.fft(x, norm='ortho')     # FFT: convolución circular → multiplicación
+    H = np.fft.fft(h, n=N)             # DFT del canal (N puntos)
+    if equalize == 'zf':
+        return Y / H
+    SNR_lin = 10 ** (SNR_dB / 10)
+    return (np.conj(H) / (np.abs(H)**2 + 1/SNR_lin)) * Y
 ```
 
-??? example "Verificación (sin ruido, canal conocido)"
+??? example "Verificación (sin ruido, equalize='zf')"
     ```python
     H = np.fft.fft(h_channel, n=N)
-    Y = ofdm_rx(y_sin_ruido, N, N_CP)
-    residual = np.max(np.abs(Y - H * X_tx))
-    print(f'Residual máximo |Y − H·X|: {residual:.2e}')   # < 1e-10  ✓
+    # Pasar por canal sin ruido y recuperar con ZF
+    y_ideal  = apply_channel(x_cp, h_channel)
+    X_hat    = ofdm_rx_with_channel(y_ideal, N, N_CP, h_channel, equalize='zf')
+    residual = np.max(np.abs(X_hat - X_tx))
+    print(f'Residual máximo |X̂ − X|: {residual:.2e}')   # < 1e-10  ✓
     ```
 
 ---
