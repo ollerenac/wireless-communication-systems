@@ -404,18 +404,16 @@ para $d = 0, 1, \ldots, 8$. Construye una tabla con todos los valores de $P[d]$.
 Con el CP en su lugar, la cadena OFDM completa es:
 
 ```mermaid
-graph LR
-    A[Bits] --> B["QAM<br/>mapper"]
-    B --> C["S/P<br/>(N símbolos)"]
-    C --> D["IFFT<br/>N puntos"]
-    D --> E["Añadir CP<br/>(N_CP muestras)"]
-    E --> F["P/S + DAC<br/>Canal h(t)"]
-    F --> G["ADC + P/S<br/>(N+N_CP muestras)"]
-    G --> H["Eliminar CP<br/>(N muestras)"]
-    H --> I["FFT<br/>N puntos"]
-    I --> J["Ecualizador<br/>1 tap por subportadora"]
-    J --> K["QAM<br/>demapper"]
-    K --> L[Bits]
+flowchart TD
+    subgraph TX["📡  Transmisor"]
+        direction LR
+        A([Bits TX]) --> B["QAM mapper"] --> C["IFFT (N pts)"] --> D["Añadir CP (N_CP)"] --> E[DAC]
+    end
+    subgraph RX["📻  Receptor"]
+        direction LR
+        F[ADC] --> G["Eliminar CP (N muestras)"] --> H["FFT (N pts)"] --> I["Ecualizador (1 tap / sc)"] --> J["QAM demapper"] --> K([Bits RX])
+    end
+    E -->|"Canal  h(t)  +  AWGN"| F
 ```
 
 **Ecualizador de un tap.** Dado $Y[k] = H[k] X[k] + W[k]$, la estimación del símbolo transmitido mediante el ecualizador *Zero Forcing* (ZF) es:
