@@ -417,6 +417,35 @@ Con el CP en su lugar, la cadena OFDM completa es:
                          Receptor (RX)
 ```
 
+??? note "Del diagrama al notebook: por qué DAC y ADC desaparecen del código"
+    El diagrama anterior muestra la cadena a nivel de sistema. La cadena física real entre el DAC y el ADC es más larga:
+
+    ```
+    Cadena física completa (entre DAC y ADC):
+
+    x[n] ──► DAC ──► filtro paso-bajos TX ──► mezclador TX (×e^{j2πf_c t})
+                                                        │
+                                               canal h(t) + AWGN
+                                                        │
+    y[n] ◄── ADC ◄── filtro paso-bajos RX ◄── mezclador RX (×e^{-j2πf_c t})
+    ```
+
+    El notebook colapsa todo ese tramo en un único bloque discreto `apply_channel(x, h)`. Esto es válido bajo dos suposiciones estándar en simulación de sistemas de comunicaciones:
+
+    **1. Muestreo perfecto (Nyquist cumplido).** El DAC reconstruye $x(t)$ a partir de $x[n]$ y el ADC la vuelve a muestrear. Si $f_s = N \cdot \Delta f$ cumple Nyquist — lo cual está garantizado por diseño en OFDM — el par DAC→ADC es transparente: $x[n] \to x(t) \to x[n]$ sin pérdida.
+
+    **2. Canal discreto equivalente.** El canal físico $h(t)$ opera en tiempo continuo, pero al muestrear la salida a $f_s$ se obtiene exactamente la convolución discreta $y[n] = \sum_l h[l]\,x[n-l] + w[n]$. Los mezcladores y filtros de banda base se absorben en esta expresión. El resultado es que el canal continuo queda representado fielmente por la secuencia discreta $h[l]$.
+
+    | Bloque físico | Efecto | ¿Modelado explícitamente? |
+    |---------------|--------|--------------------------|
+    | DAC + ADC | Conversión analógico↔digital | No — asumido transparente (Nyquist) |
+    | Mezcladores TX/RX | Subir/bajar a RF ($f_c$) | No — operamos en banda base compleja |
+    | Filtros paso-bajos | Limitar espectro fuera de banda | No — asumido ideales |
+    | Canal $h(t)$ continuo | Convolución + ecos | Sí, modelado como $h[l]$ discreto |
+    | AWGN | Ruido térmico | Sí, como $w[n]$ complejo gaussiano |
+
+    Todo lo que está fuera de la banda base discreta existe en el hardware pero no cambia los cálculos de BER — el parámetro de rendimiento que usamos desde la Sesión 01. El notebook opera íntegramente en **banda base discreta equivalente**, el modelo estándar en simulación de sistemas LTE y 5G NR.
+
 **Lectura bloque a bloque.** Cada bloque de la cadena tiene un rol preciso que conecta directamente con la teoría de §1–§3:
 
 | Bloque | Qué hace | Por qué es necesario |
