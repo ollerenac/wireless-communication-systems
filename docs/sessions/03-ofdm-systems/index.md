@@ -559,11 +559,11 @@ def ofdm_tx(X, N_CP):
 
 ---
 
-#### 4.3 Canal Multipath + AWGN
+#### 4.3 Canal Multipath
 
-**Entrada:** $x[n]$ de longitud $N + N_{CP}$ — **Operación:** convolución lineal con $h[l]$ + ruido gaussiano — **Salida:** $y[n] = (x \ast h)[n] + w[n]$
+**Entrada:** $x[n]$ de longitud $N + N_{CP}$ — **Operación:** convolución lineal con $h[l]$ — **Salida:** $y[n] = \sum_{l=0}^{L-1} h[l]\,x[n-l]$
 
-El canal introduce dos perturbaciones simultáneas: los ecos mezclan muestras consecutivas (ISI) y el ruido térmico degrada el SNR. El desafío de implementación es calibrar el nivel de ruido correctamente a partir del $E_b/N_0$ deseado.
+El canal introduce ISI: los ecos mezclan muestras de símbolos consecutivos. El AWGN se añade por separado sobre la salida del canal, calibrado al $E_b/N_0$ deseado.
 
 ??? note "Calibración del nivel de ruido"
     Con $E_s = 1$ y $k$ bits/símbolo: $N_0 = E_s/(k \cdot \text{SNR}_{\text{lineal}})$. La varianza del ruido por componente (I o Q) es $\sigma_w^2 = N_0/2$.
