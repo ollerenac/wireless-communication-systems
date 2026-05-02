@@ -595,7 +595,7 @@ y_noisy = apply_channel(x_cp, h_channel) + noise
 
 #### 4.4 Eliminar CP + FFT
 
-**Entrada:** $y[m]$ de longitud $N + N_{CP}$ — **Operación:** descartar CP, FFT — **Salida:** $Y[k] = H[k]\,X[k] + W[k]$ — una ganancia escalar independiente por subportadora
+**Entrada:** $y[n]$ de longitud $N + N_{CP}$ — **Operación:** descartar CP, FFT — **Salida:** $Y[k] = H[k]\,X[k] + W[k]$ — una ganancia escalar independiente por subportadora
 
 El receptor descarta las primeras $N_{CP}$ muestras (contaminadas por ISI del símbolo anterior) y aplica la FFT a las $N$ restantes. Gracias al CP, esas $N$ muestras son el resultado de una convolución *circular*, y la DFT convierte convolución circular en multiplicación puntual:
 
@@ -604,25 +604,18 @@ $$\mathcal{F}\{x \circledast h\}[k] = X[k] \cdot H[k]$$
 Éste es el momento donde todo el trabajo previo converge: el canal, que en tiempo mezclaba $L$ muestras, aparece en frecuencia como $N$ escalares independientes $H[k]$ — uno por subportadora.
 
 ```python
-def ofdm_rx_with_channel(y_received, N, N_CP, h, equalize='zf', SNR_dB=30):
-    """Eliminar CP + FFT + ecualización. El paso de esta sección es el CP+FFT."""
+def ofdm_rx_no_channel(y_received, N, N_CP):
+    """Eliminar CP + FFT normalizada. Salida: Y[k] = H[k]·X[k] + W[k]."""
     x = y_received[N_CP:]               # descartar CP: quedan N muestras limpias
-    Y = np.fft.fft(x, norm='ortho')     # FFT: convolución circular → multiplicación
-    H = np.fft.fft(h, n=N)             # DFT del canal (N puntos)
-    if equalize == 'zf':
-        return Y / H
-    SNR_lin = 10 ** (SNR_dB / 10)
-    return (np.conj(H) / (np.abs(H)**2 + 1/SNR_lin)) * Y
+    return np.fft.fft(x, norm='ortho')  # FFT: convolución circular → multiplicación
 ```
 
-??? example "Verificación (sin ruido, equalize='zf')"
+??? example "Verificación (sin canal)"
     ```python
-    H = np.fft.fft(h_channel, n=N)
-    # Pasar por canal sin ruido y recuperar con ZF
-    y_ideal  = apply_channel(x_cp, h_channel)
-    X_hat    = ofdm_rx_with_channel(y_ideal, N, N_CP, h_channel, equalize='zf')
-    residual = np.max(np.abs(X_hat - X_tx))
-    print(f'Residual máximo |X̂ − X|: {residual:.2e}')   # < 1e-10  ✓
+    # Sin canal: TX → RX debe recuperar X exactamente
+    Y_ideal = ofdm_rx_no_channel(x_cp, N, N_CP)
+    residual = np.max(np.abs(Y_ideal - X_tx))
+    print(f'Residual máximo |Y[k] - X[k]|: {residual:.2e}')   # ~1e-14  ✓
     ```
 
 ---
