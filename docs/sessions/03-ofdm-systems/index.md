@@ -822,7 +822,37 @@ H_est = np.interp(np.arange(N), pilot_idx, H_ls)
 
 ---
 
-#### 4.8 BER End-to-End
+#### 4.8 QAM Demapper
+
+**Entrada:** símbolo complejo ecualizado $\hat{X}[k]$ — **Operación:** asignar al punto de constelación más cercano — **Salida:** $\log_2 M$ bits por subportadora
+
+El ecualizador entrega $\hat{X}[k]$: un número complejo que es una estimación ruidosa del símbolo transmitido $X[k]$. El QAM demapper es el bloque que convierte ese número complejo en bits. Mira dónde cae $\hat{X}[k]$ en el plano complejo y lo asigna al punto de la constelación más cercano:
+
+$$\hat{s}[k] = \arg\min_{s \in \mathcal{C}} \left|\hat{X}[k] - s\right|^2$$
+
+donde $\mathcal{C}$ es el conjunto de $M$ puntos de la constelación. Esta operación se llama **decisión hard** — elige un ganador y descarta toda la información de distancia.
+
+**Gray coding.** La asignación bits→puntos no es arbitraria: con Gray coding, puntos vecinos de la constelación difieren en exactamente 1 bit. Cuando el ruido desplaza $\hat{X}[k]$ al vecino más próximo — el error más frecuente — solo se corrompe 1 bit de los $\log_2 M$ posibles. Sin Gray coding, el mismo error de símbolo podría corromper varios bits simultáneamente y elevar la BER artificialmente.
+
+**Regiones de decisión.** El plano complejo queda dividido en $M$ regiones de Voronoi, una por punto de constelación. El demapper comete un error cuando el ruido residual desplaza $\hat{X}[k]$ fuera de la región del símbolo verdadero. Las regiones se estrechan con el orden de modulación:
+
+| Modulación | Distancia mínima entre vecinos | Riesgo de error |
+|:----------:|:------------------------------:|:---------------:|
+| QPSK | $\sqrt{2} \approx 1{,}41$ | bajo |
+| 16-QAM | $2/\sqrt{10} \approx 0{,}63$ | moderado |
+| 64-QAM | $2/\sqrt{42} \approx 0{,}31$ | alto |
+
+El mismo nivel de ruido que apenas perturba QPSK puede cruzar frecuentemente las fronteras de 64-QAM — de ahí que modulaciones de orden superior requieran mayor SNR para la misma BER.
+
+**Decisión soft (LLR).** La decisión hard descarta información útil: solo dice "este punto ganó". Una alternativa es calcular, para cada bit $b_i$, el **logaritmo de la razón de verosimilitud** (LLR):
+
+$$\Lambda_i[k] = \log \frac{P(b_i = 0 \mid \hat{X}[k])}{P(b_i = 1 \mid \hat{X}[k])}$$
+
+El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud indica alta certeza; un valor próximo a cero indica ambigüedad. Un decodificador FEC (LDPC, turbo) puede explotar esa información de confianza para corregir errores con una eficiencia muy superior a la que obtendría a partir de bits duros. La transición de decisión hard a soft es uno de los saltos más importantes en el diseño de receptores modernos — se tratará en detalle en la Sesión 04.
+
+---
+
+#### 4.9 BER End-to-End
 
 **Entrada:** bits aleatorios + parámetros del sistema — **Operación:** cadena completa TX→canal→RX — **Salida:** curva BER vs $E_b/N_0$
 
