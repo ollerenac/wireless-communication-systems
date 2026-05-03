@@ -693,17 +693,25 @@ def zf_equalizer(Y, h, N):
     print(f'SNR efectivo ZF en esa subportadora: {10*np.log10(snr_zf_min):.1f} dB')
     ```
 
+El ZF tiene una debilidad estructural: trata todas las subportadoras por igual. Divide por $H[k]$ sin importar si ese $H[k]$ es grande o pequeño. En las subportadoras fuertes eso es perfecto — la inversión es estable y el ruido resultante es pequeño. Pero en las subportadoras débiles, el ZF divide por un número cercano a cero y el ruido se dispara. No hay nada que el ZF pueda hacer al respecto: su único objetivo es eliminar la distorsión del canal, y lo consigue siempre, aunque amplifique el ruido hasta hacerlo dominante.
+
+La pregunta natural es: ¿existe un ecualizador que sea más inteligente en esas subportadoras? En lugar de invertir el canal ciegamente, ¿podría detectar que una subportadora está muy atenuada y moderar su respuesta para no amplificar el ruido? La respuesta es sí, y ese ecualizador es el MMSE.
+
 ---
 
 #### 4.6 Ecualizador MMSE
 
 **Entrada:** $Y[k]$, $H[k]$, SNR — **Operación:** inversión regularizada del canal — **Salida:** $\hat{X}^{MMSE}[k]$ con ruido acotado en *fades*
 
-El MMSE balancea cancelación del canal y amplificación del ruido mediante un **factor de contracción** que vale 1 cuando el canal es fuerte y cae hacia 0 en *deep fade*:
+La idea del MMSE es sencilla: en lugar de invertir el canal a ciegas, multiplica el resultado del ZF por un factor $\alpha[k] \in (0,1)$ que depende de la calidad del canal en cada subportadora. Ese factor se llama **factor de contracción** (*shrinkage factor*):
 
-$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\text{contracción} \in (0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + N_0/\sigma_s^2}\,Y[k]$$
+$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\alpha[k]\;\in\;(0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + 1/\text{SNR}}\,Y[k]$$
 
-El término $1/\text{SNR}$ actúa como regularizador: impide que la ganancia crezca sin límite cuando $H[k] \to 0$.
+Cuando el canal es fuerte ($|H[k]|$ grande), $\alpha[k] \approx 1$ y el MMSE se comporta exactamente igual que el ZF. Cuando el canal es débil ($|H[k]| \approx 0$), $\alpha[k] \approx 0$ y el MMSE devuelve una estimación cercana a cero — ruidosa, sí, pero acotada — en lugar del ruido amplificado al infinito que produciría el ZF.
+
+Dicho de otro modo: **el ZF es un caso particular del MMSE** cuando el SNR tiende a infinito. Con ruido cero, $1/\text{SNR} \to 0$, $\alpha[k] \to 1$ para todas las subportadoras, y ambos ecualizadores son idénticos. El MMSE solo se diferencia del ZF cuando hay ruido suficiente como para que importar cuánto se amplifica.
+
+El término $1/\text{SNR}$ en el denominador actúa como **regularizador**: suma una constante positiva para evitar que la ganancia $1/H[k]$ crezca sin límite cuando $H[k] \to 0$. A cambio, introduce un pequeño sesgo — el símbolo no queda perfectamente invertido — pero ese sesgo es mucho menor que el ruido que el ZF habría amplificado.
 
 ??? note "Los dos límites del MMSE"
     - **Canal fuerte** ($|H[k]|^2 \gg 1/\text{SNR}$): contracción → 1, MMSE → ZF. Equivalentes.
