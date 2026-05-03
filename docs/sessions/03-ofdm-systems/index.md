@@ -695,6 +695,10 @@ def zf_equalizer(Y, h, N):
 
 El ZF tiene una debilidad estructural: trata todas las subportadoras por igual. Divide por $H[k]$ sin importar si ese $H[k]$ es grande o pequeño. En las subportadoras fuertes eso es perfecto — la inversión es estable y el ruido resultante es pequeño. Pero en las subportadoras débiles, el ZF divide por un número cercano a cero y el ruido se dispara. No hay nada que el ZF pueda hacer al respecto: su único objetivo es eliminar la distorsión del canal, y lo consigue siempre, aunque amplifique el ruido hasta hacerlo dominante.
 
+La figura lo muestra directamente: los dos paneles tienen exactamente las mismas barras con los mismos colores, pero en orden inverso. Donde el canal tiene ganancia baja (barra corta, color azul/cian en el panel izquierdo), el ruido tras el ecualizador tiene potencia alta (barra larga, mismo color azul/cian en el panel derecho). El ZF convierte el problema del canal en un problema de ruido, subportadora a subportadora.
+
+![El ZF convierte canal débil en ruido amplificado](figures/zf-noise-amplification.png)
+
 La pregunta natural es: ¿existe un ecualizador que sea más inteligente en esas subportadoras? En lugar de invertir el canal ciegamente, ¿podría detectar que una subportadora está muy atenuada y moderar su respuesta para no amplificar el ruido? La respuesta es sí, y ese ecualizador es el MMSE.
 
 ---
