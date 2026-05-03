@@ -624,27 +624,52 @@ def ofdm_rx_no_channel(y_received, N, N_CP):
 
 **Entrada:** $Y[k]$, $H[k]$ conocido — **Operación:** división escalar por subportadora — **Salida:** $\hat{X}^{ZF}[k] = Y[k]/H[k]$
 
-Con $Y[k] = H[k]\,X[k] + W[k]$, la solución directa es dividir por $H[k]$:
+##### El problema que resuelve el ecualizador
 
-$$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
+Tras el bloque anterior, el receptor dispone de:
 
-El canal queda perfectamente cancelado, pero el ruido se amplifica por $1/|H[k]|$. El SNR efectivo en la subportadora $k$ es:
+$$Y[k] = H[k]\,X[k] + W[k]$$
 
-$$\text{SNR}^{ZF}[k] = |H[k]|^2 \cdot \text{SNR}_0$$
+El canal no distorsiona todas las subportadoras por igual: cada $H[k]$ es un número complejo distinto con módulo $|H[k]|$ (cuánto atenúa) y fase $\angle H[k]$ (cuánto rota). El símbolo QPSK transmitido $X[k]$ llega escalado y girado: si $|H[k]| = 0{,}3$ y $\angle H[k] = 45°$, el punto de la constelación aparece a un tercio de su amplitud original y rotado 45 grados. Con $N$ subportadoras recibiendo $N$ ganancias distintas, la constelación se convierte en una nube dispersa que ningún detector puede interpretar directamente.
 
-En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el SNR global sea alto. El ZF es óptimo solo cuando el canal es fuerte y uniforme en todas las subportadoras.
+El **ecualizador** es el bloque que corrige esta distorsión: dado $Y[k]$ y el conocimiento de $H[k]$, produce una estimación $\hat{X}[k]$ de los símbolos transmitidos.
+
+##### La solución Zero Forcing
+
+Si $H[k]$ es conocido, la corrección más directa es dividir $Y[k]$ por $H[k]$:
+
+$$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = \frac{H[k]\,X[k] + W[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
+
+El término $H[k]/H[k] = 1$ recupera el símbolo original exactamente. El nombre *Zero Forcing* describe precisamente eso: **fuerza la respuesta del canal a cero** — equivalentemente, fuerza la ganancia efectiva del canal a la unidad en cada subportadora.
+
+##### El costo: amplificación del ruido
+
+La división por $H[k]$ actúa sobre toda la señal recibida, incluido el ruido. El residuo tras la ecualización es:
+
+$$\hat{X}^{ZF}[k] = X[k] + \underbrace{\frac{W[k]}{H[k]}}_{\text{ruido amplificado}}$$
+
+La potencia del ruido amplificado es $\sigma_w^2 / |H[k]|^2$. Con potencia de señal unitaria ($|X[k]|^2 = 1$), el SNR efectivo en la subportadora $k$ es:
+
+$$\text{SNR}^{ZF}[k] = \frac{1}{\sigma_w^2 / |H[k]|^2} = |H[k]|^2 \cdot \text{SNR}_0$$
+
+Cada subportadora tiene un SNR propio, proporcional al cuadrado de la ganancia del canal en esa frecuencia. En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el $\text{SNR}_0$ global sea alto — el ZF amplifica el ruido hasta hacerlo dominante. La figura siguiente muestra el efecto del ecualizador sobre la constelación recibida, con los puntos coloreados según $|H[k]|$ (rojo = subportadora débil, verde = subportadora fuerte).
+
+![Efecto del ecualizador ZF sobre la constelación](figures/zf-equalizer-effect.png)
 
 ```python
-H       = np.fft.fft(h_channel, n=N)   # DFT del canal (N puntos)
-X_hat   = Y / H                         # una división escalar por subportadora
+def zf_equalizer(Y, h, N):
+    """ZF: divide por la DFT del canal → elimina distorsión (pero amplifica ruido)."""
+    H = np.fft.fft(h, n=N)
+    return Y / H
 ```
 
 ??? example "Verificación"
     ```python
+    H = np.fft.fft(h_channel, n=N)
     k_min = np.argmin(np.abs(H))
     snr_zf_min = np.abs(H[k_min])**2 * SNR_lin
-    print(f'Subportadora más débil: k={k_min}, |H|={np.abs(H[k_min]):.3f}')
-    print(f'SNR efectivo ZF: {10*np.log10(snr_zf_min):.1f} dB')
+    print(f'Subportadora más débil: k={k_min}, |H[k]|={np.abs(H[k_min]):.3f}')
+    print(f'SNR efectivo ZF en esa subportadora: {10*np.log10(snr_zf_min):.1f} dB')
     ```
 
 ---
