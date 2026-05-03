@@ -656,6 +656,18 @@ Cada subportadora tiene un SNR propio, proporcional al cuadrado de la ganancia d
 
 ![Efecto del ecualizador ZF sobre la constelación](figures/zf-equalizer-effect.png)
 
+##### El detector y las regiones de decisión
+
+La ecualización **no garantiza** que los símbolos caigan en sus regiones de decisión correctas. El ecualizador produce $\hat{X}^{ZF}[k] = X[k] + W[k]/H[k]$: una estimación ruidosa, no el símbolo exacto. Después del ecualizador, un **detector** (también llamado *slicer*) asigna cada punto ecualizado al símbolo de la constelación más cercano:
+
+$$\hat{s}[k] = \arg\min_{s \in \mathcal{C}} \left|\hat{X}^{ZF}[k] - s\right|$$
+
+El detector comete un error cuando el ruido amplificado $W[k]/H[k]$ es suficientemente grande para empujar el punto fuera de su región de decisión. La probabilidad de ese evento es precisamente la BER.
+
+El tamaño de la región de decisión depende de la modulación. Para **QPSK** las regiones son los cuatro cuadrantes — un punto necesita desplazarse más de $1/\sqrt{2} \approx 0{,}71$ para cruzar el eje más cercano. Para **16-QAM**, los 16 símbolos forman una cuadrícula 4×4; los símbolos interiores tienen vecinos a distancia $2/\sqrt{10} \approx 0{,}63$, mucho más cerca. El mismo nivel de ruido amplificado que apenas perturba QPSK puede causar errores frecuentes en 16-QAM. La figura muestra esta diferencia con el mismo canal y el mismo SNR:
+
+![Comparación QPSK vs 16-QAM tras ecualizador ZF](figures/zf-equalizer-qam-comparison.png)
+
 ```python
 def zf_equalizer(Y, h, N):
     """ZF: divide por la DFT del canal → elimina distorsión (pero amplifica ruido)."""
