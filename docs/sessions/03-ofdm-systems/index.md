@@ -652,7 +652,14 @@ La potencia del ruido amplificado es $\sigma_w^2 / |H[k]|^2$. Con potencia de se
 
 $$\text{SNR}^{ZF}[k] = \frac{1}{\sigma_w^2 / |H[k]|^2} = |H[k]|^2 \cdot \text{SNR}_0$$
 
-Cada subportadora tiene un SNR propio, proporcional al cuadrado de la ganancia del canal en esa frecuencia. En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el $\text{SNR}_0$ global sea alto — el ZF amplifica el ruido hasta hacerlo dominante. La figura siguiente muestra el efecto del ecualizador sobre la constelación recibida, con los puntos coloreados según $|H[k]|$ (rojo = subportadora débil, verde = subportadora fuerte).
+Cada subportadora tiene un SNR propio, proporcional al cuadrado de la ganancia del canal en esa frecuencia. En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el $\text{SNR}_0$ global sea alto — el ZF amplifica el ruido hasta hacerlo dominante.
+
+La figura siguiente muestra el efecto del ecualizador. El color de borde de cada punto representa la ganancia $|H[k]|$ de la subportadora que transporta ese símbolo (colormap *turbo*: azul/cian = canal débil, rojo = canal fuerte):
+
+- **Panel 1 ($|H[k]|$):** la ganancia real del canal por subportadora. Las barras bajas corresponden a subportadoras muy atenuadas — sus símbolos aparecen en azul/cian en los paneles siguientes.
+- **Panel 2 ($X[k]$ transmitido):** los 64 símbolos QPSK están en los 4 vértices exactos. La asignación de un símbolo a una subportadora es arbitraria (depende de los bits del frame); el color ya está fijo porque cada punto pertenece a una subportadora concreta.
+- **Panel 3 ($Y[k]$ sin ecualizar):** la constelación llega distorsionada. Los puntos azules/cian están más dispersos porque el ruido ocupa proporcionalmente más espacio en las subportadoras débiles.
+- **Panel 4 ($\hat{X}^{ZF}[k]$ tras ecualizador):** los símbolos vuelven cerca de los 4 vértices, pero conservan su color. Los azules/cian siguen siendo los más dispersos: el ecualizador corrigió la distorsión del canal, pero también amplificó el ruido $W[k]/H[k]$ — cuanto más débil era el canal, más ruido residual queda.
 
 ![Efecto del ecualizador ZF sobre la constelación](figures/zf-equalizer-effect.png)
 
@@ -664,7 +671,9 @@ $$\hat{s}[k] = \arg\min_{s \in \mathcal{C}} \left|\hat{X}^{ZF}[k] - s\right|$$
 
 El detector comete un error cuando el ruido amplificado $W[k]/H[k]$ es suficientemente grande para empujar el punto fuera de su región de decisión. La probabilidad de ese evento es precisamente la BER.
 
-El tamaño de la región de decisión depende de la modulación. Para **QPSK** las regiones son los cuatro cuadrantes — un punto necesita desplazarse más de $1/\sqrt{2} \approx 0{,}71$ para cruzar el eje más cercano. Para **16-QAM**, los 16 símbolos forman una cuadrícula 4×4; los símbolos interiores tienen vecinos a distancia $2/\sqrt{10} \approx 0{,}63$, mucho más cerca. El mismo nivel de ruido amplificado que apenas perturba QPSK puede causar errores frecuentes en 16-QAM. La figura muestra esta diferencia con el mismo canal y el mismo SNR:
+El tamaño de la región de decisión depende de la modulación. Para **QPSK** las regiones son los cuatro cuadrantes — un punto necesita desplazarse más de $1/\sqrt{2} \approx 0{,}71$ para cruzar el eje más cercano. Para **16-QAM**, los 16 símbolos forman una cuadrícula 4×4; los símbolos interiores tienen vecinos a distancia $2/\sqrt{10} \approx 0{,}63$, mucho más cerca. El mismo nivel de ruido amplificado que apenas perturba QPSK puede causar errores frecuentes en 16-QAM.
+
+La figura tiene el mismo código de color (azul/cian = subportadora débil, rojo = fuerte) y se lee columna a columna: **transmitido → recibido sin ecualizar → tras ZF**. En la fila inferior (16-QAM), las líneas de puntos marcan las fronteras de decisión de la cuadrícula 4×4. Observa cómo los puntos azules — que en QPSK se mantienen dentro de su cuadrante — cruzan frecuentemente esas fronteras más estrechas en 16-QAM, aunque el canal y el SNR sean idénticos.
 
 ![Comparación QPSK vs 16-QAM tras ecualizador ZF](figures/zf-equalizer-qam-comparison.png)
 
