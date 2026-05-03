@@ -762,7 +762,15 @@ Luego interpola al resto de subportadoras. El desafío es que si los pilotos est
 
     $$\Delta k_p \cdot \Delta f \ll B_c \quad\Longrightarrow\quad \Delta k_p \ll \frac{B_c}{\Delta f}$$
 
-    Con $B_c = 2\ \text{MHz}$ y $\Delta f = 30\ \text{kHz}$: $\Delta k_p \ll 66$. Un piloto cada 8 subportadoras es más que suficiente.
+    $B_c$ no es una constante — depende del canal. Se calcula como $B_c \approx 1/(5\,\sigma_\tau)$, donde $\sigma_\tau$ es el RMS delay spread. En LTE la subportadora mide $\Delta f = 15\ \text{kHz}$. Con eso:
+
+    | Escenario | $\sigma_\tau$ | $B_c$ | $\Delta k_p \ll$ |
+    |-----------|--------------|--------|-----------------|
+    | Indoor / microcélula | 100 ns | 2 MHz | 133 |
+    | Urbano típico (caso de diseño LTE) | 1 μs | 200 kHz | **13** |
+    | Rural / macrocélula | 5 μs | 40 kHz | 3 |
+
+    LTE eligió $\Delta k_p = 6$ en los CRS — conservador para el canal urbano típico, que es el peor caso frecuente de despliegue.
 
 ??? note "Cómo funciona esto en LTE"
     En LTE los pilotos se llaman **Cell-Specific Reference Signals (CRS)**. Se distribuyen en posiciones fijas de la grilla tiempo-frecuencia — cada celda de la grilla es un **Resource Element (RE)**, la unidad mínima de transmisión: una subportadora en un símbolo OFDM.
