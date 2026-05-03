@@ -756,7 +756,9 @@ $$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p}$$
 Luego interpola al resto de subportadoras. El desafío es que si los pilotos están demasiado separados en frecuencia, la interpolación no captura las variaciones de $H[k]$ — se produce aliasing en el dominio del retardo.
 
 ??? note "Densidad mínima de pilotos"
-    $H[k]$ varía suavemente a escala $B_c$. Para capturarla sin aliasing, el espaciado entre pilotos debe satisfacer:
+    $\Delta k_p$ es el **espaciado entre pilotos consecutivos**, medido en número de subportadoras. Si los pilotos están en las subportadoras 0, 8, 16, 24, … entonces $\Delta k_p = 8$. Como cada subportadora ocupa un ancho de banda $\Delta f$, ese espaciado equivale a una separación en frecuencia de $\Delta k_p \cdot \Delta f$.
+
+    $H[k]$ varía suavemente a escala $B_c$. Para capturar esa variación sin aliasing, la separación en frecuencia entre pilotos debe ser menor que la coherence bandwidth:
 
     $$\Delta k_p \cdot \Delta f \ll B_c \quad\Longrightarrow\quad \Delta k_p \ll \frac{B_c}{\Delta f}$$
 
