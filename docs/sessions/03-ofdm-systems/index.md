@@ -745,6 +745,10 @@ Por eso en OFDM real — LTE, 5G NR — el ecualizador y el decodificador FEC so
 
 **Entrada:** $Y[k_p]$ en posiciones piloto + símbolo conocido $X_p$ — **Operación:** estimación LS + interpolación — **Salida:** $\hat{H}[k]$ para todas las subportadoras
 
+Hay un supuesto que §4.5 y §4.6 nunca mencionaron: tanto el ZF como el MMSE necesitan conocer $H[k]$ para funcionar. La fórmula del ZF divide $Y[k]$ entre $H[k]$; la del MMSE usa $H^*[k]$ en el numerador y $|H[k]|^2$ en el denominador. Si $H[k]$ es incorrecto, el ecualizador no cancela el canal — lo empeora.
+
+El problema es que el receptor no conoce $H[k]$. El canal es una propiedad del entorno físico entre antena transmisora y receptora, y varía con el tiempo y la frecuencia. Nadie se lo comunica al receptor de forma directa.
+
 En la práctica $H[k]$ es desconocido. El transmisor reserva ciertas subportadoras como **pilotos** — transmite un símbolo conocido $X_p$ — y el receptor estima la ganancia del canal en esas posiciones mediante mínimos cuadrados (LS):
 
 $$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p}$$
