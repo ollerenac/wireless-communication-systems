@@ -711,7 +711,7 @@ La idea del MMSE es sencilla: en lugar de invertir el canal a ciegas, multiplica
 
 $$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\alpha[k]\;\in\;(0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + 1/\text{SNR}}\,Y[k]$$
 
-Cuando el canal es fuerte ($|H[k]|$ grande), $\alpha[k] \approx 1$ y el MMSE se comporta exactamente igual que el ZF. Cuando el canal es débil ($|H[k]| \approx 0$), $\alpha[k] \approx 0$ y el MMSE devuelve una estimación cercana a cero — ruidosa, sí, pero acotada — en lugar del ruido amplificado al infinito que produciría el ZF.
+Cuando el canal es fuerte ($|H[k]|$ grande), $\alpha[k] \approx 1$ y el MMSE se comporta exactamente igual que el ZF. Cuando el canal es débil ($|H[k]| \approx 0$), $\alpha[k] \approx 0$ y el MMSE devuelve una estimación cercana a cero — es decir, no recupera el símbolo, pero tampoco amplifica el ruido. El ZF en esa misma subportadora habría devuelto el símbolo correcto más un ruido amplificado al infinito ($W[k]/H[k] \to \infty$). El MMSE elige el mal menor: preferir un estimado sesgado y silencioso antes que uno correcto pero ahogado en ruido.
 
 Dicho de otro modo: **el ZF es un caso particular del MMSE** cuando el SNR tiende a infinito. Con ruido cero, $1/\text{SNR} \to 0$, $\alpha[k] \to 1$ para todas las subportadoras, y ambos ecualizadores son idénticos. El MMSE solo se diferencia del ZF cuando hay ruido suficiente como para que importar cuánto se amplifica.
 
