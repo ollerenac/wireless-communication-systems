@@ -715,7 +715,7 @@ Cuando el canal es fuerte ($|H[k]|$ grande), $\alpha[k] \approx 1$ y el MMSE se 
 
 Dicho de otro modo: **el ZF es un caso particular del MMSE** cuando el SNR tiende a infinito. Con ruido cero, $1/\text{SNR} \to 0$, $\alpha[k] \to 1$ para todas las subportadoras, y ambos ecualizadores son idénticos. El MMSE solo se diferencia del ZF cuando hay ruido suficiente como para que importar cuánto se amplifica.
 
-El término $1/\text{SNR}$ en el denominador actúa como **regularizador**: suma una constante positiva para evitar que la ganancia $1/H[k]$ crezca sin límite cuando $H[k] \to 0$. A cambio, introduce un pequeño sesgo — el símbolo no queda perfectamente invertido — pero ese sesgo es mucho menor que el ruido que el ZF habría amplificado.
+El término $1/\text{SNR}$ en el denominador actúa como **regularizador**: suma una constante positiva para evitar que la ganancia $1/H[k]$ crezca sin límite cuando $H[k] \to 0$. A cambio, introduce un pequeño sesgo — el símbolo no queda perfectamente recuperado — pero ese sesgo es mucho menor que el ruido que el ZF habría amplificado.
 
 ??? note "Los dos límites del MMSE"
     - **Canal fuerte** ($|H[k]|^2 \gg 1/\text{SNR}$): contracción → 1, MMSE → ZF. Equivalentes.
