@@ -753,7 +753,15 @@ En la práctica $H[k]$ es desconocido. El transmisor reserva ciertas subportador
 
 $$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p}$$
 
-Luego interpola al resto de subportadoras. El desafío es que si los pilotos están demasiado separados en frecuencia, la interpolación no captura las variaciones de $H[k]$ — se produce aliasing en el dominio del retardo.
+Luego interpola al resto de subportadoras para obtener $\hat{H}[k]$ en todas las subportadoras de datos.
+
+![Estimación LS del canal con y sin ruido en los pilotos](figures/channel-estimation-ls.png)
+
+La figura muestra el estimado en dos condiciones. Sin ruido (izquierda), el error viene solo de la interpolación: la línea roja sigue bien al canal verdadero, con desviaciones donde $H[k]$ varía más rápido entre pilotos. Con ruido (derecha), los puntos piloto LS quedan desplazados de su valor verdadero y ese desplazamiento se propaga a toda la interpolación — el MSE sube.
+
+**Por qué pilotos demasiado separados causan aliasing.** El canal en el dominio del retardo tiene $L$ taps: $h[0], h[1], \ldots, h[L-1]$. Su DFT es $H[k]$. Muestrear $H[k]$ cada $\Delta k_p$ subportadoras equivale, por el teorema de muestreo, a observar $h[l]$ en una ventana de $N/\Delta k_p$ muestras. Si el canal tiene taps más allá de esa ventana ($L > N/\Delta k_p$), los taps tardíos se solapan con los primeros al reconstruir — eso es el aliasing en el dominio del retardo — y el estimado queda contaminado incluso con pilotos sin ruido.
+
+**Coste en eficiencia espectral.** Los pilotos no transportan datos: cada RE piloto es capacidad sacrificada. Con el patrón CRS de LTE (1 antena), los pilotos consumen aproximadamente el 4.8% de los REs de cada subframe; con 4 puertos de antena ese overhead sube al 14.3%. Una de las motivaciones del diseño más frugal de los DMRS en 5G NR, donde los pilotos solo aparecen en los símbolos que efectivamente transmiten datos.
 
 ??? note "Densidad mínima de pilotos"
     $\Delta k_p$ es el **espaciado entre pilotos consecutivos**, medido en número de subportadoras. Si los pilotos están en las subportadoras 0, 8, 16, 24, … entonces $\Delta k_p = 8$. Como cada subportadora ocupa un ancho de banda $\Delta f$, ese espaciado equivale a una separación en frecuencia de $\Delta k_p \cdot \Delta f$.
