@@ -731,6 +731,14 @@ X_hat     = (np.conj(H) / (np.abs(H)**2 + 1/SNR_lin)) * Y
 
     ![BER ZF vs MMSE](figures/ofdm-ber-equalizers.png)
 
+El sesgo del MMSE — devolver un estimado cercano a cero en las subportadoras muy débiles — se resuelve en dos niveles distintos según la profundidad del fade:
+
+- **Fades moderados (α[k] no demasiado pequeño):** el propio detector lo absorbe. El detector no necesita recuperar el símbolo perfectamente; solo necesita que el estimado caiga dentro de la región de decisión correcta. Un símbolo sesgado al 80% de su posición original probablemente sigue en el cuadrante correcto, y el slicer lo asigna bien de todas formas.
+
+- **Deep fades reales (α[k] ≈ 0):** ningún bloque del transceptor OFDM lo resuelve por sí solo. El MMSE ya es el mejor ecualizador de un tap posible — no se puede extraer más con ecualización. La solución real es la **codificación de canal** (Session 04): un código LDPC o turbo mezcla los bits de todas las subportadoras antes de transmitir, de modo que el decodificador pueda reconstruir los bits perdidos en subportadoras débiles usando la redundancia de los que viajaron en subportadoras fuertes. Las buenas compensan a las malas.
+
+Por eso en OFDM real — LTE, 5G NR — el ecualizador y el decodificador FEC son inseparables: el ecualizador hace lo que puede subportadora a subportadora, y el código corrige lo que el ecualizador no pudo.
+
 ---
 
 #### 4.7 Estimación de Canal con Pilotos
