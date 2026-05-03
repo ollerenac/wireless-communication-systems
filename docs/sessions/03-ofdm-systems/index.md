@@ -762,6 +762,27 @@ Luego interpola al resto de subportadoras. El desafío es que si los pilotos est
 
     Con $B_c = 2\ \text{MHz}$ y $\Delta f = 30\ \text{kHz}$: $\Delta k_p \ll 66$. Un piloto cada 8 subportadoras es más que suficiente.
 
+??? note "Cómo funciona esto en LTE"
+    En LTE los pilotos se llaman **Cell-Specific Reference Signals (CRS)**. Se distribuyen en posiciones fijas de la grilla tiempo-frecuencia — cada celda de la grilla es un **Resource Element (RE)**, la unidad mínima de transmisión: una subportadora en un símbolo OFDM.
+
+    ![Grilla de recursos LTE con posiciones CRS](figures/lte-resource-grid-pilots.png)
+
+    Los RE en rojo son pilotos: el transmisor envía un símbolo conocido ($X_p = +1$ en BPSK) y el receptor calcula $\hat{H}^{LS}[k_p] = Y[k_p]/X_p$ directamente. Los RE en azul son datos: el receptor usa $\hat{H}[k]$ interpolado de los pilotos vecinos para ecualizarlos.
+
+    El patrón está diseñado para cubrir dos dimensiones: cada 6 subportadoras en frecuencia (para seguir variaciones dentro de la coherence bandwidth) y cada 3-4 símbolos en tiempo (para seguir variaciones dentro del coherence time). Si el canal varía demasiado rápido entre pilotos en cualquiera de las dos dimensiones, la interpolación falla.
+
+    **¿Sirve esta estimación para conocer el canal en ambas direcciones a la vez?**
+
+    No — downlink y uplink se estiman de forma independiente:
+
+    - **Downlink (BS → UE):** el BS transmite los CRS. El UE los recibe, estima $\hat{H}_{DL}[k]$, y lo usa para ecualizar los datos que le llegan. Adicionalmente, el UE retroalimenta al BS un índice de calidad del canal (CQI) para que el planificador ajuste la modulación y la tasa de código — lo que se verá en la sesión de link adaptation.
+
+    - **Uplink (UE → BS):** el UE transmite sus propios pilotos (DMRS en el canal de datos, SRS para sondeo del canal). El BS los usa para estimar $\hat{H}_{UL}[k]$ y ecualizar los datos que sube el UE.
+
+    La única excepción es en sistemas **TDD** (Time Division Duplex), donde DL y UL comparten la misma frecuencia en tiempos alternos. Gracias a la reciprocidad del canal ($H_{UL} \approx H_{DL}$), el BS puede estimar el canal uplink — cuando el UE transmite — y usar esa misma estimación para diseñar la beamforming del downlink sin necesitar feedback. Este principio es uno de los pilares del **Massive MIMO** (Session 07).
+
+    En **FDD** (Frequency Division Duplex), que es el modo de la mayoría de despliegues LTE, DL y UL operan en bandas de frecuencia distintas: los canales son completamente independientes y deben estimarse por separado.
+
 ```python
 pilot_spacing = 8
 pilot_idx     = np.arange(0, N, pilot_spacing)
