@@ -888,19 +888,24 @@ La brecha residual entre OFDM y AWGN no es un defecto del sistema — es la pena
 
 #### 5.2 Tabla de Dualidades OFDM
 
-Los parámetros de diseño de un sistema OFDM viven simultáneamente en el dominio temporal y el frecuencial, y cada elección tiene consecuencias en ambos. Esta tabla recoge las dualidades fundamentales derivadas a lo largo de §1–§4:
+Los parámetros de diseño de un sistema OFDM viven simultáneamente en el dominio temporal y el frecuencial. La tabla agrupa las dualidades en tres categorías: parámetros que el ingeniero controla, propiedades del canal que el entorno impone, y las condiciones de diseño que emergen de ambos.
 
 | Dominio temporal | | Dominio frecuencial |
-|:--:|:--:|:--:|
+|:--|:--:|:--|
+| **Parámetros de diseño** | | |
 | Período de símbolo $T_s = N/B$ | $\leftrightarrow$ | Espaciado de subportadora $\Delta f = B/N$ |
 | Longitud del CP $T_{CP} = N_{CP}/B$ | $\leftrightarrow$ | Delay máximo soportado $\tau_{\max} = T_{CP}$ |
-| Número de muestras $N$ | $\leftrightarrow$ | Número de subportadoras $N$ |
+| Símbolo OFDM: $N$ muestras en tiempo | $\leftrightarrow$ | $N$ subportadoras en frecuencia |
+| **Propiedades del canal** | | |
 | Delay spread $\sigma_\tau$ | $\leftrightarrow$ | Coherence bandwidth $B_c \approx 1/(5\sigma_\tau)$ |
+| Coherence time $T_c$ | $\leftrightarrow$ | Doppler spread $f_{D,\text{max}} = 1/(2\pi T_c)$ |
+| **Condiciones de diseño** | | |
 | Condición CP: $T_{CP} > \tau_{\max}$ | $\leftrightarrow$ | Condición flat: $\Delta f \ll B_c$ |
-| Coherence time $T_c$ | $\leftrightarrow$ | Doppler spread $f_{D,\text{max}} = 1/(2\pi T_c)$|
 | Condición slow fading: $T_s \ll T_c$ | $\leftrightarrow$ | Condición sin ICI: $\Delta f \gg f_{D,\text{max}}$ |
 
-**Cómo usar la tabla para diseñar.** El diseñador elige $N$, $N_{CP}$ y $B$ — estos determinan todos los valores de la tabla. El canal impone las restricciones ($B_c$, $\tau_{\max}$, $f_{D,\text{max}}$) que no son controlables. La tensión central de diseño es que $N$ aparece en dos condiciones con efectos opuestos: aumentar $N$ estrecha $\Delta f$ (favorable para ISI: $\Delta f \ll B_c$) pero alarga $T_s$ (desfavorable para Doppler: $T_s \ll T_c$). Elegir $N$ es encontrar el equilibrio entre estas dos restricciones — exactamente el boxplot de §1. La numerología de 5G NR resuelve esto escalando $\Delta f$ según el entorno, como veremos en §6.
+**Cómo usar la tabla para diseñar.** El diseñador elige $N$, $N_{CP}$ y $B$ — los parámetros de la primera sección. El canal impone $\sigma_\tau$ y $T_c$ — propiedades no controlables que determinan $B_c$ y $f_{D,\max}$. Las condiciones de la tercera sección conectan ambas: como $\tau_{\max} \approx 1/B_c$, satisfacer $T_{CP} > \tau_{\max}$ y satisfacer $\Delta f \ll B_c$ son dos caras del mismo requisito — ambas exigen que la dispersión temporal del canal sea pequeña respecto a las escalas del sistema.
+
+La tensión central de diseño aparece en la tercera fila de la primera sección: el mismo $N$ fija simultáneamente la resolución temporal ($1/B$ s por muestra) y la frecuencial ($\Delta f = B/N$ Hz por subportadora). Aumentar $N$ estrecha $\Delta f$ (favorable para ISI: $\Delta f \ll B_c$) pero alarga $T_s$ (desfavorable para Doppler: $T_s \ll T_c$). Elegir $N$ es encontrar el equilibrio entre estas dos restricciones — exactamente el boxplot de §1. La numerología de 5G NR resuelve esto escalando $\Delta f$ según el entorno, como veremos en §6.
 
 ---
 
