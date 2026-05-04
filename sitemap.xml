@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/syllabus/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/sessions/01-channel-modeling/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/sessions/02-digital-modulation/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/sessions/03-ofdm-systems/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+    <url>
+         <loc>https://ollerenac.github.io/wireless-communication-systems/sessions/04-channel-coding/</loc>
+         <lastmod>2026-05-04</lastmod>
+    </url>
+</urlset>
