@@ -852,11 +852,15 @@ El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud in
 
 ---
 
-#### 4.9 BER End-to-End
+---
 
-**Entrada:** bits aleatorios + parámetros del sistema — **Operación:** cadena completa TX→canal→RX — **Salida:** curva BER vs $E_b/N_0$
+### 5. Rendimiento End-to-End
 
-Con todos los bloques en su lugar, la cadena completa permite medir el rendimiento real del sistema y compararlo con la cota teórica de AWGN:
+Con todos los bloques de la cadena en su lugar — mapper, IFFT, CP, canal, FFT, ecualizador, estimación de canal y demapper — la pregunta natural es: ¿cuán bien funciona el sistema completo? La respuesta se expresa con la curva de **BER** (Bit Error Rate) frente a $E_b/N_0$: para cada nivel de energía por bit, ¿qué fracción de bits llega incorrecta al demapper?
+
+#### 5.1 BER End-to-End
+
+Para medir la BER se ejecuta la cadena completa con bits aleatorios, se repite para distintos valores de $E_b/N_0$ y se cuentan los errores a la salida del demapper. El resultado se compara con la cota teórica de un canal AWGN ideal — un sistema sin frequency-selectivity donde todos los símbolos experimentan el mismo canal:
 
 ![BER OFDM end-to-end: ZF vs MMSE vs AWGN](figures/ofdm-ber-equalizers.png)
 
@@ -872,7 +876,9 @@ Tres observaciones clave que debe extraer el estudiante de esta figura:
 
 La brecha residual entre OFDM y AWGN no es un defecto del sistema — es la penalización de operar sobre un canal frequency-selective sin diversidad frecuencial. La codificación de canal (Sesión 04) y el *link adaptation* (Sesión 06) explotan esa diversidad para cerrar la brecha.
 
-#### Tabla de Dualidades OFDM
+#### 5.2 Tabla de Dualidades OFDM
+
+Los parámetros de diseño de un sistema OFDM viven simultáneamente en el dominio temporal y el frecuencial, y cada elección tiene consecuencias en ambos. Esta tabla recoge las dualidades fundamentales derivadas a lo largo de §1–§4:
 
 | Dominio temporal | | Dominio frecuencial |
 |:--:|:--:|:--:|
@@ -884,11 +890,11 @@ La brecha residual entre OFDM y AWGN no es un defecto del sistema — es la pena
 | Coherence time $T_c$ | $\leftrightarrow$ | Doppler spread $f_{D,\text{max}} = 1/(2\pi T_c)$|
 | Condición slow fading: $T_s \ll T_c$ | $\leftrightarrow$ | Condición sin ICI: $\Delta f \gg f_{D,\text{max}}$ |
 
-**Cómo usar la tabla para diseñar.** El diseñador elige $N$, $N_{CP}$ y $B$ — estos determinan todos los valores de la tabla. El canal impone las restricciones ($B_c$, $\tau_{\max}$, $f_{D,\text{max}}$) que no son controlables. La tensión central de diseño es que $N$ aparece en dos condiciones con efectos opuestos: aumentar $N$ estrecha $\Delta f$ (favorable para ISI: $\Delta f \ll B_c$) pero alarga $T_s$ (desfavorable para Doppler: $T_s \ll T_c$). Elegir $N$ es encontrar el equilibrio entre estas dos restricciones — exactamente el boxplot de §1. La numerología de 5G NR resuelve esto escalando $\Delta f$ según el entorno, como veremos en §5.
+**Cómo usar la tabla para diseñar.** El diseñador elige $N$, $N_{CP}$ y $B$ — estos determinan todos los valores de la tabla. El canal impone las restricciones ($B_c$, $\tau_{\max}$, $f_{D,\text{max}}$) que no son controlables. La tensión central de diseño es que $N$ aparece en dos condiciones con efectos opuestos: aumentar $N$ estrecha $\Delta f$ (favorable para ISI: $\Delta f \ll B_c$) pero alarga $T_s$ (desfavorable para Doppler: $T_s \ll T_c$). Elegir $N$ es encontrar el equilibrio entre estas dos restricciones — exactamente el boxplot de §1. La numerología de 5G NR resuelve esto escalando $\Delta f$ según el entorno, como veremos en §6.
 
 ---
 
-### 5. Parámetros OFDM en 5G NR: Ejemplo Integrador
+### 6. Parámetros OFDM en 5G NR: Ejemplo Integrador
 
 5G NR no usa un único conjunto de parámetros OFDM — usa **numerologías** ($\mu = 0, 1, 2, 3$) que escalan el espaciado de subportadora por potencias de 2:
 
@@ -953,7 +959,7 @@ Este valor es representativo del throughput pico de 5G NR en banda sub-6 GHz con
 
 ---
 
-### 6. PAPR: La Penalización de la Amplificación
+### 7. PAPR: La Penalización de la Amplificación
 
 Un símbolo OFDM es la suma de $N$ exponenciales complejas con amplitudes y fases aleatorias (según los datos). Por el teorema central del límite, la parte real (e imaginaria) de $x[n]$ sigue aproximadamente una distribución gaussiana para $N$ grande. La relación entre el pico y la potencia media (*Peak-to-Average Power Ratio*, PAPR) puede ser muy elevada:
 
