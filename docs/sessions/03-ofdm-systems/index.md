@@ -860,17 +860,27 @@ Con todos los bloques de la cadena en su lugar — mapper, IFFT, CP, canal, FFT,
 
 #### 5.1 BER End-to-End
 
-Para medir la BER se ejecuta la cadena completa con bits aleatorios, se repite para distintos valores de $E_b/N_0$ y se cuentan los errores a la salida del demapper. El resultado se compara con la cota teórica de un canal AWGN ideal — un sistema sin frequency-selectivity donde todos los símbolos experimentan el mismo canal:
+Para medir la BER se ejecuta la cadena completa con bits aleatorios, se repite para distintos valores de energía por bit y se cuentan los errores a la salida del demapper. El resultado se compara con la cota teórica de un canal AWGN ideal — un sistema sin frequency-selectivity donde todos los símbolos experimentan el mismo canal plano.
+
+**$E_b/N_0$: la métrica universal.** A lo largo de §4 hemos caracterizado el ruido con el SNR: potencia de señal dividida entre potencia de ruido. El SNR depende del ancho de banda y de la modulación, lo que dificulta comparar sistemas distintos en el mismo gráfico. Las curvas BER usan en su lugar $E_b/N_0$ — la energía por bit de información dividida entre la densidad espectral de potencia del ruido — una métrica independiente del ancho de banda y la modulación:
+
+$$\frac{E_b}{N_0} = \frac{\text{SNR}}{\log_2 M \cdot r}$$
+
+donde $\log_2 M$ es el número de bits por símbolo QAM y $r$ es la tasa de código (1 si no hay codificación de canal). Para QPSK sin codificación: $E_b/N_0 = \text{SNR}/2$, es decir, 3 dB menos que el SNR. Para 16-QAM: 6 dB menos. Esta normalización permite trazar en el mismo eje curvas de distintas modulaciones y compararlas con la cota AWGN teórica sin que el ancho de banda distorsione el resultado.
 
 ![BER OFDM end-to-end: ZF vs MMSE vs AWGN](figures/ofdm-ber-equalizers.png)
 
-Tres observaciones clave que debe extraer el estudiante de esta figura:
+**Cómo leer la figura.** El eje horizontal es $E_b/N_0$ en dB: más a la derecha, más energía por bit. El eje vertical es la BER en escala logarítmica — $10^{-1}$ significa 1 error cada 10 bits; $10^{-4}$, 1 error cada 10 000 bits, exigencia típica de voz. Hay tres curvas: la referencia AWGN (canal plano ideal), el ecualizador ZF y el MMSE. La separación horizontal entre una curva OFDM y la referencia AWGN a la misma BER es la *penalización de diversidad*: los dB adicionales que el sistema necesita por operar en un canal frequency-selective.
+
+Tres observaciones clave:
 
 1. **OFDM + ZF degradado vs AWGN:** las subportadoras en *deep fade* contribuyen desproporcionadamente a la BER total. La figura siguiente muestra que unas pocas subportadoras débiles elevan la BER global varios dB por encima de la referencia AWGN:
 
     ![BER por subportadora](figures/ofdm-per-subcarrier-ber.png)
 
-2. **MMSE mejora ZF a SNR baja:** el regularizador limita la amplificación de ruido en los *fades* → menor BER global a SNR bajas.
+    La figura muestra la BER individual de cada una de las $N$ subportadoras. El color sigue el mismo código que las constelaciones: azul = subportadora débil ($|H[k]|$ pequeño), rojo = fuerte. Unas pocas barras azules alcanzan BER $> 10^{-1}$ — prácticamente cada bit falla en esas subportadoras. Al promediar sobre todas las subportadoras, esas barras tiran la BER global hacia arriba de forma desproporcionada, explicando la brecha con AWGN visible en la curva principal.
+
+2. **MMSE mejora ZF a SNR baja:** el regularizador limita la amplificación de ruido en los *fades* → menor BER global a $E_b/N_0$ bajas.
 
 3. **Convergencia a SNR alta:** cuando $|H[k]|^2 \gg 1/\text{SNR}$ en todas las subportadoras, ZF y MMSE son equivalentes y ambos se aproximan a la cota AWGN.
 
