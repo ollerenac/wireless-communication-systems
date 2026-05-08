@@ -235,7 +235,7 @@ Esa es exactamente la definición de la IFFT aplicada al vector de símbolos $[X
   <figcaption markdown="1">**Figura 2.** $N$ símbolos en frecuencia $X[k]$ (izquierda) entran a la IFFT y producen $N$ muestras en tiempo $x[n]$ (derecha). La tasa de muestreo $f_s = N\cdot\Delta f$ es la que garantiza que $\Delta f$ se cancele en el exponente.</figcaption>
 </figure>
 
-**¿Por qué son ortogonales las subportadoras?** Para extraer el símbolo $X[k]$ de la señal recibida, el receptor multiplica muestra a muestra (x[n]) por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
+**¿Por qué son ortogonales las subportadoras?** Antes de introducir el canal, vale la pena demostrar la propiedad en el caso ideal: canal plano unitario, sin ruido. En ese caso la señal que llega al receptor es exactamente $x[n]$ — la señal transmitida. Para extraer el símbolo $X[k]$ de $x[n]$, el receptor multiplica muestra a muestra por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
@@ -262,7 +262,7 @@ El término de interferencia vale 1 cuando $l = k$ y 0 en cualquier otro caso:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases}$$
 
-Por eso de la suma sobre $l$ solo sobrevive el término propio: el receptor recupera $X[k]$ sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT.
+Por eso de la suma sobre $l$ solo sobrevive el término propio: en el caso ideal el receptor recupera $X[k]$ exactamente, sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT. El canal real ($y[n] \neq x[n]$) se trata a continuación.
 
 ¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
 
