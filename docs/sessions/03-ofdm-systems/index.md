@@ -54,7 +54,7 @@ donde $w[n]$ es ruido AWGN. Los índices $n$ y $l$ son distintos porque represen
 
     La longitud $L$ la determina el delay spread: $L = \lceil \tau_{\max} \cdot B \rceil$. Con $\tau_{\max} = 1\ \mu\text{s}$ y $B = 20\ \text{MHz}$, $L = 20$ taps. El panel superior izquierdo de la Figura 1 ilustra exactamente esta estructura.
 
-Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. El equalizer en tiempo necesario tiene complejidad $\mathcal{O}(L^2)$ por símbolo. La Figura 1 resume el problema en sus tres dimensiones:
+Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. La Figura 1 resume el problema en sus tres dimensiones:
 
 <figure markdown="span">
   ![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
