@@ -56,6 +56,19 @@ donde $w[n]$ es ruido AWGN. Los índices $n$ y $l$ son distintos porque represen
 
 Cada muestra $y[n]$ mezcla $L$ símbolos pasados. En LTE con $B = 20\ \text{MHz}$ y delay spread $\sigma_\tau = 1\ \mu\text{s}$, el canal tiene una longitud de $L \approx 20$ muestras. El detector ML de la Sesión 02 asume $y = hs + n$ — un escalar multiplicado por el símbolo; aquí ya no es así porque $y[n]$ depende de $L$ símbolos pasados simultáneamente. La Figura 1 resume el problema en sus tres dimensiones:
 
+??? note "Definición de $\tau_l$ y $\sigma_\tau$"
+    El retardo del tap $l$ en segundos es $\tau_l = l/B$: cada posición de la respuesta impulsional discreta corresponde a un retardo de una muestra ($1/B$ segundos).
+
+    El **retardo medio** pondera cada retardo por la potencia del eco que llega con ese retardo:
+
+    $$\bar{\tau} = \frac{\displaystyle\sum_{l=0}^{L-1} \tau_l\,|h[l]|^2}{\displaystyle\sum_{l=0}^{L-1} |h[l]|^2}$$
+
+    El **RMS delay spread** $\sigma_\tau$ es la desviación estándar de esos retardos, ponderada por potencia:
+
+    $$\sigma_\tau = \sqrt{\frac{\displaystyle\sum_{l=0}^{L-1}(\tau_l - \bar{\tau})^2\,|h[l]|^2}{\displaystyle\sum_{l=0}^{L-1}|h[l]|^2}}$$
+
+    Cuanto mayor es $\sigma_\tau$, más dispersos en tiempo llegan los ecos y más severa es la ISI. La coherence bandwidth se aproxima como $B_c \approx 1/(5\sigma_\tau)$: un $\sigma_\tau$ grande implica un $B_c$ pequeño y un canal más frequency-selective.
+
 <figure markdown="span">
   ![Problema de ISI en canales frequency-selective](figures/isi-problem.png)
   <figcaption markdown="1">**Figura 1.** Los ecos del canal $h[l]$ con distintos retardos *(panel superior izquierda)* producen una respuesta en frecuencia $|H(f)|$ no uniforme *(panel superior derecha)*: la coherence bandwidth $B_c \ll B$ implica que distintas frecuencias reciben ganancias distintas. En el dominio temporal *(panel inferior)*, esto se manifiesta como ISI: el eco de $s_0$ llega durante la recepción de $s_1$, $s_2$, … — el símbolo observado $y[n]$ mezcla $L$ transmisiones pasadas.</figcaption>
