@@ -162,7 +162,7 @@ Con $v = 120\ \text{km/h}$, $f_c = 2\ \text{GHz}$, $f_{D,\text{max}} \approx 222
 
 $$N = \frac{B}{\Delta f} = \frac{20\ \text{MHz}}{15\ \text{kHz}} \approx 1333$$
 
-Para que la implementación hardware de la FFT sea eficiente, $N$ se elige como potencia de 2; el valor mínimo que supera las 1333 subportadoras necesarias es $N = 2048$. Las 715 posiciones sobrantes se usan como subportadoras de guarda en los bordes de banda para evitar interferencia con canales adyacentes.
+Para que la implementación hardware de la FFT sea eficiente, $N$ se elige como potencia de 2; el valor mínimo que supera 1333 es $N = 2048$. De esas 2048 posiciones, sin embargo, solo **1272 se activan** para datos y pilotos (106 resource blocks × 12 subportadoras, según 3GPP TS 38.101-1 para 20 MHz / 15 kHz): las ~61 posiciones restantes dentro del ancho de banda de 20 MHz son las **subportadoras de guarda** — se dejan a cero en los bordes del canal para no derramar energía sobre el canal adyacente. Las 715 posiciones que quedan fuera del ancho de banda de 20 MHz también se ponen a cero, pero no son subportadoras de guarda: son bins de FFT sin uso que resultan de elegir $N$ como potencia de 2.
 
 El principio multiportadora queda así establecido: dividir el canal en $N$ subportadoras estrechas convierte un problema de ecualización de complejidad $\mathcal{O}(L^2)$ en $N$ divisiones escalares independientes. Queda, sin embargo, la pregunta de implementación: ¿cómo se generan y separan $N$ subportadoras simultáneas sin $N$ moduladores físicos? La respuesta exige que las subportadoras sean *mutuamente ortogonales* — y que exista una operación única capaz de generarlas todas a la vez en el transmisor y separarlas todas a la vez en el receptor. Esa operación es la DFT.
 
