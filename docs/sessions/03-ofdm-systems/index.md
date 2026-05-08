@@ -210,29 +210,30 @@ Un sistema OFDM opera en un canal con delay spread $\sigma_\tau = 5\ \mu\text{s}
 
 ### 2. Ortogonalidad y la DFT
 
-La §1 estableció que necesitamos $N$ subportadoras simultáneas, cada una lo suficientemente estrecha para ver un canal plano. La subportadora $k$ ocupa la frecuencia $k \cdot \Delta f$ y, en tiempo continuo, es una exponencial compleja $e^{j2\pi k \Delta f \cdot t}$. Cada subportadora transporta un símbolo M-QAM $X[k]$.
+El §1 estableció el *qué*: $N$ subportadoras, cada una lo suficientemente estrecha para ver canal plano. Ahora construimos la señal físicamente.
 
-Al muestrear a frecuencia $f_s = N \cdot \Delta f$ — es decir, $N$ muestras por símbolo OFDM de duración $T_s = 1/\Delta f$ — el instante $t = n/f_s$ convierte el exponente en:
+La subportadora $k$ es una sinusoide compleja en la frecuencia $k\cdot\Delta f$. El transmisor la pondera con el símbolo M-QAM $X[k]$ — su amplitud y fase — antes de transmitir. En tiempo continuo, la contribución de la subportadora $k$ es $X[k]\,e^{j2\pi k\Delta f\cdot t}$, y la señal total es la suma de las $N$ subportadoras:
 
-$$e^{j2\pi k \Delta f \cdot \frac{n}{N \cdot \Delta f}} = e^{j2\pi kn/N}$$
+$$x(t) = \frac{1}{\sqrt{N}}\sum_{k=0}^{N-1} X[k]\, e^{j2\pi k\Delta f\cdot t}$$
 
-El $\Delta f$ se cancela y el exponente queda en función únicamente de $k$ y $n$. La señal transmitida $x[n]$ es la suma de las $N$ subportadoras, cada una ponderada por su símbolo $X[k]$:
+Para convertir esto en muestras digitales necesitamos fijar la tasa de muestreo. Cada símbolo OFDM dura $T_s = 1/\Delta f$ segundos y contiene $N$ subportadoras — una por muestra de la IFFT. Se necesitan exactamente $N$ muestras por símbolo, lo que fija la tasa de muestreo:
+
+$$f_s = \frac{N}{T_s} = N\cdot\Delta f$$
+
+La muestra $n$ se toma en el instante $t = n/f_s$ — es decir, $n$ períodos de muestreo desde el inicio del símbolo. Sustituyendo en el exponente:
+
+$$e^{j2\pi k\Delta f \cdot \frac{n}{N\Delta f}} = e^{j2\pi kn/N}$$
+
+$\Delta f$ aparece en numerador y denominador y se cancela. La señal discreta queda:
 
 $$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0, 1, \ldots, N-1$$
 
-Es importante distinguir los dos dominios: $X[k]$ vive en **frecuencia** — es el símbolo M-QAM asignado a la subportadora $k$, su amplitud y fase. $x[n]$ vive en **tiempo** — es la muestra $n$ de la señal física que se transmite. La IFFT es precisamente la operación que convierte el vector de frecuencia $\mathbf{X} = [X[0], \ldots, X[N-1]]^T$ en el bloque de tiempo $\mathbf{x} = [x[0], \ldots, x[N-1]]^T$: el transmisor OFDM es una IFFT.
+Esa es exactamente la definición de la IFFT aplicada al vector de símbolos $[X[0],\ldots,X[N-1]]$. El transmisor OFDM no necesita $N$ osciladores físicos: una sola IFFT genera la señal completa. $X[k]$ vive en frecuencia — es el símbolo asignado a la subportadora $k$. $x[n]$ vive en tiempo — es la muestra física que sale al canal.
 
-??? note "La granularidad temporal $1/f_s$ como unidad fundamental"
-    Al muestrear a $f_s$, se divide el tiempo en intervalos de $1/f_s$ segundos. Todo lo demás queda encadenado a esa granularidad:
-
-    - El símbolo OFDM tiene $N$ muestras porque hay $N$ subportadoras: la IFFT toma $N$ entradas en frecuencia $X[k]$ y produce $N$ salidas en tiempo $x[n]$. No es la resolución del ADC la que fija $N$ — es el número de subportadoras.
-    - El símbolo dura $T_s = N/f_s$ segundos — el tiempo de transmitir esas $N$ muestras a ritmo $f_s$.
-    - El espaciado entre subportadoras resulta $\Delta f = 1/T_s = f_s/N$, de modo que cada subportadora completa exactamente un número entero de ciclos en $T_s$.
-    - La subportadora $k$ completa exactamente $k$ ciclos completos en los $N$ intervalos del símbolo.
-
-    Esto explica por qué el exponente colapsa a $e^{j2\pi kn/N}$ sin parámetros sueltos: $f_s$ y $\Delta f$ se cancelan porque están relacionados por $N$. Si $\Delta f$ no fuera exactamente $f_s/N$, la cancelación no ocurriría y la ortogonalidad se rompería.
-
-    La imagen mental: *un estroboscopio que dispara cada $1/f_s$ segundos; un símbolo OFDM son $N$ destellos; la subportadora $k$ completa exactamente $k$ vueltas entre el destello 0 y el destello $N-1$.*
+<figure markdown="span">
+  ![El transmisor OFDM es una IFFT](figures/ofdm-ifft-transmitter.png)
+  <figcaption markdown="1">**Figura 2.** $N$ símbolos en frecuencia $X[k]$ (izquierda) entran a la IFFT y producen $N$ muestras en tiempo $x[n]$ (derecha). La tasa de muestreo $f_s = N\cdot\Delta f$ es la que garantiza que $\Delta f$ se cancele en el exponente.</figcaption>
+</figure>
 
 **¿Por qué son ortogonales las subportadoras?** Para extraer el símbolo $X[k]$ de la señal recibida, el receptor multiplica muestra a muestra (x[n]) por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
