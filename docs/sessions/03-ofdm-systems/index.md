@@ -65,7 +65,55 @@ El mismo fenómeno visto desde el dominio de la frecuencia revela el problema de
 
 La solución es elegante: en lugar de un símbolo ancho que sufre ISI, transmitir $N$ símbolos simultáneamente en $N$ subportadoras tan estrechas que cada una vea un canal plano. Sobre un canal plano la ecualización se reduce a una división escalar — exactamente un tap por subportadora. Este esquema se denomina **OFDM** (Orthogonal Frequency-Division Multiplexing), y su viabilidad práctica depende de un hecho algebraico: la Transformada Discreta de Fourier (DFT) genera y separa las $N$ subportadoras en una sola operación, sin $N$ moduladores independientes.
 
-Queda, sin embargo, un problema pendiente: la convolución del canal es *lineal*, pero la DFT asume una convolución *circular*. El puente entre ambas es el **cyclic prefix** (CP) — un bloque de muestras de guarda que transforma la convolución lineal en circular antes de aplicar la FFT. Esta sesión construye esa cadena completa: símbolos QAM → IFFT → CP → canal → FFT → ecualización de un tap.
+Queda, sin embargo, un problema pendiente: el canal realiza una convolución **lineal**, pero la FFT necesita que sea **circular** para que $Y[k] = H[k]\cdot X[k]$ se cumpla exactamente. El **cyclic prefix** (CP) cierra esa brecha copiando las últimas muestras del símbolo al frente. Esta sesión construye esa cadena completa: símbolos QAM → IFFT → CP → canal → FFT → ecualización de un tap.
+
+??? note "¿Qué diferencia hay entre convolución lineal y circular, y por qué importa el CP?"
+    **Paso 1 — Lo que hace el canal (convolución lineal)**
+
+    Supón 4 muestras transmitidas `x = [x0, x1, x2, x3]` y un canal `h = [0.8, 0.5]` (rayo directo + un eco). El canal produce:
+
+    ```
+    y[0] = 0.8·x0 + 0.5·???   ← antes de x0 no hay nada → 0
+    y[1] = 0.8·x1 + 0.5·x0
+    y[2] = 0.8·x2 + 0.5·x1
+    y[3] = 0.8·x3 + 0.5·x2
+    y[4] = 0.8·??? + 0.5·x3   ← cola del eco, muestra extra
+    ```
+
+    El canal no sabe qué había antes de `x0` ni qué viene después de `x3` — rellena con ceros en los bordes. Esto es **convolución lineal**.
+
+    **Paso 2 — Lo que necesita la FFT (convolución circular)**
+
+    La FFT tiene una propiedad valiosa: si la convolución fuera circular, entonces $Y[k] = H[k]\cdot X[k]$ — el canal aplica una ganancia escalar $H[k]$ a cada subportadora, y recuperar $X[k]$ es una simple división $\hat{X}[k] = Y[k]/H[k]$: un tap por subportadora.
+
+    ¿Qué significa circular? Que el bloque da la vuelta: la muestra "antes de x0" no es cero, es **x3** (el final del bloque):
+
+    ```
+    y[0] = 0.8·x0 + 0.5·x3    ← x3 da la vuelta al inicio
+    y[1] = 0.8·x1 + 0.5·x0
+    y[2] = 0.8·x2 + 0.5·x1
+    y[3] = 0.8·x3 + 0.5·x2
+    ```
+
+    Exactamente 4 muestras, y para este resultado sí se cumple $Y[k] = H[k]\cdot X[k]$.
+
+    **Paso 3 — El problema**
+
+    El canal real pone `0` en `y[0]`, la FFT espera `x3`. Ese desacuerdo rompe la igualdad $Y[k] = H[k]\cdot X[k]$ y arruina la ecualización de un tap.
+
+    **Paso 4 — Cómo el CP lo resuelve**
+
+    Se copia `x3` al frente antes de transmitir: `[x3 | x0, x1, x2, x3]`. El canal hace convolución lineal sobre esta secuencia:
+
+    ```
+    y[0] = 0.8·x3 + 0.5·???   ← CP, se descarta en el receptor
+    y[1] = 0.8·x0 + 0.5·x3    ← igual que la circular
+    y[2] = 0.8·x1 + 0.5·x0    ← igual
+    y[3] = 0.8·x2 + 0.5·x1    ← igual
+    y[4] = 0.8·x3 + 0.5·x2    ← igual
+    ```
+
+    El receptor descarta `y[0]` y se queda con `y[1..4]` — exactamente el resultado de la convolución circular. Ahora sí se cumple $Y[k] = H[k]\cdot X[k]$.
 
 ---
 
