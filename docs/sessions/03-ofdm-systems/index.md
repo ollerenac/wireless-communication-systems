@@ -684,6 +684,13 @@ def zf_equalizer(Y, h, N):
     return Y / H
 ```
 
+??? note "¿Por qué `fft(h)` sin `norm='ortho'`?"
+    El transmisor usa `ifft(..., norm='ortho')` y el receptor usa `fft(..., norm='ortho')`, de modo que la cadena IFFT–canal–FFT produce $Y[k] = H[k] \cdot X[k] + W[k]$, donde $H[k]$ es la **DFT estándar** (sin normalización) de la respuesta impulsional del canal:
+
+    $$H[k] = \sum_{l=0}^{L-1} h[l]\, e^{-j2\pi kl/N}$$
+
+    El factor $1/\sqrt{N}$ de la IFFT ortogonal se cancela con el $1/\sqrt{N}$ de la FFT ortogonal, dejando exactamente la DFT estándar como coeficiente de canal. Por eso el ecualizador divide por `np.fft.fft(h, n=N)` —sin `norm='ortho'`— y el resultado es matemáticamente correcto.
+
 ??? example "Verificación"
     ```python
     H = np.fft.fft(h_channel, n=N)
