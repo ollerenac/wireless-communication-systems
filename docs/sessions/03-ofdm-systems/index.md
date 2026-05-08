@@ -22,11 +22,22 @@ Al finalizar esta sesión, el estudiante será capaz de:
 
 Las Sesiones 01 y 02 construyeron los dos pilares del problema de transmisión digital: el canal inalámbrico y la modulación. La Sesión 01 mostró que los canales de banda ancha son frequency-selective — distintas frecuencias experimentan ganancias distintas, y los ecos producen ISI cuando el período de símbolo es menor que el delay spread. La Sesión 02 mostró que para transmitir $k$ bits por símbolo con M-QAM se necesita un SNR proporcional a $(M-1)$. Pero hay un problema que no resolvimos: ¿qué ocurre cuando aplicamos una única portadora M-QAM de alta tasa sobre un canal frequency-selective?
 
-El símbolo recibido es la convolución del símbolo transmitido con el canal:
+Cada eco del canal sale del transmisor en un instante distinto: el rayo directo llega sin retraso, una reflexión en un edificio cercano llega $l_1$ muestras tarde, otra reflexión más lejana llega $l_2$ muestras tarde. Al instante $n$, el receptor recibe todos esos ecos **simultáneamente** — cada uno cargando una copia de un símbolo pasado diferente. El tap $h[l]$ es la ganancia del eco con retardo $l$, y el símbolo que ese eco transporta es $x[n-l]$ (el que fue transmitido $l$ muestras atrás). La suma de todos los ecos activos es la convolución:
 
 $$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n]$$
 
-donde $h[l]$ son los coeficientes de los $L$ taps del canal (ecos con distintos retardos y ganancias), $x[n]$ es el símbolo transmitido, y $w[n]$ es ruido AWGN.
+donde $w[n]$ es ruido AWGN. Los índices $n$ y $l$ son distintos porque representan cosas distintas: $n$ es tiempo absoluto (el reloj del receptor), $l$ es retardo relativo (cuántas muestras atrás llegó ese eco — una propiedad fija del entorno, no del instante actual).
+
+??? note "La tabla de ecos"
+    | Tap $l$ | Ganancia | Muestra que llega al instante $n$ |
+    |---------|----------|----------------------------------|
+    | $0$ | $h[0]$ | $x[n]$ — camino directo, sin retraso |
+    | $1$ | $h[1]$ | $x[n-1]$ — reflexión 1 muestra más tardía |
+    | $2$ | $h[2]$ | $x[n-2]$ — reflexión 2 muestras más tardía |
+    | $\vdots$ | $\vdots$ | $\vdots$ |
+    | $L-1$ | $h[L-1]$ | $x[n-(L-1)]$ — eco más tardío |
+
+    Lo que mide el receptor al instante $n$ es la superposición de todas esas llegadas simultáneas.
 
 ??? note "¿Qué es un tap del canal?"
     Al digitalizar la señal a frecuencia de muestreo $f_s = B$, el canal continuo $h(\tau)$ se convierte en una secuencia discreta $h[0], h[1], \ldots, h[L-1]$. Cada posición $l$ representa un retardo de $l/B$ segundos; si hay energía en esa posición, existe un eco con ese retardo.
