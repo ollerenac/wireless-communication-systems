@@ -56,7 +56,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Cada bloque 4.1–4.8 termina con una frase de transición que nombra el problema que resuelve y el problema que deja pendiente para el siguiente bloque
   2. La Introducción menciona explícitamente las sesiones 01–02 y establece la motivación de OFDM sin saltos lógicos detectables al leer en secuencia
   3. Cada una de las 5 dimensiones de §7 incluye una referencia explícita a la sección donde se desarrolló ese concepto
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 03-01-PLAN.md — Insertar 6 transiciones §4 + bloque de cierre §4 (cadena bits→bits_hat) + fix bug WR-01 (NARR-01)
+  - [ ] 03-02-PLAN.md — Insertar frase puente Sesión 02 → OFDM en Introducción (NARR-02)
+  - [ ] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
+  - [ ] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
 
 ### Phase 4: Revisión Final
 **Goal**: El documento completo está listo para publicar — coherente, sin errores detectables, ejecutable
@@ -66,7 +70,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. Una lectura de corrido de index.md de §1 a §7 no revela contradicciones, saltos ni referencias rotas
   2. lab.ipynb corre limpio de punta a punta con `Run All` — cero errores, outputs generados
   3. Un profesor puede dictar la clase usando solo index.md y lab.ipynb sin necesitar ninguna corrección de última hora
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 03-01-PLAN.md — Insertar 6 transiciones §4 + bloque de cierre §4 (cadena bits→bits_hat) + fix bug WR-01 (NARR-01)
+  - [ ] 03-02-PLAN.md — Insertar frase puente Sesión 02 → OFDM en Introducción (NARR-02)
+  - [ ] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
+  - [ ] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
 
 ## Progress
 
