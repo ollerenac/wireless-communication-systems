@@ -44,8 +44,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Todos los snippets Python de index.md coinciden con el comportamiento real del lab.ipynb (misma API, mismas variables, mismo orden lógico)
   4. lab.ipynb corre de inicio a fin sin ningún error de celda en el entorno de trabajo
 **Plans**: 3 plans
-  - [ ] 02-01-PLAN.md — Versionar 6 PNGs generadas + verificar lab.ipynb (CORR-02, LAB-01) [Wave 1]
-  - [ ] 02-02-PLAN.md — Corregir fórmulas LaTeX BLOCKER-S.01/S.02/MINOR-01 en §2 y §6 (CORR-01) [Wave 1]
+  - [x] 02-01-PLAN.md — Versionar 6 PNGs generadas + verificar lab.ipynb (CORR-02, LAB-01) [Wave 1]
+  - [x] 02-02-PLAN.md — Corregir fórmulas LaTeX BLOCKER-S.01/S.02/MINOR-01 en §2 y §6 (CORR-01) [Wave 1]
   - [ ] 02-03-PLAN.md — Alinear snippets MMSE/LS + insertar figura en §4.8 (CORR-01, CORR-02, CORR-03) [Wave 2]
 
 ### Phase 3: Mejora de Narrativa
@@ -76,6 +76,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Auditoría y Diagnóstico | 4/4 | Complete   | 2026-05-22 |
-| 2. Corrección de Contenido | 0/? | Not started | - |
+| 2. Corrección de Contenido | 2/3 | In Progress|  |
 | 3. Mejora de Narrativa | 0/? | Not started | - |
 | 4. Revisión Final | 0/? | Not started | - |
