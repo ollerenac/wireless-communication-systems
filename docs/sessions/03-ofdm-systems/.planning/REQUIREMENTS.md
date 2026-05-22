@@ -34,10 +34,10 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| CORR-01 | — | Pending |
-| CORR-02 | — | Pending |
-| CORR-03 | — | Pending |
-| NARR-01 | — | Pending |
-| NARR-02 | — | Pending |
-| NARR-03 | — | Pending |
-| LAB-01 | — | Pending |
+| CORR-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
+| CORR-02 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
+| CORR-03 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
+| LAB-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
+| NARR-01 | Phase 3 | Pending |
+| NARR-02 | Phase 3 | Pending |
+| NARR-03 | Phase 3 | Pending |
