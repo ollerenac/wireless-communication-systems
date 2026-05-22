@@ -804,8 +804,11 @@ El término $1/\text{SNR}$ en el denominador actúa como **regularizador**: suma
     - **Deep fade** ($|H[k]|^2 \ll 1/\text{SNR}$): contracción → 0. El MMSE devuelve un estimado cercano a cero; el ZF devuelve ruido amplificado con varianza $\sigma_w^2/|H[k]|^2 \to \infty$.
 
 ```python
-SNR_lin   = 10 ** (SNR_dB / 10)
-X_hat     = (np.conj(H) / (np.abs(H)**2 + 1/SNR_lin)) * Y
+def mmse_equalizer(Y, h, N, SNR_dB):
+    """MMSE: regulariza la inversión del canal → limita amplificación de ruido en fades."""
+    H   = np.fft.fft(h, n=N)
+    SNR = 10 ** (SNR_dB / 10)
+    return (np.conj(H) / (np.abs(H)**2 + 1/SNR)) * Y
 ```
 
 ??? example "Verificación"
@@ -884,15 +887,12 @@ La figura muestra el estimado en dos condiciones. Sin ruido (izquierda), el erro
     En **FDD** (Frequency Division Duplex), que es el modo de la mayoría de despliegues LTE, DL y UL operan en bandas de frecuencia distintas: los canales son completamente independientes y deben estimarse por separado.
 
 ```python
-pilot_spacing = 8
-pilot_idx     = np.arange(0, N, pilot_spacing)
-X_pilot       = np.ones(len(pilot_idx))            # pilotos BPSK: valor conocido = +1
-
-# Estimación LS en posiciones piloto
-H_ls = Y[pilot_idx] / X_pilot
-
-# Interpolación lineal al resto de subportadoras
-H_est = np.interp(np.arange(N), pilot_idx, H_ls)
+def ls_channel_estimate(Y, pilot_idx, X_pilot, N):
+    """Estimación LS en pilotos + interpolación lineal a todas las subportadoras."""
+    H_ls = Y[pilot_idx] / X_pilot
+    H_est = (np.interp(np.arange(N), pilot_idx, H_ls.real) +
+             1j * np.interp(np.arange(N), pilot_idx, H_ls.imag))
+    return H_est
 ```
 
 ??? example "Verificación"
@@ -931,6 +931,11 @@ El mismo nivel de ruido que apenas perturba QPSK puede cruzar frecuentemente las
 $$\Lambda_i[k] = \log \frac{P(b_i = 0 \mid \hat{X}[k])}{P(b_i = 1 \mid \hat{X}[k])}$$
 
 El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud indica alta certeza; un valor próximo a cero indica ambigüedad. Un decodificador FEC (LDPC, turbo) puede explotar esa información de confianza para corregir errores con una eficiencia muy superior a la que obtendría a partir de bits duros. La transición de decisión hard a soft es uno de los saltos más importantes en el diseño de receptores modernos — se tratará en detalle en la Sesión 04.
+
+<figure markdown="span">
+  ![Constelaciones QAM tras ecualización ZF (izquierda) vs MMSE (derecha)](figures/mmse-vs-zf-constellation.png)
+  <figcaption markdown="1">**Figura 3.** Dispersión de la constelación QAM tras ecualización en un canal selectivo en frecuencia: ZF (izquierda) amplifica ruido en las subportadoras débiles — la nube se ensancha desproporcionadamente; MMSE (derecha) la contiene mediante regularización con $1/\text{SNR}$ — los puntos quedan más cerca de los símbolos ideales. La diferencia se ve más pronunciada a SNR baja, donde el regularizador domina.</figcaption>
+</figure>
 
 ---
 
