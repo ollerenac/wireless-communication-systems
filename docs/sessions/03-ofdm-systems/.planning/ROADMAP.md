@@ -13,7 +13,7 @@ Cuatro fases de trabajo editorial para dejar `index.md` y `lab.ipynb` listos par
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Auditoría y Diagnóstico** - Leer notebook y index.md completos; catalogar todos los errores antes de tocar nada (completed 2026-05-22)
-- [ ] **Phase 2: Corrección de Contenido** - Corregir errores de fórmulas, referencias rotas y desalineación de código
+- [x] **Phase 2: Corrección de Contenido** - Corregir errores de fórmulas, referencias rotas y desalineación de código (completed 2026-05-22)
 - [ ] **Phase 3: Mejora de Narrativa** - Fortalecer hilo conductor de §4, mejorar introducción e integrar síntesis de §7
 - [ ] **Phase 4: Revisión Final** - Verificar coherencia global, correr notebook de punta a punta y confirmar publicabilidad
 
@@ -46,7 +46,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
   - [x] 02-01-PLAN.md — Versionar 6 PNGs generadas + verificar lab.ipynb (CORR-02, LAB-01) [Wave 1]
   - [x] 02-02-PLAN.md — Corregir fórmulas LaTeX BLOCKER-S.01/S.02/MINOR-01 en §2 y §6 (CORR-01) [Wave 1]
-  - [ ] 02-03-PLAN.md — Alinear snippets MMSE/LS + insertar figura en §4.8 (CORR-01, CORR-02, CORR-03) [Wave 2]
+  - [x] 02-03-PLAN.md — Alinear snippets MMSE/LS + insertar figura en §4.8 (CORR-01, CORR-02, CORR-03) [Wave 2]
 
 ### Phase 3: Mejora de Narrativa
 **Goal**: El flujo pedagógico del documento es coherente: cada sección motiva la siguiente y la síntesis final conecta con el desarrollo
@@ -76,6 +76,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Auditoría y Diagnóstico | 4/4 | Complete   | 2026-05-22 |
-| 2. Corrección de Contenido | 2/3 | In Progress|  |
+| 2. Corrección de Contenido | 3/3 | Complete   | 2026-05-22 |
 | 3. Mejora de Narrativa | 0/? | Not started | - |
 | 4. Revisión Final | 0/? | Not started | - |
