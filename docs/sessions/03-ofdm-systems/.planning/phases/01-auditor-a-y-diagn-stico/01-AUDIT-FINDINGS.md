@@ -18,10 +18,14 @@
 | **TOTAL** | **5** | **4** |
 
 **Criterio de severidad:**
-- **BLOCKER** — impide dictar la clase: fórmula falsa, figura rota al renderizar, resultado numérico erróneo si el estudiante aplica la fórmula
-- **MINOR** — inconsistencia que no confunde al estudiante: variable renombrada, snippet sin firma de función, figura generada no referenciada
+- **BLOCKER-S.NN** — impide dictar la clase: fórmula falsa, figura rota al renderizar, resultado numérico erróneo si el estudiante aplica la fórmula
+- **MINOR-NN** — inconsistencia que no confunde al estudiante: variable renombrada, snippet sin firma de función, figura generada no referenciada
+
+**Convención de IDs:** Los BLOCKERs llevan sufijo `S` (Sección de Severidad alta); los MINORs no. Los IDs son globales y únicos en todo el informe.
 
 Cada hallazgo es independientemente corregible en Fase 2 sin releer `index.md`.
+
+> **Nota sobre estado de disco:** El Plan 03 de esta fase ejecutó `lab.ipynb` de punta a punta para auditar el notebook. Como resultado, `figures/` contiene 17 archivos (en lugar de los 11 pre-auditoría) — las figuras antes faltantes `ofdm-ber-equalizers.png` y `ofdm-per-subcarrier-ber.png` **ya existen en disco**. Los BLOCKERs de figuras (S.03–S.05) describen la referencia rota en `index.md`; la solución de Fase 2 es verificar que estas figuras persistan en CI/CD, no crearlas desde cero.
 
 ---
 
@@ -105,9 +109,15 @@ Huérfanas en disco (sin referenciar): `figures/mmse-vs-zf-constellation.png`
 
 ---
 
-**MINOR-02** — Figura huérfana `figures/mmse-vs-zf-constellation.png`
-- **Descripción:** Existe en disco (generada por celda `81830cd0`), no está referenciada en `index.md`. No confunde al estudiante pero ocupa espacio sin uso pedagógico. Fase 2 puede agregar la referencia o ignorar.
-- **Ubicación:** `figures/mmse-vs-zf-constellation.png` (sin referencia en `index.md`)
+**MINOR-02** — Figuras huérfanas generadas por el notebook (no referenciadas en `index.md`)
+- **Descripción:** Las siguientes figuras existen en disco (generadas al ejecutar `lab.ipynb`) pero no están referenciadas en `index.md`. No confunden al estudiante pero son capacidad generada sin uso pedagógico visible. Fase 2 puede referenciarlas o ignorarlas según criterio editorial.
+- **Ubicación:** `figures/` (generadas durante auditoría de Plan 03)
+  - `mmse-vs-zf-constellation.png` — generada por celda `81830cd0` (pre-existía en disco antes de la auditoría; generada en ambos estados)
+  - `channel-estimation-pilots.png` — generada por celda `eecd25a6`
+  - `qpsk-decision-regions.png` — generada por celda de ejercicio
+  - `ofdm-time-domain.png` — generada por celda de ejercicio
+  - `cp-effect-constellation.png` — generada por celda de ejercicio
+- **Nota:** La figura referenciada en `index.md` línea 840 es `channel-estimation-ls.png` (archivo estático pre-existente), **no** `channel-estimation-pilots.png`.
 
 ---
 
@@ -128,7 +138,7 @@ Huérfanas en disco (sin referenciar): `figures/mmse-vs-zf-constellation.png`
 ---
 
 **MINOR-03** — MMSE: código inline en index.md vs función invocable en notebook
-- **Descripción:** `index.md` presenta el cálculo MMSE como código inline (sin firma de función); `lab.ipynb` define `mmse_equalizer(Y, h, N, SNR_dB)` invocable. La lógica matemática es equivalente pero la API difiere. Un estudiante que copie el snippet de `index.md` no obtendrá el mismo resultado que llamar la función del notebook.
+- **Descripción:** `index.md` presenta el cálculo MMSE como código inline (sin firma de función); `lab.ipynb` define `mmse_equalizer(Y, h, N, SNR_dB)` invocable. La lógica matemática es equivalente y produce el mismo resultado numérico, pero el snippet de `index.md` no es reutilizable como callable — un estudiante no puede invocarlo con la misma API que el notebook.
 - **Ubicación:** `index.md` líneas 806–808 ↔ `lab.ipynb` celda `81830cd0`
 - **Texto actual (index.md):**
   ```python
@@ -196,14 +206,19 @@ Huérfanas en disco (sin referenciar): `figures/mmse-vs-zf-constellation.png`
 
 ## Checklist para Fase 2
 
-Los siguientes ítems son la lista de trabajo de Fase 2 (CORR-01, CORR-02, CORR-03, LAB-01):
+Los siguientes ítems son la lista de trabajo de Fase 2 (CORR-01, CORR-02, CORR-03, LAB-01).
+
+### Obligatorio antes de publicar
 
 - [ ] **BLOCKER-S.01** — Corregir factor `1/N` → `1/√N` en línea 240 de index.md (§2)
 - [ ] **BLOCKER-S.02** — Corregir fórmula η_neta: `N_CP/(N+N_CP)` → `N/(N+N_CP)` en línea 1029 de index.md (§6)
-- [ ] **BLOCKER-S.03** — Resolver figura faltante `ofdm-ber-equalizers.png` para línea 814 (ejecutar notebook)
-- [ ] **BLOCKER-S.04** — Resolver figura faltante `ofdm-ber-equalizers.png` para línea 953 (mismo archivo que S.03)
-- [ ] **BLOCKER-S.05** — Resolver figura faltante `ofdm-per-subcarrier-ber.png` para línea 961 (ejecutar notebook)
+- [ ] **BLOCKER-S.03** — Verificar que `ofdm-ber-equalizers.png` persiste en disco (ya existe tras auditoría); si el CI no ejecuta el notebook, comprometer el archivo generado en `figures/`
+- [ ] **BLOCKER-S.04** — Igual que S.03 (segunda referencia en línea 953, mismo archivo)
+- [ ] **BLOCKER-S.05** — Verificar que `ofdm-per-subcarrier-ber.png` persiste en disco (ya existe tras auditoría); misma estrategia que S.03
 - [ ] **MINOR-01** — Corregir factor `1/N` en nota desplegable línea 249 (consistente con S.01)
-- [ ] **MINOR-02** — Decidir sobre `mmse-vs-zf-constellation.png`: referenciar en index.md o ignorar
+
+### Recomendado si hay tiempo
+
+- [ ] **MINOR-02** — Decidir sobre las 5 figuras huérfanas: referenciar en index.md o comprometer sin referenciar
 - [ ] **MINOR-03** — Alinear snippet MMSE de líneas 806–808 con firma de función del notebook
 - [ ] **MINOR-04** — Alinear snippet LS de líneas 886–895 con firma de función del notebook
