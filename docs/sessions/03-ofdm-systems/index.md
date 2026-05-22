@@ -237,7 +237,7 @@ Esa es exactamente la definición de la IFFT aplicada al vector de símbolos $[X
 
 **¿Por qué son ortogonales las subportadoras?** Antes de introducir el canal, vale la pena demostrar la propiedad en el caso ideal: canal plano unitario, sin ruido. En ese caso la señal que llega al receptor es exactamente $x[n]$ — la señal transmitida. Para extraer el símbolo $X[k]$ de $x[n]$, el receptor multiplica muestra a muestra por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
-$$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
+$$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
 ??? note "¿Cómo se pasa de $x[n]$ a la suma sobre $X[l]$?"
     La definición de $x[n]$ de la sección anterior es:
@@ -246,7 +246,7 @@ $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l
 
     Se sustituye directamente dentro de la operación del receptor:
 
-    $$\frac{1}{N}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{N}\sum_{n=0}^{N-1} \left(\frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l]\, e^{j2\pi ln/N}\right) e^{-j2\pi kn/N}$$
+    $$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} \left(\frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l]\, e^{j2\pi ln/N}\right) e^{-j2\pi kn/N}$$
 
     El factor $1/\sqrt{N}$ y $X[l]$ no dependen de $n$, así que salen de la suma sobre $n$:
 
@@ -1026,7 +1026,7 @@ La eficiencia espectral neta integra las tres penalizaciones:
 
 No todas las subportadoras transportan datos. En NR, cada resource block (RB) tiene 12 subportadoras; los RBs de guarda en los bordes y las subportadoras piloto (DMRS) reducen la eficiencia:
 
-$$\eta_{\text{neta}} = \underbrace{\frac{N_{CP}}{N + N_{CP}}}_{\text{overhead CP}} \times \underbrace{\frac{N - N_{\text{guard}} - N_{\text{pilot}}}{N}}_{\text{overhead frecuencial}} \times \log_2 M \times r_c$$
+$$\eta_{\text{neta}} = \underbrace{\frac{N}{N + N_{CP}}}_{\text{eficiencia temporal}} \times \underbrace{\frac{N - N_{\text{guard}} - N_{\text{pilot}}}{N}}_{\text{overhead frecuencial}} \times \log_2 M \times r_c$$
 
 Para el ejemplo de $\mu = 1$, $N = 2048$, $N_{CP} = 144$ muestras (en la FFT de 2048):
 
