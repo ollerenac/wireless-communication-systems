@@ -588,6 +588,8 @@ def qpsk_map(bits):
     print(np.mean(np.abs(X)**2))   # 1.0  ← energía unitaria ✓
     ```
 
+La pregunta natural es: `X` contiene $N$ símbolos complejos en el dominio de la frecuencia, pero el canal opera en tiempo — no existe forma de transmitir un vector de frecuencias directamente. ¿Cómo se convierten esos $N$ números complejos en una señal de tiempo muestreada lista para pasar por el canal? La respuesta es la IFFT, que genera las $N$ subportadoras ortogonales simultáneamente y les añade el prefijo cíclico.
+
 ---
 
 #### 4.2 IFFT + Añadir CP
@@ -632,6 +634,8 @@ def ofdm_tx(X, N_CP):
 
     El stem plot del notebook muestra las $N + N_{CP} = 80$ muestras discretas $\text{Re}\{x[n]\}$ en función del índice $n$. El bloque naranja (posiciones $0$ a $N_{CP}-1$) es visualmente idéntico al tramo final del símbolo (posiciones $N$ a $N+N_{CP}-1$) — esa identidad es exactamente la propiedad que el receptor usará para detectar el inicio de cada símbolo.
 
+La pregunta natural es: `x_cp` ya es una señal discreta en tiempo lista para transmitir, pero todavía existe solo en el simulador. Al atravesar el canal real, los ecos del entorno deformarán cada muestra. ¿Cómo modela el laboratorio esa deformación? La respuesta es la convolución lineal con el vector de canal $h$, que mezcla los últimos $L$ símbolos con sus respectivas ganancias de eco.
+
 ---
 
 #### 4.3 Canal Multipath
@@ -666,6 +670,8 @@ y_noisy = apply_channel(x_cp, h_channel) + noise
     print(f'Ratio de potencia: {ratio:.4f}')   # ≈ 1.0  ✓
     ```
 
+La pregunta natural es: `y_noisy` contiene el símbolo OFDM deformado por el canal más los ecos de símbolos anteriores mezclados en el prefijo cíclico. ¿Cómo aprovecha el receptor el CP para separar limpiamente las subportadoras y convertir la convolución lineal del canal en multiplicación puntual en frecuencia? La respuesta es descartar el CP y aplicar la FFT, que transforma la convolución circular resultante en $N$ operaciones escalares independientes.
+
 ---
 
 #### 4.4 Eliminar CP + FFT
@@ -692,6 +698,8 @@ def ofdm_rx_no_channel(y_received, N, N_CP):
     residual = np.max(np.abs(Y_ideal - X_tx))
     print(f'Residual máximo |Y[k] - X[k]|: {residual:.2e}')   # ~1e-14  ✓
     ```
+
+La pregunta natural es: la FFT ha separado las subportadoras y cada $Y[k] = H[k]\,X[k] + W[k]$ — el canal distorsionó cada subportadora de forma diferente. Sin corregir esa distorsión, el detector recibirá una nube dispersa en lugar de la constelación original. ¿Cómo invertir la ganancia de canal de cada subportadora independientemente? La respuesta es el ecualizador, que divide o compensa $Y[k]$ subportadora a subportadora.
 
 ---
 
@@ -824,6 +832,8 @@ El sesgo del MMSE — devolver un estimado cercano a cero en las subportadoras m
 
 Por eso en OFDM real — LTE, 5G NR — el ecualizador y el decodificador FEC son inseparables: el ecualizador hace lo que puede subportadora a subportadora, y el código corrige lo que el ecualizador no pudo.
 
+La pregunta natural es: tanto el ZF como el MMSE calculan $H[k]$ a partir de `h_channel` — asumiendo que el canal es perfectamente conocido por el receptor. En la práctica nadie entrega ese vector al receptor. ¿Cómo se obtiene $H[k]$ cuando el canal es desconocido? La respuesta es transmitir símbolos piloto conocidos en posiciones conocidas, y estimar el canal a partir de ellos.
+
 ---
 
 #### 4.7 Estimación de Canal con Pilotos
@@ -901,6 +911,8 @@ def ls_channel_estimate(Y, pilot_idx, X_pilot, N):
     mse    = np.mean(np.abs(H_est - H_true)**2)
     print(f'MSE estimación: {mse:.2e}')   # pequeño sin ruido; crece con SNR bajo
     ```
+
+La pregunta natural es: ¿qué se hace con $\hat{H}[k]$ una vez estimado? Con esa estimación el ecualizador puede calcular $\hat{X}[k]$, pero $\hat{X}[k]$ sigue siendo un número complejo en el plano — no son bits todavía. La respuesta es el demapper, que asigna cada punto complejo al símbolo de la constelación más cercano y extrae los bits correspondientes.
 
 ---
 
