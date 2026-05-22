@@ -28,7 +28,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Existe una lista de todas las referencias a figuras en index.md cruzada contra los archivos reales en `figures/` — cada discrepancia marcada explícitamente
   3. Existe un diff conceptual de cada snippet Python en index.md versus su equivalente en lab.ipynb, marcando coincidencia o desalineación
   4. Existe un registro de si lab.ipynb corre de punta a punta sin error de celda, con el número de celda de cualquier fallo encontrado
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 01-01-PLAN.md — Auditar fórmulas y enunciados de index.md (§4, §6 prioritarios; §1, §2, §5, §7 solo errores de contenido) → 01-AUDIT-FRAGMENT-formulas.md
+  - [ ] 01-02-PLAN.md — Auditar referencias de figuras cruzadas contra disco → 01-AUDIT-FRAGMENT-figuras.md
+  - [ ] 01-03-PLAN.md — Auditar snippets Python (index.md vs lab.ipynb) + ejecutar notebook end-to-end → 01-AUDIT-FRAGMENT-codigo.md, 01-AUDIT-FRAGMENT-notebook.md
+  - [ ] 01-04-PLAN.md — Ensamblar informe final 01-AUDIT-FINDINGS.md desde los 4 fragmentos con renumeración global
 
 ### Phase 2: Corrección de Contenido
 **Goal**: Todos los errores de corrección catalogados en la fase 1 están corregidos en index.md y lab.ipynb
