@@ -43,7 +43,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Todas las referencias a figuras en index.md apuntan a archivos que existen en `figures/`; no hay referencias rotas ni figuras huérfanas sin referenciar
   3. Todos los snippets Python de index.md coinciden con el comportamiento real del lab.ipynb (misma API, mismas variables, mismo orden lógico)
   4. lab.ipynb corre de inicio a fin sin ningún error de celda en el entorno de trabajo
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 02-01-PLAN.md — Versionar 6 PNGs generadas + verificar lab.ipynb (CORR-02, LAB-01) [Wave 1]
+  - [ ] 02-02-PLAN.md — Corregir fórmulas LaTeX BLOCKER-S.01/S.02/MINOR-01 en §2 y §6 (CORR-01) [Wave 1]
+  - [ ] 02-03-PLAN.md — Alinear snippets MMSE/LS + insertar figura en §4.8 (CORR-01, CORR-02, CORR-03) [Wave 2]
 
 ### Phase 3: Mejora de Narrativa
 **Goal**: El flujo pedagógico del documento es coherente: cada sección motiva la siguiente y la síntesis final conecta con el desarrollo
