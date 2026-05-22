@@ -949,7 +949,21 @@ El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud in
   <figcaption markdown="1">**Figura 3.** Dispersión de la constelación QAM tras ecualización en un canal selectivo en frecuencia: ZF (izquierda) amplifica ruido en las subportadoras débiles — la nube se ensancha desproporcionadamente; MMSE (derecha) la contiene mediante regularización con $1/\text{SNR}$ — los puntos quedan más cerca de los símbolos ideales. La diferencia se ve más pronunciada a SNR baja, donde el regularizador domina.</figcaption>
 </figure>
 
----
+Con el demapper, la cadena completa está cerrada: bits de entrada atraviesan el transmisor, el canal y el receptor, y los bits de salida pueden compararse con los originales. La pregunta natural es: ¿qué tan bien funciona el sistema? ¿Cuántos bits llegan incorrectos a medida que la SNR disminuye? La respuesta es la curva BER de §5, que mide exactamente el comportamiento de esta cadena para distintos niveles de energía por bit.
+
+Con todos los bloques en su lugar, la cadena completa puede ejecutarse de principio a fin. Este snippet es el transceptor OFDM sin codificación de canal — exactamente el sistema que §5 mide con la curva BER. La codificación LDPC (Sesión 04) se agrega como una capa superior a esta cadena.
+
+```python
+# Transceptor OFDM uncoded — exactamente lo que §5 mide con la curva BER
+bits     = rng.integers(0, 2, N * 2)               # bits aleatorios (2 bits/símbolo QPSK)
+X        = qpsk_map(bits)                           # §4.1  mapper
+x_cp     = ofdm_tx(X, N_CP)                        # §4.2  IFFT + CP
+y_noisy  = apply_channel(x_cp, h_channel) + noise  # §4.3  canal + AWGN
+Y        = ofdm_rx_no_channel(y_noisy, N, N_CP)    # §4.4  eliminar CP + FFT
+X_hat    = zf_equalizer(Y, h_channel, N)           # §4.5  ecualizador ZF
+bits_hat = qpsk_demap(X_hat)                       # §4.8  demapper
+ber      = np.mean(bits != bits_hat)
+```
 
 ---
 
