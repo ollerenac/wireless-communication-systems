@@ -12,16 +12,18 @@ El `index.md` debe explicar exactamente lo que el `lab.ipynb` demuestra — sin 
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Auditar index.md buscando enunciados falsos o fórmulas incorrectas — Validado en Fase 1 (5 BLOCKERs + 4 MINORs catalogados)
+- [x] Corregir referencias a figuras rotas (filenames no existentes en `figures/`) — Validado en Fase 2 (7 PNGs versionados, BLOCKERs S.03/S.04/S.05 resueltos)
+- [x] Alinear los snippets de código en index.md con la implementación real del notebook — Validado en Fase 2 (mmse_equalizer + ls_channel_estimate alineados)
+- [x] Revisar fórmulas en §6 (eficiencia espectral — posible error de notación CP overhead) — Validado en Fase 2 (BLOCKER-S.02 resuelto: N_CP/(N+N_CP) → N/(N+N_CP))
+- [x] Verificar que el lab.ipynb corre de principio a fin sin errores de celda — Validado en Fase 1 (exit code 0, sin errores)
 
 ### Active
 
-- [ ] Auditar index.md buscando enunciados falsos o fórmulas incorrectas
-- [ ] Corregir referencias a figuras rotas (filenames no existentes en `figures/`)
-- [ ] Alinear los snippets de código en index.md con la implementación real del notebook
-- [ ] Fortalecer el hilo conductor de la Sección 4 (cadena OFDM completa)
-- [ ] Verificar que el lab.ipynb corre de principio a fin sin errores de celda
-- [ ] Revisar fórmulas en §6 (eficiencia espectral — posible error de notación CP overhead)
+- [ ] Fortalecer el hilo conductor de la Sección 4 (cadena OFDM completa) — Fase 3
+- [ ] Corregir doble separador `---` entre §4.8 y §5 (WR-01 de revisión de código) — Fase 3
+- [ ] Revisar caption de mmse-vs-zf-constellation.png (3 paneles: izq/centro/der) — Fase 3
+- [ ] Decidir sobre 4 PNGs modificados fuera de alcance (cp-illustration, ofdm-subcarriers, zf-equalizer-effect, zf-equalizer-qam-comparison)
 
 ### Out of Scope
 
@@ -70,4 +72,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-22 — Phase 1 complete (Auditoría y Diagnóstico). 5 BLOCKERs + 4 MINORs catalogados en 01-AUDIT-FINDINGS.md. Notebook corre limpio. index.md sin modificar.*
+*Last updated: 2026-05-22 — Phase 2 complete (Corrección de Contenido). Todos los BLOCKERs y MINORs resueltos: 3 fórmulas LaTeX corregidas, 7 figuras versionadas, 2 snippets alineados con lab.ipynb, figura §4.8 insertada. index.md listo para Fase 3 (narrativa).*
