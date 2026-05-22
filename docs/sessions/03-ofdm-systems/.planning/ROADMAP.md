@@ -12,7 +12,7 @@ Cuatro fases de trabajo editorial para dejar `index.md` y `lab.ipynb` listos par
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Auditoría y Diagnóstico** - Leer notebook y index.md completos; catalogar todos los errores antes de tocar nada
+- [x] **Phase 1: Auditoría y Diagnóstico** - Leer notebook y index.md completos; catalogar todos los errores antes de tocar nada (completed 2026-05-22)
 - [ ] **Phase 2: Corrección de Contenido** - Corregir errores de fórmulas, referencias rotas y desalineación de código
 - [ ] **Phase 3: Mejora de Narrativa** - Fortalecer hilo conductor de §4, mejorar introducción e integrar síntesis de §7
 - [ ] **Phase 4: Revisión Final** - Verificar coherencia global, correr notebook de punta a punta y confirmar publicabilidad
@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   - [x] 01-01-PLAN.md — Auditar fórmulas y enunciados de index.md (§4, §6 prioritarios; §1, §2, §5, §7 solo errores de contenido) → 01-AUDIT-FRAGMENT-formulas.md
   - [x] 01-02-PLAN.md — Auditar referencias de figuras cruzadas contra disco → 01-AUDIT-FRAGMENT-figuras.md
   - [x] 01-03-PLAN.md — Auditar snippets Python (index.md vs lab.ipynb) + ejecutar notebook end-to-end → 01-AUDIT-FRAGMENT-codigo.md, 01-AUDIT-FRAGMENT-notebook.md
-  - [ ] 01-04-PLAN.md — Ensamblar informe final 01-AUDIT-FINDINGS.md desde los 4 fragmentos con renumeración global
+  - [x] 01-04-PLAN.md — Ensamblar informe final 01-AUDIT-FINDINGS.md desde los 4 fragmentos con renumeración global
 
 ### Phase 2: Corrección de Contenido
 **Goal**: Todos los errores de corrección catalogados en la fase 1 están corregidos en index.md y lab.ipynb
@@ -72,7 +72,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Auditoría y Diagnóstico | 3/4 | In Progress|  |
+| 1. Auditoría y Diagnóstico | 4/4 | Complete   | 2026-05-22 |
 | 2. Corrección de Contenido | 0/? | Not started | - |
 | 3. Mejora de Narrativa | 0/? | Not started | - |
 | 4. Revisión Final | 0/? | Not started | - |
