@@ -17,13 +17,14 @@ El `index.md` debe explicar exactamente lo que el `lab.ipynb` demuestra — sin 
 - [x] Alinear los snippets de código en index.md con la implementación real del notebook — Validado en Fase 2 (mmse_equalizer + ls_channel_estimate alineados)
 - [x] Revisar fórmulas en §6 (eficiencia espectral — posible error de notación CP overhead) — Validado en Fase 2 (BLOCKER-S.02 resuelto: N_CP/(N+N_CP) → N/(N+N_CP))
 - [x] Verificar que el lab.ipynb corre de principio a fin sin errores de celda — Validado en Fase 1 (exit code 0, sin errores)
+- [x] Fortalecer el hilo conductor de §4 con transiciones pregunta-respuesta y bloque de cierre cadena completa — Validado en Fase 3 (NARR-01)
+- [x] Cerrar la brecha narrativa Sesión 02 → OFDM en la Introducción — Validado en Fase 3 (NARR-02)
+- [x] Integrar §7 Síntesis con referencias cruzadas a las secciones donde se desarrolló cada dimensión — Validado en Fase 3 (NARR-03)
+- [x] Revisar lab.ipynb: ejecución end-to-end + alineación de enunciados con index.md — Validado en Fase 4 (LAB-01)
 
 ### Active
 
-- [ ] Fortalecer el hilo conductor de la Sección 4 (cadena OFDM completa) — Fase 3
-- [ ] Corregir doble separador `---` entre §4.8 y §5 (WR-01 de revisión de código) — Fase 3
-- [ ] Revisar caption de mmse-vs-zf-constellation.png (3 paneles: izq/centro/der) — Fase 3
-- [ ] Decidir sobre 4 PNGs modificados fuera de alcance (cp-illustration, ofdm-subcarriers, zf-equalizer-effect, zf-equalizer-qam-comparison)
+- *(ningún item Active restante — todos los requisitos v1 están completos o explícitamente diferidos)*
 
 ### Out of Scope
 
@@ -51,8 +52,10 @@ El `index.md` debe explicar exactamente lo que el `lab.ipynb` demuestra — sin 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Notebook como ground truth | El código ejecutable no miente — la narrativa se adapta a él | — Pending |
-| Preservar estructura de secciones | Con 8h no hay tiempo para reorganizar §1-§3 y §5-§7 | — Pending |
+| Notebook como ground truth | El código ejecutable no miente — la narrativa se adapta a él | Ejecutado en Fase 2: conflictos resueltos ajustando index.md (snippets MMSE, LS, fórmula N/(N+N_CP)) |
+| Preservar estructura de secciones | Con 8h no hay tiempo para reorganizar §1-§3 y §5-§7 | Confirmado: estructura §1-§7 intacta, solo contenido y narrativa modificados |
+| Transiciones §4 pregunta-respuesta | El template canónico §4.5 (ya existente) define el estilo para las 7 nuevas transiciones | Ejecutado en Fase 3: 8 transiciones presentes, 1 human_needed validada en Fase 4 |
+| lab.ipynb solo markdown editables | El código Python es ground truth; los enunciados de ejercicios son ajustables | Ejecutado en Fase 4: LAB-01 verificado end-to-end, cero cambios de código |
 
 ## Evolution
 
