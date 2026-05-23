@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Auditoría y Diagnóstico** - Leer notebook y index.md completos; catalogar todos los errores antes de tocar nada (completed 2026-05-22)
 - [x] **Phase 2: Corrección de Contenido** - Corregir errores de fórmulas, referencias rotas y desalineación de código (completed 2026-05-22)
-- [ ] **Phase 3: Mejora de Narrativa** - Fortalecer hilo conductor de §4, mejorar introducción e integrar síntesis de §7
+- [x] **Phase 3: Mejora de Narrativa** - Fortalecer hilo conductor de §4, mejorar introducción e integrar síntesis de §7 (completed 2026-05-23)
 - [ ] **Phase 4: Revisión Final** - Verificar coherencia global, correr notebook de punta a punta y confirmar publicabilidad
 
 ## Phase Details
@@ -60,7 +60,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   - [x] 03-01-PLAN.md — Insertar 6 transiciones §4 + bloque de cierre §4 (cadena bits→bits_hat) + fix bug WR-01 (NARR-01)
   - [x] 03-02-PLAN.md — Insertar frase puente Sesión 02 → OFDM en Introducción (NARR-02)
   - [x] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
-  - [ ] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
+  - [x] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
 
 ### Phase 4: Revisión Final
 **Goal**: El documento completo está listo para publicar — coherente, sin errores detectables, ejecutable
@@ -73,7 +73,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
   - [x] 03-01-PLAN.md — Insertar 6 transiciones §4 + bloque de cierre §4 (cadena bits→bits_hat) + fix bug WR-01 (NARR-01)
   - [x] 03-02-PLAN.md — Insertar frase puente Sesión 02 → OFDM en Introducción (NARR-02)
-  - [ ] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
+  - [x] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
   - [ ] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
 
 ## Progress
@@ -85,5 +85,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Auditoría y Diagnóstico | 4/4 | Complete   | 2026-05-22 |
 | 2. Corrección de Contenido | 3/3 | Complete   | 2026-05-22 |
-| 3. Mejora de Narrativa | 3/4 | In Progress|  |
+| 3. Mejora de Narrativa | 4/4 | Complete   | 2026-05-23 |
 | 4. Revisión Final | 0/? | Not started | - |
