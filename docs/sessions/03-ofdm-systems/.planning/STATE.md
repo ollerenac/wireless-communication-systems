@@ -80,7 +80,7 @@ Ninguno.
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
-| 260523-q | Reorder §2 interference-term explanation before consequence paragraph | 2026-05-23 | — | [260523-q-reorder-interferencia-explanation-before-consequence](./quick/260523-q-reorder-interferencia-explanation-before-consequence/) |
+| 260523-q | Reorder §2 interference-term explanation before consequence paragraph | 2026-05-23 | d795976 | [260523-q-reorder-interferencia-explanation-before-consequence](./quick/260523-q-reorder-interferencia-explanation-before-consequence/) |
 
 ## Deferred Items
 
