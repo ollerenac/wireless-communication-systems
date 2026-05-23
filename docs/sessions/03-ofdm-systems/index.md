@@ -307,6 +307,8 @@ La figura siguiente muestra el espectro de potencia de las $N$ subportadoras ind
 
 ![Subportadoras OFDM en frecuencia](figures/ofdm-subcarriers.png)
 
+El eje horizontal usa la representación en banda base centrada en cero (índices $-N/2$ a $N/2-1$ en la DFT): las subportadoras a la izquierda de $f = 0$ corresponden a las de índice alto ($k > N/2$) del símbolo OFDM, que en la vista centrada equivalen a $k - N$ (frecuencias negativas). La figura muestra seis subportadoras representativas para ilustrar la forma; en un sistema real hay $N$ de ellas, simétricamente repartidas alrededor de DC.
+
 Cada subportadora tiene forma de sinc en frecuencia, con nulos exactamente en los centros del resto de subportadoras. Cada una alcanza su máximo ($= 1$) en su propia frecuencia $k \cdot \Delta f$, donde todas las demás valen cero. Las subportadoras se solapan espectralmente — en ningún punto del eje de frecuencias hay separación vacía entre ellas — y sin embargo no interfieren entre sí porque la ortogonalidad garantiza la cancelación en la suma, no la separación física. Esto es lo que hace a OFDM más eficiente en espectro que los sistemas FDM con bandas de guarda.
 
 #### Ejercicio 2
