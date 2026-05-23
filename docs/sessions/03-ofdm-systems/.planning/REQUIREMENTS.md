@@ -10,13 +10,13 @@
 
 ### Narrativa
 
-- [ ] **NARR-01**: Fortalecer el hilo conductor de la Sección 4 (bloques 4.1–4.8) — cada bloque debe motivar el siguiente con una frase de transición que conecte qué problema resuelve y qué problema deja pendiente
-- [ ] **NARR-02**: Revisar y mejorar la Introducción — verificar que la progresión desde Sesiones 01–02 hacia OFDM sea clara y que no haya saltos lógicos
-- [ ] **NARR-03**: Integrar mejor la síntesis de §7 (5 dimensiones) con el resto del documento — las dimensiones deben referenciar la sección donde se desarrollaron
+- [x] **NARR-01**: Fortalecer el hilo conductor de la Sección 4 (bloques 4.1–4.8) — cada bloque debe motivar el siguiente con una frase de transición que conecte qué problema resuelve y qué problema deja pendiente
+- [x] **NARR-02**: Revisar y mejorar la Introducción — verificar que la progresión desde Sesiones 01–02 hacia OFDM sea clara y que no haya saltos lógicos
+- [x] **NARR-03**: Integrar mejor la síntesis de §7 (5 dimensiones) con el resto del documento — las dimensiones deben referenciar la sección donde se desarrollaron
 
 ### Laboratorio
 
-- [ ] **LAB-01**: Revisar lab.ipynb: verificar que todos los ejercicios corren sin error, que el orden de ejercicios corresponde al orden del index.md, y ajustar enunciados del notebook si hay desalineación con el texto
+- [x] **LAB-01**: Revisar lab.ipynb: verificar que todos los ejercicios corren sin error, que el orden de ejercicios corresponde al orden del index.md, y ajustar enunciados del notebook si hay desalineación con el texto
 
 ## v2 (Fuera del alcance de hoy)
 
@@ -37,7 +37,7 @@
 | CORR-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
 | CORR-02 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
 | CORR-03 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
-| LAB-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
-| NARR-01 | Phase 3 | Pending |
-| NARR-02 | Phase 3 | Pending |
-| NARR-03 | Phase 3 | Pending |
+| LAB-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) → Phase 4 (cierre) | Complete |
+| NARR-01 | Phase 3 | Complete |
+| NARR-02 | Phase 3 | Complete |
+| NARR-03 | Phase 3 | Complete |
