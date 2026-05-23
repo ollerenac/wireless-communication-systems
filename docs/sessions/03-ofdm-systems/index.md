@@ -237,7 +237,7 @@ Esa es exactamente la definición de la IFFT aplicada al vector de símbolos $[X
 
 **¿Por qué son ortogonales las subportadoras?** Antes de introducir el canal, vale la pena demostrar la propiedad en el caso ideal: canal plano unitario, sin ruido. En ese caso la señal que llega al receptor es exactamente $x[n]$ — la señal transmitida. Para extraer el símbolo $X[k]$ de $x[n]$, el receptor multiplica muestra a muestra por la conjugada de la subportadora $k$ — es decir, por $e^{-j2\pi kn/N}$ — y suma los $N$ resultados. Sustituyendo la expresión de $x[n]$, ese cálculo produce un término por cada subportadora $l$:
 
-$$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
+$$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \sum_{l=0}^{N-1} X[l] \underbrace{\left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)}_{\text{término de interferencia de }l\text{ sobre }k}$$
 
 ??? note "¿Cómo se pasa de $x[n]$ a la suma sobre $X[l]$?"
     La definición de $x[n]$ de la sección anterior es:
@@ -248,13 +248,13 @@ $$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}
 
     $$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} \left(\frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l]\, e^{j2\pi ln/N}\right) e^{-j2\pi kn/N}$$
 
-    El factor $1/\sqrt{N}$ y $X[l]$ no dependen de $n$, así que salen de la suma sobre $n$:
+    Los dos factores $1/\sqrt{N}$ — el externo del receptor y el interno de $x[n]$ — se multiplican dando $1/N$. Ese factor combinado junto con $X[l]$ no dependen de $n$, así que salen de la suma sobre $n$:
 
-    $$= \frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi ln/N}\, e^{-j2\pi kn/N}\right)$$
+    $$= \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi ln/N}\, e^{-j2\pi kn/N}\right)$$
 
     Los dos exponentes con el mismo índice $n$ se combinan:
 
-    $$= \frac{1}{\sqrt{N}} \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)$$
+    $$= \sum_{l=0}^{N-1} X[l] \left(\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N}\right)$$
 
     Ese término interior es el que determina si la subportadora $l$ interfiere con $k$ o no.
 
