@@ -395,6 +395,16 @@ Las subportadoras son ortogonales en el vacío. El problema aparece cuando la se
 
 **¿Por qué funciona?** Con el CP añadido, el símbolo transmitido tiene longitud $N + N_{CP}$. El canal (de longitud $L$) provoca que las primeras $L-1$ muestras del símbolo recibido estén contaminadas con el símbolo anterior. Pero el receptor descarta exactamente esas primeras $N_{CP} \geq L-1$ muestras. Las $N$ muestras restantes corresponden a la convolución del canal con el símbolo como si fuera periódico: es decir, convolución circular.
 
+**Derivación algebraica.** La clave es que el bloque transmitido $\tilde{x}[m]$ (de longitud $N + N_{CP}$) puede escribirse de forma compacta como:
+
+$$\tilde{x}[m] = x\!\left[(m - N_{CP}) \bmod N\right], \qquad m = 0, \ldots, N + N_{CP} - 1$$
+
+Para $m \geq N_{CP}$, el mod es trivial y se obtiene $x[m - N_{CP}]$ — el símbolo en sí. Para $m < N_{CP}$ (la zona del CP), el mod da $x[m - N_{CP} + N]$, que es exactamente la cola del símbolo que el CP copia al frente. El canal aplica convolución lineal a $\tilde{x}$; descartando las primeras $N_{CP}$ muestras y re-indexando $n = m - N_{CP}$:
+
+$$y[n] = \sum_{l=0}^{L-1} h[l]\,\tilde{x}[n + N_{CP} - l] + w[n]$$
+
+Sustituyendo la definición de $\tilde{x}$: $\tilde{x}[n + N_{CP} - l] = x[(n + N_{CP} - l - N_{CP}) \bmod N] = x[(n-l) \bmod N]$. Por tanto:
+
 Formalmente, tras eliminar el CP, la muestra $n$-ésima del símbolo recibido es:
 
 $$y[n] = \sum_{l=0}^{L-1} h[l]\, x[(n-l) \bmod N] + w[n] \tag{4}$$

@@ -5,7 +5,7 @@ milestone_name: milestone
 status: completed
 stopped_at: context exhaustion at 78% (2026-05-23)
 last_updated: "2026-05-23T05:26:58.218Z"
-last_activity: 2026-05-23 -- Quick task 260523-q: reorder §2 interferencia explanation before consequence
+last_activity: 2026-05-23 -- Quick task 260523-u: derivar algebraicamente convolución circular Ec. 4
 progress:
   total_phases: 4
   completed_phases: 4
@@ -83,7 +83,8 @@ Ninguno.
 | 260523-q | Reorder §2 interference-term explanation before consequence paragraph | 2026-05-23 | d795976 | [260523-q-reorder-interferencia-explanation-before-consequence](./quick/260523-q-reorder-interferencia-explanation-before-consequence/) |
 | 260523-r | Agregar nota sobre frecuencias negativas en figura ofdm-subcarriers | 2026-05-23 | 9cd4436 | [260523-r-note-frecuencias-negativas-subcarriers-fig](./quick/260523-r-note-frecuencias-negativas-subcarriers-fig/) |
 | 260523-s | Añadir labels Figura 1–13 y etiquetas Ec. (1)–(9) en index.md y lab.ipynb | 2026-05-23 | 9760bd4 | [260523-s-label-figures-equations](./quick/260523-s-label-figures-equations/) |
-| 260523-t | Clarificar "canal de longitud L" en §3 — explicar cadena causal L taps → L-1 muestras contaminadas | 2026-05-23 | fe29cd8 | [260523-t-clarify-canal-longitud-l-cp-section](./quick/260523-t-clarify-canal-longitud-l-cp-section/) | [260523-s-label-figures-equations](./quick/260523-s-label-figures-equations/) |
+| 260523-t | Clarificar "canal de longitud L" en §3 — explicar cadena causal L taps → L-1 muestras contaminadas | 2026-05-23 | fe29cd8 | [260523-t-clarify-canal-longitud-l-cp-section](./quick/260523-t-clarify-canal-longitud-l-cp-section/) |
+| 260523-u | Derivar algebraicamente por qué Ec. (4) es convolución circular — mostrar sustitución x̃[m]=x[(m-N_CP) mod N] | 2026-05-23 | TBD | [260523-u-derivar-convolucion-circular-ec4](./quick/260523-u-derivar-convolucion-circular-ec4/) |
 
 ## Deferred Items
 
