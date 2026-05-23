@@ -262,8 +262,6 @@ El término de interferencia vale 1 cuando $l = k$ y 0 en cualquier otro caso:
 
 $$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases}$$
 
-Por eso de la suma sobre $l$ solo sobrevive el término propio: en el caso ideal el receptor recupera $X[k]$ exactamente, sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT. El canal real ($y[n] \neq x[n]$) se trata a continuación.
-
 ¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
 
 ??? note "¿Por qué la suma de vueltas completas es cero?"
@@ -285,6 +283,8 @@ Por eso de la suma sobre $l$ solo sobrevive el término propio: en el caso ideal
     $$\sum_{n=0}^{N-1} r^n = \frac{1 - r^N}{1 - r} = \frac{1 - e^{j2\pi(l-k)}}{1 - e^{j2\pi(l-k)/N}}$$
 
     El numerador es $1 - e^{j2\pi(l-k)}$. Como $l - k$ es un entero, $e^{j2\pi(l-k)} = 1$, y el numerador vale exactamente cero. El denominador no es cero porque $l \neq k$. Resultado: $0$.
+
+Por eso de la suma sobre $l$ solo sobrevive el término propio: en el caso ideal el receptor recupera $X[k]$ exactamente, sin contaminación de ninguna otra subportadora. Esta operación completa es la FFT. El canal real ($y[n] \neq x[n]$) se trata a continuación.
 
 **Por qué funciona sobre el canal.** Las exponenciales complejas $e^{j2\pi kn/N}$ son **autofunciones** de cualquier sistema LTI: si la entrada es $e^{j2\pi kn/N}$, la salida es $H[k]\, e^{j2\pi kn/N}$, donde $H[k]$ es la DFT del canal. Esta propiedad explica el corazón de OFDM: el canal convierte la entrada $X[k]$ en $H[k]X[k]$ subportadora a subportadora, sin mezclar las subportadoras entre sí. La ecualización queda reducida a una división escalar por subportadora.
 
