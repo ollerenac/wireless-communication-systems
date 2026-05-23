@@ -74,7 +74,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   - [x] 03-01-PLAN.md — Insertar 6 transiciones §4 + bloque de cierre §4 (cadena bits→bits_hat) + fix bug WR-01 (NARR-01)
   - [x] 03-02-PLAN.md — Insertar frase puente Sesión 02 → OFDM en Introducción (NARR-02)
   - [x] 03-03-PLAN.md — Cross-refs §7 (5 dimensiones) + corregir caption Figura 3 (3 paneles) (NARR-03)
-  - [ ] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
+  - [x] 03-04-PLAN.md — Inspección visual de 4 PNGs modificados + commit/revert por archivo (D-16)
 
 ## Progress
 

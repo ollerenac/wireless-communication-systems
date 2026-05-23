@@ -4,9 +4,9 @@
 
 ### Corrección de Contenido
 
-- [ ] **CORR-01**: Auditar index.md completo buscando enunciados falsos o fórmulas incorrectas; registrar hallazgos y corregir
-- [ ] **CORR-02**: Corregir todas las referencias a figuras rotas — `ofdm-ber-equalizers.png` → renombrar a `ofdm-ber.png` o viceversa; resolver `ofdm-per-subcarrier-ber.png` faltante; verificar `mmse-vs-zf-constellation.png` (existe en disco pero no referenciada)
-- [ ] **CORR-03**: Revisar todos los snippets Python del index.md contra el código real del lab.ipynb y alinear donde haya discrepancias
+- [x] **CORR-01**: Auditar index.md completo buscando enunciados falsos o fórmulas incorrectas; registrar hallazgos y corregir
+- [x] **CORR-02**: Corregir todas las referencias a figuras rotas — `ofdm-ber-equalizers.png` → renombrar a `ofdm-ber.png` o viceversa; resolver `ofdm-per-subcarrier-ber.png` faltante; verificar `mmse-vs-zf-constellation.png` (existe en disco pero no referenciada)
+- [x] **CORR-03**: Revisar todos los snippets Python del index.md contra el código real del lab.ipynb y alinear donde haya discrepancias
 
 ### Narrativa
 
@@ -34,9 +34,9 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| CORR-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
-| CORR-02 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
-| CORR-03 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
+| CORR-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
+| CORR-02 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
+| CORR-03 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Complete |
 | LAB-01 | Phase 1 (diagnóstico) → Phase 2 (corrección) | Pending |
 | NARR-01 | Phase 3 | Pending |
 | NARR-02 | Phase 3 | Pending |
