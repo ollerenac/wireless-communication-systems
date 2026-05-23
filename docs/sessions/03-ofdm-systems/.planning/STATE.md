@@ -84,7 +84,7 @@ Ninguno.
 | 260523-r | Agregar nota sobre frecuencias negativas en figura ofdm-subcarriers | 2026-05-23 | 9cd4436 | [260523-r-note-frecuencias-negativas-subcarriers-fig](./quick/260523-r-note-frecuencias-negativas-subcarriers-fig/) |
 | 260523-s | Añadir labels Figura 1–13 y etiquetas Ec. (1)–(9) en index.md y lab.ipynb | 2026-05-23 | 9760bd4 | [260523-s-label-figures-equations](./quick/260523-s-label-figures-equations/) |
 | 260523-t | Clarificar "canal de longitud L" en §3 — explicar cadena causal L taps → L-1 muestras contaminadas | 2026-05-23 | fe29cd8 | [260523-t-clarify-canal-longitud-l-cp-section](./quick/260523-t-clarify-canal-longitud-l-cp-section/) |
-| 260523-u | Derivar algebraicamente por qué Ec. (4) es convolución circular — mostrar sustitución x̃[m]=x[(m-N_CP) mod N] | 2026-05-23 | TBD | [260523-u-derivar-convolucion-circular-ec4](./quick/260523-u-derivar-convolucion-circular-ec4/) |
+| 260523-u | Derivar algebraicamente por qué Ec. (4) es convolución circular — mostrar sustitución x̃[m]=x[(m-N_CP) mod N] | 2026-05-23 | 89e4ae5 | [260523-u-derivar-convolucion-circular-ec4](./quick/260523-u-derivar-convolucion-circular-ec4/) |
 
 ## Deferred Items
 
