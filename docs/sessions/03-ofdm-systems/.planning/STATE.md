@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-22)
 
 **Core value:** index.md explica exactamente lo que lab.ipynb demuestra — sin errores, sin referencias rotas, con hilo conductor claro en §4
-**Current focus:** COMPLETO — Milestone v1.0 cerrado
+**Current focus:** PUBLICADO — Milestone v1.0 cerrado y tageado (v1.0); pushed a remote
 
 ## Current Position
 
