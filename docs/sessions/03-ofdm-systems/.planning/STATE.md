@@ -82,6 +82,7 @@ Ninguno.
 |---|-------------|------|--------|-----------|
 | 260523-q | Reorder §2 interference-term explanation before consequence paragraph | 2026-05-23 | d795976 | [260523-q-reorder-interferencia-explanation-before-consequence](./quick/260523-q-reorder-interferencia-explanation-before-consequence/) |
 | 260523-r | Agregar nota sobre frecuencias negativas en figura ofdm-subcarriers | 2026-05-23 | 9cd4436 | [260523-r-note-frecuencias-negativas-subcarriers-fig](./quick/260523-r-note-frecuencias-negativas-subcarriers-fig/) |
+| 260523-s | Añadir labels Figura 1–13 y etiquetas Ec. (1)–(9) en index.md y lab.ipynb | 2026-05-23 | TBD | [260523-s-label-figures-equations](./quick/260523-s-label-figures-equations/) |
 
 ## Deferred Items
 

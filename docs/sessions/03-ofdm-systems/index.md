@@ -24,7 +24,7 @@ Las Sesiones 01 y 02 construyeron los dos pilares del problema de transmisión d
 
 Cada eco del canal sale del transmisor en un instante distinto: el rayo directo llega sin retraso, una reflexión en un edificio cercano llega $l_1$ muestras tarde, otra reflexión más lejana llega $l_2$ muestras tarde. Al instante $n$, el receptor recibe todos esos ecos **simultáneamente** — cada uno cargando una copia de un símbolo pasado diferente. El tap $h[l]$ es la ganancia del eco con retardo $l$, y el símbolo que ese eco transporta es $x[n-l]$ (el que fue transmitido $l$ muestras atrás). La suma de todos los ecos activos es la convolución:
 
-$$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n]$$
+$$y[n] = \sum_{l=0}^{L-1} h[l]\, x[n-l] + w[n] \tag{1}$$
 
 donde $w[n]$ es ruido AWGN. Los índices $n$ y $l$ son distintos porque representan cosas distintas: $n$ es tiempo absoluto (el reloj del receptor), $l$ es retardo relativo (cuántas muestras atrás llegó ese eco — una propiedad fija del entorno, no del instante actual).
 
@@ -226,7 +226,7 @@ $$e^{j2\pi k\Delta f \cdot \frac{n}{N\Delta f}} = e^{j2\pi kn/N}$$
 
 $\Delta f$ aparece en numerador y denominador y se cancela. La señal discreta queda:
 
-$$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0, 1, \ldots, N-1$$
+$$x[n] = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} X[k]\, e^{j2\pi kn/N}, \quad n = 0, 1, \ldots, N-1 \tag{2}$$
 
 Esa es exactamente la definición de la IFFT aplicada al vector de símbolos $[X[0],\ldots,X[N-1]]$. El transmisor OFDM no necesita $N$ osciladores físicos: una sola IFFT genera la señal completa. $X[k]$ vive en frecuencia — es el símbolo asignado a la subportadora $k$. $x[n]$ vive en tiempo — es la muestra física que sale al canal.
 
@@ -260,7 +260,7 @@ $$\frac{1}{\sqrt{N}}\sum_{n=0}^{N-1} x[n]\, e^{-j2\pi kn/N} = \sum_{l=0}^{N-1} X
 
 El término de interferencia vale 1 cuando $l = k$ y 0 en cualquier otro caso:
 
-$$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases}$$
+$$\frac{1}{N}\sum_{n=0}^{N-1} e^{j2\pi (l-k)n/N} = \begin{cases} 1 & l = k \\ 0 & l \neq k \end{cases} \tag{3}$$
 
 ¿Por qué es cero cuando $l \neq k$? El producto $e^{j2\pi ln/N} \cdot e^{-j2\pi kn/N} = e^{j2\pi(l-k)n/N}$ es una exponencial compleja que, al recorrer $n = 0, 1, \ldots, N-1$, da exactamente $|l-k|$ vueltas completas en el plano complejo. La suma de cualquier número entero de vueltas completas es cero. El intervalo $[0, N-1]$ es exactamente la ventana de un símbolo OFDM — fuera de ella la cancelación no está garantizada.
 
@@ -305,7 +305,10 @@ Por eso de la suma sobre $l$ solo sobrevive el término propio: en el caso ideal
 
 La figura siguiente muestra el espectro de potencia de las $N$ subportadoras individuales y su superposición.
 
-![Subportadoras OFDM en frecuencia](figures/ofdm-subcarriers.png)
+<figure markdown="span">
+  ![Subportadoras OFDM en frecuencia](figures/ofdm-subcarriers.png)
+  <figcaption markdown="1">**Figura 3.** Espectro de potencia de las $N$ subportadoras OFDM. Cada subportadora tiene forma de sinc con nulos exactamente en las frecuencias centrales del resto — máxima eficiencia espectral sin interferencia. El eje usa representación en banda base centrada ($-N/2$ a $N/2-1$), por lo que las subportadoras de índice alto aparecen a la izquierda de DC.</figcaption>
+</figure>
 
 El eje horizontal usa la representación en banda base centrada en cero (índices $-N/2$ a $N/2-1$ en la DFT): las subportadoras a la izquierda de $f = 0$ corresponden a las de índice alto ($k > N/2$) del símbolo OFDM, que en la vista centrada equivalen a $k - N$ (frecuencias negativas). La figura muestra seis subportadoras representativas para ilustrar la forma; en un sistema real hay $N$ de ellas, simétricamente repartidas alrededor de DC.
 
@@ -394,17 +397,20 @@ Las subportadoras son ortogonales en el vacío. El problema aparece cuando la se
 
 Formalmente, tras eliminar el CP, la muestra $n$-ésima del símbolo recibido es:
 
-$$y[n] = \sum_{l=0}^{L-1} h[l]\, x[(n-l) \bmod N] + w[n]$$
+$$y[n] = \sum_{l=0}^{L-1} h[l]\, x[(n-l) \bmod N] + w[n] \tag{4}$$
 
 Esto es convolución circular. Aplicando la FFT:
 
-$$Y[k] = H[k] \cdot X[k] + W[k]$$
+$$Y[k] = H[k] \cdot X[k] + W[k] \tag{5}$$
 
 donde $H[k] = \sum_{l=0}^{L-1} h[l]\, e^{-j2\pi kl/N}$ es la DFT del canal. El canal simplemente multiplica cada subportadora por un número complejo $H[k]$.
 
 La figura siguiente ilustra la estructura temporal del símbolo OFDM con y sin CP.
 
-![Símbolo OFDM con prefijo cíclico](figures/cp-illustration.png)
+<figure markdown="span">
+  ![Símbolo OFDM con prefijo cíclico](figures/cp-illustration.png)
+  <figcaption markdown="1">**Figura 4.** Estructura temporal del símbolo OFDM con prefijo cíclico. *Panel superior:* símbolo original de $N$ muestras (parte real). *Panel inferior:* símbolo transmitido con CP — las últimas $N_{CP}$ muestras (recuadro naranja) se copian al frente. El receptor descarta las primeras $N_{CP}$ muestras, eliminando la ISI del símbolo anterior; las $N$ muestras restantes corresponden a la convolución circular limpia.</figcaption>
+</figure>
 
 El panel superior muestra el símbolo OFDM original de $N$ muestras (parte real). El panel inferior muestra el símbolo transmitido con CP: las últimas $N_{CP}$ muestras del símbolo (recuadro naranja) se copian al frente. La longitud total transmitida es $N + N_{CP}$. Al llegar al receptor, el canal convierte las primeras $L-1$ muestras en residuo del símbolo anterior (ISI); el receptor las descarta exactamente porque $N_{CP} \geq L-1$. Las $N$ muestras restantes son la convolución circular limpia — la FFT las transforma en $Y[k] = H[k] X[k]$.
 
@@ -723,7 +729,7 @@ El **ecualizador** es el bloque que corrige esta distorsión: dado $Y[k]$ y el c
 
 Si $H[k]$ es conocido, la corrección más directa es dividir $Y[k]$ por $H[k]$:
 
-$$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = \frac{H[k]\,X[k] + W[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]}$$
+$$\hat{X}^{ZF}[k] = \frac{Y[k]}{H[k]} = \frac{H[k]\,X[k] + W[k]}{H[k]} = X[k] + \frac{W[k]}{H[k]} \tag{6}$$
 
 El término $H[k]/H[k] = 1$ recupera el símbolo original exactamente. El nombre *Zero Forcing* describe precisamente eso: **fuerza la respuesta del canal a cero** — equivalentemente, fuerza la ganancia efectiva del canal a la unidad en cada subportadora.
 
@@ -735,7 +741,7 @@ $$\hat{X}^{ZF}[k] = X[k] + \underbrace{\frac{W[k]}{H[k]}}_{\text{ruido amplifica
 
 La potencia del ruido amplificado es $\sigma_w^2 / |H[k]|^2$. Con potencia de señal unitaria ($|X[k]|^2 = 1$), el SNR efectivo en la subportadora $k$ es:
 
-$$\text{SNR}^{ZF}[k] = \frac{1}{\sigma_w^2 / |H[k]|^2} = |H[k]|^2 \cdot \text{SNR}_0$$
+$$\text{SNR}^{ZF}[k] = \frac{1}{\sigma_w^2 / |H[k]|^2} = |H[k]|^2 \cdot \text{SNR}_0 \tag{7}$$
 
 Cada subportadora tiene un SNR propio, proporcional al cuadrado de la ganancia del canal en esa frecuencia. En subportadoras con *deep fade* ($|H[k]| \ll 1$), el SNR colapsa aunque el $\text{SNR}_0$ global sea alto — el ZF amplifica el ruido hasta hacerlo dominante.
 
@@ -746,7 +752,10 @@ La figura siguiente muestra el efecto del ecualizador. El color de borde de cada
 - **Panel 3 ($Y[k]$ sin ecualizar):** la constelación llega distorsionada. Los puntos azules/cian están más dispersos porque el ruido ocupa proporcionalmente más espacio en las subportadoras débiles.
 - **Panel 4 ($\hat{X}^{ZF}[k]$ tras ecualizador):** los símbolos vuelven cerca de los 4 vértices, pero conservan su color. Los azules/cian siguen siendo los más dispersos: el ecualizador corrigió la distorsión del canal, pero también amplificó el ruido $W[k]/H[k]$ — cuanto más débil era el canal, más ruido residual queda.
 
-![Efecto del ecualizador ZF sobre la constelación](figures/zf-equalizer-effect.png)
+<figure markdown="span">
+  ![Efecto del ecualizador ZF sobre la constelación](figures/zf-equalizer-effect.png)
+  <figcaption markdown="1">**Figura 5.** Efecto del ecualizador ZF sobre la constelación QPSK. *Panel 1:* ganancia $|H[k]|$ por subportadora (azul/cian = canal débil, rojo = fuerte). *Panel 2:* constelación transmitida. *Panel 3:* constelación recibida sin ecualizar. *Panel 4:* constelación tras ecualizador ZF — los símbolos de subportadoras débiles quedan más dispersos por el ruido amplificado $W[k]/H[k]$.</figcaption>
+</figure>
 
 ##### El detector y las regiones de decisión
 
@@ -760,7 +769,10 @@ El tamaño de la región de decisión depende de la modulación. Para **QPSK** l
 
 La figura tiene el mismo código de color (azul/cian = subportadora débil, rojo = fuerte) y se lee columna a columna: **transmitido → recibido sin ecualizar → tras ZF**. En la fila inferior (16-QAM), las líneas de puntos marcan las fronteras de decisión de la cuadrícula 4×4. Observa cómo los puntos azules — que en QPSK se mantienen dentro de su cuadrante — cruzan frecuentemente esas fronteras más estrechas en 16-QAM, aunque el canal y el SNR sean idénticos.
 
-![Comparación QPSK vs 16-QAM tras ecualizador ZF](figures/zf-equalizer-qam-comparison.png)
+<figure markdown="span">
+  ![Comparación QPSK vs 16-QAM tras ecualizador ZF](figures/zf-equalizer-qam-comparison.png)
+  <figcaption markdown="1">**Figura 6.** Comparación del ecualizador ZF en QPSK (fila superior) y 16-QAM (fila inferior), misma codificación de color. Las regiones de decisión más estrechas de 16-QAM hacen que los puntos de subportadoras débiles crucen frecuentemente la frontera de decisión aunque el canal y el SNR sean idénticos al caso QPSK.</figcaption>
+</figure>
 
 ```python
 def zf_equalizer(Y, h, N):
@@ -789,7 +801,10 @@ El ZF tiene una debilidad estructural: trata todas las subportadoras por igual. 
 
 La figura lo muestra directamente: los dos paneles tienen exactamente las mismas barras con los mismos colores, pero en orden inverso. Donde el canal tiene ganancia baja (barra corta, color azul/cian en el panel izquierdo), el ruido tras el ecualizador tiene potencia alta (barra larga, mismo color azul/cian en el panel derecho). El ZF convierte el problema del canal en un problema de ruido, subportadora a subportadora.
 
-![El ZF convierte canal débil en ruido amplificado](figures/zf-noise-amplification.png)
+<figure markdown="span">
+  ![El ZF convierte canal débil en ruido amplificado](figures/zf-noise-amplification.png)
+  <figcaption markdown="1">**Figura 7.** El ZF convierte canal débil en ruido amplificado. *Izquierda:* ganancia del canal $|H[k]|$ por subportadora. *Derecha:* potencia de ruido tras el ZF ($\sigma_w^2/|H[k]|^2$) por subportadora. Las barras del mismo color son inversas: canal bajo → ruido alto.</figcaption>
+</figure>
 
 La pregunta natural es: ¿existe un ecualizador que sea más inteligente en esas subportadoras? En lugar de invertir el canal ciegamente, ¿podría detectar que una subportadora está muy atenuada y moderar su respuesta para no amplificar el ruido? La respuesta es sí, y ese ecualizador es el MMSE.
 
@@ -801,7 +816,7 @@ La pregunta natural es: ¿existe un ecualizador que sea más inteligente en esas
 
 La idea del MMSE es sencilla: en lugar de invertir el canal a ciegas, multiplica el resultado del ZF por un factor $\alpha[k] \in (0,1)$ que depende de la calidad del canal en cada subportadora. Ese factor se llama **factor de contracción** (*shrinkage factor*):
 
-$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\alpha[k]\;\in\;(0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + 1/\text{SNR}}\,Y[k]$$
+$$\hat{X}^{MMSE}[k] = \underbrace{\frac{1}{H[k]}}_{\text{ZF}} \cdot \underbrace{\frac{|H[k]|^2}{|H[k]|^2 + 1/\text{SNR}}}_{\alpha[k]\;\in\;(0,1)} \cdot Y[k] = \frac{H^*[k]}{|H[k]|^2 + 1/\text{SNR}}\,Y[k] \tag{8}$$
 
 Cuando el canal es fuerte ($|H[k]|$ grande), $\alpha[k] \approx 1$ y el MMSE se comporta exactamente igual que el ZF. Cuando el canal es débil ($|H[k]| \approx 0$), $\alpha[k] \approx 0$ y el MMSE devuelve una estimación cercana a cero — es decir, no recupera el símbolo, pero tampoco amplifica el ruido. El ZF en esa misma subportadora habría devuelto el símbolo correcto más un ruido amplificado al infinito ($W[k]/H[k] \to \infty$). El MMSE elige el mal menor: preferir un estimado sesgado y silencioso antes que uno correcto pero ahogado en ruido.
 
@@ -824,7 +839,10 @@ def mmse_equalizer(Y, h, N, SNR_dB):
 ??? example "Verificación"
     La figura compara BER de ZF y MMSE sobre el canal de referencia. A SNR baja, MMSE supera a ZF en las subportadoras débiles; a SNR alta ambos convergen:
 
-    ![BER ZF vs MMSE](figures/ofdm-ber-equalizers.png)
+    <figure markdown="span">
+      ![BER ZF vs MMSE](figures/ofdm-ber-equalizers.png)
+      <figcaption markdown="1">**Figura 8.** Comparación de BER: ecualizador ZF vs. MMSE sobre el canal de referencia. A SNR baja, el MMSE supera al ZF en las subportadoras en *fade*; a SNR alta ambos convergen.</figcaption>
+    </figure>
 
 El sesgo del MMSE — devolver un estimado cercano a cero en las subportadoras muy débiles — se resuelve en dos niveles distintos según la profundidad del fade:
 
@@ -848,11 +866,14 @@ El problema es que el receptor no conoce $H[k]$. El canal es una propiedad del e
 
 En la práctica $H[k]$ es desconocido. El transmisor reserva ciertas subportadoras como **pilotos** — transmite un símbolo conocido $X_p$ — y el receptor estima la ganancia del canal en esas posiciones mediante mínimos cuadrados (LS):
 
-$$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p}$$
+$$\hat{H}^{LS}[k_p] = \frac{Y[k_p]}{X_p} \tag{9}$$
 
 Luego interpola al resto de subportadoras para obtener $\hat{H}[k]$ en todas las subportadoras de datos.
 
-![Estimación LS del canal con y sin ruido en los pilotos](figures/channel-estimation-ls.png)
+<figure markdown="span">
+  ![Estimación LS del canal con y sin ruido en los pilotos](figures/channel-estimation-ls.png)
+  <figcaption markdown="1">**Figura 9.** Estimación LS del canal con pilotos. *Izquierda (sin ruido):* el error proviene solo de la interpolación entre pilotos. *Derecha (con ruido):* el ruido desplaza los puntos LS y ese desplazamiento se propaga a toda la interpolación, aumentando el MSE.</figcaption>
+</figure>
 
 La figura muestra el estimado en dos condiciones. Sin ruido (izquierda), el error viene solo de la interpolación: la línea roja sigue bien al canal verdadero, con desviaciones donde $H[k]$ varía más rápido entre pilotos. Con ruido (derecha), los puntos piloto LS quedan desplazados de su valor verdadero y ese desplazamiento se propaga a toda la interpolación — el MSE sube.
 
@@ -880,7 +901,10 @@ La figura muestra el estimado en dos condiciones. Sin ruido (izquierda), el erro
 ??? note "Cómo funciona esto en LTE"
     En LTE los pilotos se llaman **Cell-Specific Reference Signals (CRS)**. Se distribuyen en posiciones fijas de la grilla tiempo-frecuencia — cada celda de la grilla es un **Resource Element (RE)**, la unidad mínima de transmisión: una subportadora en un símbolo OFDM.
 
-    ![Grilla de recursos LTE con posiciones CRS](figures/lte-resource-grid-pilots.png)
+    <figure markdown="span">
+      ![Grilla de recursos LTE con posiciones CRS](figures/lte-resource-grid-pilots.png)
+      <figcaption markdown="1">**Figura 10.** Grilla de recursos LTE con posiciones de los CRS (*Cell-Specific Reference Signals*). Los RE rojos son pilotos (símbolo conocido $X_p$); los azules son datos. Espaciado de 6 subportadoras en frecuencia y 3–4 símbolos en tiempo, diseñado para seguir variaciones dentro de $B_c$ y del tiempo de coherencia.</figcaption>
+    </figure>
 
     Los RE en rojo son pilotos: el transmisor envía un símbolo conocido ($X_p = +1$ en BPSK) y el receptor calcula $\hat{H}^{LS}[k_p] = Y[k_p]/X_p$ directamente. Los RE en azul son datos: el receptor usa $\hat{H}[k]$ interpolado de los pilotos vecinos para ecualizarlos.
 
@@ -948,7 +972,7 @@ El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud in
 
 <figure markdown="span">
   ![Factor de contracción α[k] (izquierda), constelación ZF (centro) y MMSE (derecha) en un canal selectivo en frecuencia](figures/mmse-vs-zf-constellation.png)
-  <figcaption markdown="1">**Figura 3.** Tres paneles del ecualizador MMSE en un canal selectivo en frecuencia. **Izquierda:** factor de contracción $\alpha[k] \in (0,1)$ por subportadora — valores $\approx 1$ (rojo) indican canal fuerte donde MMSE $\approx$ ZF; valores $\ll 1$ (azul/cian) indican *fades* donde el MMSE modera la amplificación. **Centro:** constelación tras ecualizador ZF — los puntos azules/cian muestran ruido amplificado en las subportadoras débiles. **Derecha:** constelación tras ecualizador MMSE — la contracción $\alpha[k]$ compacta la nube en las subportadoras débiles a costa de un pequeño sesgo.</figcaption>
+  <figcaption markdown="1">**Figura 11.** Tres paneles del ecualizador MMSE en un canal selectivo en frecuencia. **Izquierda:** factor de contracción $\alpha[k] \in (0,1)$ por subportadora — valores $\approx 1$ (rojo) indican canal fuerte donde MMSE $\approx$ ZF; valores $\ll 1$ (azul/cian) indican *fades* donde el MMSE modera la amplificación. **Centro:** constelación tras ecualizador ZF — los puntos azules/cian muestran ruido amplificado en las subportadoras débiles. **Derecha:** constelación tras ecualizador MMSE — la contracción $\alpha[k]$ compacta la nube en las subportadoras débiles a costa de un pequeño sesgo.</figcaption>
 </figure>
 
 Con el demapper, la cadena completa está cerrada: bits de entrada atraviesan el transmisor, el canal y el receptor, y los bits de salida pueden compararse con los originales. La pregunta natural es: ¿qué tan bien funciona el sistema? ¿Cuántos bits llegan incorrectos a medida que la SNR disminuye? La respuesta es la curva BER de §5, que mide exactamente el comportamiento de esta cadena para distintos niveles de energía por bit.
@@ -983,7 +1007,10 @@ $$\frac{E_b}{N_0} = \frac{\text{SNR}}{\log_2 M \cdot r}$$
 
 donde $\log_2 M$ es el número de bits por símbolo QAM y $r$ es la tasa de código (1 si no hay codificación de canal). Para QPSK sin codificación: $E_b/N_0 = \text{SNR}/2$, es decir, 3 dB menos que el SNR. Para 16-QAM: 6 dB menos. Esta normalización permite trazar en el mismo eje curvas de distintas modulaciones y compararlas con la cota AWGN teórica sin que el ancho de banda distorsione el resultado.
 
-![BER OFDM end-to-end: ZF vs MMSE vs AWGN](figures/ofdm-ber-equalizers.png)
+<figure markdown="span">
+  ![BER OFDM end-to-end: ZF vs MMSE vs AWGN](figures/ofdm-ber-equalizers.png)
+  <figcaption markdown="1">**Figura 12.** BER end-to-end del sistema OFDM: ecualizador ZF, MMSE y cota AWGN teórica. La separación horizontal entre las curvas OFDM y la referencia AWGN es la penalización por operar en un canal frequency-selective sin diversidad frecuencial.</figcaption>
+</figure>
 
 **Cómo leer la figura.** El eje horizontal es $E_b/N_0$ en dB: más a la derecha, más energía por bit. El eje vertical es la BER en escala logarítmica — $10^{-1}$ significa 1 error cada 10 bits; $10^{-4}$, 1 error cada 10 000 bits, exigencia típica de voz. Hay tres curvas: la referencia AWGN (canal plano ideal), el ecualizador ZF y el MMSE. La separación horizontal entre una curva OFDM y la referencia AWGN a la misma BER es la *penalización de diversidad*: los dB adicionales que el sistema necesita por operar en un canal frequency-selective.
 
@@ -991,7 +1018,10 @@ Tres observaciones clave:
 
 1. **OFDM + ZF degradado vs AWGN:** las subportadoras en *deep fade* contribuyen desproporcionadamente a la BER total. La figura siguiente muestra que unas pocas subportadoras débiles elevan la BER global varios dB por encima de la referencia AWGN:
 
-    ![BER por subportadora](figures/ofdm-per-subcarrier-ber.png)
+    <figure markdown="span">
+      ![BER por subportadora](figures/ofdm-per-subcarrier-ber.png)
+      <figcaption markdown="1">**Figura 13.** BER individual de cada subportadora (azul = canal débil, rojo = fuerte). Las pocas barras azules con BER $> 10^{-1}$ tiran de la BER global de forma desproporcionada, explicando la brecha con la cota AWGN visible en la Figura 12.</figcaption>
+    </figure>
 
     La figura muestra la BER individual de cada una de las $N$ subportadoras. El color sigue el mismo código que las constelaciones: azul = subportadora débil ($|H[k]|$ pequeño), rojo = fuerte. Unas pocas barras azules alcanzan BER $> 10^{-1}$ — prácticamente cada bit falla en esas subportadoras. Al promediar sobre todas las subportadoras, esas barras tiran la BER global hacia arriba de forma desproporcionada, explicando la brecha con AWGN visible en la curva principal.
 
