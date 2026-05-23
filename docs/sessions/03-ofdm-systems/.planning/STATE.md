@@ -85,6 +85,20 @@ Ninguno.
 | v2 | Ejercicios interactivos / widgets Jupyter | Out of scope — v2 | Phase 4 |
 | v2 | Push al remoto y CI/CD | Responsabilidad del profesor | Phase 4 |
 
+## Deferred Items — Acknowledged at Milestone Close (2026-05-23)
+
+Items acknowledged and deferred at v1.0 milestone close on 2026-05-23:
+
+| Category | Item | Status | Notes |
+|----------|------|--------|-------|
+| quick_task | 260523-0lf-reorder-ejercicio-2-and-ejercicio-3-in-l | false positive — SUMMARY.md exists, status: complete | Audit scanner false positive; work committed as d401cd1 |
+| verification | Phase 04: 04-VERIFICATION.md human_needed | resolved — professor approved §4.6→§4.7 and exercises reordered | Resolved interactively in session; file status not updated |
+| verification | Phase 03: 03-VERIFICATION.md human_needed | resolved — §4.6→§4.7 item originated here, resolved in Phase 04 | Carry-over from Phase 3; superseded by Phase 4 resolution |
+| verification | Phase 02: 02-VERIFICATION.md human_needed | resolved — content corrections verified in Phases 3+4 | mkdocs build --strict passes; professor accepted all content |
+| uat | Phase 02: 02-HUMAN-UAT.md 4 pending scenarios | acknowledged — browser renders pass (mkdocs build --strict exit 0); PNG decisions made in Phase 3 (Plan 03-04) | Visual UAT superseded by structural verification in Phases 3+4 |
+
+Known acknowledged items at v1.0 close: 5 (see above — all resolved or false positives)
+
 ## Session Continuity
 
 Last session: 2026-05-23T05:25:42.122Z

@@ -35,11 +35,12 @@ El `index.md` debe explicar exactamente lo que el `lab.ipynb` demuestra — sin 
 ## Context
 
 - **Audiencia:** Estudiantes de posgrado en ingeniería de telecomunicaciones
-- **Tiempo:** 8 horas para publicar y dictar
+- **Estado actual (v1.0):** `index.md` (1,357 líneas) y `lab.ipynb` (44 celdas, 1,053 líneas fuente) publicados y listos para dictar en clase
 - **Stack:** MkDocs-Material con admonitions (`???`), LaTeX math, Python 3 con NumPy/Matplotlib en el notebook
 - **Repositorio:** El proyecto es una subcarpeta dentro del repo mayor `wireless-communication-systems`. El worktree raíz está en `/home/researcher/Teaching/uni/2026/wireless-communication-systems`
 - **Idioma:** Español (toda la clase)
 - **Ground truth:** El `lab.ipynb` define qué se demuestra. El `index.md` explica esas demostraciones. Los conflictos se resuelven ajustando el `index.md`
+- **Deuda técnica conocida (W-01):** Cell 11 y Cell 15 de lab.ipynb guardan en el mismo archivo `figures/ofdm-ber-equalizers.png`; en ejecución completa Cell 15 gana (dpi=300). Riesgo solo en ejecución parcial. Fix: renombrar Cell 11 a `figures/ofdm-ber-quick.png`
 
 ## Constraints
 
@@ -54,8 +55,9 @@ El `index.md` debe explicar exactamente lo que el `lab.ipynb` demuestra — sin 
 |----------|-----------|---------|
 | Notebook como ground truth | El código ejecutable no miente — la narrativa se adapta a él | Ejecutado en Fase 2: conflictos resueltos ajustando index.md (snippets MMSE, LS, fórmula N/(N+N_CP)) |
 | Preservar estructura de secciones | Con 8h no hay tiempo para reorganizar §1-§3 y §5-§7 | Confirmado: estructura §1-§7 intacta, solo contenido y narrativa modificados |
-| Transiciones §4 pregunta-respuesta | El template canónico §4.5 (ya existente) define el estilo para las 7 nuevas transiciones | Ejecutado en Fase 3: 8 transiciones presentes, 1 human_needed validada en Fase 4 |
-| lab.ipynb solo markdown editables | El código Python es ground truth; los enunciados de ejercicios son ajustables | Ejecutado en Fase 4: LAB-01 verificado end-to-end, cero cambios de código |
+| Transiciones §4 pregunta-respuesta | El template canónico §4.5 (ya existente) define el estilo para las 7 nuevas transiciones | ✓ Ejecutado en Fase 3: 8 transiciones presentes; §4.6→§4.7 aprobada por profesor en Fase 4 |
+| lab.ipynb solo markdown editables | El código Python es ground truth; los enunciados de ejercicios son ajustables | ✓ Ejecutado en Fase 4: LAB-01 verificado end-to-end, cero cambios de código |
+| Orden ejercicios §4.3 antes §4.4 | Profesor prefiere orden monotónico respecto a la narrativa — Ej2→§4.3 (ISI) antes Ej3→§4.4 | ✓ Ejecutado en quick task 260523-0lf (d401cd1): ejercicios intercambiados y notebook re-ejecutado |
 
 ## Evolution
 
@@ -75,4 +77,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-22
+*Last updated: 2026-05-23 after v1.0 milestone*
