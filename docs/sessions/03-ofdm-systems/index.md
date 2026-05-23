@@ -389,7 +389,7 @@ y comprueba que vale 0.
 
 Las subportadoras son ortogonales en el vacío. El problema aparece cuando la señal OFDM pasa por el canal multipath.
 
-**La ISI en OFDM sin CP.** El canal de longitud $L$ convierte los primeros $L-1$ muestras del símbolo OFDM $n$ en una mezcla que incluye las últimas muestras del símbolo $n-1$. Esto rompe la ortogonalidad: la FFT del receptor mezcla datos del símbolo anterior — ISI inter-símbolo. Además, el canal rota las subportadoras entre sí — ICI intra-símbolo.
+**La ISI en OFDM sin CP.** El canal tiene $L$ taps — $h[0], h[1], \ldots, h[L-1]$ (Ec. 1) — y el eco más tardío llega con $L-1$ muestras de retraso. Si dos símbolos OFDM consecutivos se transmiten sin CP, ese eco tardío hace que las primeras $L-1$ muestras del símbolo recibido $n$ contengan también energía del símbolo anterior $n-1$: **ISI inter-símbolo**. Al mismo tiempo, la convolución lineal del canal rompe la periodicidad de las subportadoras — los productos internos de la FFT ya no se anulan entre sí — produciendo **ICI intra-símbolo**.
 
 **La solución: convolución circular.** La FFT convierte la convolución lineal en multiplicación en frecuencia únicamente si la convolución es *circular*. Para convertir la convolución lineal del canal en circular, basta añadir al principio del símbolo una copia de sus últimas $N_{CP}$ muestras — el **prefijo cíclico** (CP).
 
