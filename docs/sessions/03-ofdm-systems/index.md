@@ -945,8 +945,8 @@ $$\Lambda_i[k] = \log \frac{P(b_i = 0 \mid \hat{X}[k])}{P(b_i = 1 \mid \hat{X}[k
 El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud indica alta certeza; un valor próximo a cero indica ambigüedad. Un decodificador FEC (LDPC, turbo) puede explotar esa información de confianza para corregir errores con una eficiencia muy superior a la que obtendría a partir de bits duros. La transición de decisión hard a soft es uno de los saltos más importantes en el diseño de receptores modernos — se tratará en detalle en la Sesión 04.
 
 <figure markdown="span">
-  ![Constelaciones QAM tras ecualización ZF (izquierda) vs MMSE (derecha)](figures/mmse-vs-zf-constellation.png)
-  <figcaption markdown="1">**Figura 3.** Dispersión de la constelación QAM tras ecualización en un canal selectivo en frecuencia: ZF (izquierda) amplifica ruido en las subportadoras débiles — la nube se ensancha desproporcionadamente; MMSE (derecha) la contiene mediante regularización con $1/\text{SNR}$ — los puntos quedan más cerca de los símbolos ideales. La diferencia se ve más pronunciada a SNR baja, donde el regularizador domina.</figcaption>
+  ![Factor de contracción α[k] (izquierda), constelación ZF (centro) y MMSE (derecha) en un canal selectivo en frecuencia](figures/mmse-vs-zf-constellation.png)
+  <figcaption markdown="1">**Figura 3.** Tres paneles del ecualizador MMSE en un canal selectivo en frecuencia. **Izquierda:** factor de contracción $\alpha[k] \in (0,1)$ por subportadora — valores $\approx 1$ (rojo) indican canal fuerte donde MMSE $\approx$ ZF; valores $\ll 1$ (azul/cian) indican *fades* donde el MMSE modera la amplificación. **Centro:** constelación tras ecualizador ZF — los puntos azules/cian muestran ruido amplificado en las subportadoras débiles. **Derecha:** constelación tras ecualizador MMSE — la contracción $\alpha[k]$ compacta la nube en las subportadoras débiles a costa de un pequeño sesgo.</figcaption>
 </figure>
 
 Con el demapper, la cadena completa está cerrada: bits de entrada atraviesan el transmisor, el canal y el receptor, y los bits de salida pueden compararse con los originales. La pregunta natural es: ¿qué tan bien funciona el sistema? ¿Cuántos bits llegan incorrectos a medida que la SNR disminuye? La respuesta es la curva BER de §5, que mide exactamente el comportamiento de esta cadena para distintos niveles de energía por bit.
@@ -1101,15 +1101,15 @@ Las técnicas de reducción de PAPR (clipping, tone reservation, SLM) se aplican
 
 ## Síntesis
 
-**Dimensión 1: Conversión de canal FSF en N canales flat.** OFDM descompone el problema de ecualización de canal frequency-selective (complejidad $\mathcal{O}(L^2)$) en N problemas triviales de ganancia escalar (complejidad $\mathcal{O}(N \log N)$ incluyendo la FFT). La condición es $\Delta f \ll B_c$. *Implicación de diseño*: N debe ser suficientemente grande para que $\Delta f \ll B_c$, pero no tan grande que el Doppler cause ICI.
+**Dimensión 1: Conversión de canal FSF en N canales flat.** OFDM descompone el problema de ecualización de canal frequency-selective (complejidad $\mathcal{O}(L^2)$) en N problemas triviales de ganancia escalar (complejidad $\mathcal{O}(N \log N)$ incluyendo la FFT). La condición es $\Delta f \ll B_c$. *Implicación de diseño*: N debe ser suficientemente grande para que $\Delta f \ll B_c$, pero no tan grande que el Doppler cause ICI (§2 y §4).
 
-**Dimensión 2: El prefijo cíclico como precio de la circularidad.** El CP gasta $N_{CP}/(N+N_{CP})$ de la capacidad temporal. Es el precio de convertir la convolución lineal del canal en circular. *Implicación de diseño*: CP más largo protege frente a mayor delay spread pero reduce la eficiencia espectral. 5G NR balancea esto con numerologías.
+**Dimensión 2: El prefijo cíclico como precio de la circularidad.** El CP gasta $N_{CP}/(N+N_{CP})$ de la capacidad temporal. Es el precio de convertir la convolución lineal del canal en circular. *Implicación de diseño*: CP más largo protege frente a mayor delay spread pero reduce la eficiencia espectral. 5G NR balancea esto con numerologías (§3).
 
-**Dimensión 3: La FFT como implementación eficiente.** La IFFT/FFT tiene complejidad $\mathcal{O}(N\log N)$ frente a $\mathcal{O}(N^2)$ de la DFT directa. Para $N = 2048$: FFT es $2048/\log_2(2048) \approx 186\times$ más eficiente. *Implicación de diseño*: N se elige potencia de 2 para maximizar la eficiencia de la FFT radix-2.
+**Dimensión 3: La FFT como implementación eficiente.** La IFFT/FFT tiene complejidad $\mathcal{O}(N\log N)$ frente a $\mathcal{O}(N^2)$ de la DFT directa. Para $N = 2048$: FFT es $2048/\log_2(2048) \approx 186\times$ más eficiente. *Implicación de diseño*: N se elige potencia de 2 para maximizar la eficiencia de la FFT radix-2 (§2).
 
-**Dimensión 4: Ecualización de un tap y estimación de canal.** La elegancia matemática de OFDM (un tap por subportadora) requiere conocer $H[k]$ — estimación de canal mediante pilotos. La calidad de la estimación determina la BER en la práctica. *Implicación de diseño*: la densidad de pilotos es el trade-off entre exactitud de estimación y eficiencia espectral. Sesión 08 desarrolla los estimadores LS y MMSE.
+**Dimensión 4: Ecualización de un tap y estimación de canal.** La elegancia matemática de OFDM (un tap por subportadora) requiere conocer $H[k]$ — estimación de canal mediante pilotos. La calidad de la estimación determina la BER en la práctica. *Implicación de diseño*: la densidad de pilotos es el trade-off entre exactitud de estimación y eficiencia espectral. Sesión 08 desarrolla los estimadores LS y MMSE (§4.5, §4.6, §4.7).
 
-**Dimensión 5: PAPR como coste energético.** El PAPR alto obliga a un backoff del PA y reduce la eficiencia energética. *Implicación de diseño*: PAPR es especialmente crítico en el uplink (terminal móvil con batería limitada). 5G NR usa DFT-spread OFDM (SC-FDMA) en el uplink para reducir el PAPR, a costa de perder la ecualización de un tap pura.
+**Dimensión 5: PAPR como coste energético.** El PAPR alto obliga a un backoff del PA y reduce la eficiencia energética. *Implicación de diseño*: PAPR es especialmente crítico en el uplink (terminal móvil con batería limitada). 5G NR usa DFT-spread OFDM (SC-FDMA) en el uplink para reducir el PAPR, a costa de perder la ecualización de un tap pura (§7).
 
 **Dependencias hacia adelante:**
 
