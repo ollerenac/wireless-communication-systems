@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-23T16:22:40Z",
+  "timestamp": "2026-05-24T03:26:05Z",
   "phase": null,
   "phase_name": null,
   "phase_dir": null,
@@ -10,17 +10,21 @@
   "status": "post_milestone",
   "completed_tasks": [
     {"id": 1, "name": "milestone v1.0 ceremony + tag + push", "status": "done", "commit": "7b6ab3d"},
-    {"id": 2, "name": "fix §2 orthogonality expansion (1/√N·1/√N = 1/N)", "status": "done", "commit": "1ddd0ec"}
+    {"id": 2, "name": "fix §2 orthogonality expansion (1/√N·1/√N = 1/N)", "status": "done", "commit": "1ddd0ec"},
+    {"id": 3, "name": "git push origin main — sync post-milestone commits to remote", "status": "done", "pushed_to": "f367da6"},
+    {"id": 4, "name": "quick-260523-t: clarify L-taps causal chain in §3 ISI paragraph", "status": "done", "commit": "fe29cd8"},
+    {"id": 5, "name": "quick-260523-u: add algebraic derivation of circular convolution (mod N) in §3", "status": "done", "commit": "89e4ae5"}
   ],
   "remaining_tasks": [],
   "blockers": [],
   "human_actions_pending": [
-    {"action": "git push origin main", "context": "1ddd0ec not yet pushed to remote", "blocking": false}
+    {"action": "git push origin main", "context": "commits 89e4ae5 + 05f44a9 not yet pushed to remote", "blocking": false}
   ],
   "decisions": [
     {"decision": "1/√N convention kept — consistent with norm='ortho' in notebook", "rationale": "Not an error; both document and notebook use unitary DFT convention", "phase": "post-v1.0"},
-    {"decision": "Orthogonality proof fix applied", "rationale": "Genuine algebraic error: two 1/√N factors were not combined, giving X[k]/√N instead of X[k]", "phase": "post-v1.0"}
+    {"decision": "Orthogonality proof fix applied", "rationale": "Genuine algebraic error: two 1/√N factors were not combined, giving X[k]/√N instead of X[k]", "phase": "post-v1.0"},
+    {"decision": "lab.ipynb serialization noise discarded", "rationale": "Jupyter reformatting (execution_count null, source array split) — content identical; restored to committed version per ground-truth constraint", "phase": "post-v1.0"}
   ],
   "uncommitted_files": [],
-  "next_action": "git push origin main; then /gsd:new-milestone for next scope if needed"
+  "next_action": "git push origin main (non-blocking); continue /gsd-quick editorial fixes as professor reads index.md"
 }
