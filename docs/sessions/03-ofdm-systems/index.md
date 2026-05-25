@@ -498,15 +498,15 @@ Con el CP en su lugar, la cadena OFDM completa es:
 
 ```
                          Transmisor (TX)
-┌───────────────────────────────────────────────────────────────────────┐
-│  Bits TX ──► QAM mapper ──► IFFT (N pts) ──► Añadir CP (N_CP) ──► DAC │
-└──────────────────────────────────────────────────────────────────┬────┘
-                                                                   │
-                                                        Canal h(t) + AWGN
-                                                                   │
-┌──────────────────────────────────────────────────────────────────┴────┐
-│  Bits RX ◄── QAM demapper ◄── Ecualizador ◄── FFT (N pts) ◄── ADC     │
-└───────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────────────────┐
+│  Bits TX ──► QAM mapper ──► IFFT (N pts) ──► Añadir CP (N_CP) ──► DAC           │
+└─────────────────────────────────────────────────────────────────────────────────┬─┘
+                                                                                  │
+                                                                     Canal h(t) + AWGN
+                                                                                  │
+┌─────────────────────────────────────────────────────────────────────────────────┴─┐
+│  Bits RX ◄── QAM demapper ◄── Ecualizador ◄── FFT (N pts) ◄── Eliminar CP ◄── ADC │
+└───────────────────────────────────────────────────────────────────────────────────┘
                          Receptor (RX)
 ```
 
@@ -548,6 +548,7 @@ Con el CP en su lugar, la cadena OFDM completa es:
 | Añadir CP | Copia las últimas $N_{CP}$ muestras al frente del símbolo | Convierte la convolución lineal del canal en circular (§3) |
 | DAC | Muestras digitales → señal analógica RF | Interfaz con el medio físico |
 | **Canal h(t) + AWGN** | Convoluciona la señal con los ecos y añade ruido | El mundo real — no controlable |
+| ADC | Señal analógica RF → muestras digitales | Interfaz con el medio físico |
 | Eliminar CP | Descarta las primeras $N_{CP}$ muestras (ISI del símbolo anterior) | Deja solo la convolución circular limpia |
 | FFT ($N$ pts) | Separa las $N$ subportadoras | Por la propiedad del CP: $Y[k] = H[k]\,X[k] + W[k]$ — sin mezcla entre subportadoras |
 | Ecualizador | Recupera $\hat{X}[k]$ a partir de $Y[k]$ y $H[k]$ | Deshace la distorsión del canal subportadora a subportadora |
