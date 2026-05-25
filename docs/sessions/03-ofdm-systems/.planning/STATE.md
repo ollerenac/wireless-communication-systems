@@ -88,6 +88,7 @@ Ninguno.
 | 260525-v | Añadir "Eliminar CP" al diagrama ASCII y fila ADC a tabla "Lectura bloque a bloque" en §4 | 2026-05-25 | e49e800 | [260525-v-diagrama-bloques-cp-adc-tabla](./quick/260525-v-diagrama-bloques-cp-adc-tabla/) |
 | 260525-w | Alinear §4.3 con Bloque 3 notebook — quitar ruido del snippet, y_noisy → y_ch | 2026-05-25 | a3dce51 | [260525-w-seccion-43-canal-variable-y-ch](./quick/260525-w-seccion-43-canal-variable-y-ch/) |
 | 260525-x | Fix colorbar overlap en Figura 7 (zf-noise-amplification.png) — colorbar a la derecha del grid | 2026-05-25 | 2310ea7 | [260525-x-fig7-colorbar-fix](./quick/260525-x-fig7-colorbar-fix/) |
+| 260525-y | Reemplazar fórmula LLR por prosa en §4.8 — fórmula prematura, lab usa hard decision | 2026-05-25 | TBD | [260525-y-llr-formula-remove](./quick/260525-y-llr-formula-remove/) |
 
 ## Deferred Items
 

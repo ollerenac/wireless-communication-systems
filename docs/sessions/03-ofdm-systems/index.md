@@ -972,11 +972,7 @@ donde $\mathcal{C}$ es el conjunto de $M$ puntos de la constelación. Esta opera
 
 El mismo nivel de ruido que apenas perturba QPSK puede cruzar frecuentemente las fronteras de 64-QAM — de ahí que modulaciones de orden superior requieran mayor SNR para la misma BER.
 
-**Decisión soft (LLR).** La decisión hard descarta información útil: solo dice "este punto ganó". Una alternativa es calcular, para cada bit $b_i$, el **logaritmo de la razón de verosimilitud** (LLR):
-
-$$\Lambda_i[k] = \log \frac{P(b_i = 0 \mid \hat{X}[k])}{P(b_i = 1 \mid \hat{X}[k])}$$
-
-El LLR cuantifica la *confianza* en la decisión: un valor grande en magnitud indica alta certeza; un valor próximo a cero indica ambigüedad. Un decodificador FEC (LDPC, turbo) puede explotar esa información de confianza para corregir errores con una eficiencia muy superior a la que obtendría a partir de bits duros. La transición de decisión hard a soft es uno de los saltos más importantes en el diseño de receptores modernos — se tratará en detalle en la Sesión 04.
+**Decisión soft.** La decisión hard descarta información útil: solo dice "este punto ganó". Una alternativa — que no implementamos aquí — es que el demapper entregue, para cada bit, un número real cuyo *signo* indica la decisión y cuya *magnitud* indica la confianza. Un símbolo que cayó justo en el centro de su región produce alta confianza; uno que cayó cerca de la frontera produce baja confianza. Un decodificador FEC (LDPC, turbo) puede explotar esa información de confianza para corregir errores con una eficiencia muy superior a la que obtendría a partir de bits duros. La transición de decisión hard a soft es uno de los saltos más importantes en el diseño de receptores modernos — se tratará en detalle en la Sesión 04.
 
 <figure markdown="span">
   ![Factor de contracción α[k] (izquierda), constelación ZF (centro) y MMSE (derecha) en un canal selectivo en frecuencia](figures/mmse-vs-zf-constellation.png)
