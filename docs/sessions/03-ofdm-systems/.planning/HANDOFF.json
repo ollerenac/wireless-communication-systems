@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-24T03:26:05Z",
+  "timestamp": "2026-05-25T21:00:00Z",
   "phase": null,
   "phase_name": null,
   "phase_dir": null,
@@ -13,18 +13,20 @@
     {"id": 2, "name": "fix §2 orthogonality expansion (1/√N·1/√N = 1/N)", "status": "done", "commit": "1ddd0ec"},
     {"id": 3, "name": "git push origin main — sync post-milestone commits to remote", "status": "done", "pushed_to": "f367da6"},
     {"id": 4, "name": "quick-260523-t: clarify L-taps causal chain in §3 ISI paragraph", "status": "done", "commit": "fe29cd8"},
-    {"id": 5, "name": "quick-260523-u: add algebraic derivation of circular convolution (mod N) in §3", "status": "done", "commit": "89e4ae5"}
+    {"id": 5, "name": "quick-260523-u: add algebraic derivation of circular convolution (mod N) in §3", "status": "done", "commit": "89e4ae5"},
+    {"id": 6, "name": "quick-260525-v: Eliminar CP in ASCII block diagram + ADC row in §4 table", "status": "done", "commit": "e49e800"},
+    {"id": 7, "name": "quick-260525-w: §4.3 snippet — remove noise, y_noisy→y_ch (align with Bloque 3)", "status": "done", "commit": "a3dce51"}
   ],
   "remaining_tasks": [],
   "blockers": [],
   "human_actions_pending": [
-    {"action": "git push origin main", "context": "commits 89e4ae5 + 05f44a9 not yet pushed to remote", "blocking": false}
+    {"action": "git push origin main", "context": "commits e49e800 through a3dce51 not yet pushed to remote", "blocking": false}
   ],
   "decisions": [
-    {"decision": "1/√N convention kept — consistent with norm='ortho' in notebook", "rationale": "Not an error; both document and notebook use unitary DFT convention", "phase": "post-v1.0"},
-    {"decision": "Orthogonality proof fix applied", "rationale": "Genuine algebraic error: two 1/√N factors were not combined, giving X[k]/√N instead of X[k]", "phase": "post-v1.0"},
-    {"decision": "lab.ipynb serialization noise discarded", "rationale": "Jupyter reformatting (execution_count null, source array split) — content identical; restored to committed version per ground-truth constraint", "phase": "post-v1.0"}
+    {"decision": "1/√N convention kept", "rationale": "Not an error; both document and notebook use unitary DFT convention", "phase": "post-v1.0"},
+    {"decision": "lab.ipynb ground truth — serialization noise discarded", "rationale": "Jupyter reformatting is content-identical; restore, don't commit", "phase": "post-v1.0"},
+    {"decision": "§4.3 canal/noise separation", "rationale": "Notebook intentionally separates channel (Bloque 3, y_ch) and AWGN (Bloque 5); index.md now matches", "phase": "post-v1.0"}
   ],
   "uncommitted_files": [],
-  "next_action": "git push origin main (non-blocking); continue /gsd-quick editorial fixes as professor reads index.md"
+  "next_action": "git push origin main; continue /gsd-quick editorial fixes as professor reads §4 of index.md"
 }
