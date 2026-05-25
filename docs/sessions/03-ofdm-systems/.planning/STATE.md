@@ -5,7 +5,7 @@ milestone_name: milestone
 status: completed
 stopped_at: context exhaustion at 78% (2026-05-23)
 last_updated: "2026-05-23T05:26:58.218Z"
-last_activity: 2026-05-25 -- Quick task 260525-v: añadir Eliminar CP al diagrama y ADC a la tabla de §4
+last_activity: 2026-05-25 -- Quick task 260525-w: alinear §4.3 con Bloque 3 del notebook — y_noisy→y_ch, quitar ruido del snippet
 progress:
   total_phases: 4
   completed_phases: 4
@@ -86,6 +86,7 @@ Ninguno.
 | 260523-t | Clarificar "canal de longitud L" en §3 — explicar cadena causal L taps → L-1 muestras contaminadas | 2026-05-23 | fe29cd8 | [260523-t-clarify-canal-longitud-l-cp-section](./quick/260523-t-clarify-canal-longitud-l-cp-section/) |
 | 260523-u | Derivar algebraicamente por qué Ec. (4) es convolución circular — mostrar sustitución x̃[m]=x[(m-N_CP) mod N] | 2026-05-23 | 89e4ae5 | [260523-u-derivar-convolucion-circular-ec4](./quick/260523-u-derivar-convolucion-circular-ec4/) |
 | 260525-v | Añadir "Eliminar CP" al diagrama ASCII y fila ADC a tabla "Lectura bloque a bloque" en §4 | 2026-05-25 | e49e800 | [260525-v-diagrama-bloques-cp-adc-tabla](./quick/260525-v-diagrama-bloques-cp-adc-tabla/) |
+| 260525-w | Alinear §4.3 con Bloque 3 notebook — quitar ruido del snippet, y_noisy → y_ch | 2026-05-25 | TBD | [260525-w-seccion-43-canal-variable-y-ch](./quick/260525-w-seccion-43-canal-variable-y-ch/) |
 
 ## Deferred Items
 

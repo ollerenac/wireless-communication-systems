@@ -673,12 +673,9 @@ def apply_channel(x_signal, h):
     """Convolución lineal con h: simula el canal multipath."""
     return np.convolve(x_signal, h, mode='full')[:len(x_signal)]
 
-# El ruido se añade por separado, calibrado al Eb/N0 del punto de simulación:
-SNR_lin = 10 ** (SNR_dB / 10)
-sigma2  = 1 / (2 * k * SNR_lin)          # varianza por componente I o Q
-noise   = (rng.normal(0, np.sqrt(sigma2), N + N_CP) +
-           1j * rng.normal(0, np.sqrt(sigma2), N + N_CP))
-y_noisy = apply_channel(x_cp, h_channel) + noise
+y_ch = apply_channel(x_cp, h_channel)
+# Nota: el AWGN se añade por separado en la cadena de BER (§4.5); aquí
+# se aísla el efecto del canal para poder verificarlo sin ruido de por medio.
 ```
 
 ??? example "Verificación (sin ruido)"
@@ -689,7 +686,7 @@ y_noisy = apply_channel(x_cp, h_channel) + noise
     print(f'Ratio de potencia: {ratio:.4f}')   # ≈ 1.0  ✓
     ```
 
-La pregunta natural es: `y_noisy` contiene el símbolo OFDM deformado por el canal más los ecos de símbolos anteriores mezclados en el prefijo cíclico. ¿Cómo aprovecha el receptor el CP para separar limpiamente las subportadoras y convertir la convolución lineal del canal en multiplicación puntual en frecuencia? La respuesta es descartar el CP y aplicar la FFT, que transforma la convolución circular resultante en $N$ operaciones escalares independientes.
+La pregunta natural es: `y_ch` contiene el símbolo OFDM deformado por el canal más los ecos de símbolos anteriores mezclados en el prefijo cíclico. ¿Cómo aprovecha el receptor el CP para separar limpiamente las subportadoras y convertir la convolución lineal del canal en multiplicación puntual en frecuencia? La respuesta es descartar el CP y aplicar la FFT, que transforma la convolución circular resultante en $N$ operaciones escalares independientes.
 
 ---
 
