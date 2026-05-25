@@ -4,6 +4,10 @@ session: 1
 description: "Fundamentos del canal inalámbrico: path loss, shadowing, multipath fading y modelos estadísticos de Rayleigh y Rician."
 ---
 
+[Video - Parte 1](https://youtu.be/r44p2Y9n89g?si=-8gQ14Bs2J1Q5Dyy)
+
+[Video - Parte 2](https://www.youtube.com/live/9JTkiddcbbk?si=HaFTiODmf6XKDOQt)
+
 # Sesión 01 — Modelado del Canal Inalámbrico
 
 ## Objetivos de Aprendizaje
