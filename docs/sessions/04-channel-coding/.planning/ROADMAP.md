@@ -21,6 +21,13 @@
 
 **Requirements:** IDX-01, IDX-02, IDX-03, IDX-04, FIG-01
 
+**Plans:** 3 planes
+
+Plans:
+- [ ] 01-01-PLAN.md — Hooks narrativos "La pregunta natural es..." en §1, §2, §3.1, §3.2, §3.3, §4.1, §4.2, §4.3, §5
+- [ ] 01-02-PLAN.md — Lab section rewrite (6 ejercicios target) + auditoría admonitions de solución
+- [ ] 01-03-PLAN.md — Conversión figuras a `<figure>` + placeholder tanner-graph + corrección factual intro
+
 **Success Criteria:**
 1. Cada sub-sección de §3 y §4 termina con "La pregunta natural es…" conectando con la siguiente
 2. La sección "Laboratorio Python" describe exactamente los 6 ejercicios del notebook con tiempos estimados
