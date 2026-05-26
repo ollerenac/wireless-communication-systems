@@ -19,7 +19,7 @@
 
 **Goal:** El `index.md` tiene la misma calidad narrativa y estructura que la sesión 03 — ganchos entre secciones, lab section alineada con el notebook real, referencias cruzadas verificadas.
 
-**Requirements:** IDX-01, IDX-02, IDX-03, IDX-04, FIG-01
+**Requirements:** IDX-01, IDX-02, IDX-03, FIG-01
 
 **Plans:** 3 planes
 
