@@ -502,13 +502,19 @@ Un sistema 5G NR transmite datos en el PDSCH sobre un canal UMi LOS. Usando los 
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/04-channel-coding/lab.ipynb)
 
-En este laboratorio (~90 minutos) implementarás los conceptos fundamentales de codificación de canal:
+En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de codificación de canal, desde el límite teórico hasta un sistema OFDM+LDPC end-to-end:
 
-1. **Capacidad de Shannon y brecha al límite**: visualiza dónde opera cada modulación respecto a la curva de Shannon (Ej. 1 — ~15 min)
-2. **Código LDPC simple — verificación de paridad**: opera con la matriz $\mathbf{H}$ en GF(2), verifica codewords y detecta errores (Ej. 2 — ~15 min)
-3. **Curvas waterfall de BER**: simula BER de BPSK con y sin un código de repetición, observa el waterfall (Ej. 3 — ~20 min)
-4. **Código Polar N=8**: implementa el encoder Polar y el decodificador SC, mide la BER (Ej. 4 — ~25 min)
-5. **Comparación coded vs uncoded**: curvas de BER para BPSK sin código, con código de repetición, y con Polar $r_c=1/2$ (Ej. 5 — ~15 min)
+1. **Ej. 1 — Capacidad de Shannon y puntos de operación (~15 min)**: Grafica la curva de Shannon $C/B$ vs SNR y marca los puntos de operación de las modulaciones de la Sesión 02. Visualiza el límite absoluto de Eb/N0 = -1.59 dB y la brecha de cada modulación respecto al límite teórico.
+
+2. **Ej. 2 — Código LDPC: verificación de paridad (~15 min)**: Construye la matriz $\mathbf{H}$ en GF(2), verifica si un vector es codeword válido calculando $\mathbf{H}\,\mathbf{c} \pmod{2}$, y detecta la posición de un error a partir del síndrome.
+
+3. **Ej. 3 — LDPC BP realista sobre código de n≈400 bits (~30 min)**: Implementa el algoritmo sum-product (belief propagation) completo — inicialización de LLRs del canal AWGN, mensajes variable→nodo-de-verificación y verificación→nodo-de-variable, y decisión iterativa. Simula la curva BER Monte Carlo para al menos dos tasas de código y observa el *waterfall* con al menos 3 décadas de caída en BER.
+
+4. **Ej. 4 — Polar N=64: encoder + SC + SCL-L=8 (~35 min)**: Construye el encoder Polar con la matriz $G_{64}$ y selección de bits congelados por parámetro de Bhattacharyya. Implementa el decodificador SC recursivo y el SCL con lista $L=8$. Compara las curvas BER de SC y SCL en la región de *waterfall*.
+
+5. **Ej. 5 — Curvas waterfall comparativas (~15 min)**: Genera las curvas BER de LDPC ($r_c=1/2$, $2/3$, $3/4$), Polar equivalente y BPSK sin código en el mismo eje. Cuantifica la ganancia de codificación de cada esquema a BER = $10^{-5}$.
+
+6. **Ej. 6 — Integrador OFDM+LDPC (~30 min)**: Reutiliza sin modificación las funciones `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel` y `zf_equalizer` de la Sesión 03. Añade una capa de codificación LDPC (encode antes de transmitir, decode tras el ecualizador) y compara la BER coded vs uncoded sobre un canal frequency-selective de 5 taps.
 
 ---
 
