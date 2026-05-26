@@ -20,7 +20,7 @@ Al finalizar esta sesión, el estudiante será capaz de:
 
 ## Introducción
 
-En la Sesión 03, el Ejercicio 6 calculó que un sistema OFDM operaba al 86% de la capacidad de Shannon en condiciones realistas. En la Sesión 02, el selector de MCS usó un umbral de BER pre-FEC de $10^{-1.5}$ — una BER que un detector sin código nunca aceptaría — dando por sentado que el código LDPC de 5G NR la transformaba en $<10^{-5}$. Ambas sesiones usaron la codificación de canal como una "caja negra" con propiedades mágicas. Esta sesión abre esa caja.
+En la Sesión 03, el Ejercicio 6 calculó que un sistema OFDM operaba al 86% de la capacidad de Shannon en condiciones realistas. En la Sesión 02, el selector de MCS usó un umbral de BER pre-FEC de $10^{-1}$ — una BER que un detector sin código nunca aceptaría — dando por sentado que el código LDPC de 5G NR la transformaba en $<10^{-5}$. Ambas sesiones usaron la codificación de canal como una "caja negra" con propiedades mágicas. Esta sesión abre esa caja.
 
 La pregunta central es: si un canal introduce errores inevitablemente, ¿cómo es posible comunicar sin errores? La respuesta, contra toda intuición, es: añadiendo más bits. Específicamente, añadiendo bits de redundancia cuidadosamente diseñados para que el receptor pueda detectar y corregir los errores del canal. Shannon (1948) demostró que esto es posible para cualquier tasa $R < C$, donde $C$ es la capacidad del canal. Durante casi 50 años nadie supo construir códigos que se acercaran al límite; los turbo codes (1993) y los LDPC codes (redescubiertos 1996) rompieron esa barrera. Los códigos Polar (Arıkan 2009) son los primeros en ser teóricamente demostrables como capacity-achieving.
 
@@ -127,6 +127,14 @@ graph LR
 ```
 
 *Grafo de Tanner para el código (7,4) de Hamming. Las 3 ecuaciones de paridad conectan 4 variables cada una. El grado de cada nodo de verificación es 4; el de cada nodo de variable es 2.*
+
+<figure markdown="span">
+  ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
+  <!-- será generada por lab.ipynb — Fase 3 -->
+  <figcaption markdown="1">**Figura 3.** Grafo bipartito de Tanner para un código LDPC representativo. Los nodos de variable $v_j$ (círculos) representan los bits del codeword; los nodos de verificación $c_i$ (cuadrados) representan las ecuaciones de paridad $H_{ij}=1$ de la matriz $\mathbf{H}$.
+  La dispersidad del grafo — pocos unos en $\mathbf{H}$, aristas escasas — garantiza ciclos largos y convergencia rápida del decodificador belief propagation. Esta figura se generará en la Fase 3 del laboratorio.
+  </figcaption>
+</figure>
 
 La dispersidad del grafo es la razón por la que el decodificador iterativo converge eficientemente. En grafos dispersos, los ciclos son largos — esto minimiza las correlaciones entre mensajes en iteraciones sucesivas.
 
@@ -257,7 +265,7 @@ Un terminal 5G NR debe transmitir un bloque de transporte de $k = 4000$ bits en 
 
 **Paso 1 — Longitud del bloque codificado:** $n = k/r_c = 4000\times3/2 = 6000$ bits.
 
-**Paso 2 — Umbral LDPC BG1:** para $r_c = 2/3$ y longitud 6000, el umbral típico es Eb/N0 $\approx 5$ dB (a BER pre-FEC $\approx 10^{-1.5}$). El SNR de 18 dB da un Eb/N0 efectivo por bit de canal:
+**Paso 2 — Umbral LDPC BG1:** para $r_c = 2/3$ y longitud 6000, el umbral típico es Eb/N0 $\approx 5$ dB (a BER pre-FEC $\approx 10^{-1}$). El SNR de 18 dB da un Eb/N0 efectivo por bit de canal:
 
 $$\frac{E_b}{N_0}\bigg\vert_{\text{canal}} = \text{SNR} - 10\log_{10}(k_{\text{bits/sym}}\cdot r_c) = 18 - 10\log_{10}(6 \times 2/3) = 18 - 6 = 12\ \text{dB}$$
 
