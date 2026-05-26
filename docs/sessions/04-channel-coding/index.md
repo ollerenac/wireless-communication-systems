@@ -64,6 +64,8 @@ La figura siguiente muestra la capacidad $C/B$ en función del SNR, con los punt
 
 La curva negra es la frontera de Shannon: $C/B = \log_2(1+\text{SNR})$. Los puntos de colores muestran dónde opera cada modulación sin codificación a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02). Los puntos se sitúan entre un 30% y un 60% por debajo de la curva — la diferencia es el espacio que la codificación de canal puede recuperar. Las flechas horizontales indican la ganancia de codificación: la reducción de Eb/N0 que permite un buen código operando a la misma tasa espectral.
 
+La pregunta natural es: el límite $E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}$ marca la frontera absoluta de lo posible, pero los sistemas reales operan varios dB por encima de ella. ¿Cómo se construye un código que se acerque a esa frontera sin cruzarla? La respuesta es la redundancia estructurada: añadir bits de paridad diseñados para que el receptor detecte y corrija los errores del canal, reduciendo el Eb/N0 necesario mediante ganancia de codificación.
+
 ---
 
 ### 2. Codificación de Canal: Redundancia Estructurada
@@ -89,6 +91,8 @@ La **ganancia de codificación** es la reducción neta de Eb/N0 (en dB) necesari
 $$G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{con código}} \quad \text{[dB, a misma BER]}$$
 
 Para LDPC con $r_c = 1/2$ operando a BER $= 10^{-5}$ sobre AWGN: $G_c \approx 8\ \text{dB}$ — se necesita 8 dB menos de SNR que con BPSK sin código para la misma fiabilidad.
+
+La pregunta natural es: $G_c \approx 8\ \text{dB}$ es una mejora sustancial, pero ¿qué estructura interna tiene el código que lo hace posible? Añadir bits de redundancia arbitrarios no es suficiente — la ganancia de codificación depende de cómo se diseñan las relaciones de paridad entre bits. ¿Qué arquitectura matemática permite al decodificador explotar esas relaciones de forma eficiente? La respuesta es el grafo de Tanner disperso de los códigos LDPC, donde cada ecuación de paridad conecta solo un subconjunto pequeño de bits y el decodificador puede propagar correcciones de forma iterativa.
 
 ---
 
@@ -122,6 +126,8 @@ graph LR
 
 La dispersidad del grafo es la razón por la que el decodificador iterativo converge eficientemente. En grafos dispersos, los ciclos son largos — esto minimiza las correlaciones entre mensajes en iteraciones sucesivas.
 
+La pregunta natural es: el grafo de Tanner disperso con ciclos largos es la estructura que hace posible la decodificación iterativa, pero ¿cómo explota concretamente esa estructura un decodificador para propagar correcciones de bit en bit? ¿Qué mensajes se intercambian entre nodos de variable y nodos de verificación, y cómo convergen hacia la codeword correcta? La respuesta es el algoritmo de belief propagation, que circula log-likelihood ratios por las aristas del grafo en iteraciones sucesivas hasta que todas las ecuaciones de paridad se satisfacen.
+
 #### 3.2 Belief Propagation (Propagación de Creencias)
 
 El algoritmo de decodificación de LDPC es **belief propagation** (BP), también llamado *sum-product algorithm* o *message passing*. La idea es que cada nodo transmite a sus vecinos un mensaje que representa su "creencia" sobre los bits desconocidos, basándose en toda la información que ha recibido de sus otros vecinos.
@@ -147,6 +153,8 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
 El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codeword válida) o hasta un número máximo de iteraciones (típicamente 50–100). El comportamiento en la práctica muestra una **curva en cascada** (*waterfall*): por encima del umbral de SNR, el BP converge en pocas iteraciones; por debajo, no converge y la BER cae precipitosamente.
 
+La pregunta natural es: la decisión $\hat{c}_v$ y la curva waterfall describen el comportamiento ideal sobre un grafo pequeño, pero 5G NR transmite bloques de datos de miles de bits — los grafos correspondientes tendrían millones de aristas y serían inviables de almacenar y procesar directamente. ¿Cómo escala el algoritmo BP a esas dimensiones manteniendo el mismo hardware de decodificador? La respuesta es la estructura de grafo base con lifting: un grafo compacto que se expande mediante permutaciones cíclicas para generar matrices $\mathbf{H}$ de cualquier longitud con un único diseño de hardware.
+
 #### 3.3 LDPC en 5G NR
 
 5G NR usa dos familias de grafos base LDPC (*base graphs*, BG):
@@ -155,6 +163,8 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 - **BG2**: grafo base de 42×52, bloque máximo de $k = 3840$ bits. Optimizado para bloques pequeños y tasas bajas ($r_c \geq 1/5$). Para control de datos y retransmisiones HARQ.
 
 El grafo base se expande mediante *lifting* con factor $Z$, resultando en matrices $H$ de dimensiones $(n_b - k_b)Z \times n_b Z$. Esto permite códigos de distintas longitudes con la misma arquitectura de decodificador.
+
+La pregunta natural es: el factor de lifting $Z$ y las matrices expandidas permiten construir LDPC de cualquier longitud a partir de un grafo base optimizado, pero esa optimización es empírica — se buscan grafos con buenas propiedades de umbral mediante simulación. ¿Existe una familia de códigos cuya propiedad de alcanzar la capacidad del canal se demuestre matemáticamente, sin búsqueda aleatoria de grafos? La respuesta es la familia de códigos Polar, que construyen canales sintéticos mediante transformaciones butterfly deterministas y garantizan la polarización completa en el límite $N \to \infty$.
 
 ---
 
@@ -183,6 +193,8 @@ $$\lim_{N\to\infty} \frac{|\{i : Z(W_N^{(i)}) < \delta\}|}{N} = C(W) \quad \text
 
 Es decir: una fracción $C(W)$ de los canales sintéticos se vuelve perfecta, y la fracción $1-C(W)$ se vuelve inútil. El código Polar pone bits de información en los canales buenos (bajo $Z$) y bits congelados — conocidos por el receptor, convencionalmente 0 — en los canales malos.
 
+La pregunta natural es: el parámetro de Bhattacharyya $Z(W_N^{(i)})$ identifica cuáles canales sintéticos son fiables, pero el decodificador debe extraer los bits de información de esos canales sin conocer aún los bits que siguen — cada decisión afecta a todas las posteriores. ¿Cómo resuelve el decodificador esa dependencia causal de forma eficiente? La respuesta es la cancelación sucesiva: decodificar los bits en orden estricto $u_1, u_2, \ldots, u_N$, usando cada decisión anterior como condición conocida para calcular el LLR del siguiente.
+
 #### 4.2 Decodificación por Cancelación Sucesiva
 
 El decodificador SC (*Successive Cancellation*) decodifica los bits en orden $u_1, u_2, \ldots, u_N$:
@@ -193,6 +205,8 @@ El decodificador SC (*Successive Cancellation*) decodifica los bits en orden $u_
 El cálculo de LLRs se realiza recursivamente sobre el grafo del factor polar. La complejidad es $\mathcal{O}(N\log N)$ — la misma que la FFT.
 
 La limitación del SC básico es la propagación de errores: un error en $\hat{u}_i$ compromete todos los bits posteriores. El **decodificador de lista** (SCL, *Successive Cancellation List*) mantiene $L$ hipótesis paralelas en cada decisión y elimina las menos probables, mejorando significativamente la BER práctica. El SCL con $L=8$ y CRC exterior (*CA-Polar*, el esquema de 5G NR) da prestaciones cercanas a la decodificación ML.
+
+La pregunta natural es: el CA-Polar con SCL $L=8$ ofrece prestaciones próximas al óptimo, pero ¿en qué canales físicos concretos de 5G NR se despliega este esquema, y qué característica de esos canales hace que Polar sea preferible a LDPC — que ya existe en el estándar y funciona bien para datos? La respuesta es el conjunto de canales de control de bloques cortos (PBCH, PDCCH, PUCCH), donde la longitud limitada del bloque favorece la estructura sistemática de Polar frente a la búsqueda iterativa de BP.
 
 #### 4.3 Polar en 5G NR
 
@@ -205,6 +219,8 @@ La limitación del SC básico es la propagación de errores: un error en $\hat{u
 | PUCCH | Uplink Control | 1–11 bits | 1/3–1 |
 
 La longitud máxima del bloque de información es 1706 bits. En todos los casos se usa el esquema CA-Polar con CRC de 6 o 24 bits para detectar errores de decodificación y guiar el SCL. La ventaja de Polar sobre LDPC en bloques cortos es su estructura sistemática y su desempeño garantizado por teoría.
+
+La pregunta natural es: 1706 bits de bloque máximo para Polar frente a 8448 bits para LDPC BG1 marca una diferencia clara de escala, pero ¿cuáles son los criterios cuantitativos completos que determinan cuándo elegir uno u otro en un sistema real? ¿Hay un cruce de rendimiento medible entre ambas familias, o la elección depende solo del tipo de canal físico? La respuesta es la comparación directa de la §5, que tabula los criterios de complejidad, longitud de bloque, y capacidad-achieving para guiar la selección en un sistema como 5G NR.
 
 ---
 
@@ -240,6 +256,8 @@ $$\frac{E_b}{N_0}\bigg\vert_{\text{canal}} = \text{SNR} - 10\log_{10}(k_{\text{b
 **Paso 3 — Ganancia de codificación:** sin código, BPSK necesita Eb/N0 = 6.8 dB para BER $= 10^{-3}$. Con LDPC $r_c=2/3$ a Eb/N0 = 12 dB, el código opera muy por encima del umbral de 5 dB: BER post-FEC $\ll 10^{-10}$. Ganancia de codificación neta ≈ 12 − 6.8 − penalización de tasa = $(12 - 10\log_{10}(2/3)) − 6.8 \approx (12+1.8) − 6.8 \approx \mathbf{7\ \text{dB}}$.
 
 **Paso 4 — Throughput:** con $r_c = 2/3$ y 64-QAM (6 bits/símbolo), la eficiencia espectral efectiva es $6\times2/3 = 4$ bit/s/Hz (ver Sesión 02 tabla MCS). Para $B = 40$ MHz: $R \approx 160$ Mbit/s — coherente con el resultado de la Sesión 03 Sección 5.
+
+La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con una ganancia de codificación de $\approx 7\ \text{dB}$ — un resultado analítico convincente, pero ¿cómo se verifica empíricamente que estos códigos realmente alcanzan esa ganancia sobre un canal simulado? ¿Cómo se construye y mide esa cadena en el laboratorio, y cuántas realizaciones de ruido son necesarias para trazar una curva waterfall confiable? La respuesta es la sección de laboratorio, que implementa exactamente esta cadena con simulación Monte Carlo y mide la BER bit a bit.
 
 ---
 
