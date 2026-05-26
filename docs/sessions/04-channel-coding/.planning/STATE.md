@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-05-26T08:30:33.434Z"
+last_updated: "2026-05-26T08:34:29Z"
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
-  percent: 0
+  completed_plans: 3
+  percent: 17
 ---
 
 # STATE — Sesión 04: Codificación de Canal
@@ -17,14 +17,14 @@ progress:
 ## Current Phase
 
 **Phase:** 1 — Index Polish  
-**Plan:** 01-02 complete — 01-03 next  
-**Status:** Executing — plan 2/3 complete
+**Plan:** 01-03 complete — Phase 1 DONE  
+**Status:** Phase 1 complete — Phase 2 next
 
 ## Phase Progress
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| 1 — Index Polish | 🟨 In progress | Plan 01-01 done (hooks IDX-01); 01-02 done (lab section + admonitions D-06); 01-03 pending |
+| 1 — Index Polish | ✅ Complete | Plans 01-01, 01-02, 01-03 done — hooks, lab section, figure blocks, factual corrections |
 | 2 — Figuras Existentes | ⬜ Not started | |
 | 3 — LDPC Lab + Figuras | ⬜ Not started | |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
@@ -33,7 +33,7 @@ progress:
 
 ## Last Commit
 
-4145805 feat(01-02): audit admonitions — remove solution blocks from Ej3, Ej4, Ej6 (D-06) — 2026-05-26
+3acff5c feat(01-03): add tanner-graph placeholder figure + fix factual intro (D-05, D-07) — 2026-05-26
 
 ## Decisions Made
 
@@ -41,6 +41,9 @@ progress:
 - D-02 aplicada: objeto ancla matemático por sección en cada hook
 - D-03 aplicada: sección Laboratorio Python describe 6 ejercicios del estado target con tiempos ~15+15+30+35+15+30=140 min
 - D-06 aplicada: solo Ej1, Ej2, Ej5 conservan admonition de solución; Ej3, Ej4, Ej6 sin admonition (implementación pendiente en Fases 3-5)
+- D-04 aplicada: 2 referencias planas convertidas a <figure markdown="span"> con figcaption de 2+ líneas y comentarios de celda origen
+- D-05 aplicada: placeholder <figure> para tanner-graph.png insertado en §3.1; mermaid intacto
+- D-07 aplicada: $10^{-1.5} corregido a $10^{-1} en Introducción y ejemplo numérico §5 (referencia sesión 02 línea 267)
 
 ## Key Context for Continuation
 
