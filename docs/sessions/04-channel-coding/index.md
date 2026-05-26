@@ -359,28 +359,6 @@ $$\mathbf{H} = \begin{pmatrix} 1&1&0&1&1&0&0 \\ 0&1&1&0&1&1&0 \\ 1&0&1&1&0&0&1 \
 
 **(c)** ¿Cuántos errores puede corregir garantizadamente este código? Calcula su distancia mínima contando las columnas que definen la tasa de corrección de errores $t$.
 
-??? example "Solución"
-
-    **(a)** $\mathbf{H}\,\mathbf{c}_1 \pmod{2}$:
-
-    Fila 1: $1\cdot1 + 1\cdot1 + 0\cdot0 + 1\cdot1 + 1\cdot1 + 0\cdot0 + 0\cdot0 = 1+1+0+1+1+0+0 = 4 \equiv 0$. ✓
-
-    Fila 2: $0+1+0+0+1+0+0 = 2 \equiv 0$. ✓
-
-    Fila 3: $1+0+0+1+0+0+0 = 2 \equiv 0$. ✓
-
-    $\mathbf{H}\,\mathbf{c}_1 = \mathbf{0}$ → es un codeword válido ✓.
-
-    **(b)** $\mathbf{r} = \mathbf{c}_1 \oplus \mathbf{e}_3$, donde $\mathbf{e}_3 = [0,0,1,0,0,0,0]^T$ (error en posición 3).
-
-    $\mathbf{s} = \mathbf{H}\,\mathbf{r} = \mathbf{H}\,\mathbf{c}_1 + \mathbf{H}\,\mathbf{e}_3 = \mathbf{0} + \mathbf{h}_3 \pmod{2}$
-
-    donde $\mathbf{h}_3$ es la columna 3 de $\mathbf{H}$ (índice 2): $\mathbf{h}_3 = [0, 1, 1]^T$.
-
-    El síndrome $\mathbf{s} = [0,1,1]^T$ coincide exactamente con la columna 3 de $\mathbf{H}$ → el error está en el **bit 3**. El código puede corregir el error localizando la columna de $\mathbf{H}$ que coincide con el síndrome.
-
-    **(c)** El código (7,4) de Hamming tiene $d_{\min} = 3$ (puede verificarse encontrando el codeword de mínimo peso distinto de $\mathbf{0}$). Por tanto $t = \lfloor(3-1)/2\rfloor = 1$ — puede corregir **1 error** garantizadamente. Con 2 o más errores, el síndrome apunta a la columna incorrecta y el decodificador comete un error de corrección.
-
 ---
 
 ### Ejercicio 4
@@ -396,45 +374,6 @@ partiendo de $Z_0 = \varepsilon = 0{,}5$ para obtener los 8 canales sintéticos 
 **(b)** Para un código Polar de tasa $r_c = 1/2$ ($K = 4$ bits de información), ¿cuáles 4 canales sintéticos se deben elegir para los bits de información? ¿Cuáles son los bits congelados?
 
 **(c)** La capacidad de cada canal sintético es $I(W) = 1 - Z(W)$ para el BEC. Calcula la capacidad total de los 8 canales y verifica que coincide con $N\times I(W) = 8\times(1-0{,}5) = 4$ (conservación de la información).
-
-??? example "Solución"
-
-    **(a)** Árbol de polarización para $N=8$ ($n=3$ niveles):
-
-    Nivel 0: $Z_0 = 0{,}500$.
-
-    Nivel 1: $Z_- = 2(0{,}5) - (0{,}5)^2 = 0{,}750$; $Z_+ = (0{,}5)^2 = 0{,}250$.
-
-    Nivel 2 (de $Z_-=0.75$): $Z_{--} = 2(0{,}75)-(0{,}75)^2 = 0{,}9375$; $Z_{-+} = (0{,}75)^2 = 0{,}5625$.
-    Nivel 2 (de $Z_+=0.25$): $Z_{+-} = 2(0{,}25)-(0{,}25)^2 = 0{,}4375$; $Z_{++} = (0{,}25)^2 = 0{,}0625$.
-
-    Nivel 3 (8 canales finales):
-
-    | $i$ | Secuencia | $Z(W_8^{(i)})$ |
-    |:---:|-----------|:--------------:|
-    | 1 | $---$ | $2(0{,}9375)-(0{,}9375)^2 = 0{,}9961$ |
-    | 2 | $--+$ | $(0{,}9375)^2 = 0{,}8789$ |
-    | 3 | $-+-$ | $2(0{,}5625)-(0{,}5625)^2 = 0{,}8086$ |
-    | 4 | $-++$ | $(0{,}5625)^2 = 0{,}3164$ |
-    | 5 | $+--$ | $2(0{,}4375)-(0{,}4375)^2 = 0{,}6836$ |
-    | 6 | $+-+$ | $(0{,}4375)^2 = 0{,}1914$ |
-    | 7 | $++-$ | $2(0{,}0625)-(0{,}0625)^2 = 0{,}1211$ |
-    | 8 | $+++$ | $(0{,}0625)^2 = 0{,}0039$ |
-
-    **(b)** Para tasa $r_c = 1/2$, $K = 4$ bits de información en los 4 canales con **menor** $Z$ (más fiables):
-
-    Ordenados: $i=8$ ($Z=0.0039$), $i=7$ ($Z=0.1211$), $i=6$ ($Z=0.1914$), $i=4$ ($Z=0.3164$).
-
-    **Bits de información**: posiciones $\{4, 6, 7, 8\}$.
-    **Bits congelados** (= 0): posiciones $\{1, 2, 3, 5\}$.
-
-    **(c)** Capacidad total: $\sum_i I(W_8^{(i)}) = \sum_i (1 - Z_i)$:
-
-    $= (1-0{,}9961)+(1-0{,}8789)+(1-0{,}8086)+(1-0{,}3164)+(1-0{,}6836)+(1-0{,}1914)+(1-0{,}1211)+(1-0{,}0039)$
-
-    $= 0{,}0039+0{,}1211+0{,}1914+0{,}6836+0{,}3164+0{,}8086+0{,}8789+0{,}9961 = \mathbf{4{,}000}$ ✓
-
-    La polarización conserva la información total: simplemente la concentra en un subconjunto de canales. Esta es la verificación matemática del teorema de polarización.
 
 ---
 
@@ -479,22 +418,6 @@ Un sistema 5G NR transmite datos en el PDSCH sobre un canal UMi LOS. Usando los 
 **(c)** Calcula la brecha al límite de Shannon: ¿cuántos dB separan la tasa efectiva del sistema de la capacidad de Shannon al SNR recibido?
 
 **(d)** Con $K = 9\ \text{dB}$ (canal Rician), ¿esperarías una BER pre-FEC mayor o menor que en un canal Rayleigh con el mismo SNR medio? ¿Cómo afecta esto a la elección del umbral de BER pre-FEC?
-
-??? example "Solución"
-
-    **(a)** SNR = 20 dB → de la tabla Sesión 02, CQI 13 → 256-QAM con $r_c = 3/4$, $\eta = 6{,}0$ bit/s/Hz. Con LDPC BG1 para 256-QAM, el Eb/N0 del canal efectivo:
-
-    $$\frac{E_b}{N_0}\bigg\vert_{\text{código}} = 20 - 10\log_{10}(\log_2(256)\times r_c) = 20 - 10\log_{10}(8\times0{,}75) = 20 - 7{,}8 = 12{,}2\ \text{dB}$$
-
-    **(b)** El umbral LDPC BG1 para $r_c = 3/4$ es $\approx 6\ \text{dB}$. Con Eb/N0$_{\text{código}} = 12{,}2\ \text{dB} \gg 6\ \text{dB}$ ✓ — el sistema opera con 6.2 dB de margen sobre el umbral, garantizando BER post-FEC $\ll 10^{-10}$.
-
-    **(c)** Capacidad Shannon a SNR = 20 dB = 100: $C/B = \log_2(101) \approx 6{,}66$ bit/s/Hz.
-
-    El sistema opera a $\eta = 6{,}0$ bit/s/Hz. Brecha $= 6{,}66 - 6{,}0 = 0{,}66$ bit/s/Hz.
-
-    En términos de SNR: para $\eta = 6{,}0$ se necesita $\text{SNR}_{\min} = 2^6 - 1 = 63 \approx 18\ \text{dB}$. La brecha es $20 - 18 = \mathbf{2\ \text{dB}}$ al límite de Shannon — el sistema opera al 90% de la capacidad máxima del canal.
-
-    **(d)** Con $K = 9\ \text{dB}$ (Rician), la componente LOS concentra el 89% de la potencia (calculado en Sesión 01, Ejercicio 6c). Los deep fades son mucho menos frecuentes que en Rayleigh — la BER pre-FEC a SNR = 20 dB será significativamente **menor** que en Rayleigh. Esto significa que el umbral de BER pre-FEC de $10^{-1.5}$ que usa el MCS es muy conservador en este escenario LOS: en la práctica, la BER pre-FEC a 20 dB con canal Rician $K=9$ estará cerca de $10^{-3}$, dando un margen adicional al decodificador LDPC y asegurando BER post-FEC prácticamente nula.
 
 ---
 
