@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: Phase 1 planned, ready to execute
-last_updated: "2026-05-26T08:02:00.000Z"
+status: executing
+last_updated: "2026-05-26T08:25:57.918Z"
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -17,13 +17,14 @@ progress:
 ## Current Phase
 
 **Phase:** 1 — Index Polish  
-**Status:** Planned — 3 plans in 3 waves, ready to execute
+**Plan:** 01-01 complete — 01-02 next  
+**Status:** Executing — plan 1/3 complete
 
 ## Phase Progress
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| 1 — Index Polish | 🟦 Planned | 3 plans: 01-01 (hooks), 01-02 (lab section), 01-03 (figures + factual) |
+| 1 — Index Polish | 🟨 In progress | Plan 01-01 done (hooks IDX-01); 01-02, 01-03 pending |
 | 2 — Figuras Existentes | ⬜ Not started | |
 | 3 — LDPC Lab + Figuras | ⬜ Not started | |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
@@ -32,7 +33,12 @@ progress:
 
 ## Last Commit
 
-None yet — project initialized 2026-05-26
+6bdae05 feat(01-01): insert 9 narrative hooks in index.md — 2026-05-26
+
+## Decisions Made
+
+- D-01 aplicada: cobertura total 9 sub-secciones (no solo §3.2 y §4.2)
+- D-02 aplicada: objeto ancla matemático por sección en cada hook
 
 ## Key Context for Continuation
 

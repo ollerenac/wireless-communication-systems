@@ -6,7 +6,7 @@
 
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|--------------|------------------|
-| 1 | Index Polish | index.md narrativa y estructura a nivel sesión 03 | IDX-01, IDX-02, IDX-03, IDX-04, FIG-01 | 3 |
+| 1 | Index Polish | 1/3 | In Progress|  |
 | 2 | Figuras existentes | shannon-capacity y waterfall-curves publicables con `<figure>` | FIG-02, FIG-03, LAB-05 | 3 |
 | 3 | LDPC Lab + Figuras | BP completo realista con Monte Carlo BER y figuras de BP | FIG-04, FIG-05, FIG-08, LAB-01 | 4 |
 | 4 | Polar Lab + Figuras | Polar N=64 encoder+SC+SCL con figuras de polarización | FIG-06, FIG-07, LAB-02 | 3 |
@@ -21,10 +21,10 @@
 
 **Requirements:** IDX-01, IDX-02, IDX-03, FIG-01
 
-**Plans:** 3 planes
+**Plans:** 1/3 plans executed
 
 Plans:
-- [ ] 01-01-PLAN.md — Hooks narrativos "La pregunta natural es..." en §1, §2, §3.1, §3.2, §3.3, §4.1, §4.2, §4.3, §5
+- [x] 01-01-PLAN.md — Hooks narrativos "La pregunta natural es..." en §1, §2, §3.1, §3.2, §3.3, §4.1, §4.2, §4.3, §5
 - [ ] 01-02-PLAN.md — Lab section rewrite (6 ejercicios target) + auditoría admonitions de solución
 - [ ] 01-03-PLAN.md — Conversión figuras a `<figure>` + placeholder tanner-graph + corrección factual intro
 

@@ -16,7 +16,7 @@
 
 ### Índice (index.md)
 
-- [ ] **IDX-01**: Añadir ganchos narrativos "La pregunta natural es…" al cierre de §3.2 (BP) y §4.2 (SC) conectando con la sección siguiente, igual que cada sub-sección de la sesión 03
+- [x] **IDX-01**: Añadir ganchos narrativos "La pregunta natural es…" al cierre de §3.2 (BP) y §4.2 (SC) conectando con la sección siguiente, igual que cada sub-sección de la sesión 03
 - [ ] **IDX-02**: Reescribir sección "Laboratorio Python" para describir los 6 ejercicios reales del notebook con tiempo estimado
 - [ ] **IDX-03**: Verificar referencias cruzadas con sesiones 01-03 (sin referencias a secciones inexistentes)
 - [ ] **IDX-04**: Asegurar que cada figura del index.md tiene una celda correspondiente en el notebook que la genera
