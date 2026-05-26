@@ -60,9 +60,13 @@ El **límite absoluto de Shannon** es $E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}$.
 
 La figura siguiente muestra la capacidad $C/B$ en función del SNR, con los puntos de operación de las modulaciones de la Sesión 02.
 
-![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
-
-La curva negra es la frontera de Shannon: $C/B = \log_2(1+\text{SNR})$. Los puntos de colores muestran dónde opera cada modulación sin codificación a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02). Los puntos se sitúan entre un 30% y un 60% por debajo de la curva — la diferencia es el espacio que la codificación de canal puede recuperar. Las flechas horizontales indican la ganancia de codificación: la reducción de Eb/N0 que permite un buen código operando a la misma tasa espectral.
+<figure markdown="span">
+  ![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
+  <!-- generada por celda 3 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 1.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de BPSK, QPSK, 16-QAM, 64-QAM y 256-QAM a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02).
+  Las flechas horizontales indican la ganancia de codificación disponible: la reducción de Eb/N0 que permitiría un buen código operando a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
+  </figcaption>
+</figure>
 
 La pregunta natural es: el límite $E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}$ marca la frontera absoluta de lo posible, pero los sistemas reales operan varios dB por encima de ella. ¿Cómo se construye un código que se acerque a esa frontera sin cruzarla? La respuesta es la redundancia estructurada: añadir bits de paridad diseñados para que el receptor detecte y corrija los errores del canal, reduciendo el Eb/N0 necesario mediante ganancia de codificación.
 
@@ -228,9 +232,13 @@ La pregunta natural es: 1706 bits de bloque máximo para Polar frente a 8448 bit
 
 La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos frente a BPSK sin código.
 
-![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
-
-El panel muestra tres familias de curvas en AWGN con BPSK. La curva negra continua es la BER teórica de BPSK sin código — cae suavemente a medida que sube el SNR. Las curvas azules son LDPC con tasas $r_c = 1/2$, $2/3$ y $3/4$: presentan la característica "curva en cascada" — la BER permanece alta hasta un umbral de Eb/N0 y luego cae precipitosamente varias décadas en pocos dB. Las curvas naranjas son Polar con tasas similares. Ambas familias demuestran que la codificación desplaza la curva de BER hacia la izquierda por una ganancia neta de 4–8 dB respecto a la BPSK sin código en la región de BER $= 10^{-5}$. La zona a la izquierda del umbral (*error floor* o *waterfall cliff*) marca el punto donde el decoder ya no puede recuperar los errores del canal.
+<figure markdown="span">
+  ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
+  <!-- será generada por lab.ipynb — Fase 2 -->
+  <figcaption markdown="1">**Figura 2.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC con tasas $r_c = 1/2$, $2/3$, $3/4$ (azul) y Polar con tasas equivalentes (naranja), todas sobre canal AWGN.
+  La característica "curva en cascada" de LDPC y Polar contrasta con la caída suave de BPSK sin código: por encima del umbral de decodificación, la BER cae precipitosamente varias décadas en pocos dB, alcanzando la ganancia de codificación neta de 4–8 dB respecto a BPSK sin código a BER $= 10^{-5}$.
+  </figcaption>
+</figure>
 
 La elección entre LDPC y Polar en 5G NR sigue criterios de complejidad de implementación y longitud de bloque:
 
