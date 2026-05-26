@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-25T21:00:00Z",
+  "timestamp": "2026-05-26T07:00:00Z",
   "phase": null,
   "phase_name": null,
   "phase_dir": null,
@@ -11,22 +11,25 @@
   "completed_tasks": [
     {"id": 1, "name": "milestone v1.0 ceremony + tag + push", "status": "done", "commit": "7b6ab3d"},
     {"id": 2, "name": "fix §2 orthogonality expansion (1/√N·1/√N = 1/N)", "status": "done", "commit": "1ddd0ec"},
-    {"id": 3, "name": "git push origin main — sync post-milestone commits to remote", "status": "done", "pushed_to": "f367da6"},
+    {"id": 3, "name": "git push origin main — all post-milestone commits synced", "status": "done", "pushed_to": "035ddb0"},
     {"id": 4, "name": "quick-260523-t: clarify L-taps causal chain in §3 ISI paragraph", "status": "done", "commit": "fe29cd8"},
     {"id": 5, "name": "quick-260523-u: add algebraic derivation of circular convolution (mod N) in §3", "status": "done", "commit": "89e4ae5"},
     {"id": 6, "name": "quick-260525-v: Eliminar CP in ASCII block diagram + ADC row in §4 table", "status": "done", "commit": "e49e800"},
-    {"id": 7, "name": "quick-260525-w: §4.3 snippet — remove noise, y_noisy→y_ch (align with Bloque 3)", "status": "done", "commit": "a3dce51"}
+    {"id": 7, "name": "quick-260525-w: §4.3 snippet — remove noise, y_noisy→y_ch (align with Bloque 3)", "status": "done", "commit": "a3dce51"},
+    {"id": 8, "name": "quick-260525-x: fix colorbar overlap in Figura 7 (zf-noise-amplification.png)", "status": "done", "commit": "2310ea7"},
+    {"id": 9, "name": "quick-260525-y: replace LLR formula with prose in §4.8 demapper section", "status": "done", "commit": "79d3c89"}
   ],
   "remaining_tasks": [],
   "blockers": [],
-  "human_actions_pending": [
-    {"action": "git push origin main", "context": "commits e49e800 through a3dce51 not yet pushed to remote", "blocking": false}
-  ],
+  "human_actions_pending": [],
   "decisions": [
     {"decision": "1/√N convention kept", "rationale": "Not an error; both document and notebook use unitary DFT convention", "phase": "post-v1.0"},
-    {"decision": "lab.ipynb ground truth — serialization noise discarded", "rationale": "Jupyter reformatting is content-identical; restore, don't commit", "phase": "post-v1.0"},
-    {"decision": "§4.3 canal/noise separation", "rationale": "Notebook intentionally separates channel (Bloque 3, y_ch) and AWGN (Bloque 5); index.md now matches", "phase": "post-v1.0"}
+    {"decision": "lab.ipynb ground truth — serialization noise discarded", "rationale": "Jupyter execution outputs are content-identical; restore, don't commit", "phase": "post-v1.0"},
+    {"decision": "§4.3 canal/noise separation", "rationale": "Notebook intentionally separates channel (Bloque 3, y_ch) and AWGN (Bloque 5); index.md now matches", "phase": "post-v1.0"},
+    {"decision": "LLR formula removed from §4.8", "rationale": "Formula premature — lab uses hard decision; Session 04 introduces LLR in context with LDPC decoder", "phase": "post-v1.0"},
+    {"decision": "Session 03 declared closed for delivery", "rationale": "All content gaps fixed; W-01 advisory (savefig rename) non-blocking for class delivery", "phase": "post-v1.0"}
   ],
   "uncommitted_files": [],
-  "next_action": "git push origin main; continue /gsd-quick editorial fixes as professor reads §4 of index.md"
+  "next_action": "Session 03 complete and pushed. Next: open new Claude Code session in ../04-channel-coding and run /gsd-new-project to start Session 04 content.",
+  "context_notes": "Profesor leyó §4 completo en esta sesión. Gaps encontrados: diagrama ASCII sin Eliminar CP, tabla sin ADC, §4.3 snippet con ruido inline, colorbar solapada en Fig 7, fórmula LLR prematura en §4.8. Todos corregidos. Remote sincronizado en 035ddb0. W-01 advisory (Cell 11 savefig rename) documentado pero no bloqueante."
 }
