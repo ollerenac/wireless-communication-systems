@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-26T14:34:24Z",
+  "phase": "2",
+  "phase_name": "Figuras Existentes Polished",
+  "phase_dir": ".planning/phases/02-figuras-existentes-polished",
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "paused",
+  "completed_tasks": [],
+  "remaining_tasks": [
+    {"id": null, "name": "Run /gsd-plan-phase 2 to generate PLAN.md files", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [
+    {"decision": "Phase 2 directory created at .planning/phases/02-figuras-existentes-polished/", "rationale": "Auto-created by gsd-plan-phase init", "phase": "2"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Run /gsd-plan-phase 2 — the workflow will ask about CONTEXT.md (select 'Continue without context' to proceed directly to research, or run /gsd-discuss-phase 2 first to lock in design decisions about colormap, figure style, and DPI).",
+  "context_notes": "Phase 1 (Index Polish) completed with 17/17 must-haves verified. This session only created the Phase 2 directory; no planning or research was done. Phase 2 goal: make shannon-capacity.png and waterfall-curves.png publication-quality (FIG-02, FIG-03, LAB-05). The waterfall-curves.png block in index.md already has a placeholder comment '<!-- será generada por lab.ipynb — Fase 2 -->' at line 245 from Phase 1 work."
+}
