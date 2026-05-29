@@ -60,6 +60,12 @@ Plans:
 
 **Requirements:** FIG-04, FIG-05, FIG-08, LAB-01
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — FIG-04: Cell 7 codeword fix + tanner-graph.png desde notebook + update index.md comments
+- [ ] 03-02-PLAN.md — LAB-01+FIG-05+FIG-08: Gallager LDPC construction + BP decoder + bp-messages.png + ldpc-ber-waterfall.png + index.md figure blocks
+
 **Success Criteria:**
 1. La celda LAB-01 implementa BP completo: inicialización de LLRs, mensajes variable→check y check→variable, decisión iterativa; converge en <15 iteraciones a SNR sobre umbral
 2. `ldpc-ber-waterfall.png` muestra curvas Monte Carlo para ≥2 tasas con waterfall cliff claramente visible (salto de ≥3 décadas en BER en ≤2 dB)
