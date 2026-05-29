@@ -50,7 +50,13 @@ e30e158 feat(02-02): waterfall-curves.png analítico multi-tasa + corrección D-
 - Working directory: `docs/sessions/04-channel-coding/`
 - Reference session: `../03-ofdm-systems/` — style, figure format, narrative hooks
 - Existing files: `index.md` (503 lines, borrador funcional), `lab.ipynb` (15 cells)
-- Existing figures: `figures/shannon-capacity.png`, `figures/waterfall-curves.png`
+- Existing figures: `figures/shannon-capacity.png`, `figures/waterfall-curves.png`, `figures/tanner-graph.png`
 - Session 03 OFDM functions to reuse in Phase 5: `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel`, `zf_equalizer`
 - Language: Spanish narrative, English technical terms
 - Site: MkDocs-Material — figures must use `<figure markdown="span">` syntax
+
+## Quick Tasks Completed
+
+| Date | Slug | Description | Commit |
+|------|------|-------------|--------|
+| 2026-05-29 | tanner-graph-fix | Generar tanner-graph.png desde H_ldpc(8,4) — corrige figura rota §3.1 | 58ec99f |
