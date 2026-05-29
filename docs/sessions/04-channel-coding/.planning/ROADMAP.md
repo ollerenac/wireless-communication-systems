@@ -24,11 +24,13 @@
 **Plans:** 3/3 plans executed
 
 Plans:
+
 - [x] 01-01-PLAN.md — Hooks narrativos "La pregunta natural es..." en §1, §2, §3.1, §3.2, §3.3, §4.1, §4.2, §4.3, §5
 - [x] 01-02-PLAN.md — Lab section rewrite (6 ejercicios target) + auditoría admonitions de solución (D-03, D-06)
 - [x] 01-03-PLAN.md — Conversión figuras a `<figure>` + placeholder tanner-graph + corrección factual intro
 
 **Success Criteria:**
+
 1. Cada sub-sección de §3 y §4 termina con "La pregunta natural es…" conectando con la siguiente
 2. La sección "Laboratorio Python" describe exactamente los 6 ejercicios del notebook con tiempos estimados
 3. Todas las referencias a `figures/` usan `<figure markdown="span">` con `<figcaption markdown="1">` de al menos 2 líneas
@@ -44,10 +46,12 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
+
 - [ ] 02-01-PLAN.md — FIG-02: shannon-capacity.png publicable (5 puntos MCS + gap arrows) + setup mínimo Cell 1
 - [ ] 02-02-PLAN.md — FIG-03: waterfall-curves.png analítico multi-tasa (6 curvas + threshold markers) + comentario index.md
 
 **Success Criteria:**
+
 1. `shannon-capacity.png` muestra la curva de Shannon + puntos de operación por modulación con colormap consistente con sesión 02/03 y leyenda descriptiva
 2. `waterfall-curves.png` muestra ≥3 tasas LDPC + ≥2 tasas Polar + BPSK sin código, con anotaciones de umbral visibles
 3. Ambas figuras son generadas por celdas del notebook (LAB-05) y se almacenan en `figures/`
@@ -63,10 +67,12 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
+
 - [ ] 03-01-PLAN.md — FIG-04: Cell 7 codeword fix + tanner-graph.png desde notebook + update index.md comments
 - [ ] 03-02-PLAN.md — LAB-01+FIG-05+FIG-08: Gallager LDPC construction + BP decoder + bp-messages.png + ldpc-ber-waterfall.png + index.md figure blocks
 
 **Success Criteria:**
+
 1. La celda LAB-01 implementa BP completo: inicialización de LLRs, mensajes variable→check y check→variable, decisión iterativa; converge en <15 iteraciones a SNR sobre umbral
 2. `ldpc-ber-waterfall.png` muestra curvas Monte Carlo para ≥2 tasas con waterfall cliff claramente visible (salto de ≥3 décadas en BER en ≤2 dB)
 3. `tanner-graph.png` y `bp-messages.png` son publicables y el index.md las referencia correctamente
@@ -82,10 +88,16 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 04-01-PLAN.md — LAB-02+FIG-06+FIG-07: 3 celdas nuevas (encoder G64+butterfly, SC+SCL, MC+polarization) en lab.ipynb
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 04-02-PLAN.md — FIG-06+FIG-07 display: bloques <figure> en index.md §4.1
 
 **Success Criteria:**
+
 1. La celda LAB-02 implementa el encoder Polar (N=64) y el decodificador SC recursivo correctamente: BER < BER teórica BPSK sin código a SNR > umbral
 2. SCL con L=8 mejora visiblemente al SC básico en la región waterfall (diferencia ≥1 dB a BER=10⁻³)
 3. `polar-polarization.png` muestra el histograma de $Z(W_N^{(i)})$ con polarización visible (modos en torno a 0 y 1)
@@ -99,6 +111,7 @@ Plans:
 **Requirements:** FIG-09, LAB-03
 
 **Success Criteria:**
+
 1. La celda LAB-03 reutiliza sin modificación las funciones `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel`, `zf_equalizer` de la sesión 03
 2. `ofdm-ldpc-ber.png` muestra BER OFDM sin FEC, OFDM+LDPC, y límite AWGN en el mismo eje — ganancia de codificación visible (≥3 dB a BER=10⁻³)
 3. El index.md §3.3 o §5 hace referencia a este resultado como cierre del arco OFDM→FEC
@@ -112,6 +125,7 @@ Plans:
 **Requirements:** LAB-04, IDX-04
 
 **Success Criteria:**
+
 1. `jupyter nbconvert --execute lab.ipynb` completa sin errores ni warnings críticos
 2. Todas las referencias de figura en index.md apuntan a archivos que existen en `figures/`
 3. El índice renderiza correctamente en MkDocs-Material (sin admonitions rotas, sin LaTeX malformado)
