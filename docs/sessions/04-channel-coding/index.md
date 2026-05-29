@@ -242,7 +242,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
-  <!-- será generada por lab.ipynb — Fase 2 -->
+  <!-- generada por celda 13 de lab.ipynb -->
   <figcaption markdown="1">**Figura 2.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC con tasas $r_c = 1/2$, $2/3$, $3/4$ (azul) y Polar con tasas equivalentes (naranja), todas sobre canal AWGN.
   La característica "curva en cascada" de LDPC y Polar contrasta con la caída suave de BPSK sin código: por encima del umbral de decodificación, la BER cae precipitosamente varias décadas en pocos dB, alcanzando la ganancia de codificación neta de 4–8 dB respecto a BPSK sin código a BER $= 10^{-5}$.
   </figcaption>

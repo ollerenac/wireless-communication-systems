@@ -27,7 +27,7 @@
 - [ ] **LAB-02**: **Ej 4 — Polar N=64**: encoder completo (matriz $G_{64}$), selección de bits congelados por Z de Bhattacharyya, decodificador SC con árbol factor recursivo, comparar SC vs SCL-L=8, generar `polar-polarization.png`
 - [ ] **LAB-03**: **Ej 6 — Integrador OFDM+FEC**: reutilizar `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel`, `zf_equalizer` de la sesión 03; añadir capa LDPC codec; simular BER coded vs uncoded; generar `ofdm-ldpc-ber.png`
 - [ ] **LAB-04**: Notebook ejecutable de principio a fin sin errores (orden correcto de celdas, sin undefined variables)
-- [ ] **LAB-05**: Ejercicio 1 (Shannon) y Ejercicio 5 (waterfall) actualizados para generar versiones publicables de `shannon-capacity.png` y `waterfall-curves.png`
+- [ ] **LAB-05**: Ejercicio 1 (Shannon) y Ejercicio 6 (waterfall) actualizados para generar versiones publicables de `shannon-capacity.png` y `waterfall-curves.png`
 
 ## v2 Requirements (deferred)
 
