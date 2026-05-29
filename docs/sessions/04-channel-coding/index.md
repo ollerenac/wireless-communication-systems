@@ -137,9 +137,9 @@ graph LR
 
 <figure markdown="span">
   ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
-  <!-- generada por gsd-quick (tanner-graph-fix) -->
+  <!-- generada por celda 7 de lab.ipynb -->
   <figcaption markdown="1">**Figura 3.** Grafo bipartito de Tanner para un código LDPC representativo. Los nodos de variable $v_j$ (círculos) representan los bits del codeword; los nodos de verificación $c_i$ (cuadrados) representan las ecuaciones de paridad $H_{ij}=1$ de la matriz $\mathbf{H}$.
-  La dispersidad del grafo — pocos unos en $\mathbf{H}$, aristas escasas — garantiza ciclos largos y convergencia rápida del decodificador belief propagation. Esta figura se generará en la Fase 3 del laboratorio.
+  La dispersidad del grafo — pocos unos en $\mathbf{H}$, aristas escasas — garantiza ciclos largos y convergencia rápida del decodificador belief propagation.
   </figcaption>
 </figure>
 
