@@ -44,6 +44,13 @@ Para canales complejos (bandpass), hay dos dimensiones por uso, y $n$ usos del c
 
 $$\boxed{C = B\log_2(1+\text{SNR})\quad \text{[bit/s]}}$$
 
+<figure markdown="span">
+  ![Sphere packing — argumento geométrico de Shannon](figures/shannon-sphere-packing.png)
+  <!-- generada por gsd-quick (shannon-sphere-packing) -->
+  <figcaption markdown="1">**Figura 1.** Argumento geométrico de Shannon. *Izquierda:* En el espacio de señal $\mathbb{R}^n$, el punto transmitido $\mathbf{x}$ vive en una esfera de radio $\sqrt{nP_s}$; el ruido lo desplaza dentro de una esfera de radio $\sqrt{nN_0/2}$. El número máximo de codewords distinguibles es el número de esferas de ruido que caben en la esfera total de radio $\sqrt{n(P_s+N_0/2)}$. *Derecha:* El número de mensajes distinguibles $M \approx (1+\text{SNR})^{n/2}$ crece exponencialmente con el bloque $n$ — de ahí que la tasa $C = \frac{1}{2}\log_2(1+\text{SNR})$ sea asintóticamente alcanzable con bloques largos.
+  </figcaption>
+</figure>
+
 Este resultado — el **Teorema de Shannon-Hartley** — establece dos hechos complementarios. El primero (la mitad positiva del teorema de codificación de canal): para cualquier tasa $R < C$ existe un código de longitud $n$ suficientemente grande tal que la probabilidad de error es arbitrariamente pequeña. El segundo (la mitad negativa o el "converso"): para cualquier $R > C$, la probabilidad de error se acerca a 1 sin importar qué código se use.
 
 **El límite de Eb/N0.** ¿Cuál es el SNR mínimo absoluto para comunicar fiablemente? Si la tasa espectral es $\eta = R/B$ [bit/s/Hz], la condición $R < C$ exige:
