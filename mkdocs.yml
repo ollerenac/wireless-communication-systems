@@ -71,4 +71,5 @@ nav:
       - "01 — Modelado del Canal": sessions/01-channel-modeling/index.md
       - "02 — Modulación Digital": sessions/02-digital-modulation/index.md
       - "03 — Sistemas OFDM": sessions/03-ofdm-systems/index.md
-      - "04 — Codificación de Canal": sessions/04-channel-coding/index.md
+      - "04 — Lab OFDM con GNU Radio": sessions/04-channel-coding/gnuradio-ofdm.md
+      - "05 — Codificación de Canal": sessions/04-channel-coding/index.md
