@@ -41,6 +41,12 @@ Plans:
 
 **Requirements:** FIG-02, FIG-03, LAB-05
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — FIG-02: shannon-capacity.png publicable (5 puntos MCS + gap arrows) + setup mínimo Cell 1
+- [ ] 02-02-PLAN.md — FIG-03: waterfall-curves.png analítico multi-tasa (6 curvas + threshold markers) + comentario index.md
+
 **Success Criteria:**
 1. `shannon-capacity.png` muestra la curva de Shannon + puntos de operación por modulación con colormap consistente con sesión 02/03 y leyenda descriptiva
 2. `waterfall-curves.png` muestra ≥3 tasas LDPC + ≥2 tasas Polar + BPSK sin código, con anotaciones de umbral visibles

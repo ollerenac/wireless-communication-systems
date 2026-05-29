@@ -16,16 +16,16 @@ progress:
 
 ## Current Phase
 
-**Phase:** 1 — Index Polish  
-**Plan:** 01-03 complete — Phase 1 DONE  
-**Status:** Phase 1 complete — Phase 2 next
+**Phase:** 2 — Figuras Existentes Polished  
+**Plan:** 02-01 next (Shannon capacity figure)  
+**Status:** Phase 2 planned — ready to execute
 
 ## Phase Progress
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | 1 — Index Polish | ✅ Complete | Plans 01-01, 01-02, 01-03 done — hooks, lab section, figure blocks, factual corrections |
-| 2 — Figuras Existentes | ⬜ Not started | |
+| 2 — Figuras Existentes | 📋 Planned | Plans 02-01 (Shannon), 02-02 (waterfall + D-12) |
 | 3 — LDPC Lab + Figuras | ⬜ Not started | |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
 | 5 — Integrador OFDM+FEC | ⬜ Not started | |

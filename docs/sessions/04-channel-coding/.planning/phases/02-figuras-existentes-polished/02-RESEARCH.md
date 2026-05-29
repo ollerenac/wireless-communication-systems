@@ -512,17 +512,15 @@ El número de celda exacto depende de si el reemplazo de Ej6 ocurre en la misma 
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **QPSK r=1/2 vs QPSK r=3/4 — misma eta, mismo color**
    - Lo que sabemos: D-02 asigna verde a QPSK. Las dos tasas (η=1.0 y η=1.5) son puntos distintos en la figura.
-   - Lo que no está claro: Si el planner quiere distinguirlos visualmente dentro del mismo color o acepta mismo color con offset de etiqueta.
-   - Recomendación: Usar mismo color (correcto según D-02) con offsets distintos de etiqueta. Si el usuario lo nota en revisión, ajustar shading (verde oscuro / verde claro).
+   - RESOLVED: Usar mismo color `'mediumseagreen'` para ambos (correcto según D-02). Distinguir con offsets distintos: QPSK r=1/2 usa `xytext=(+0.5, +0.2)`, QPSK r=3/4 usa `xytext=(+0.5, -0.3)`. Plan 02-01 Task 2 step 8 implementa esto explícitamente.
 
 2. **Número de celda exacto para el comentario en index.md línea 245**
    - Lo que sabemos: El plan reemplazará Cells 12-13 (markdown Ej6 + código Ej6). La celda de código será la 13 si no se reordena.
-   - Lo que no está claro: Si el planner decide dividir en más de una celda o consolida.
-   - Recomendación: El planner especifica el número exacto al final del task; el research apunta a "celda 13" como valor probable.
+   - RESOLVED: El Plan 02-02 especifica "celda 13" — D-10 garantiza que Ej6 se mantiene en su lugar sin reordenar celdas. El ejecutor debe confirmar el índice al final del Task 1 y actualizar el comentario de index.md en consecuencia.
 
 ---
 
