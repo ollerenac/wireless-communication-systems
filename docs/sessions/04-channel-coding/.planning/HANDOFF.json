@@ -1,23 +1,32 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-26T14:34:24Z",
-  "phase": "2",
-  "phase_name": "Figuras Existentes Polished",
-  "phase_dir": ".planning/phases/02-figuras-existentes-polished",
-  "plan": null,
-  "task": null,
-  "total_tasks": null,
-  "status": "paused",
-  "completed_tasks": [],
-  "remaining_tasks": [
-    {"id": null, "name": "Run /gsd-plan-phase 2 to generate PLAN.md files", "status": "not_started"}
+  "timestamp": "2026-05-29T18:30:00.000Z",
+  "phase": "4",
+  "phase_name": "Polar Lab + Figuras",
+  "phase_dir": ".planning/phases/04-polar-lab-figuras",
+  "plan": 1,
+  "task": 3,
+  "status": "partial",
+  "last_commit": "25cf103",
+  "blocking_constraints": [
+    {
+      "id": "SC-DECODER-BUG",
+      "severity": "blocking",
+      "description": "compute_llr_for_bit en Cell B tiene bug fundamental: para G_N=kron(G_{N/2},F) el nivel externo debe combinar pares adyacentes (2j,2j+1) no (j,j+N/2). BER_SC=0.5 a todos los SNRs.",
+      "workaround": "FIG-06 y FIG-07 estan correctas. Fix decoder antes de ejecutar Plan 04-02.",
+      "evidence": "BER_SC=0.5 incluso a SNR=20dB en test noiseless"
+    }
   ],
-  "blockers": [],
-  "human_actions_pending": [],
-  "decisions": [
-    {"decision": "Phase 2 directory created at .planning/phases/02-figuras-existentes-polished/", "rationale": "Auto-created by gsd-plan-phase init", "phase": "2"}
+  "completed_this_session": [
+    "Cell A (idx 15): encoder G_64 + frozen set AWGN + polar-butterfly.png (95KB)",
+    "Cell B (idx 16): SC/SCL decoders insertados — BUGGY",
+    "Cell C (idx 17): polar-polarization.png (63KB) FIG-07 correcta"
   ],
-  "uncommitted_files": [],
-  "next_action": "Run /gsd-plan-phase 2 — the workflow will ask about CONTEXT.md (select 'Continue without context' to proceed directly to research, or run /gsd-discuss-phase 2 first to lock in design decisions about colormap, figure style, and DPI).",
-  "context_notes": "Phase 1 (Index Polish) completed with 17/17 must-haves verified. This session only created the Phase 2 directory; no planning or research was done. Phase 2 goal: make shannon-capacity.png and waterfall-curves.png publication-quality (FIG-02, FIG-03, LAB-05). The waterfall-curves.png block in index.md already has a placeholder comment '<!-- será generada por lab.ipynb — Fase 2 -->' at line 245 from Phase 1 work."
+  "remaining_work": [
+    "Fix Cell B decoder (SC tree para G_N=kron)",
+    "Plan 04-02: figure blocks en index.md seccion 4.1",
+    "Phase 5: OFDM+FEC integrador",
+    "Phase 6: QA"
+  ],
+  "next_action": "gsd-quick fix decoder SC Cell B, luego gsd-execute-phase 4 --interactive para plan 04-02"
 }
