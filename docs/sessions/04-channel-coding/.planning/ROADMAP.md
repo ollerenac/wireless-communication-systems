@@ -79,6 +79,12 @@ Plans:
 
 **Requirements:** FIG-06, FIG-07, LAB-02
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — LAB-02+FIG-06+FIG-07: 3 celdas nuevas (encoder G64+butterfly, SC+SCL, MC+polarization) en lab.ipynb
+- [ ] 04-02-PLAN.md — FIG-06+FIG-07 display: bloques <figure> en index.md §4.1
+
 **Success Criteria:**
 1. La celda LAB-02 implementa el encoder Polar (N=64) y el decodificador SC recursivo correctamente: BER < BER teórica BPSK sin código a SNR > umbral
 2. SCL con L=8 mejora visiblemente al SC básico en la región waterfall (diferencia ≥1 dB a BER=10⁻³)
