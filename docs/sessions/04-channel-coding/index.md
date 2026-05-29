@@ -172,6 +172,22 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
 El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codeword válida) o hasta un número máximo de iteraciones (típicamente 50–100). El comportamiento en la práctica muestra una **curva en cascada** (*waterfall*): por encima del umbral de SNR, el BP converge en pocas iteraciones; por debajo, no converge y la BER cae precipitosamente.
 
+<figure markdown="span">
+  ![Evolución de LLR en belief propagation](figures/bp-messages.png)
+  <!-- generada por celda 9 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 4.** Evolución de los LLR marginales $\lambda_v^{(\text{total})}$ durante el algoritmo de belief propagation sobre un código LDPC con $n=240$, $r_c\approx1/2$, a $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall).
+  Iteración 1: los LLR reflejan principalmente la información del canal, concentrados cerca de cero. Iteración 3: la propagación de mensajes entre vecinos comienza a polarizar las creencias. Iteración 10: las creencias convergen hacia valores de gran magnitud (bits con alta certeza), con muy pocos bits en la zona de incertidumbre ($|\lambda|<2$).
+  </figcaption>
+</figure>
+
+<figure markdown="span">
+  ![Curvas BER Monte Carlo LDPC n=240](figures/ldpc-ber-waterfall.png)
+  <!-- generada por celda 10 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 5.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
+  La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación, a diferencia de la caída gradual de BPSK sin código.
+  </figcaption>
+</figure>
+
 La pregunta natural es: la decisión $\hat{c}_v$ y la curva waterfall describen el comportamiento ideal sobre un grafo pequeño, pero 5G NR transmite bloques de datos de miles de bits — los grafos correspondientes tendrían millones de aristas y serían inviables de almacenar y procesar directamente. ¿Cómo escala el algoritmo BP a esas dimensiones manteniendo el mismo hardware de decodificador? La respuesta es la estructura de grafo base con lifting: un grafo compacto que se expande mediante permutaciones cíclicas para generar matrices $\mathbf{H}$ de cualquier longitud con un único diseño de hardware.
 
 #### 3.3 LDPC en 5G NR
