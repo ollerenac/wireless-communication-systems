@@ -6,19 +6,19 @@ status: in_progress
 last_updated: "2026-05-29T05:05:00.000Z"
 progress:
   total_phases: 6
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 33
+  completed_phases: 3
+  total_plans: 7
+  completed_plans: 7
+  percent: 50
 ---
 
 # STATE — Sesión 04: Codificación de Canal
 
 ## Current Phase
 
-**Phase:** 3 — LDPC Lab + Figuras  
+**Phase:** 4 — Polar Lab + Figuras  
 **Plan:** (not yet planned)  
-**Status:** Phase 2 complete — Phase 3 next
+**Status:** Phase 3 complete — Phase 4 next
 
 ## Phase Progress
 
@@ -26,14 +26,14 @@ progress:
 |-------|--------|-------|
 | 1 — Index Polish | ✅ Complete | Plans 01-01, 01-02, 01-03 done — hooks, lab section, figure blocks, factual corrections |
 | 2 — Figuras Existentes | ✅ Complete | Plans 02-01 (Shannon 91KB), 02-02 (waterfall 126KB + D-12 + index.md) |
-| 3 — LDPC Lab + Figuras | ⬜ Not started | |
+| 3 — LDPC Lab + Figuras | ✅ Complete | Plans 03-01 (tanner-graph 40KB), 03-02 (BP decoder + bp-messages 57KB + waterfall-BER 107KB) |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
 | 5 — Integrador OFDM+FEC | ⬜ Not started | |
 | 6 — QA & Publicación | ⬜ Not started | |
 
 ## Last Commit
 
-e30e158 feat(02-02): waterfall-curves.png analítico multi-tasa + corrección D-12 + comentario index (FIG-03, LAB-05) — 2026-05-29
+d97fa09 feat(03-02): BP decoder + bp-messages.png + ldpc-ber-waterfall.png (LAB-01, FIG-05, FIG-08) — 2026-05-29
 
 ## Decisions Made
 
