@@ -2,30 +2,30 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-last_updated: "2026-05-29T04:38:12.636Z"
+status: in_progress
+last_updated: "2026-05-29T05:05:00.000Z"
 progress:
   total_phases: 6
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
-  percent: 17
+  completed_phases: 2
+  total_plans: 5
+  completed_plans: 5
+  percent: 33
 ---
 
 # STATE — Sesión 04: Codificación de Canal
 
 ## Current Phase
 
-**Phase:** 2 — Figuras Existentes Polished  
-**Plan:** 02-01 next (Shannon capacity figure)  
-**Status:** Phase 2 planned — ready to execute
+**Phase:** 3 — LDPC Lab + Figuras  
+**Plan:** (not yet planned)  
+**Status:** Phase 2 complete — Phase 3 next
 
 ## Phase Progress
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | 1 — Index Polish | ✅ Complete | Plans 01-01, 01-02, 01-03 done — hooks, lab section, figure blocks, factual corrections |
-| 2 — Figuras Existentes | 📋 Planned | Plans 02-01 (Shannon), 02-02 (waterfall + D-12) |
+| 2 — Figuras Existentes | ✅ Complete | Plans 02-01 (Shannon 91KB), 02-02 (waterfall 126KB + D-12 + index.md) |
 | 3 — LDPC Lab + Figuras | ⬜ Not started | |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
 | 5 — Integrador OFDM+FEC | ⬜ Not started | |
@@ -33,7 +33,7 @@ progress:
 
 ## Last Commit
 
-3acff5c feat(01-03): add tanner-graph placeholder figure + fix factual intro (D-05, D-07) — 2026-05-26
+e30e158 feat(02-02): waterfall-curves.png analítico multi-tasa + corrección D-12 + comentario index (FIG-03, LAB-05) — 2026-05-29
 
 ## Decisions Made
 
