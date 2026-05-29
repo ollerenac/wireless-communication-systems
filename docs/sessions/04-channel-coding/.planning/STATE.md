@@ -60,3 +60,4 @@ e30e158 feat(02-02): waterfall-curves.png analítico multi-tasa + corrección D-
 | Date | Slug | Description | Commit |
 |------|------|-------------|--------|
 | 2026-05-29 | tanner-graph-fix | Generar tanner-graph.png desde H_ldpc(8,4) — corrige figura rota §3.1 | 58ec99f |
+| 2026-05-29 | shannon-sphere-packing | Generar shannon-sphere-packing.png — argumento geométrico Shannon §1 | e01d107 |
