@@ -74,11 +74,24 @@ Y un control deslizante (bloque **QT GUI Range**):
 |----|-------|------|------|---------|
 | `noise_amp` | `0.0` | `2.0` | `0.01` | `0.1` |
 
-Finalmente, una variable para la constelación (bloque **Variable**):
+Finalmente, añade el bloque **`Constellation Object`** para elegir la modulación:
 
-| ID | Valor |
-|----|-------|
-| `qpsk_const` | `digital.constellation_qpsk().base()` |
+| Parámetro | Valor |
+|-----------|-------|
+| **ID** | `mod_const` |
+| **Constellation Type** | Elige entre: `QPSK`, `16QAM`, `64QAM`, `8PSK` |
+
+Este bloque centraliza la modulación — cambiando solo este parámetro el TX y RX se adaptan automáticamente.
+
+!!! warning "Ajusta K según la modulación elegida"
+    El parámetro **K** de `Pack K Bits` y `Unpack K Bits` debe coincidir:
+
+    | Constellation Type | K (bits/símbolo) |
+    |--------------------|-----------------|
+    | QPSK | `2` |
+    | 8PSK | `3` |
+    | 16QAM | `4` |
+    | 64QAM | `6` |
 
 ---
 
@@ -113,9 +126,9 @@ Sin este bloque el flowgraph consume el 100% de CPU generando muestras tan rápi
 
 | Parámetro | Valor | Por qué |
 |-----------|-------|---------|
-| K | `2` | Agrupa 2 bits → 1 byte con valor {0,1,2,3} |
+| K | `2` (QPSK) | Agrupa K bits → 1 índice de símbolo (ver tabla de modulaciones arriba) |
 
-QPSK tiene 4 puntos de constelación — cada símbolo codifica 2 bits. Este bloque convierte el flujo de bits individuales en índices de símbolo.
+Convierte el flujo de bits individuales en índices de símbolo. K debe coincidir con la modulación elegida en `mod_const`.
 
 ### Bloque 4 — Chunks to Symbols
 
@@ -125,13 +138,13 @@ QPSK tiene 4 puntos de constelación — cada símbolo codifica 2 bits. Este blo
 |-----------|-------|---------|
 | Input Type | `Byte` | Recibe índices 0–3 |
 | Output Type | `Complex` | Produce puntos complejos I+jQ |
-| Symbol Table | `qpsk_const.points()` | Los 4 puntos QPSK en ±1/√2 ± j/√2 |
+| Symbol Table | `mod_const.points()` | Puntos de la constelación elegida en `mod_const` |
 | Dimensionality | `1` | Un símbolo complejo por índice de entrada |
 
 Mapea cada índice de símbolo a su punto en el plano complejo. Aquí cada byte vale un punto QPSK — esto es la modulación.
 
 !!! tip "GUI ① — Constelación TX"
-    Conecta un **QT GUI Constellation Sink** a la salida de este bloque. Verás los 4 puntos QPSK perfectos antes de entrar al canal.
+    Conecta un **QT GUI Constellation Sink** a la salida de este bloque. Verás los puntos de la constelación elegida perfectos antes de entrar al canal.
 
 ### Bloque 5 — Stream to Vector
 
@@ -266,7 +279,7 @@ Este es el **ecualizador de un tap**. Para un canal plano sin multipath, $H[k]=1
 
 | Parámetro | Valor | Por qué |
 |-----------|-------|---------|
-| Constellation | `qpsk_const` | Mismo objeto que en TX |
+| Constellation | `mod_const` | Mismo objeto que en TX |
 
 Toma cada símbolo complejo recibido y decide cuál de los 4 puntos QPSK es el más cercano (decisión dura). Convierte cada punto complejo en un índice {0,1,2,3}.
 
