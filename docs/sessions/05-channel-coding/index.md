@@ -462,7 +462,7 @@ Un sistema 5G NR transmite datos en el PDSCH sobre un canal UMi LOS. Usando los 
 
 ## Laboratorio Python
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/04-channel-coding/lab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/05-channel-coding/lab.ipynb)
 
 En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de codificación de canal, desde el límite teórico hasta un sistema OFDM+LDPC end-to-end:
 
