@@ -1391,3 +1391,20 @@ En este laboratorio (~90 minutos) construirás un transceptor OFDM completo desd
 3. **Goldsmith, A.** — *Wireless Communications*, Cambridge University Press, 2005. Capítulo 12 (OFDM).
 4. **3GPP TS 38.211** — *Physical channels and modulation*, Release 17. §4 (numerología NR y estructura de ranura).
 5. **Dahlman, E., Parkvall, S. & Sköld, J.** — *5G NR: The Next Generation Wireless Access Technology*, Academic Press, 2018. Capítulo 7 (transmisión en capa física NR).
+
+---
+
+## Notas — Laboratorio 1
+
+Las notas corresponden a la entrega del **Laboratorio 1** (transceptor OFDM). La nota se compone de 2 puntos por ejecución completa del notebook y 18 puntos distribuidos entre las preguntas de reflexión de los cinco ejercicios. Las respuestas modelo y el código de verificación están disponibles en el solucionario: [![Solucionario](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/03-ofdm-systems/Laboratorio-01/SOLUCION_lab01.ipynb)
+
+| Alumno | Ej 1 /3 | Ej 2 /3 | Ej 4 /4 | Ej 5 /4 | Ej 6 /4 | Ejec. /2 | **Nota /20** |
+|--------|:-------:|:-------:|:-------:|:-------:|:-------:|:--------:|:------------:|
+| Bermúdez Silva, Moisés   | 0   | 0   | 0    | 0   | 0    | 2 | **2**  |
+| Castilla Alcalá, Luis    | 1.5 | 2   | 2.25 | 1.5 | 3    | 2 | **12** |
+| Livia Mariano, Mariano   | 0   | 0   | 0    | 0   | 0    | 2 | **2**  |
+| Loayza Sáenz, Néstor     | —   | —   | —    | —   | —    | — | **0 ⚠️** |
+| Taipe Quiroz, Meri       | 2.5 | 3   | 4    | 1.5 | 3.25 | 2 | **16** |
+
+!!! warning "Loayza Sáenz, Néstor"
+    Entrega incorrecta: se recibió el notebook de Sesión 01 (canal inalámbrico) en lugar del de Sesión 03 (OFDM). Nota pendiente de nueva entrega.
