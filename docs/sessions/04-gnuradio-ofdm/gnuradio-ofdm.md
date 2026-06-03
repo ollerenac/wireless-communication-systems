@@ -420,3 +420,15 @@ Con el delay calibrado, cambia los taps a `[1.0, 0, 0.5j]` (multipath, delay spr
 - Con `cp_len = 0` (sin CP): el BER debe dispararse aunque `noise_amp = 0`
 
 Esto demuestra cuantitativamente que el CP no solo es una "guardia de seguridad" — es el mecanismo que garantiza que el multipath no añade BER cuando su retardo está dentro del CP.
+
+---
+
+## Notas — Laboratorio 2
+
+| Alumno | **Nota /20** |
+|--------|:------------:|
+| Bermúdez Silva, Moisés | **18** |
+| Castilla Alcalá, Luis  | **18** |
+| Livia Mariano, Mariano | **18** |
+| Loayza Sáenz, Néstor   | **18** |
+| Taipe Quiroz, Meri     | **18** |
