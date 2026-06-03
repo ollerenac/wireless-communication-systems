@@ -83,12 +83,18 @@ Al finalizar este curso, el estudiante será capaz de:
 
 ## Evaluación
 
-Este es un curso abierto y autónomo sin evaluación calificada. Cada sesión incluye:
+| Componente | Peso |
+|---|:---:|
+| Examen Parcial (Clase 08) | 30% |
+| Examen Final (Clase 16) | 30% |
+| Promedio de Laboratorios (4 labs) | 40% |
 
-- **≥ 5 ejercicios** con soluciones de referencia paso a paso
-- **1 laboratorio Python** (cuaderno Jupyter, ejecutable en Google Colab sin instalación local)
+La nota final es el promedio ponderado de los tres componentes, todos sobre 20 puntos. Los laboratorios previstos son:
 
-Se recomienda al estudiante intentar los ejercicios de forma independiente antes de consultar las soluciones.
+- **Lab 1** — Sistemas OFDM (Clase 05)
+- **Lab 2** — Lab OFDM con GNU Radio (Clase 06)
+- **Lab 3** — Fundamentos MIMO y MIMO Masivo (Clase 09)
+- **Lab 4** — Software-Defined Radio (Clase 13)
 
 ---
 
