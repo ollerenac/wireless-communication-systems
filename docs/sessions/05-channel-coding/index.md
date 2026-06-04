@@ -30,28 +30,27 @@ La pregunta central es: si un canal introduce errores inevitablemente, ¿cómo e
 
 ### 1. El Límite de Shannon
 
-La Sesión 03 calculó throughput de OFDM comparándolo con la capacidad de Shannon $C = B\log_2(1+\text{SNR})$, pero no explicó de dónde viene esa fórmula. La intuición geométrica es más útil que la derivación formal.
-
-**Capacidad como ratio de volúmenes.** En $n$ usos del canal, la señal transmitida ocupa un punto en $\mathbb{R}^n$ con energía $E_s = nP_s$. El ruido la desplaza aleatoriamente dentro de una esfera de radio $\sqrt{nN_0/2}$. El punto recibido cae dentro de una esfera de radio $\sqrt{n(P_s + N_0/2)}$. El número máximo de mensajes distinguibles es aproximadamente el ratio de volúmenes esféricas en $n$ dimensiones:
-
-$$M \approx \left(\frac{\sqrt{n(P_s + N_0/2)}}{\sqrt{nN_0/2}}\right)^n = \left(1 + \frac{P_s}{N_0/2}\right)^{n/2} = (1+\text{SNR})^{n/2}$$
-
-La tasa máxima de bits por uso de canal es:
-
-$$C = \frac{\log_2 M}{n} = \frac{1}{2}\log_2(1+\text{SNR}) \quad \text{[bits/uso real]}$$
-
-Para canales complejos (bandpass), hay dos dimensiones por uso, y $n$ usos del canal en tiempo $T$ proporcionan $2BT$ dimensiones ($B$ = bandwidth, Nyquist):
+La Sesión 03 usó la capacidad de Shannon como referencia de throughput. El resultado central es el **Teorema de Shannon-Hartley**:
 
 $$\boxed{C = B\log_2(1+\text{SNR})\quad \text{[bit/s]}}$$
 
-<figure markdown="span">
-  ![Sphere packing — argumento geométrico de Shannon](figures/shannon-sphere-packing.png)
-  <!-- generada por gsd-quick (shannon-sphere-packing) -->
-  <figcaption markdown="1">**Figura 1.** Argumento geométrico de Shannon. *Izquierda:* En el espacio de señal $\mathbb{R}^n$, el punto transmitido $\mathbf{x}$ vive en una esfera de radio $\sqrt{nP_s}$; el ruido lo desplaza dentro de una esfera de radio $\sqrt{nN_0/2}$. El número máximo de codewords distinguibles es el número de esferas de ruido que caben en la esfera total de radio $\sqrt{n(P_s+N_0/2)}$. *Derecha:* El número de mensajes distinguibles $M \approx (1+\text{SNR})^{n/2}$ crece exponencialmente con el bloque $n$ — de ahí que la tasa $C = \frac{1}{2}\log_2(1+\text{SNR})$ sea asintóticamente alcanzable con bloques largos.
-  </figcaption>
-</figure>
+donde $B$ es el ancho de banda [Hz] y SNR es la relación señal a ruido lineal en el receptor. Este límite establece dos hechos complementarios: la *mitad positiva* — para cualquier tasa $R < C$ existe un código de longitud $n$ suficientemente grande tal que la probabilidad de error es arbitrariamente pequeña — y la *mitad negativa* o "converso" — para cualquier $R > C$, la probabilidad de error se acerca a 1 sin importar qué código se use.
 
-Este resultado — el **Teorema de Shannon-Hartley** — establece dos hechos complementarios. El primero (la mitad positiva del teorema de codificación de canal): para cualquier tasa $R < C$ existe un código de longitud $n$ suficientemente grande tal que la probabilidad de error es arbitrariamente pequeña. El segundo (la mitad negativa o el "converso"): para cualquier $R > C$, la probabilidad de error se acerca a 1 sin importar qué código se use.
+<!-- Derivación geométrica (sphere-packing) comentada 2026-06-04.
+
+  Capacidad como ratio de volúmenes: en n usos del canal, la señal transmitida ocupa un
+  punto en R^n con energía E_s = nP_s. El ruido la desplaza dentro de una esfera de radio
+  sqrt(nN_0/2); el punto recibido cae en una esfera de radio sqrt(n(P_s+N_0/2)).
+  Número máximo de mensajes: M ≈ (1+SNR)^(n/2) → C = (1/2)log2(1+SNR) [bits/uso real].
+  Para canales bandpass (2 dimensiones/uso): C = B·log2(1+SNR) [bit/s].
+
+  Figura original: figures/shannon-sphere-packing.png  (generada por gsd-quick shannon-sphere-packing)
+  Caption: Argumento geométrico de Shannon. Izquierda: el punto transmitido x vive en una
+  esfera de radio sqrt(nPs); el ruido lo desplaza dentro de una esfera de radio sqrt(nN0/2).
+  El número máximo de codewords distinguibles es el número de esferas de ruido que caben en
+  la esfera total de radio sqrt(n(Ps+N0/2)). Derecha: M ≈ (1+SNR)^(n/2) crece
+  exponencialmente con el bloque n.
+-->
 
 **El límite de Eb/N0.** ¿Cuál es el SNR mínimo absoluto para comunicar fiablemente? Si la tasa espectral es $\eta = R/B$ [bit/s/Hz], la condición $R < C$ exige:
 
@@ -65,12 +64,12 @@ A medida que $\eta \to 0$ (tasa de bits muy baja): $\lim_{\eta\to0}\frac{2^\eta-
 
 El **límite absoluto de Shannon** es $E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}$. Por debajo de este valor no existe ningún código capaz de comunicar fiablemente, para ninguna tasa y ningún esquema de modulación.
 
-La figura siguiente muestra la capacidad $C/B$ en función del SNR, con los puntos de operación de las modulaciones de la Sesión 02.
+La figura siguiente sitúa los MCS codificados de la Sesión 02 sobre la frontera de Shannon. Las flechas muestran la **brecha de codificación**: cuántos dB de $E_b/N_0$ separan cada sistema del límite teórico a la misma eficiencia espectral.
 
 <figure markdown="span">
   ![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 2.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de cinco MCS codificados: BPSK $r=1/2$, QPSK $r=1/2$, QPSK $r=3/4$, 16-QAM $r=1/2$ y 64-QAM $r=3/4$, situados en $(\eta_{\text{eff}},\,E_b/N_0)$ con $\eta_{\text{eff}} = \log_2(M)\cdot r_c$.
+  <figcaption markdown="1">**Figura 1.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de cinco MCS codificados: BPSK $r=1/2$, QPSK $r=1/2$, QPSK $r=3/4$, 16-QAM $r=1/2$ y 64-QAM $r=3/4$, situados en $(\eta_{\text{eff}},\,E_b/N_0)$ con $\eta_{\text{eff}} = \log_2(M)\cdot r_c$.
   Las flechas horizontales indican la brecha de codificación disponible: la reducción de $E_b/N_0$ que podría lograrse con un código que opera al límite de Shannon a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
   </figcaption>
 </figure>
@@ -138,7 +137,7 @@ graph LR
 <figure markdown="span">
   ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
   <!-- generada por celda 7 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 3.** Grafo bipartito de Tanner para un código LDPC representativo. Los nodos de variable $v_j$ (círculos) representan los bits del codeword; los nodos de verificación $c_i$ (cuadrados) representan las ecuaciones de paridad $H_{ij}=1$ de la matriz $\mathbf{H}$.
+  <figcaption markdown="1">**Figura 2.** Grafo bipartito de Tanner para un código LDPC representativo. Los nodos de variable $v_j$ (círculos) representan los bits del codeword; los nodos de verificación $c_i$ (cuadrados) representan las ecuaciones de paridad $H_{ij}=1$ de la matriz $\mathbf{H}$.
   La dispersidad del grafo — pocos unos en $\mathbf{H}$, aristas escasas — garantiza ciclos largos y convergencia rápida del decodificador belief propagation.
   </figcaption>
 </figure>
@@ -175,7 +174,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 <figure markdown="span">
   ![Evolución de LLR en belief propagation](figures/bp-messages.png)
   <!-- generada por celda 7c de lab.ipynb -->
-  <figcaption markdown="1">**Figura 4.** Evolución de los LLR marginales $\lambda_v^{(\text{total})}$ durante el algoritmo de belief propagation sobre un código LDPC con $n=240$, $r_c\approx1/2$, a $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall).
+  <figcaption markdown="1">**Figura 3.** Evolución de los LLR marginales $\lambda_v^{(\text{total})}$ durante el algoritmo de belief propagation sobre un código LDPC con $n=240$, $r_c\approx1/2$, a $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall).
   Iteración 1: los LLR reflejan principalmente la información del canal, concentrados cerca de cero. Iteración 3: la propagación de mensajes entre vecinos comienza a polarizar las creencias. Iteración 10: las creencias convergen hacia valores de gran magnitud (bits con alta certeza), con muy pocos bits en la zona de incertidumbre ($|\lambda|<2$).
   </figcaption>
 </figure>
@@ -183,7 +182,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 <figure markdown="span">
   ![Curvas BER Monte Carlo LDPC n=240](figures/ldpc-ber-waterfall.png)
   <!-- generada por celda 7d de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
+  <figcaption markdown="1">**Figura 4.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
   La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación. La irregularidad visible a BER $\lesssim 10^{-4}$ es ruido estadístico de Monte Carlo (∼5 errores por punto a esa BER), no un *error floor* real.
   </figcaption>
 </figure>
@@ -220,7 +219,7 @@ La idea central es combinar dos copias independientes de un canal $W$ para crear
 <figure markdown="span">
   ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
   <!-- generada por celda 15 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes n}$ de Arıkan; la composición de $n = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
+  <figcaption markdown="1">**Figura 5.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes n}$ de Arıkan; la composición de $n = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
   </figcaption>
 </figure>
 
@@ -238,7 +237,7 @@ Es decir: una fracción $C(W)$ de los canales sintéticos se vuelve perfecta, y 
 <figure markdown="span">
   ![Histograma de polarización de canales sintéticos Polar N=64](figures/polar-polarization.png)
   <!-- generada por celda 17 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 7.** Histograma del parámetro de Bhattacharyya $Z(W_{64}^{(i)})$ para los $N=64$ canales sintéticos de un código Polar con $r_c=1/2$, diseñado a $E_b/N_0=3\ \text{dB}$. La distribución es bimodal: los 32 canales de información (azul) se concentran en $Z\approx 0$ (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en $Z\approx 1$ (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para $N\to\infty$ — es la propiedad que garantiza que el código alcance la capacidad del canal.
+  <figcaption markdown="1">**Figura 6.** Histograma del parámetro de Bhattacharyya $Z(W_{64}^{(i)})$ para los $N=64$ canales sintéticos de un código Polar con $r_c=1/2$, diseñado a $E_b/N_0=3\ \text{dB}$. La distribución es bimodal: los 32 canales de información (azul) se concentran en $Z\approx 0$ (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en $Z\approx 1$ (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para $N\to\infty$ — es la propiedad que garantiza que el código alcance la capacidad del canal.
   </figcaption>
 </figure>
 
@@ -280,7 +279,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
   <!-- generada por celda 18 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 8.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, n=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
+  <figcaption markdown="1">**Figura 7.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, n=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
   </figcaption>
 </figure>
 
@@ -314,7 +313,7 @@ La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con
 <figure markdown="span">
   ![BER end-to-end OFDM+LDPC vs sin FEC vs AWGN](figures/ofdm-ldpc-ber.png)
   <!-- generada por celda 20 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 9.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
+  <figcaption markdown="1">**Figura 8.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
   El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando $\approx 3\ \text{dB}$ de ganancia a BER $= 10^{-3}$ gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
   </figcaption>
 </figure>
