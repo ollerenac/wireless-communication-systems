@@ -73,4 +73,4 @@ Este documento evoluciona en las transiciones de fase y en los hitos del milesto
 4. ¿Decisiones a registrar? → Añadir a Key Decisions
 
 ---
-*Last updated: 2026-05-26 after initialization*
+*Last updated: 2026-06-04 — Phase 6 (QA & Publicación) complete. lab.ipynb ejecuta limpio con nbconvert (LAB-04), index.md con 9 figuras trazadas y build mkdocs --strict limpio (IDX-04). Milestone v1.0 completo.*
