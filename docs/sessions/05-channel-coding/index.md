@@ -1,10 +1,10 @@
 ---
-title: "Sesión 04 — Codificación de Canal: LDPC y Códigos Polar"
-session: 4
+title: "Sesión 05 — Codificación de Canal: LDPC y Códigos Polar"
+session: 5
 description: "Del límite de Shannon a los códigos que lo alcanzan: LDPC con belief propagation y Polar con cancelación sucesiva, tal como se usan en 5G NR."
 ---
 
-# Sesión 04 — Codificación de Canal: LDPC y Códigos Polar
+# Sesión 05 — Codificación de Canal: LDPC y Códigos Polar
 
 ## Objetivos de Aprendizaje
 
@@ -297,6 +297,14 @@ $$\frac{E_b}{N_0}\bigg\vert_{\text{canal}} = \text{SNR} - 10\log_{10}(k_{\text{b
 **Paso 4 — Throughput:** con $r_c = 2/3$ y 64-QAM (6 bits/símbolo), la eficiencia espectral efectiva es $6\times2/3 = 4$ bit/s/Hz (ver Sesión 02 tabla MCS). Para $B = 40$ MHz: $R \approx 160$ Mbit/s — coherente con el resultado de la Sesión 03 Sección 5.
 
 La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con una ganancia de codificación de $\approx 7\ \text{dB}$ — un resultado analítico convincente, pero ¿cómo se verifica empíricamente que estos códigos realmente alcanzan esa ganancia sobre un canal simulado? ¿Cómo se construye y mide esa cadena en el laboratorio, y cuántas realizaciones de ruido son necesarias para trazar una curva waterfall confiable? La respuesta es la sección de laboratorio, que implementa exactamente esta cadena con simulación Monte Carlo y mide la BER bit a bit.
+
+<figure markdown="span">
+  ![BER end-to-end OFDM+LDPC vs sin FEC vs AWGN](figures/ofdm-ldpc-ber.png)
+  <!-- generada por celda 19 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 6.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
+  El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando $\approx 3\ \text{dB}$ de ganancia a BER $= 10^{-3}$ gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
+  </figcaption>
+</figure>
 
 ---
 
