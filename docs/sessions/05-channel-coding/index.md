@@ -70,8 +70,8 @@ La figura siguiente muestra la capacidad $C/B$ en función del SNR, con los punt
 <figure markdown="span">
   ![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 2.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de BPSK, QPSK, 16-QAM, 64-QAM y 256-QAM a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02).
-  Las flechas horizontales indican la ganancia de codificación disponible: la reducción de Eb/N0 que permitiría un buen código operando a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
+  <figcaption markdown="1">**Figura 2.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de cinco MCS codificados: BPSK $r=1/2$, QPSK $r=1/2$, QPSK $r=3/4$, 16-QAM $r=1/2$ y 64-QAM $r=3/4$, situados en $(\eta_{\text{eff}},\,E_b/N_0)$ con $\eta_{\text{eff}} = \log_2(M)\cdot r_c$.
+  Las flechas horizontales indican la brecha de codificación disponible: la reducción de $E_b/N_0$ que podría lograrse con un código que opera al límite de Shannon a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
   </figcaption>
 </figure>
 
@@ -133,7 +133,7 @@ graph LR
     V2 --- C3; V3 --- C3; V6 --- C3; V7 --- C3
 ```
 
-*Grafo de Tanner para el código (7,4) de Hamming. Las 3 ecuaciones de paridad conectan 4 variables cada una. El grado de cada nodo de verificación es 4; el de cada nodo de variable es 2.*
+*Grafo de Tanner para un código LDPC $(7,4)$ de ejemplo. Las 3 ecuaciones de paridad conectan 4 variables cada una. El grado de cada nodo de verificación es 4; el de la mayoría de nodos de variable es 2, excepto $v_4$ y $v_6$ que tienen grado 1 (grafo irregular).*
 
 <figure markdown="span">
   ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
@@ -184,7 +184,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
   ![Curvas BER Monte Carlo LDPC n=240](figures/ldpc-ber-waterfall.png)
   <!-- generada por celda 7d de lab.ipynb -->
   <figcaption markdown="1">**Figura 5.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
-  La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación, a diferencia de la caída gradual de BPSK sin código.
+  La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación. La irregularidad visible a BER $\lesssim 10^{-4}$ es ruido estadístico de Monte Carlo (∼5 errores por punto a esa BER), no un *error floor* real.
   </figcaption>
 </figure>
 
@@ -305,7 +305,7 @@ Un terminal 5G NR debe transmitir un bloque de transporte de $k = 4000$ bits en 
 
 $$\frac{E_b}{N_0}\bigg\vert_{\text{canal}} = \text{SNR} - 10\log_{10}(k_{\text{bits/sym}}\cdot r_c) = 18 - 10\log_{10}(6 \times 2/3) = 18 - 6 = 12\ \text{dB}$$
 
-**Paso 3 — Ganancia de codificación:** sin código, BPSK necesita Eb/N0 = 6.8 dB para BER $= 10^{-3}$. Con LDPC $r_c=2/3$ a Eb/N0 = 12 dB, el código opera muy por encima del umbral de 5 dB: BER post-FEC $\ll 10^{-10}$. Ganancia de codificación neta ≈ 12 − 6.8 − penalización de tasa = $(12 - 10\log_{10}(2/3)) − 6.8 \approx (12+1.8) − 6.8 \approx \mathbf{7\ \text{dB}}$.
+**Paso 3 — Ganancia de codificación:** el umbral LDPC BG1 para $r_c = 2/3$ es $E_b/N_0 \approx 5{,}5\ \text{dB}$ a BER $= 10^{-5}$; BPSK sin código necesita $12{,}6\ \text{dB}$ a la misma BER. Ganancia de codificación neta: $G_c = 12{,}6 - 5{,}5 \approx \mathbf{7{,}1\ \text{dB}}$. A $E_b/N_0 = 12\ \text{dB}$ el sistema opera muy por encima del umbral de $5{,}5\ \text{dB}$, por lo que la BER post-FEC $\ll 10^{-10}$.
 
 **Paso 4 — Throughput:** con $r_c = 2/3$ y 64-QAM (6 bits/símbolo), la eficiencia espectral efectiva es $6\times2/3 = 4$ bit/s/Hz (ver Sesión 02 tabla MCS). Para $B = 40$ MHz: $R \approx 160$ Mbit/s — coherente con el resultado de la Sesión 03 Sección 5.
 
@@ -335,7 +335,7 @@ La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con
 
 **Dependencias hacia adelante:**
 
-- *Sesión 05 — Acceso múltiple*: HARQ opera sobre bloques LDPC completos. La gestión de retransmisiones HARQ es parte del radio resource management.
+- *Sesión 07 — Acceso múltiple*: HARQ opera sobre bloques LDPC completos. La gestión de retransmisiones HARQ es parte del radio resource management.
 - *Sesión 06 — MIMO*: los flujos MIMO independientes se codifican de forma independiente con LDPC/Polar antes de ser precodificados.
 - *Sesión 09 — 5G NR*: el mapeo de bloques de transporte a resource blocks, la selección de BG y el rate-matching se definen en 3GPP TS 38.212.
 - *Sesión 14 — IA/ML*: los decodificadores neuronales (neural BP, turbo decoders) son una aplicación directa de ML a los algoritmos de esta sesión.
@@ -386,32 +386,29 @@ Un sistema BPSK sin código necesita Eb/N0 = 12.6 dB para BER = $10^{-5}$.
 
 ??? example "Solución"
 
-    La relación entre el Eb/N0 del canal y el del código es:
-    $$\frac{E_b}{N_0}\bigg\vert_{\text{código}} = \frac{E_b}{N_0}\bigg\vert_{\text{canal}} + 10\log_{10}(r_c)$$
+    El umbral de decodificación $E_b/N_0\vert_{\text{umbral}}$ se expresa en $E_b/N_0$ *por bit de información* — la misma normalización del eje horizontal de la curva waterfall, que ya incorpora el factor de tasa. La ganancia de codificación neta es la diferencia directa a la misma BER:
 
-    Para que el código opere: $E_b/N_0\vert_{\text{código}} \geq E_b/N_0\vert_{\text{umbral}}$.
+    $$G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{umbral}} \quad \text{[dB, a la misma BER]}$$
 
-    Despejando: $E_b/N_0\vert_{\text{canal}} \geq E_b/N_0\vert_{\text{umbral}} - 10\log_{10}(r_c)$.
+    **(a)** $r_c = 1/2$, umbral $= 3{,}5\ \text{dB}$.
 
-    **(a)** $r_c = 1/2$: $10\log_{10}(1/2) = -3\ \text{dB}$.
+    $E_b/N_0$ del canal necesario $= \mathbf{3{,}5\ \text{dB}}$.
 
-    $E_b/N_0\vert_{\text{canal}} \geq 3{,}5 + 3{,}0 = \mathbf{6{,}5\ \text{dB}}$.
+    **(b)** Ganancia neta: $G_c = 12{,}6 - 3{,}5 = \mathbf{9{,}1\ \text{dB}}$.
 
-    **(b)** Ganancia neta: $G_c = 12{,}6 - 6{,}5 = \mathbf{6{,}1\ \text{dB}}$.
+    **(c)** $r_c = 3/4$, umbral $= 5{,}5\ \text{dB}$.
 
-    **(c)** $r_c = 3/4$: $10\log_{10}(3/4) = -1{,}25\ \text{dB}$.
+    $E_b/N_0$ del canal necesario $= \mathbf{5{,}5\ \text{dB}}$. Ganancia: $12{,}6 - 5{,}5 = \mathbf{7{,}1\ \text{dB}}$.
 
-    $E_b/N_0\vert_{\text{canal}} \geq 5{,}5 + 1{,}25 = 6{,}75\ \text{dB}$. Ganancia: $12{,}6 - 6{,}75 = \mathbf{5{,}85\ \text{dB}}$.
-
-    **(d)** La tasa $r_c = 1/2$ tiene mayor ganancia de codificación (6.1 dB vs 5.85 dB). Sin embargo, $r_c = 3/4$ transmite 50% más bits por uso del canal — en un sistema con SNR suficiente para ambas tasas, la tasa más alta maximiza el caudal. El trade-off entre ganancia de codificación y eficiencia espectral es la motivación de la adaptación de enlace: a SNR bajo se prefiere $r_c$ bajo (mayor protección), a SNR alto se prefiere $r_c$ alto (mayor caudal).
+    **(d)** La tasa $r_c = 1/2$ tiene mayor ganancia de codificación (9.1 dB vs 7.1 dB). Sin embargo, $r_c = 3/4$ transmite 50% más bits por uso del canal — en un sistema con SNR suficiente para ambas tasas, la tasa más alta maximiza el caudal. El trade-off entre ganancia de codificación y eficiencia espectral es la motivación de la adaptación de enlace: a SNR bajo se prefiere $r_c$ bajo (mayor protección), a SNR alto se prefiere $r_c$ alto (mayor caudal).
 
 ---
 
 ### Ejercicio 3
 
-Considera el código LDPC (7,4) con la siguiente matriz de verificación de paridad:
+Considera el código de bloque (7,4) de Hamming con la siguiente matriz de verificación de paridad:
 
-$$\mathbf{H} = \begin{pmatrix} 1&1&0&1&1&0&0 \\ 0&1&1&0&1&1&0 \\ 1&0&1&1&0&0&1 \end{pmatrix} \pmod{2}$$
+$$\mathbf{H} = \begin{pmatrix} 0&1&1&0&1&0&1 \\ 0&0&0&1&1&1&1 \\ 1&1&0&1&1&0&0 \end{pmatrix} \pmod{2}$$
 
 **(a)** Verifica que $\mathbf{c}_1 = [1, 1, 0, 1, 1, 0, 0]^T$ es un codeword válido.
 
