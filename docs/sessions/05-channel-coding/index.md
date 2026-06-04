@@ -182,7 +182,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 
 <figure markdown="span">
   ![Curvas BER Monte Carlo LDPC n=240](figures/ldpc-ber-waterfall.png)
-  <!-- generada por celda 10 de lab.ipynb -->
+  <!-- generada por celda 7d de lab.ipynb -->
   <figcaption markdown="1">**Figura 5.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
   La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación, a diferencia de la caída gradual de BPSK sin código.
   </figcaption>
