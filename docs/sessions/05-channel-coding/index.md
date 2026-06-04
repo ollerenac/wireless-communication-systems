@@ -492,7 +492,7 @@ En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de
 
 2. **Ej. 2 — Código LDPC: verificación de paridad (~15 min)**: Construye la matriz $\mathbf{H}$ en GF(2), verifica si un vector es codeword válido calculando $\mathbf{H}\,\mathbf{c} \pmod{2}$, y detecta la posición de un error a partir del síndrome.
 
-3. **Ej. 3 — LDPC BP realista sobre código de n≈400 bits (~30 min)**: Implementa el algoritmo sum-product (belief propagation) completo — inicialización de LLRs del canal AWGN, mensajes variable→nodo-de-verificación y verificación→nodo-de-variable, y decisión iterativa. Simula la curva BER Monte Carlo para al menos dos tasas de código y observa el *waterfall* con al menos 3 décadas de caída en BER.
+3. **Ej. 3 — LDPC BP realista sobre código de n=240 bits (~30 min)**: Implementa el algoritmo sum-product (belief propagation) completo — inicialización de LLRs del canal AWGN, mensajes variable→nodo-de-verificación y verificación→nodo-de-variable, y decisión iterativa. Simula la curva BER Monte Carlo para al menos dos tasas de código y observa el *waterfall* con al menos 3 décadas de caída en BER.
 
 4. **Ej. 4 — Polar N=64: encoder + SC + SCL-L=8 (~35 min)**: Construye el encoder Polar con la matriz $G_{64}$ y selección de bits congelados por parámetro de Bhattacharyya. Implementa el decodificador SC recursivo y el SCL con lista $L=8$. Compara las curvas BER de SC y SCL en la región de *waterfall*.
 
