@@ -217,6 +217,13 @@ La idea central es combinar dos copias independientes de un canal $W$ para crear
 - El canal sintético $W_2^{(-)}$ ve $u_1$ con menos información (peor canal).
 - El canal sintético $W_2^{(+)}$ ve $u_2$ con más información, dado $u_1$ ya decodificado (mejor canal).
 
+<figure markdown="span">
+  ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
+  <!-- generada por celda 15 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 6.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes n}$ de Arıkan; la composición de $n = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
+  </figcaption>
+</figure>
+
 El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ mide la dificultad del canal: $Z=0$ significa canal perfecto, $Z=1$ significa canal totalmente ruidoso. Las transformaciones satisfacen:
 
 $$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W)$$
@@ -227,6 +234,13 @@ El canal malo empeora; el canal bueno mejora. Aplicando esta transformación $n$
 $$\lim_{N\to\infty} \frac{|\{i : Z(W_N^{(i)}) < \delta\}|}{N} = C(W) \quad \text{para todo } \delta > 0$$
 
 Es decir: una fracción $C(W)$ de los canales sintéticos se vuelve perfecta, y la fracción $1-C(W)$ se vuelve inútil. El código Polar pone bits de información en los canales buenos (bajo $Z$) y bits congelados — conocidos por el receptor, convencionalmente 0 — en los canales malos.
+
+<figure markdown="span">
+  ![Histograma de polarización de canales sintéticos Polar N=64](figures/polar-polarization.png)
+  <!-- generada por celda 17 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 7.** Histograma del parámetro de Bhattacharyya $Z(W_{64}^{(i)})$ para los $N=64$ canales sintéticos de un código Polar con $r_c=1/2$, diseñado a $E_b/N_0=3\ \text{dB}$. La distribución es bimodal: los 32 canales de información (azul) se concentran en $Z\approx 0$ (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en $Z\approx 1$ (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para $N\to\infty$ — es la propiedad que garantiza que el código alcance la capacidad del canal.
+  </figcaption>
+</figure>
 
 La pregunta natural es: el parámetro de Bhattacharyya $Z(W_N^{(i)})$ identifica cuáles canales sintéticos son fiables, pero el decodificador debe extraer los bits de información de esos canales sin conocer aún los bits que siguen — cada decisión afecta a todas las posteriores. ¿Cómo resuelve el decodificador esa dependencia causal de forma eficiente? La respuesta es la cancelación sucesiva: decodificar los bits en orden estricto $u_1, u_2, \ldots, u_N$, usando cada decisión anterior como condición conocida para calcular el LLR del siguiente.
 
@@ -265,7 +279,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
-  <!-- generada por celda 13 de lab.ipynb -->
+  <!-- generada por celda 18 de lab.ipynb -->
   <figcaption markdown="1">**Figura 2.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC con tasas $r_c = 1/2$, $2/3$, $3/4$ (azul) y Polar con tasas equivalentes (naranja), todas sobre canal AWGN.
   La característica "curva en cascada" de LDPC y Polar contrasta con la caída suave de BPSK sin código: por encima del umbral de decodificación, la BER cae precipitosamente varias décadas en pocos dB, alcanzando la ganancia de codificación neta de 4–8 dB respecto a BPSK sin código a BER $= 10^{-5}$.
   </figcaption>
@@ -300,7 +314,7 @@ La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con
 
 <figure markdown="span">
   ![BER end-to-end OFDM+LDPC vs sin FEC vs AWGN](figures/ofdm-ldpc-ber.png)
-  <!-- generada por celda 19 de lab.ipynb -->
+  <!-- generada por celda 20 de lab.ipynb -->
   <figcaption markdown="1">**Figura 6.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
   El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando $\approx 3\ \text{dB}$ de ganancia a BER $= 10^{-3}$ gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
   </figcaption>
