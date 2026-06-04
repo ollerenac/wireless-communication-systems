@@ -116,22 +116,7 @@ La representación más intuitiva de un LDPC es su **grafo de Tanner**: un grafo
 - **Nodos de variable** ($n$ nodos, uno por cada bit del codeword): representan los $n$ bits transmitidos.
 - **Nodos de verificación** ($n-k$ nodos, uno por cada ecuación de paridad): representan las $n-k$ ecuaciones $\mathbf{H}\,\mathbf{c} = \mathbf{0}$.
 
-Hay una arista entre el nodo de variable $v_j$ y el nodo de verificación $c_i$ si y sólo si $H_{ij} = 1$.
-
-```mermaid
-graph LR
-    subgraph "Nodos de variable (bits)"
-        V1((v₁)) & V2((v₂)) & V3((v₃)) & V4((v₄)) & V5((v₅)) & V6((v₆)) & V7((v₇))
-    end
-    subgraph "Nodos de verificación (paridades)"
-        C1{c₁} & C2{c₂} & C3{c₃}
-    end
-    V1 --- C1; V2 --- C1; V4 --- C1; V5 --- C1
-    V1 --- C2; V3 --- C2; V5 --- C2; V7 --- C2
-    V2 --- C3; V3 --- C3; V6 --- C3; V7 --- C3
-```
-
-*Grafo de Tanner para un código LDPC $(7,4)$ de ejemplo. Las 3 ecuaciones de paridad conectan 4 variables cada una. El grado de cada nodo de verificación es 4; el de la mayoría de nodos de variable es 2, excepto $v_4$ y $v_6$ que tienen grado 1 (grafo irregular).*
+Hay una arista entre el nodo de variable $v_j$ y el nodo de verificación $c_i$ si y sólo si $H_{ij} = 1$. La Figura 2 muestra el grafo de Tanner del código LDPC $(8,4)$ del laboratorio, con 8 nodos de variable (v₀–v₇) y 4 nodos de verificación (c₀–c₃).
 
 <figure markdown="span">
   ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
