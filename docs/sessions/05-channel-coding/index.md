@@ -69,8 +69,7 @@ La figura siguiente sitúa los MCS codificados de la Sesión 02 sobre la fronter
 <figure markdown="span">
   ![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 1.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de cinco MCS codificados: BPSK $r=1/2$, QPSK $r=1/2$, QPSK $r=3/4$, 16-QAM $r=1/2$ y 64-QAM $r=3/4$, situados en $(\eta_{\text{eff}},\,E_b/N_0)$ con $\eta_{\text{eff}} = \log_2(M)\cdot r_c$.
-  Las flechas horizontales indican la brecha de codificación disponible: la reducción de $E_b/N_0$ que podría lograrse con un código que opera al límite de Shannon a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
+  <figcaption markdown="1">**Figura 1.** Eficiencia espectral $\eta = C/B$ (bit/s/Hz) en función de $E_b/N_0$ (dB) para el canal AWGN. La **curva azul** es la frontera de Shannon: para cada $\eta$, el $E_b/N_0$ mínimo necesario es $(2^\eta-1)/\eta$. La **región salmón** (izquierda de la curva) es no alcanzable — ningún código puede comunicar fiablemente por debajo de esa frontera, independientemente de su complejidad. Los puntos de colores son cinco MCS codificados de la Sesión 02: BPSK $r=1/2$, QPSK $r=1/2$, QPSK $r=3/4$, 16-QAM $r=1/2$ y 64-QAM $r=3/4$, situados en $(\eta_{\text{eff}},\,E_b/N_0)$ con $\eta_{\text{eff}} = \log_2(M)\cdot r_c$. Las flechas horizontales muestran la **brecha de codificación**: cuántos dB podría reducirse el $E_b/N_0$ si el código operara justo en el límite de Shannon a la misma $\eta_{\text{eff}}$. La línea roja vertical marca el límite absoluto $E_b/N_0 = -1{,}59$ dB.
   </figcaption>
 </figure>
 
