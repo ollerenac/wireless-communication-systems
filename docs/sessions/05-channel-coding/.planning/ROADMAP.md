@@ -11,7 +11,7 @@
 | 3 | LDPC Lab + Figuras | BP completo realista con Monte Carlo BER y figuras de BP | FIG-04, FIG-05, FIG-08, LAB-01 | 4 |
 | 4 | Polar Lab + Figuras | Polar N=64 encoder+SC+SCL con figuras de polarización | FIG-06, FIG-07, LAB-02 | 3 |
 | 5 | Integrador OFDM+FEC | Ejercicio end-to-end OFDM+LDPC con figura comparativa | FIG-09, LAB-03 | 3 |
-| 6 | QA & Publicación | Notebook ejecutable limpio, index.md sin errores, listo para site | LAB-04, IDX-04 | 3 |
+| 6 | QA & Publicación | 1/2 | In Progress|  |
 
 ---
 
@@ -124,12 +124,12 @@ Plans:
 
 **Requirements:** LAB-04, IDX-04
 
-**Plans:** 2 plans en 2 waves
+**Plans:** 1/2 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 06-01-PLAN.md — LAB-04: ejecutabilidad del notebook — eliminar crash de la celda 17 (SC/SCL Polar diferidos), añadir celda generadora de waterfall-curves.png (figura huérfana), corrida limpia `nbconvert --execute`
+- [x] 06-01-PLAN.md — LAB-04: ejecutabilidad del notebook — eliminar crash de la celda 17 (SC/SCL Polar diferidos), añadir celda generadora de waterfall-curves.png (figura huérfana), corrida limpia `nbconvert --execute`
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
