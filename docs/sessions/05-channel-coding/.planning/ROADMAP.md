@@ -11,7 +11,7 @@
 | 3 | LDPC Lab + Figuras | BP completo realista con Monte Carlo BER y figuras de BP | FIG-04, FIG-05, FIG-08, LAB-01 | 4 |
 | 4 | Polar Lab + Figuras | Polar N=64 encoder+SC+SCL con figuras de polarización | FIG-06, FIG-07, LAB-02 | 3 |
 | 5 | Integrador OFDM+FEC | Ejercicio end-to-end OFDM+LDPC con figura comparativa | FIG-09, LAB-03 | 3 |
-| 6 | QA & Publicación | 1/2 | In Progress|  |
+| 6 | QA & Publicación | 2/2 | Complete   | 2026-06-04 |
 
 ---
 
@@ -124,7 +124,7 @@ Plans:
 
 **Requirements:** LAB-04, IDX-04
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 **Wave 1**
@@ -133,7 +133,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 06-02-PLAN.md — IDX-04: auditoría de figuras en index.md — bloques `<figure>` de Polar en §4.1, renumeración secuencial de captions, comentarios de origen de celda correctos, build `mkdocs --strict` limpio
+- [x] 06-02-PLAN.md — IDX-04: auditoría de figuras en index.md — bloques `<figure>` de Polar en §4.1, renumeración secuencial de captions, comentarios de origen de celda correctos, build `mkdocs --strict` limpio
 
 **Success Criteria:**
 
