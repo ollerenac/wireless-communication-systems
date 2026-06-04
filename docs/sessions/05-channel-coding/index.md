@@ -174,7 +174,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 
 <figure markdown="span">
   ![Evolución de LLR en belief propagation](figures/bp-messages.png)
-  <!-- generada por celda 9 de lab.ipynb -->
+  <!-- generada por celda 7c de lab.ipynb -->
   <figcaption markdown="1">**Figura 4.** Evolución de los LLR marginales $\lambda_v^{(\text{total})}$ durante el algoritmo de belief propagation sobre un código LDPC con $n=240$, $r_c\approx1/2$, a $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall).
   Iteración 1: los LLR reflejan principalmente la información del canal, concentrados cerca de cero. Iteración 3: la propagación de mensajes entre vecinos comienza a polarizar las creencias. Iteración 10: las creencias convergen hacia valores de gran magnitud (bits con alta certeza), con muy pocos bits en la zona de incertidumbre ($|\lambda|<2$).
   </figcaption>
