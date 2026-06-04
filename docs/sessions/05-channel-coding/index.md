@@ -493,7 +493,7 @@ En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de
 
 3. **Ej. 3 — LDPC BP realista sobre código de n=240 bits (~30 min)**: Implementa el algoritmo sum-product (belief propagation) completo — inicialización de LLRs del canal AWGN, mensajes variable→nodo-de-verificación y verificación→nodo-de-variable, y decisión iterativa. Simula la curva BER Monte Carlo para al menos dos tasas de código y observa el *waterfall* con al menos 3 décadas de caída en BER.
 
-4. **Ej. 4 — Polar N=64: encoder + SC + SCL-L=8 (~35 min)**: Construye el encoder Polar con la matriz $G_{64}$ y selección de bits congelados por parámetro de Bhattacharyya. Implementa el decodificador SC recursivo y el SCL con lista $L=8$. Compara las curvas BER de SC y SCL en la región de *waterfall*.
+4. **Ej. 4 — Polar N=64: encoder + bits congelados (~20 min)**: Construye el encoder Polar con la matriz $G_{64}$ y selección de bits congelados por parámetro de Bhattacharyya. Visualiza la polarización del canal mediante el histograma de $Z(W_{64}^{(i)})$. *(El decodificador SC/SCL queda diferido — ver extensión futura.)*
 
 5. **Ej. 5 — Curvas waterfall comparativas (~15 min)**: Genera las curvas BER de LDPC ($r_c=1/2$, $2/3$, $3/4$), Polar equivalente y BPSK sin código en el mismo eje. Cuantifica la ganancia de codificación de cada esquema a BER = $10^{-5}$.
 
