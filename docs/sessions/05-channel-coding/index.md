@@ -70,7 +70,7 @@ La figura siguiente muestra la capacidad $C/B$ en función del SNR, con los punt
 <figure markdown="span">
   ![Capacidad de Shannon y puntos de operación](figures/shannon-capacity.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 1.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de BPSK, QPSK, 16-QAM, 64-QAM y 256-QAM a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02).
+  <figcaption markdown="1">**Figura 2.** Capacidad $C/B$ (bit/s/Hz) como función del SNR (dB). La curva negra es la frontera de Shannon $C/B = \log_2(1+\text{SNR})$; los puntos de colores muestran los puntos de operación de BPSK, QPSK, 16-QAM, 64-QAM y 256-QAM a BER = $10^{-3}$ (valores del Ejercicio 5 de la Sesión 02).
   Las flechas horizontales indican la ganancia de codificación disponible: la reducción de Eb/N0 que permitiría un buen código operando a la misma tasa espectral. El límite absoluto de $E_b/N_0 = -1{,}59$ dB aparece como línea vertical roja.
   </figcaption>
 </figure>
@@ -280,7 +280,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
   <!-- generada por celda 18 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 2.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC con tasas $r_c = 1/2$, $2/3$, $3/4$ (azul) y Polar con tasas equivalentes (naranja), todas sobre canal AWGN.
+  <figcaption markdown="1">**Figura 8.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC con tasas $r_c = 1/2$, $2/3$, $3/4$ (azul) y Polar con tasas equivalentes (naranja), todas sobre canal AWGN.
   La característica "curva en cascada" de LDPC y Polar contrasta con la caída suave de BPSK sin código: por encima del umbral de decodificación, la BER cae precipitosamente varias décadas en pocos dB, alcanzando la ganancia de codificación neta de 4–8 dB respecto a BPSK sin código a BER $= 10^{-5}$.
   </figcaption>
 </figure>
@@ -315,7 +315,7 @@ La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con
 <figure markdown="span">
   ![BER end-to-end OFDM+LDPC vs sin FEC vs AWGN](figures/ofdm-ldpc-ber.png)
   <!-- generada por celda 20 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
+  <figcaption markdown="1">**Figura 9.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
   El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando $\approx 3\ \text{dB}$ de ganancia a BER $= 10^{-3}$ gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
   </figcaption>
 </figure>
