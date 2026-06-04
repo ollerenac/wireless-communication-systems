@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-05-29T22:44:21.954Z"
+last_updated: "2026-06-04T08:00:34.546Z"
 progress:
   total_phases: 6
   completed_phases: 3
@@ -16,9 +16,9 @@ progress:
 
 ## Current Phase
 
-**Phase:** 4 — Polar Lab + Figuras  
+**Phase:** 6 — QA & Publicación  
 **Plan:** (not yet planned)  
-**Status:** Executing Phase 04
+**Status:** Phase 05 complete — ready for Phase 06
 
 ## Phase Progress
 
@@ -28,7 +28,7 @@ progress:
 | 2 — Figuras Existentes | ✅ Complete | Plans 02-01 (Shannon 91KB), 02-02 (waterfall 126KB + D-12 + index.md) |
 | 3 — LDPC Lab + Figuras | ✅ Complete | Plans 03-01 (tanner-graph 40KB), 03-02 (BP decoder + bp-messages 57KB + waterfall-BER 107KB) |
 | 4 — Polar Lab + Figuras | ⬜ Not started | |
-| 5 — Integrador OFDM+FEC | ⬜ Not started | |
+| 5 — Integrador OFDM+FEC | ✅ Complete | Plan 05-01: ofdm-ldpc-ber.png (100KB), LAB-03, FIG-09 |
 | 6 — QA & Publicación | ⬜ Not started | |
 
 ## Last Commit
