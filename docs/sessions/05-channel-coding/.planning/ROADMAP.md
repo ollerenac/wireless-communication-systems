@@ -124,6 +124,17 @@ Plans:
 
 **Requirements:** LAB-04, IDX-04
 
+**Plans:** 2 plans en 2 waves
+
+Plans:
+**Wave 1**
+
+- [ ] 06-01-PLAN.md — LAB-04: ejecutabilidad del notebook — eliminar crash de la celda 17 (SC/SCL Polar diferidos), añadir celda generadora de waterfall-curves.png (figura huérfana), corrida limpia `nbconvert --execute`
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 06-02-PLAN.md — IDX-04: auditoría de figuras en index.md — bloques `<figure>` de Polar en §4.1, renumeración secuencial de captions, comentarios de origen de celda correctos, build `mkdocs --strict` limpio
+
 **Success Criteria:**
 
 1. `jupyter nbconvert --execute lab.ipynb` completa sin errores ni warnings críticos
