@@ -498,7 +498,7 @@ En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de
 
 5. **Ej. 5 — Curvas waterfall comparativas (~15 min)**: Genera las curvas BER de LDPC ($r_c=1/2$, $2/3$, $3/4$), Polar equivalente y BPSK sin código en el mismo eje. Cuantifica la ganancia de codificación de cada esquema a BER = $10^{-5}$.
 
-6. **Ej. 6 — Integrador OFDM+LDPC (~30 min)**: Reutiliza sin modificación las funciones `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel` y `zf_equalizer` de la Sesión 03. Añade una capa de codificación LDPC (encode antes de transmitir, decode tras el ecualizador) y compara la BER coded vs uncoded sobre un canal frequency-selective de 5 taps.
+6. **Ej. 6 — Integrador OFDM+LDPC (~30 min)**: Reutiliza sin modificación las funciones `ofdm_tx`, `apply_channel`, `ofdm_rx_no_channel` y `zf_equalizer` de la Sesión 03. Añade una capa de codificación LDPC (encode antes de transmitir, decode tras el ecualizador) y compara la BER coded vs uncoded sobre un canal frequency-selective de 3 taps.
 
 ---
 
