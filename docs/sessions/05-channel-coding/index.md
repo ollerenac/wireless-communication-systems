@@ -89,11 +89,11 @@ $$\mathbf{H}\,\mathbf{c} = \mathbf{0} \pmod{2}$$
 
 La **distancia mínima** $d_{\min}$ del código es el número mínimo de bits en que difieren dos codewords distintas. Un código de distancia mínima $d_{\min}$ puede corregir hasta $t = \lfloor(d_{\min}-1)/2\rfloor$ errores.
 
-**El trade-off de la codificación.** Con un código de tasa $r_c < 1$, para transmitir $k$ bits de información a través de un canal de ancho de banda $B$ se necesitan $n = k/r_c$ bits de canal, lo que efectivamente reduce la Eb/N0 disponible por bit de canal:
+**El trade-off de la codificación.** Con un código de tasa $r_c < 1$, para transmitir $k$ bits de información el codificador produce $n = k/r_c$ bits de canal. La energía total del bloque es $k \cdot E_b$ — la comprometida por los $k$ bits de información. Los $n - k$ bits de paridad no aportan energía adicional: son redundancia, no nueva información transmitida. Al repartir esa energía fija entre los $n$ bits de canal:
 
-$$\text{SNR por bit de canal} = r_c \cdot \frac{E_b}{N_0}$$
+$$E_c = \frac{k \cdot E_b}{n} = \frac{k \cdot E_b}{k/r_c} = r_c \cdot E_b \quad \Longrightarrow \quad \frac{E_c}{N_0} = r_c \cdot \frac{E_b}{N_0}$$
 
-El código introduce una **penalización por tasa** de $10\log_{10}(1/r_c)$ dB. Para que el código sea beneficioso, la ganancia en distancia mínima debe superar esta penalización — esta es la condición necesaria para que exista ganancia de codificación neta.
+Cada bit de canal recibe solo una fracción $r_c$ de la energía por bit de información. Esto introduce una **penalización por tasa** de $10\log_{10}(1/r_c)$ dB. Para que el código sea beneficioso, la ganancia en distancia mínima debe superar esa penalización — esta es la condición necesaria para que exista ganancia de codificación neta.
 
 La **ganancia de codificación** es la reducción neta de Eb/N0 (en dB) necesaria para alcanzar una BER objetivo:
 
