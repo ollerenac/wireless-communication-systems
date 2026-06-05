@@ -175,29 +175,37 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
     ---
 
-    **Paso 1 (c→v): mensaje de $c_0$ hacia $v_2$.**
+    **Paso 1 (v→c): cada variable envía su LLR de canal a sus vecinos check.**
 
-    $c_0$ verifica $\{v_0, v_1, v_2, v_3\}$. Para enviar su mensaje a $v_2$, excluye $v_2$ y convierte los LLRs de los otros tres a tanh:
+    En la primera iteración no hay mensajes previos de los check nodes ($\mu_{c' \to v} = 0$), así que la fórmula se reduce a $\mu_{v \to c} = \lambda_v^{(0)}$. Cada variable reenvía simplemente su LLR de canal:
 
-    $$\tanh(\lambda_{v_0}/2) = \tanh(0.70) = +0.604$$
-    
-    $$\tanh(\lambda_{v_1}/2) = \tanh(1.20) = +0.834$$
-    
-    $$\tanh(\lambda_{v_3}/2) = \tanh(0.80) = +0.664$$
+    | Variable | Envía a | Mensaje $\mu_{v \to c}$ |
+    |----------|---------|------------------------|
+    | $v_2$ | $c_0$ | $-0.6$ |
+    | $v_2$ | $c_1$ | $-0.6$ |
+    | $v_2$ | $c_2$ | $-0.6$ |
 
-    Producto (excluyendo $v_2$): $0.604 \times 0.834 \times 0.664 = +0.334$
+    (Todos los demás bits envían igualmente sus LLRs iniciales a sus respectivos vecinos check.)
+
+    ---
+
+    **Paso 2 (c→v): cada check devuelve consistencia de paridad hacia $v_2$.**
+
+    $c_0$ recibió de $v_0{=}{+1.4}$, $v_1{=}{+2.4}$, $v_2{=}{-0.6}$, $v_3{=}{+1.6}$. Para enviar a $v_2$, excluye $v_2$ y multiplica los tanh de los demás:
+
+    $$\tanh(+1.4/2)\cdot\tanh(+2.4/2)\cdot\tanh(+1.6/2) = 0.604\times0.834\times0.664 = +0.334$$
 
     $$\mu_{c_0 \to v_2} = 2\,\text{arctanh}(+0.334) = +0.696$$
 
-    El signo positivo significa: *"$v_0$, $v_1$ y $v_3$ creen con confianza que son 0; para que $v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0$, tú también debes ser 0."*
+    El signo positivo significa: *"$v_0$, $v_1$ y $v_3$ creen que son 0; para que $v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0$, tú también debes ser 0."*
 
-    De forma análoga, $c_1$ y $c_2$ también verifican $v_2$ y le envían mensajes positivos (sus otros vecinos $v_1, v_4, v_5$ y $v_3, v_5, v_6$ son todos positivos):
+    De forma análoga $c_1$ y $c_2$ (cuyos otros vecinos son todos positivos) envían:
 
     $$\mu_{c_1 \to v_2} = +0.876 \qquad \mu_{c_2 \to v_2} = +0.523$$
 
     ---
 
-    **Paso 3 (decisión): $v_2$ agrega todos los mensajes.**
+    **Paso 3 (decisión): $v_2$ agrega canal + todos los mensajes recibidos.**
 
     $$\lambda_{v_2}^{(\text{total})} = \underbrace{-0.6}_{\text{canal}} + \underbrace{+0.696}_{c_0} + \underbrace{+0.876}_{c_1} + \underbrace{+0.523}_{c_2} = +1.095$$
 
