@@ -262,9 +262,15 @@ La pregunta natural es: la decisión $\hat{c}_v$ y la curva waterfall describen 
 - **BG1**: grafo base de 46×68, bloque máximo de información de $k = 8448$ bits. Optimizado para bloques de datos grandes ($k > 3840$ bits) y tasas altas ($r_c \geq 1/3$). Se usa en PDSCH y PUSCH para la mayoría de las transmisiones de datos.
 - **BG2**: grafo base de 42×52, bloque máximo de $k = 3840$ bits. Optimizado para bloques pequeños y tasas bajas ($r_c \geq 1/5$). Para control de datos y retransmisiones HARQ.
 
-El grafo base se expande mediante *lifting* con factor $Z$, resultando en matrices $H$ de dimensiones $(n_b - k_b)Z \times n_b Z$. Esto permite códigos de distintas longitudes con la misma arquitectura de decodificador.
+??? note "Canales físicos de 5G NR mencionados"
 
-La pregunta natural es: el factor de lifting $Z$ y las matrices expandidas permiten construir LDPC de cualquier longitud a partir de un grafo base optimizado, pero esa optimización es empírica — se buscan grafos con buenas propiedades de umbral mediante simulación. ¿Existe una familia de códigos cuya propiedad de alcanzar la capacidad del canal se demuestre matemáticamente, sin búsqueda aleatoria de grafos? La respuesta es la familia de códigos Polar, que construyen canales sintéticos mediante transformaciones butterfly deterministas y garantizan la polarización completa en el límite $N \to \infty$.
+    - **PDSCH** (*Physical Downlink Shared Channel*): canal de datos en downlink — lleva tráfico IP desde la red hacia el UE. Usa BG1 para la mayoría de las transmisiones.
+    - **PUSCH** (*Physical Uplink Shared Channel*): canal de datos en uplink — lleva tráfico desde el UE hacia la red. También usa BG1 en condiciones normales.
+    - **HARQ** (*Hybrid Automatic Repeat reQuest*): mecanismo de retransmisión que combina FEC con solicitud de reenvío. Si el decodificador falla, el UE pide una retransmisión; el receptor combina ambas recepciones para mejorar la probabilidad de éxito. Los bloques HARQ son típicamente más cortos, de ahí el uso de BG2.
+
+**Lifting: un grafo base, cientos de longitudes.** El grafo base (por ejemplo BG1 de 46×68) es un diseño compacto de referencia. El *lifting* con factor $Z$ lo expande: cada nodo del grafo base se convierte en $Z$ nodos, y cada arista en una permutación cíclica entre grupos de $Z$ nodos. La matriz $\mathbf{H}$ resultante tiene dimensiones $(46 \times Z) \times (68 \times Z)$, produciendo codewords de longitud $n = 68Z$. En 5G NR, $Z$ puede tomar valores de 2 a 384, cubriendo codewords de hasta $68 \times 384 = 26\,112$ bits — todos decodificables con el mismo hardware diseñado para el grafo base.
+
+La pregunta natural es: los grafos base BG1 y BG2 se encontraron mediante búsqueda empírica — se simularon miles de grafos candidatos y se eligieron los que producían el mejor umbral waterfall. Funcionan muy bien en práctica, pero no existe demostración matemática de que alcancen la capacidad de Shannon. ¿Existe una familia de códigos que alcance la capacidad del canal con una prueba formal, sin búsqueda aleatoria de grafos? La respuesta es la familia de códigos Polar: Arıkan (2009) demostró matemáticamente que alcanzan exactamente la capacidad de Shannon en el límite $N \to \infty$, mediante transformaciones deterministas — los primeros códigos en la historia con esa garantía teórica.
 
 ---
 
