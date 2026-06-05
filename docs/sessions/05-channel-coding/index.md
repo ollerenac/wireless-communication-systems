@@ -288,6 +288,8 @@ La idea central es combinar dos copias independientes de un canal $W$ para crear
 - El canal sintético $W_2^{(-)}$ ve $u_1$ con menos información (peor canal).
 - El canal sintético $W_2^{(+)}$ ve $u_2$ con más información, dado $u_1$ ya decodificado (mejor canal).
 
+La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas; los 8 canales sintéticos que emergen a la derecha del grafo son el resultado de aplicar la polarización $\log_2 8 = 3$ veces consecutivas.
+
 <figure markdown="span">
   ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
   <!-- generada por celda 15 de lab.ipynb -->
@@ -295,12 +297,32 @@ La idea central es combinar dos copias independientes de un canal $W$ para crear
   </figcaption>
 </figure>
 
-El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ mide la dificultad del canal: $Z=0$ significa canal perfecto, $Z=1$ significa canal totalmente ruidoso. Las transformaciones satisfacen:
+**¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
 
 $$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W)$$
 $$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W)$$
 
-El canal malo empeora; el canal bueno mejora. Aplicando esta transformación $n$ veces en $N = 2^n$ canales:
+El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
+
+??? example "Mini-ejemplo: polarización con $N=4$, $Z_0=0{,}5$"
+
+    Partimos de un canal original con $Z_0 = 0{,}5$ (dificultad media). Primera etapa butterfly:
+
+    $$Z^{(-)} = 2Z_0 - Z_0^2 = 2(0{,}5) - (0{,}5)^2 = \mathbf{0{,}75} \quad \text{(canal peor)}$$
+    $$Z^{(+)} = Z_0^2 = (0{,}5)^2 = \mathbf{0{,}25} \quad \text{(canal mejor)}$$
+
+    Segunda etapa — aplicar la misma transformación a cada uno de los dos canales sintéticos:
+
+    | Canal sintético | Fórmula aplicada | $Z$ |
+    |----------------|-----------------|-----|
+    | $W^{(--)}$ (el más malo) | $2(0{,}75)-(0{,}75)^2$ | $\mathbf{0{,}94}$ |
+    | $W^{(-+)}$ | $(0{,}75)^2$ | $0{,}56$ |
+    | $W^{(+-)}$ | $2(0{,}25)-(0{,}25)^2$ | $0{,}44$ |
+    | $W^{(++)}$ (el mejor) | $(0{,}25)^2$ | $\mathbf{0{,}06}$ |
+
+    Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
+
+Aplicando esta transformación $n$ veces en $N = 2^n$ canales:
 
 $$\lim_{N\to\infty} \frac{|\{i : Z(W_N^{(i)}) < \delta\}|}{N} = C(W) \quad \text{para todo } \delta > 0$$
 
@@ -317,14 +339,66 @@ La pregunta natural es: el parámetro de Bhattacharyya $Z(W_N^{(i)})$ identifica
 
 #### 4.2 Decodificación por Cancelación Sucesiva
 
-El decodificador SC (*Successive Cancellation*) decodifica los bits en orden $u_1, u_2, \ldots, u_N$:
+El decodificador SC (*Successive Cancellation*) decodifica los bits de entrada $u_0, u_1, \ldots, u_{N-1}$ en orden estricto:
 
-- Si $u_i$ es un **bit congelado**: $\hat{u}_i = 0$ (conocido *a priori*).
-- Si $u_i$ es un **bit de información**: se calcula el LLR de $u_i$ condicionado en todos los bits previamente decodificados $\hat{u}_1, \ldots, \hat{u}_{i-1}$, y se decide $\hat{u}_i = \mathbb{1}[\text{LLR} < 0]$.
+- Si $u_i$ es un **bit congelado**: $\hat{u}_i = 0$ — no hay nada que calcular, el receptor ya conoce su valor.
+- Si $u_i$ es un **bit de información**: se calcula el LLR de $u_i$ condicionado en los bits ya decodificados $\hat{u}_0, \ldots, \hat{u}_{i-1}$, y se decide $\hat{u}_i = 0$ si LLR $> 0$, y $1$ en caso contrario.
 
-El cálculo de LLRs se realiza recursivamente sobre el grafo del factor polar. La complejidad es $\mathcal{O}(N\log N)$ — la misma que la FFT.
+El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly mediante dos operaciones elementales:
 
-La limitación del SC básico es la propagación de errores: un error en $\hat{u}_i$ compromete todos los bits posteriores. El **decodificador de lista** (SCL, *Successive Cancellation List*) mantiene $L$ hipótesis paralelas en cada decisión y elimina las menos probables, mejorando significativamente la BER práctica. El SCL con $L=8$ y CRC exterior (*CA-Polar*, el esquema de 5G NR) da prestaciones cercanas a la decodificación ML.
+$$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]}$$
+
+$$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]}$$
+
+La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conocido, deshace el XOR que el codificador aplicó y libera el LLR del siguiente bit con la información completa. La complejidad total es $\mathcal{O}(N\log N)$ — la misma que la FFT.
+
+??? example "Ejemplo numérico: SC sobre Polar N=4, tasa 1/2"
+
+    **Código.** Polar $N=4$ con bits congelados en $\{u_0, u_1\}$ (los dos canales sintéticos más débiles) y bits de información en $\{u_2, u_3\}$.
+
+    **Transmisión.** Se envían bits de información $[u_2, u_3] = [1, 0]$. Con $[u_0, u_1] = [0, 0]$ fijos, el codificador aplica el butterfly de 2 etapas y produce la codeword $\mathbf{x} = [1, 0, 1, 0]$. En BPSK (bit 0 → $+1$, bit 1 → $-1$), la señal transmitida es $[-1, +1, -1, +1]$.
+
+    **Recepción.** El canal AWGN añade ruido; el receptor observa $y = [-0{,}8,\; +1{,}2,\; -1{,}4,\; +0{,}6]$ y calcula los LLRs de canal:
+
+    | Posición | Señal $y$ | LLR $= 2y$ |
+    |----------|-----------|-----------|
+    | 0 | $-0{,}8$ | $-1{,}6$ |
+    | 1 | $+1{,}2$ | $+2{,}4$ |
+    | 2 | $-1{,}4$ | $-2{,}8$ |
+    | 3 | $+0{,}6$ | $+1{,}2$ |
+
+    **Etapa butterfly — combinar pares:** se aplica la operación $f$ a los pares simétricos $(0,2)$ y $(1,3)$ (aproximación min-sum: $f(a,b) \approx \text{signo}(a)\cdot\text{signo}(b)\cdot\min(|a|,|b|)$):
+
+    $$\ell_{02} = f(-1{,}6,\;-2{,}8) \approx +1{,}6 \qquad \ell_{13} = f(+2{,}4,\;+1{,}2) \approx +1{,}2$$
+
+    ---
+
+    **Decisión $u_0$ — bit congelado:**
+
+    $$\text{LLR}(u_0) = f(\ell_{02},\,\ell_{13}) = f(+1{,}6,\;+1{,}2) \approx +1{,}2 \quad\longrightarrow\quad \hat{u}_0 = \mathbf{0} \text{ (congelado, sin elección)}$$
+
+    **Decisión $u_1$ — bit congelado:**
+
+    $$\text{LLR}(u_1) = g(\ell_{02},\,\ell_{13},\,\hat{u}_0{=}0) = +1{,}2 + 1\cdot(+1{,}6) = +2{,}8 \quad\longrightarrow\quad \hat{u}_1 = \mathbf{0} \text{ (congelado)}$$
+
+    **Cancelación:** con $\hat{u}_0$ y $\hat{u}_1$ conocidos, la operación $g$ deshace el XOR del codificador:
+
+    $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0{=}0) = -2{,}8 + 1\cdot(-1{,}6) = -4{,}4$$
+    $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1{=}0) = +1{,}2 + 1\cdot(+2{,}4) = +3{,}6$$
+
+    **Decisión $u_2$ — bit de información:**
+
+    $$\text{LLR}(u_2) = f(g_{02},\,g_{13}) = f(-4{,}4,\;+3{,}6) \approx -3{,}6 \quad\longrightarrow\quad \hat{u}_2 = \mathbf{1} \checkmark \text{ correcto}$$
+
+    **Decisión $u_3$ — bit de información:**
+
+    $$\text{LLR}(u_3) = g(g_{02},\,g_{13},\,\hat{u}_2{=}1) = +3{,}6 + (1-2)\cdot(-4{,}4) = +3{,}6 + 4{,}4 = +8{,}0 \quad\longrightarrow\quad \hat{u}_3 = \mathbf{0} \checkmark \text{ correcto}$$
+
+    La cancelación sucesiva es visible en los LLRs finales: $|\text{LLR}(u_2)| = 3{,}6$ y $|\text{LLR}(u_3)| = 8{,}0$ son mucho más nítidos que los LLRs de canal originales ($|\text{LLR}| \in \{1{,}2, 2{,}4, 1{,}6, 2{,}8\}$). Cada decisión previa "ayuda" a las siguientes aportando información adicional mediante la operación $g$.
+
+La limitación del SC básico es la **propagación de errores**: si $\hat{u}_i$ es incorrecto, todos los bits posteriores reciben información errónea de la operación $g$, y el bloque completo puede fallar.
+
+**Decodificador de lista (SCL).** Cada decisión binaria bifurca el árbol de posibilidades: el SC básico siempre toma el camino de mayor LLR (*greedy*), descartando la alternativa. El SCL mantiene $L$ caminos activos en paralelo — conserva ambas ramas en cada bifurcación hasta que la lista supere $L$ hipótesis, y elimina entonces la de menor métrica acumulada. Es exactamente un *beam search* sobre un árbol de decisión binario: con $L=8$ se exploran hasta 256 trayectorias candidatas en lugar de 1, recuperando casi todo el rendimiento del decodificador ML sin necesidad de buscar exhaustivamente entre las $2^K$ codewords posibles. El SCL con $L=8$ y CRC exterior (*CA-Polar*, el esquema de 5G NR) da prestaciones cercanas a la decodificación ML.
 
 La pregunta natural es: el CA-Polar con SCL $L=8$ ofrece prestaciones próximas al óptimo, pero ¿en qué canales físicos concretos de 5G NR se despliega este esquema, y qué característica de esos canales hace que Polar sea preferible a LDPC — que ya existe en el estándar y funciona bien para datos? La respuesta es el conjunto de canales de control de bloques cortos (PBCH, PDCCH, PUCCH), donde la longitud limitada del bloque favorece la estructura sistemática de Polar frente a la búsqueda iterativa de BP.
 
