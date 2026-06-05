@@ -173,9 +173,16 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
     $v_2$ llegó negativo por ruido: sin FEC sería un bit erróneo. BP debe corregirlo.
 
+    **Vecinos de $v_2$ en el grafo de Tanner.**
+    La columna 2 de $\mathbf{H}$ indica qué check nodes verifican $v_2$ (filas con $H_{i,2}=1$):
+
+    $$\mathbf{H} = \begin{pmatrix} 1&1&\mathbf{1}&1&0&0&0&0 \\ 0&1&\mathbf{1}&0&1&1&0&0 \\ 0&0&\mathbf{1}&1&0&1&1&0 \\ 1&0&\mathbf{0}&1&0&0&1&1 \end{pmatrix}$$
+
+    Las filas 0, 1 y 2 tienen un 1 en la columna de $v_2$, por eso $v_2$ tiene aristas con $c_0$, $c_1$ y $c_2$ — y no con $c_3$.
+
     ---
 
-    **Paso 1 (v→c): cada variable envía su LLR de canal a sus vecinos check.**
+    **Paso 1 (v→c)** — fórmula: $\mu_{v \to c} = \lambda_v^{(0)} + \sum_{c' \neq c} \mu_{c' \to v}$
 
     En la primera iteración no hay mensajes previos de los check nodes ($\mu_{c' \to v} = 0$), así que la fórmula se reduce a $\mu_{v \to c} = \lambda_v^{(0)}$. Cada variable reenvía simplemente su LLR de canal:
 
@@ -189,9 +196,9 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
     ---
 
-    **Paso 2 (c→v): cada check devuelve consistencia de paridad hacia $v_2$.**
+    **Paso 2 (c→v)** — fórmula: $\mu_{c \to v} = 2\,\text{arctanh}\!\left(\prod_{v' \neq v} \tanh\!\left(\frac{\mu_{v' \to c}}{2}\right)\right)$
 
-    $c_0$ recibió de $v_0{=}{+1.4}$, $v_1{=}{+2.4}$, $v_2{=}{-0.6}$, $v_3{=}{+1.6}$. Para enviar a $v_2$, excluye $v_2$ y multiplica los tanh de los demás:
+    $c_0$ verifica $\{v_0, v_1, v_2, v_3\}$ (fila 0 de $\mathbf{H}$). Recibió $\mu_{v_0\to c_0}{=}{+1.4}$, $\mu_{v_1\to c_0}{=}{+2.4}$, $\mu_{v_2\to c_0}{=}{-0.6}$, $\mu_{v_3\to c_0}{=}{+1.6}$. Para enviar a $v_2$, excluye $v_2$ y multiplica los tanh de los demás:
 
     $$\tanh(+1.4/2)\cdot\tanh(+2.4/2)\cdot\tanh(+1.6/2) = 0.604\times0.834\times0.664 = +0.334$$
 
@@ -199,13 +206,13 @@ La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en ca
 
     El signo positivo significa: *"$v_0$, $v_1$ y $v_3$ creen que son 0; para que $v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0$, tú también debes ser 0."*
 
-    De forma análoga $c_1$ y $c_2$ (cuyos otros vecinos son todos positivos) envían:
+    De forma análoga $c_1$ (fila 1, verifica $\{v_1,v_2,v_4,v_5\}$) y $c_2$ (fila 2, verifica $\{v_2,v_3,v_5,v_6\}$) envían:
 
     $$\mu_{c_1 \to v_2} = +0.876 \qquad \mu_{c_2 \to v_2} = +0.523$$
 
     ---
 
-    **Paso 3 (decisión): $v_2$ agrega canal + todos los mensajes recibidos.**
+    **Paso 3 (decisión)** — fórmula: $\lambda_v^{(\text{total})} = \lambda_v^{(0)} + \sum_c \mu_{c \to v}$
 
     $$\lambda_{v_2}^{(\text{total})} = \underbrace{-0.6}_{\text{canal}} + \underbrace{+0.696}_{c_0} + \underbrace{+0.876}_{c_1} + \underbrace{+0.523}_{c_2} = +1.095$$
 
