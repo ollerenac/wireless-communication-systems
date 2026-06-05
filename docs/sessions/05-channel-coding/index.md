@@ -116,7 +116,25 @@ La representación más intuitiva de un LDPC es su **grafo de Tanner**: un grafo
 - **Nodos de variable** ($n$ nodos, uno por cada bit del codeword): representan los $n$ bits transmitidos.
 - **Nodos de verificación** ($n-k$ nodos, uno por cada ecuación de paridad): representan las $n-k$ ecuaciones $\mathbf{H}\,\mathbf{c} = \mathbf{0}$.
 
-Hay una arista entre el nodo de variable $v_j$ y el nodo de verificación $c_i$ si y sólo si $H_{ij} = 1$. La Figura 2 muestra el grafo de Tanner del código LDPC $(8,4)$ del laboratorio, con 8 nodos de variable (v₀–v₇) y 4 nodos de verificación (c₀–c₃).
+Para el código LDPC $(8,4)$ del laboratorio, la matriz $\mathbf{H}$ de dimensiones $4\times 8$ es:
+
+$$\mathbf{H} = \begin{pmatrix}
+1&1&1&1&0&0&0&0\\
+0&1&1&0&1&1&0&0\\
+0&0&1&1&0&1&1&0\\
+1&0&0&1&0&0&1&1
+\end{pmatrix}$$
+
+Cada fila es una ecuación de paridad: la suma XOR de los bits en las columnas donde hay un 1 debe ser cero. Las cuatro restricciones que todo codeword válido debe satisfacer son:
+
+| Check node | Ecuación de paridad |
+|------------|---------------------|
+| $c_0$ | $v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0$ |
+| $c_1$ | $v_1 \oplus v_2 \oplus v_4 \oplus v_5 = 0$ |
+| $c_2$ | $v_2 \oplus v_3 \oplus v_5 \oplus v_6 = 0$ |
+| $c_3$ | $v_0 \oplus v_3 \oplus v_6 \oplus v_7 = 0$ |
+
+Hay una arista entre $v_j$ y $c_i$ si y sólo si $H_{ij} = 1$ — cuando el bit $j$ participa en la ecuación de paridad $i$. La Figura 2 muestra ese grafo para este código.
 
 <figure markdown="span">
   ![Grafo de Tanner del código LDPC](figures/tanner-graph.png)
@@ -127,6 +145,18 @@ Hay una arista entre el nodo de variable $v_j$ y el nodo de verificación $c_i$ 
 </figure>
 
 La dispersidad del grafo es la razón por la que el decodificador iterativo converge eficientemente. En grafos dispersos, los ciclos son largos — esto minimiza las correlaciones entre mensajes en iteraciones sucesivas.
+
+**La entrada al decodificador: valores LLR.** Tras la demodulación, el receptor no entrega bits duros (0 o 1) al decodificador — entrega una **medida de confianza** por cada bit del codeword, el *log-likelihood ratio*:
+
+$$\lambda_v = \log\frac{P(\text{bit}=0 \mid y)}{P(\text{bit}=1 \mid y)}$$
+
+Un LLR grande y positivo indica que el bit es casi seguramente 0; grande y negativo, casi seguramente 1; cercano a cero, alta incertidumbre. El canal AWGN puede invertir el signo del LLR de algún bit — ese es el "error" que el decodificador debe corregir.
+
+**El objetivo de la decodificación.** El decodificador BP parte de esos LLRs de canal y los ajusta iterativamente usando las ecuaciones de paridad como restricciones: los check nodes detectan qué bits violan sus ecuaciones y retroalimentan esa información a sus variable nodes vecinos para corregir sus LLRs. El proceso termina cuando los bits decodificados satisfacen simultáneamente las $n-k$ ecuaciones:
+
+$$\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0} \pmod{2}$$
+
+El cómo se calculan esos mensajes entre nodos es el algoritmo de belief propagation, que se detalla a continuación.
 
 La pregunta natural es: el grafo de Tanner disperso con ciclos largos es la estructura que hace posible la decodificación iterativa, pero ¿cómo explota concretamente esa estructura un decodificador para propagar correcciones de bit en bit? ¿Qué mensajes se intercambian entre nodos de variable y nodos de verificación, y cómo convergen hacia la codeword correcta? La respuesta es el algoritmo de belief propagation, que circula log-likelihood ratios por las aristas del grafo en iteraciones sucesivas hasta que todas las ecuaciones de paridad se satisfacen.
 
