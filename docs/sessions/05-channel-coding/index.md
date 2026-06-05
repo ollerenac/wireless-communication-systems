@@ -156,6 +156,70 @@ $$\lambda_v^{(\text{total})} = \lambda_v^{(0)} + \sum_c \mu_{c\to v}$$
 
 La decisión es $\hat{c}_v = 0$ si $\lambda_v^{(\text{total})} > 0$, y $1$ en caso contrario.
 
+??? example "Ejemplo numérico: una iteración completa con LDPC (8,4)"
+
+    **Escenario.** Se transmite el codeword de todos ceros sobre BPSK (bit 0 → señal +1, bit 1 → señal −1) a través de un canal AWGN con $\sigma^2 = 1$. El receptor observa señales con ruido y calcula los LLRs de canal con $\lambda_v^{(0)} = 2y$:
+
+    | Bit | Señal recibida $y$ | $\lambda^{(0)} = 2y$ | Canal dice |
+    |-----|-------------------|----------------------|------------|
+    | $v_0$ | +0.7 | **+1.4** | probablemente 0 ✓ |
+    | $v_1$ | +1.2 | **+2.4** | probablemente 0 ✓ |
+    | $v_2$ | −0.3 | **−0.6** | probablemente 1 ✗ ← error |
+    | $v_3$ | +0.8 | **+1.6** | probablemente 0 ✓ |
+    | $v_4$ | +1.5 | **+3.0** | probablemente 0 ✓ |
+    | $v_5$ | +0.4 | **+0.8** | probablemente 0 ✓ |
+    | $v_6$ | +1.1 | **+2.2** | probablemente 0 ✓ |
+    | $v_7$ | +0.9 | **+1.8** | probablemente 0 ✓ |
+
+    $v_2$ llegó negativo por ruido: sin FEC sería un bit erróneo. BP debe corregirlo.
+
+    ---
+
+    **Paso 1 (c→v): mensaje de $c_0$ hacia $v_2$.**
+
+    $c_0$ verifica $\{v_0, v_1, v_2, v_3\}$. Para enviar su mensaje a $v_2$, excluye $v_2$ y convierte los LLRs de los otros tres a tanh:
+
+    $$\tanh(\lambda_{v_0}/2) = \tanh(0.70) = +0.604$$
+    
+    $$\tanh(\lambda_{v_1}/2) = \tanh(1.20) = +0.834$$
+    
+    $$\tanh(\lambda_{v_3}/2) = \tanh(0.80) = +0.664$$
+
+    Producto (excluyendo $v_2$): $0.604 \times 0.834 \times 0.664 = +0.334$
+
+    $$\mu_{c_0 \to v_2} = 2\,\text{arctanh}(+0.334) = +0.696$$
+
+    El signo positivo significa: *"$v_0$, $v_1$ y $v_3$ creen con confianza que son 0; para que $v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0$, tú también debes ser 0."*
+
+    De forma análoga, $c_1$ y $c_2$ también verifican $v_2$ y le envían mensajes positivos (sus otros vecinos $v_1, v_4, v_5$ y $v_3, v_5, v_6$ son todos positivos):
+
+    $$\mu_{c_1 \to v_2} = +0.876 \qquad \mu_{c_2 \to v_2} = +0.523$$
+
+    ---
+
+    **Paso 3 (decisión): $v_2$ agrega todos los mensajes.**
+
+    $$\lambda_{v_2}^{(\text{total})} = \underbrace{-0.6}_{\text{canal}} + \underbrace{+0.696}_{c_0} + \underbrace{+0.876}_{c_1} + \underbrace{+0.523}_{c_2} = +1.095$$
+
+    El LLR pasó de $-0.6$ (canal: "probablemente 1") a $+1.095$ (BP: "probablemente 0") — **error corregido en una sola iteración**.
+
+    ---
+
+    **Resultado final tras 1 iteración** (todos los bits):
+
+    | Bit | $\lambda$ canal | $\lambda$ final | Decisión | |
+    |-----|----------------|-----------------|----------|-|
+    | $v_0$ | +1.4 | +1.877 | 0 | ✓ |
+    | $v_1$ | +2.4 | +1.964 | 0 | ✓ |
+    | $v_2$ | **−0.6** | **+1.095** | **0** | **✓ corregido** |
+    | $v_3$ | +1.6 | +1.850 | 0 | ✓ |
+    | $v_4$ | +3.0 | +2.815 | 0 | ✓ |
+    | $v_5$ | +0.8 | +0.041 | 0 | ✓ |
+    | $v_6$ | +2.2 | +2.644 | 0 | ✓ |
+    | $v_7$ | +1.8 | +2.466 | 0 | ✓ |
+
+    $v_5$ quedó con $\lambda = +0.041$ — casi en el umbral. Con más ruido o más bits erróneos simultáneos, haría falta una segunda iteración para consolidarlo.
+
 El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codeword válida) o hasta un número máximo de iteraciones (típicamente 50–100). El comportamiento en la práctica muestra una **curva en cascada** (*waterfall*): por encima del umbral de SNR, el BP converge en pocas iteraciones; por debajo, no converge y la BER cae precipitosamente.
 
 <figure markdown="span">
