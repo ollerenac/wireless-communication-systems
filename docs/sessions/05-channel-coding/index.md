@@ -270,8 +270,10 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
 <figure markdown="span">
   ![Evolución de LLR en belief propagation](figures/bp-messages.png)
   <!-- generada por celda 7c de lab.ipynb -->
-  <figcaption markdown="1">**Figura 3.** Evolución de los LLR marginales $\lambda_v^{(\text{total})}$ durante el algoritmo de belief propagation sobre un código LDPC con $n=240$, $r_c\approx1/2$, a $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall).
-  Iteración 1: los LLR reflejan principalmente la información del canal, concentrados cerca de cero. Iteración 3: la propagación de mensajes entre vecinos comienza a polarizar las creencias. Iteración 10: las creencias convergen hacia valores de gran magnitud (bits con alta certeza), con muy pocos bits en la zona de incertidumbre ($|\lambda|<2$).
+  <figcaption markdown="1">**Figura 3.** Histograma de los LLR marginales $\lambda_v^{(\text{total})}$ de los $n=240$ bits durante el algoritmo de belief propagation. Cada barra indica cuántos bits tienen un LLR en ese rango. Código LDPC $r_c\approx1/2$, codeword todo-ceros transmitida (todos los bits deben ser 0), $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall). Por convención, un LLR correcto es positivo ($\lambda > 0$ → decisión 0 ✓); un bit a la izquierda de la línea naranja ($\lambda < 0$) es un error. El número en rojo de cada panel cuenta exactamente esos bits.
+  **Iteración 1:** los LLR son esencialmente los del canal ($\lambda_v^{(0)} = 2y/\sigma^2$); la distribución gaussiana refleja el ruido AWGN y se centra en un valor pequeño y positivo — la mayoría de bits apunta correctamente a 0 pero con poca confianza.
+  **Iteración 3:** la distribución se desplaza hacia la derecha (+x): los mensajes de los check nodes refuerzan las creencias correctas y alejan los LLRs del cero, reduciendo la incertidumbre. No hay desplazamiento hacia el extremo negativo porque el codeword es todo-ceros.
+  **Iteración 10:** casi toda la masa se concentra en LLR grandes y positivos — bits con alta certeza. Los pocos bins a la izquierda de cero son los errores residuales que BP no logró corregir a este $E_b/N_0$.
   </figcaption>
 </figure>
 
