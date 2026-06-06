@@ -329,6 +329,44 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n =
   </figcaption>
 </figure>
 
+??? example "Ejemplo: encoding butterfly N=4 paso a paso"
+
+    **Escenario.** Código Polar $N=4$, tasa $r_c=1/2$. Los bits congelados son $\{u_0, u_1\}$ (fijados a 0) y los bits de información son $\{u_2, u_3\}$. Tomamos el vector de entrada:
+
+    ```
+    u = [u0, u1, u2, u3] = [0, 0, 1, 0]
+         frozen frozen info  info
+    ```
+
+    **Etapa 1 — combinar pares adyacentes (índices 0,1) y (2,3):**
+
+    $w_0 = u_0 \oplus u_1 = 0 \oplus 0 = 0$  
+    $w_1 = u_1 = 0$  
+    $w_2 = u_2 \oplus u_3 = 1 \oplus 0 = 1$  
+    $w_3 = u_3 = 0$  
+
+    Valores intermedios: $\mathbf{w} = [0, 0, 1, 0]$
+
+    **Etapa 2 — combinar pares intercalados (índices 0,2) y (1,3):**
+
+    $x_0 = w_0 \oplus w_2 = 0 \oplus 1 = 1$  
+    $x_1 = w_1 \oplus w_3 = 0 \oplus 0 = 0$  
+    $x_2 = w_2 = 1$  
+    $x_3 = w_3 = 0$  
+
+    Codeword resultante: **x = [1, 0, 1, 0]**
+
+    **¿Por qué $u_0$ es el canal sintético más débil?**
+
+    | Bit | Aparece en | Señales que lo transportan |
+    |-----|-----------|---------------------------|
+    | $u_0$ | $x_0$ | **1** |
+    | $u_1$ | $x_0, x_1$ | **2** |
+    | $u_2$ | $x_0, x_2$ | **2** |
+    | $u_3$ | $x_0, x_1, x_2, x_3$ | **4** |
+
+    $u_3$ se distribuye por las 4 posiciones del codeword: el receptor dispone de cuatro observaciones ruidosas independientes para recuperarlo, más la información de cancelación de $\hat{u}_0$, $\hat{u}_1$, $\hat{u}_2$ ya decodificados. $u_0$, en cambio, solo llega a $x_0$ y el decodificador SC lo decodifica primero, sin ninguna información de cancelación. Eso es exactamente lo que mide el parámetro de Bhattacharyya $Z(W)$: la dificultad de recuperar un bit sin contexto adicional.
+
 **¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
 
 $$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W)$$
