@@ -1,32 +1,58 @@
 {
   "version": "1.0",
-  "timestamp": "2026-05-29T18:30:00.000Z",
-  "phase": "4",
-  "phase_name": "Polar Lab + Figuras",
-  "phase_dir": ".planning/phases/04-polar-lab-figuras",
-  "plan": 1,
-  "task": 3,
-  "status": "partial",
-  "last_commit": "25cf103",
-  "blocking_constraints": [
+  "timestamp": "2026-06-06T10:23:00.000Z",
+  "phase": null,
+  "phase_name": "Between phases — Phase 3 done, Phase 4 not started",
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "paused",
+  "milestone_progress": "83% — 5/6 phases complete",
+  "completed_tasks": [
+    {"id": "phase-1", "name": "Index Polish", "status": "done", "commit": "multiple"},
+    {"id": "phase-2", "name": "Figuras Existentes", "status": "done", "commit": "multiple"},
+    {"id": "phase-3", "name": "LDPC Lab + Figuras", "status": "done", "commit": "d97fa09"},
+    {"id": "phase-5", "name": "Integrador OFDM+FEC", "status": "done", "commit": "multiple"},
+    {"id": "quick-tanner-fix", "name": "Tanner graph PNG from H_ldpc", "status": "done", "commit": "58ec99f"},
+    {"id": "quick-shannon-sphere", "name": "shannon-sphere-packing.png", "status": "done", "commit": "e01d107"},
+    {"id": "quick-remove-mermaid", "name": "Remove Mermaid Tanner diagram §3.1", "status": "done", "commit": "d37498e"},
+    {"id": "quick-tanner-layout", "name": "Center check nodes Tanner graph", "status": "done", "commit": "6bb2204"},
+    {"id": "quick-polar-clarity", "name": "Clarify §4.1 and §4.2 polar codes", "status": "done", "commit": "410bf89"},
+    {"id": "fix-coding-tradeoff", "name": "Clarify §2 coding trade-off derivation", "status": "done", "commit": "ccf9f60"},
+    {"id": "fix-tanner-section", "name": "Expand §3.1 H matrix + LLR/BP context", "status": "done", "commit": "1f56da9"},
+    {"id": "fix-fig3-caption", "name": "Rewrite Figure 3 caption (histogram semantics)", "status": "done", "commit": "e74e2c6"},
+    {"id": "fix-fig3-fig4-captions", "name": "Clarify Figure 3 and Figure 4 captions", "status": "done", "commit": "b444dfb"},
+    {"id": "fix-fig3-iter10", "name": "Remove unverified LLR overflow claim Figure 3 iter-10", "status": "done", "commit": "066fb8b"}
+  ],
+  "remaining_tasks": [
+    {"id": "phase-4", "name": "Polar Lab + Figuras", "status": "not_started", "note": "BLOCKED by SC decoder bug in Cell 16"},
+    {"id": "phase-6", "name": "QA & Publicación", "status": "not_started"}
+  ],
+  "blockers": [
     {
       "id": "SC-DECODER-BUG",
+      "description": "Cell 16 of lab.ipynb: SC recursive decoder disabled — kron convention bug. G_N = kron(G_{N/2}, F) requires combining adjacent pairs (2j, 2j+1) not (j, j+N/2). BER_SC = 0.5 at all SNRs even at noiseless test.",
+      "type": "technical",
       "severity": "blocking",
-      "description": "compute_llr_for_bit en Cell B tiene bug fundamental: para G_N=kron(G_{N/2},F) el nivel externo debe combinar pares adyacentes (2j,2j+1) no (j,j+N/2). BER_SC=0.5 a todos los SNRs.",
-      "workaround": "FIG-06 y FIG-07 estan correctas. Fix decoder antes de ejecutar Plan 04-02.",
-      "evidence": "BER_SC=0.5 incluso a SNR=20dB en test noiseless"
+      "evidence": "Cell 16 header says '[DESHABILITADO TEMPORALMENTE]' with TODO comment",
+      "workaround": "FIG-06 (polar-butterfly.png) and FIG-07 (polar-polarization.png) are correct. Fix decoder before attempting Plan 04-02."
     }
   ],
-  "completed_this_session": [
-    "Cell A (idx 15): encoder G_64 + frozen set AWGN + polar-butterfly.png (95KB)",
-    "Cell B (idx 16): SC/SCL decoders insertados — BUGGY",
-    "Cell C (idx 17): polar-polarization.png (63KB) FIG-07 correcta"
+  "uncommitted_files": [
+    ".planning/STATE.md",
+    "figures/ofdm_rx_core.png (deleted — tracked, not committed)",
+    "figures/ofdm_tx_core.png (deleted — tracked, not committed)",
+    ".planning/quick/20260604-remove-mermaid-tanner/ (untracked dir — quick task complete)",
+    ".planning/quick/20260604-tanner-graph-layout/ (untracked dir — quick task complete)",
+    ".planning/quick/20260605-polar-sections-clarity/ (untracked dir — quick task complete)",
+    "explanations.ipynb (untracked — scratch notebook from session, 4 cells, safe to ignore or delete)"
   ],
-  "remaining_work": [
-    "Fix Cell B decoder (SC tree para G_N=kron)",
-    "Plan 04-02: figure blocks en index.md seccion 4.1",
-    "Phase 5: OFDM+FEC integrador",
-    "Phase 6: QA"
+  "human_actions_pending": [],
+  "decisions": [
+    {"decision": "All-zeros codeword convention for histogram interpretation", "rationale": "Standard LDPC simulation convention; sign of LLR = bit decision", "phase": "3"},
+    {"decision": "SC decoder disabled rather than broken fix", "rationale": "Better to disable than ship wrong BER figures", "phase": "4"},
+    {"decision": "Figure 3 caption: do not claim LLR overflow without numerical evidence", "rationale": "BP has H·ĉ=0 early termination — unverified overflow claim contradicts convergence semantics", "phase": "fix"}
   ],
-  "next_action": "gsd-quick fix decoder SC Cell B, luego gsd-execute-phase 4 --interactive para plan 04-02"
+  "next_action": "gsd-quick fix SC decoder Cell 16 lab.ipynb — fix kron convention (adjacent pairs), verify BER_SC < 0.1 at SNR=4dB, then gsd-execute-phase 4 for Plan 04-02 (figure blocks §4.1/§4.2 in index.md)"
 }
