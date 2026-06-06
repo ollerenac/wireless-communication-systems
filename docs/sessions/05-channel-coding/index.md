@@ -331,6 +331,12 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n =
 
 ??? example "Ejemplo: encoding butterfly N=4 paso a paso"
 
+    <figure markdown="span">
+      ![Red butterfly Arikan para código Polar N=4](figures/polar-butterfly-n4.png)
+      <!-- generada por celda 16 de lab.ipynb -->
+      <figcaption markdown="1">**Red butterfly para el ejemplo.** Código Polar $N=4$, $k=2$, tasa $r_c=1/2$. Los nodos de entrada (izquierda) muestran los valores del vector $\mathbf{u}=[0,0,1,0]$: los salmón son bits congelados (fijados a 0), los azules son bits de información. Los valores intermedios $w_i$ entre etapas y la codeword de salida $\mathbf{x}=[1,0,1,0]$ (cuadrados, derecha) corresponden paso a paso al cálculo detallado a continuación.</figcaption>
+    </figure>
+
     **Escenario.** Código Polar $N=4$, tasa $r_c=1/2$. Los bits congelados son $\{u_0, u_1\}$ (fijados a 0) y los bits de información son $\{u_2, u_3\}$. Tomamos el vector de entrada:
 
     ```
