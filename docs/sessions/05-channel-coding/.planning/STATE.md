@@ -2,15 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: milestone_complete
-last_updated: 2026-06-04T10:14:04.155Z
+status: completed
+last_updated: "2026-06-06T10:21:50.897Z"
 progress:
   total_phases: 6
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 12
   completed_plans: 10
-  percent: 67
-stopped_at: Milestone complete (Phase 06 was final phase)
+  percent: 83
 ---
 
 # STATE — Sesión 04: Codificación de Canal
@@ -57,6 +56,12 @@ d97fa09 feat(03-02): BP decoder + bp-messages.png + ldpc-ber-waterfall.png (LAB-
 - Site: MkDocs-Material — figures must use `<figure markdown="span">` syntax
 
 ## Quick Tasks Completed
+
+| Date | Slug | Description | Commit |
+|------|------|-------------|--------|
+| 2026-06-06 | add-encoding-butterfly-example-to-4-1-in | Add encoding butterfly N=4 example to §4.1 | 3478ea8 |
+| 2026-06-04 | tanner-graph-layout | Center check nodes + increase vertical gap in Tanner graph | 6bb2204 |
+| 2026-06-04 | remove-mermaid-tanner | Remove inconsistent Mermaid Tanner diagram from §3.1 | d37498e |
 
 | Date | Slug | Description | Commit |
 |------|------|-------------|--------|
