@@ -273,7 +273,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
   <figcaption markdown="1">**Figura 3.** Histograma de los LLR marginales $\lambda_v^{(\text{total})}$ de los $n=240$ bits durante el algoritmo de belief propagation. Cada barra indica cuántos bits tienen un LLR en ese rango. Código LDPC $r_c\approx1/2$, codeword todo-ceros transmitida (todos los bits deben ser 0), $E_b/N_0=2{,}5\ \text{dB}$ (zona de transición del waterfall). Por convención, un LLR correcto es positivo ($\lambda > 0$ → decisión 0 ✓); un bit a la izquierda de la línea naranja ($\lambda < 0$) es un error. El número en rojo de cada panel cuenta exactamente esos bits.
   **Iteración 1:** los LLR son esencialmente los del canal ($\lambda_v^{(0)} = 2y/\sigma^2$); la distribución gaussiana refleja el ruido AWGN y se centra en un valor pequeño y positivo — la mayoría de bits apunta correctamente a 0 pero con poca confianza.
   **Iteración 3:** la distribución se desplaza hacia la derecha (+x): los mensajes de los check nodes refuerzan las creencias correctas y alejan los LLRs del cero, reduciendo la incertidumbre. No hay desplazamiento hacia el extremo negativo porque el codeword es todo-ceros.
-  **Iteración 10:** casi toda la masa se concentra en LLR grandes y positivos — bits con alta certeza. Los pocos bins a la izquierda de cero son los errores residuales que BP no logró corregir a este $E_b/N_0$.
+  **Iteración 10:** el histograma muestra muy pocas barras porque el eje x solo abarca $[-25, +25]$ — la mayoría de los 240 bits ya convergieron a LLR de magnitud muy grande ($|\lambda| \gg 25$) y caen fuera del borde derecho del gráfico. Las pocas barras visibles son los bits que aún no convergieron del todo más los errores residuales (LLR $< 0$) que BP no logró corregir a este $E_b/N_0$.
   </figcaption>
 </figure>
 
@@ -281,7 +281,7 @@ El algoritmo itera hasta que $\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}$ (codewo
   ![Curvas BER Monte Carlo LDPC n=240](figures/ldpc-ber-waterfall.png)
   <!-- generada por celda 7d de lab.ipynb -->
   <figcaption markdown="1">**Figura 4.** Curvas BER Monte Carlo para el código LDPC de $n=240$ bits con tasas $r_c\approx1/2$ (azul) y $r_c\approx3/4$ (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
-  La "cascada" (*waterfall cliff*) es visible: la BER cae más de 3 décadas en menos de 2 dB por encima del umbral de decodificación. La irregularidad visible a BER $\lesssim 10^{-4}$ es ruido estadístico de Monte Carlo (∼5 errores por punto a esa BER), no un *error floor* real.
+  Las líneas verticales punteadas son los **límites de Shannon** por tasa ($E_b/N_0\vert_{\text{Shannon}} \approx -0{,}8$ dB para $r_c\approx0{,}51$), no umbrales de BP. El **umbral práctico de decodificación** — donde la cascada empieza a caer — está alrededor de $\approx 2$ dB para este código corto ($n=240$): la "brecha al límite de Shannon" de este código es $\approx 2{,}8$ dB. A partir de ese umbral práctico, la BER cae más de 3 décadas en $\approx 1{,}5$ dB (de $10^{-1}$ a $\lesssim 10^{-4}$ entre 2 y 3,5 dB) — esa pendiente abrupta es la cascada característica del LDPC. La irregularidad visible a BER $\lesssim 10^{-4}$ es ruido estadístico de Monte Carlo ($\sim$5 errores por punto a esa BER), no un *error floor* real.
   </figcaption>
 </figure>
 
