@@ -32,7 +32,7 @@ La pregunta central es: si un canal introduce errores inevitablemente, ¿cómo e
 
 La Sesión 03 usó la capacidad de Shannon como referencia de throughput. El resultado central es el **Teorema de Shannon-Hartley**:
 
-$$\boxed{C = B\log_2(1+\text{SNR})\quad \text{[bit/s]}}$$
+$$\boxed{C = B\log_2(1+\text{SNR})\quad \text{[bit/s]}} \tag{1}$$
 
 donde $B$ es el ancho de banda [Hz] y SNR es la relación señal a ruido lineal en el receptor. Este límite establece dos hechos complementarios: la *mitad positiva* — para cualquier tasa $R < C$ existe un código de longitud $n$ suficientemente grande tal que la probabilidad de error es arbitrariamente pequeña — y la *mitad negativa* o "converso" — para cualquier $R > C$, la probabilidad de error se acerca a 1 sin importar qué código se use.
 
@@ -97,7 +97,7 @@ Cada bit de canal recibe solo una fracción $r_c$ de la energía por bit de info
 
 La **ganancia de codificación** es la reducción neta de Eb/N0 (en dB) necesaria para alcanzar una BER objetivo:
 
-$$G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{con código}} \quad \text{[dB, a misma BER]}$$
+$$G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{con código}} \quad \text{[dB, a misma BER]} \tag{2}$$
 
 Para LDPC con $r_c = 1/2$ operando a BER $= 10^{-5}$ sobre AWGN: $G_c \approx 8\ \text{dB}$ — se necesita 8 dB menos de SNR que con BPSK sin código para la misma fiabilidad.
 
@@ -148,7 +148,7 @@ La dispersidad del grafo es la razón por la que el decodificador iterativo conv
 
 **La entrada al decodificador: valores LLR.** Tras la demodulación, el receptor no entrega bits duros (0 o 1) al decodificador — entrega una **medida de confianza** por cada bit del codeword, el *log-likelihood ratio*:
 
-$$\lambda_v = \log\frac{P(\text{bit}=0 \mid y)}{P(\text{bit}=1 \mid y)}$$
+$$\lambda_v = \log\frac{P(\text{bit}=0 \mid y)}{P(\text{bit}=1 \mid y)} \tag{3}$$
 
 Un LLR grande y positivo indica que el bit es casi seguramente 0; grande y negativo, casi seguramente 1; cercano a cero, alta incertidumbre. El canal AWGN puede invertir el signo del LLR de algún bit — ese es el "error" que el decodificador debe corregir.
 
@@ -172,11 +172,11 @@ Los mensajes se representan como **log-likelihood ratios** (LLRs): $\lambda = \l
 
 **Paso 1 (variable → verificación).** Cada nodo de variable $v$ envía a cada nodo de verificación $c$ la suma de todos los mensajes entrantes *excepto* el de $c$:
 
-$$\mu_{v\to c} = \lambda_v^{(0)} + \sum_{c' \neq c} \mu_{c' \to v}$$
+$$\mu_{v\to c} = \lambda_v^{(0)} + \sum_{c' \neq c} \mu_{c' \to v} \tag{4}$$
 
 **Paso 2 (verificación → variable).** Cada nodo de verificación $c$ envía a cada nodo de variable $v$ la "verificación de consistencia" de todos los demás mensajes entrantes:
 
-$$\mu_{c\to v} = 2\,\text{arctanh}\!\left(\prod_{v' \neq v} \tanh\!\left(\frac{\mu_{v'\to c}}{2}\right)\right)$$
+$$\mu_{c\to v} = 2\,\text{arctanh}\!\left(\prod_{v' \neq v} \tanh\!\left(\frac{\mu_{v'\to c}}{2}\right)\right) \tag{5}$$
 
 Este mensaje puede interpretarse como: "dado todo lo que sé de mis otros vecinos, ¿qué debería ser el bit $v$ para que la paridad se cumpla?"
 
@@ -375,9 +375,9 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n =
 
 **¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
 
-$$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W)$$
+$$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W) \tag{6}$$
 
-$$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W)$$
+$$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W) \tag{7}$$
 
 El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
 
@@ -402,7 +402,7 @@ El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separació
 
 Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen:
 
-$$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0$$
+$$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
 
 La **fracción de canales sintéticos casi perfectos** converge exactamente a la capacidad de Shannon $C(W)$ del canal físico original. La fracción restante $1-C(W)$ colapsa hacia $Z \approx 1$ — canales casi inútiles.
 
@@ -426,9 +426,9 @@ El decodificador SC (*Successive Cancellation*) decodifica los bits de entrada $
 
 El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly mediante dos operaciones elementales:
 
-$$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]}$$
+$$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]} \tag{9}$$
 
-$$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]}$$
+$$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]} \tag{10}$$
 
 La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conocido, deshace el XOR que el codificador aplicó y libera el LLR del siguiente bit con la información completa. La complejidad total es $\mathcal{O}(N\log N)$ — la misma que la FFT.
 
