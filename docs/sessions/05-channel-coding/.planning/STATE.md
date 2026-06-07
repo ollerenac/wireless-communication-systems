@@ -27,13 +27,19 @@ progress:
 | 1 — Index Polish | ✅ Complete | Plans 01-01, 01-02, 01-03 done — hooks, lab section, figure blocks, factual corrections |
 | 2 — Figuras Existentes | ✅ Complete | Plans 02-01 (Shannon 91KB), 02-02 (waterfall 126KB + D-12 + index.md) |
 | 3 — LDPC Lab + Figuras | ✅ Complete | Plans 03-01 (tanner-graph 40KB), 03-02 (BP decoder + bp-messages 57KB + waterfall-BER 107KB) |
-| 4 — Polar Lab + Figuras | ⬜ Not started | |
+| 4 — Polar Lab + Figuras | 🔴 Bloqueada | BUG: lab.ipynb cell 17 (SC/SCL decoder) deshabilitado — bug en convención kron F=[[1,0],[1,1]] produce codewords incorrectos; polar-butterfly-n4.png ✅, N=64 encoder ✅ |
 | 5 — Integrador OFDM+FEC | ✅ Complete | Plan 05-01: ofdm-ldpc-ber.png (100KB), LAB-03, FIG-09 |
 | 6 — QA & Publicación | ⬜ Not started | |
 
 ## Last Commit
 
-d97fa09 feat(03-02): BP decoder + bp-messages.png + ldpc-ber-waterfall.png (LAB-01, FIG-05, FIG-08) — 2026-05-29
+aedb277 chore: exclude .claude/ from git tracking — 2026-06-07
+
+## Pending — Next Session
+
+1. **Ecuaciones numeradas** — añadir `\tag{N}` a las ~8 ecuaciones clave del index.md (Shannon, LLR, BP f/g, Bhattacharyya, Arıkan, SC f/g)
+2. **Phase 4 — fix SC/SCL decoder** — depurar bug kron en lab.ipynb cell 17; la convención F=[[1,0],[1,1]] produce codeword incorrecto; verificar contra el ejemplo manual N=4 del index.md
+3. **Alineación notebook/doc** — §4.2 SC decoder del index.md fue restructurado (4 etapas) pero cell 14 (f_func/g_func) aún no tiene demo funcional que replique el ejemplo numérico
 
 ## Decisions Made
 
