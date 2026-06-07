@@ -447,31 +447,50 @@ La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conoci
     | 2 | $-1{,}4$ | $-2{,}8$ |
     | 3 | $+0{,}6$ | $+1{,}2$ |
 
-    **Etapa butterfly — combinar pares:** se aplica la operación $f$ a los pares simétricos $(0,2)$ y $(1,3)$ (aproximación min-sum: $f(a,b) \approx \text{signo}(a)\cdot\text{signo}(b)\cdot\min(|a|,|b|)$):
-
-    $$\ell_{02} = f(-1{,}6,\;-2{,}8) \approx +1{,}6 \qquad \ell_{13} = f(+2{,}4,\;+1{,}2) \approx +1{,}2$$
+    El decoder SC recorre el grafo butterfly de **derecha a izquierda** — al revés que el codificador. Para $N=4$ con 2 etapas, el recorrido se organiza en cuatro pasos.
 
     ---
 
-    **Decisión $u_0$ — bit congelado:**
+    **Etapa 1 — LLRs intermedios (deshacer Stage 2 hacia atrás)**
 
-    $$\text{LLR}(u_0) = f(\ell_{02},\,\ell_{13}) = f(+1{,}6,\;+1{,}2) \approx +1{,}2 \quad\longrightarrow\quad \hat{u}_0 = \mathbf{0} \text{ (congelado, sin elección)}$$
+    El codificador combinó en Stage 2 los pares $(x_0, x_2)$ y $(x_1, x_3)$ mediante XOR. El decoder deshace esa mezcla aplicando $f$ a esos mismos pares de LLRs de canal — con la aproximación min-sum $f(a,b) \approx \text{signo}(a)\cdot\text{signo}(b)\cdot\min(|a|,|b|)$. El resultado son dos **LLRs intermedios** que capturan la información conjunta de cada par sin conocer aún qué bit ocupa cada posición:
 
-    **Decisión $u_1$ — bit congelado:**
+    $$\ell_{02} = f(L_0,\, L_2) = f(-1{,}6,\;-2{,}8) \approx \mathbf{+1{,}6}$$
+    $$\ell_{13} = f(L_1,\, L_3) = f(+2{,}4,\;+1{,}2) \approx \mathbf{+1{,}2}$$
 
+    ---
+
+    **Etapa 2 — Decodificar $u_0$ y $u_1$ (deshacer Stage 1 hacia atrás)**
+
+    Con $\ell_{02}$ y $\ell_{13}$ disponibles, el decoder aplica Stage 1 al revés sobre el par $(u_0, u_1)$. La regla es siempre la misma: $f$ para el primer bit del par (sin contexto previo), $g$ para el segundo (usando el bit ya decidido):
+
+    *Decisión $u_0$* — ningún bit decidido aún; se aplica $f$:
+    $$\text{LLR}(u_0) = f(\ell_{02},\,\ell_{13}) = f(+1{,}6,\;+1{,}2) \approx +1{,}2 \quad\longrightarrow\quad \hat{u}_0 = \mathbf{0} \text{ (congelado)}$$
+
+    *Decisión $u_1$* — $\hat{u}_0 = 0$ ya conocido; se aplica $g$, que cancela la contribución de $\hat{u}_0$:
     $$\text{LLR}(u_1) = g(\ell_{02},\,\ell_{13},\,\hat{u}_0{=}0) = +1{,}2 + 1\cdot(+1{,}6) = +2{,}8 \quad\longrightarrow\quad \hat{u}_1 = \mathbf{0} \text{ (congelado)}$$
 
-    **Cancelación:** con $\hat{u}_0$ y $\hat{u}_1$ conocidos, la operación $g$ deshace el XOR del codificador:
+    ---
 
-    $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0{=}0) = -2{,}8 + 1\cdot(-1{,}6) = -4{,}4$$
-    $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1{=}0) = +1{,}2 + 1\cdot(+2{,}4) = +3{,}6$$
+    **Etapa 3 — Cancelar $(\hat{u}_0, \hat{u}_1)$ y calcular nuevos LLRs intermedios para $(u_2, u_3)$**
 
-    **Decisión $u_2$ — bit de información:**
+    Con $\hat{u}_0$ y $\hat{u}_1$ decididos, el decoder vuelve un nivel y aplica $g$ directamente sobre los LLRs de canal — usando los bits que Stage 1 produce para las posiciones $(0,2)$ y $(1,3)$ — para eliminar la contribución de la primera mitad:
 
+    $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0{\oplus}\hat{u}_1{=}0) = -2{,}8 + 1\cdot(-1{,}6) = \mathbf{-4{,}4}$$
+    $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1{=}0) = +1{,}2 + 1\cdot(+2{,}4) = \mathbf{+3{,}6}$$
+
+    Estos nuevos LLRs son más informativos que los originales: la incertidumbre sobre $u_0$ y $u_1$ queda eliminada y la información de cuatro posiciones de canal se concentra en dos valores.
+
+    ---
+
+    **Etapa 4 — Decodificar $u_2$ y $u_3$**
+
+    Con $g_{02}$ y $g_{13}$, se repite exactamente la misma lógica que en la Etapa 2 — $f$ para el primero del par, $g$ para el segundo:
+
+    *Decisión $u_2$* — ningún bit adicional conocido; se aplica $f$:
     $$\text{LLR}(u_2) = f(g_{02},\,g_{13}) = f(-4{,}4,\;+3{,}6) \approx -3{,}6 \quad\longrightarrow\quad \hat{u}_2 = \mathbf{1} \checkmark \text{ correcto}$$
 
-    **Decisión $u_3$ — bit de información:**
-
+    *Decisión $u_3$* — $\hat{u}_2 = 1$ ya conocido; se aplica $g$:
     $$\text{LLR}(u_3) = g(g_{02},\,g_{13},\,\hat{u}_2{=}1) = +3{,}6 + (1-2)\cdot(-4{,}4) = +3{,}6 + 4{,}4 = +8{,}0 \quad\longrightarrow\quad \hat{u}_3 = \mathbf{0} \checkmark \text{ correcto}$$
 
     La cancelación sucesiva es visible en los LLRs finales: $|\text{LLR}(u_2)| = 3{,}6$ y $|\text{LLR}(u_3)| = 8{,}0$ son mucho más nítidos que los LLRs de canal originales ($|\text{LLR}| \in \{1{,}2, 2{,}4, 1{,}6, 2{,}8\}$). Cada decisión previa "ayuda" a las siguientes aportando información adicional mediante la operación $g$.
