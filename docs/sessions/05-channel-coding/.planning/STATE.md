@@ -59,6 +59,8 @@ d97fa09 feat(03-02): BP decoder + bp-messages.png + ldpc-ber-waterfall.png (LAB-
 
 | Date | Slug | Description | Commit |
 |------|------|-------------|--------|
+| 2026-06-07 | sc-decoder-example-clarity | Restructure SC decoder example into 4 explicit stages (§4.2) | 519f070 |
+| 2026-06-07 | arikan-theorem-clarity | Improve readability of polarization theorem paragraph (§4.1) | 98e71ad |
 | 2026-06-06 | add-polar-butterfly-n4-png-to-the-encodi | Add polar-butterfly-n4.png to §4.1 admonition + lab.ipynb cell | 665a1c5 |
 | 2026-06-06 | add-encoding-butterfly-example-to-4-1-in | Add encoding butterfly N=4 example to §4.1 | 3478ea8 |
 | 2026-06-04 | tanner-graph-layout | Center check nodes + increase vertical gap in Tanner graph | 6bb2204 |
