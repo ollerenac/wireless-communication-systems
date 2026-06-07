@@ -468,7 +468,7 @@ La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conoci
     $$\text{LLR}(u_0) = f(\ell_{02},\,\ell_{13}) = f(+1{,}6,\;+1{,}2) \approx +1{,}2 \quad\longrightarrow\quad \hat{u}_0 = \mathbf{0} \text{ (congelado)}$$
 
     *Decisión $u_1$* — $\hat{u}_0 = 0$ ya conocido; se aplica $g$, que cancela la contribución de $\hat{u}_0$:
-    $$\text{LLR}(u_1) = g(\ell_{02},\,\ell_{13},\,\hat{u}_0{=}0) = +1{,}2 + 1\cdot(+1{,}6) = +2{,}8 \quad\longrightarrow\quad \hat{u}_1 = \mathbf{0} \text{ (congelado)}$$
+    $$\text{LLR}(u_1) = g(\ell_{02},\,\ell_{13},\,\hat{u}_0 = 0) = +1{,}2 + 1\cdot(+1{,}6) = +2{,}8 \quad\longrightarrow\quad \hat{u}_1 = \mathbf{0} \text{ (congelado)}$$
 
     ---
 
@@ -476,8 +476,8 @@ La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conoci
 
     Con $\hat{u}_0$ y $\hat{u}_1$ decididos, el decoder vuelve un nivel y aplica $g$ directamente sobre los LLRs de canal — usando los bits que Stage 1 produce para las posiciones $(0,2)$ y $(1,3)$ — para eliminar la contribución de la primera mitad:
 
-    $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0{\oplus}\hat{u}_1{=}0) = -2{,}8 + 1\cdot(-1{,}6) = \mathbf{-4{,}4}$$
-    $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1{=}0) = +1{,}2 + 1\cdot(+2{,}4) = \mathbf{+3{,}6}$$
+    $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0 \oplus \hat{u}_1 = 0) = -2{,}8 + 1\cdot(-1{,}6) = \mathbf{-4{,}4}$$
+    $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1 = 0) = +1{,}2 + 1\cdot(+2{,}4) = \mathbf{+3{,}6}$$
 
     Estos nuevos LLRs son más informativos que los originales: la incertidumbre sobre $u_0$ y $u_1$ queda eliminada y la información de cuatro posiciones de canal se concentra en dos valores.
 
@@ -491,7 +491,7 @@ La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conoci
     $$\text{LLR}(u_2) = f(g_{02},\,g_{13}) = f(-4{,}4,\;+3{,}6) \approx -3{,}6 \quad\longrightarrow\quad \hat{u}_2 = \mathbf{1} \checkmark \text{ correcto}$$
 
     *Decisión $u_3$* — $\hat{u}_2 = 1$ ya conocido; se aplica $g$:
-    $$\text{LLR}(u_3) = g(g_{02},\,g_{13},\,\hat{u}_2{=}1) = +3{,}6 + (1-2)\cdot(-4{,}4) = +3{,}6 + 4{,}4 = +8{,}0 \quad\longrightarrow\quad \hat{u}_3 = \mathbf{0} \checkmark \text{ correcto}$$
+    $$\text{LLR}(u_3) = g(g_{02},\,g_{13},\,\hat{u}_2 = 1) = +3{,}6 + (1-2)\cdot(-4{,}4) = +3{,}6 + 4{,}4 = +8{,}0 \quad\longrightarrow\quad \hat{u}_3 = \mathbf{0} \checkmark \text{ correcto}$$
 
     La cancelación sucesiva es visible en los LLRs finales: $|\text{LLR}(u_2)| = 3{,}6$ y $|\text{LLR}(u_3)| = 8{,}0$ son mucho más nítidos que los LLRs de canal originales ($|\text{LLR}| \in \{1{,}2, 2{,}4, 1{,}6, 2{,}8\}$). Cada decisión previa "ayuda" a las siguientes aportando información adicional mediante la operación $g$.
 
