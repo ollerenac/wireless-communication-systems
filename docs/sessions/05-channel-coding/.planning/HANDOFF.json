@@ -1,36 +1,60 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-06T23:27:57.217Z",
-  "phase": null,
-  "phase_name": "Between phases — educational session, figure corrections pending",
+  "timestamp": "2026-06-07T20:43:19.177Z",
+  "phase": "between-phases",
+  "phase_name": "Phase 4 complete — Phase 6 (QA & Publicacion) pending",
   "phase_dir": null,
   "plan": null,
   "task": null,
   "status": "paused",
-  "milestone_progress": "83% — phases 1,2,3,5 done; phase 4 (Polar Lab) and phase 6 (QA) pending",
+  "milestone_progress": "~95% — phases 1,2,3,4,5 done; phase 6 (QA) not started",
   "completed_tasks": [
-    {"id": "quick-encoding-butterfly", "name": "Add encoding butterfly N=4 example to §4.1", "status": "done", "commit": "3478ea8"},
-    {"id": "quick-butterfly-n4-fig", "name": "Add polar-butterfly-n4.png to §4.1 admonition + lab.ipynb", "status": "done", "commit": "665a1c5"}
-  ],
-  "remaining_tasks": [
-    {"id": "fix-butterfly-n4-png", "name": "Commit corrected polar-butterfly-n4.png (label overlap + legend fixes)", "status": "uncommitted", "note": "Figure regenerated in session, not yet committed. Also update lab.ipynb cell 16 to match corrected code."},
-    {"id": "phase-4", "name": "Polar Lab + Figuras", "status": "not_started", "note": "BLOCKED by SC decoder bug in Cell 16 of lab.ipynb"},
-    {"id": "phase-6", "name": "QA & Publicación", "status": "not_started"}
-  ],
-  "blockers": [
     {
-      "id": "SC-DECODER-BUG",
-      "description": "Cell 16 of lab.ipynb (original — now renumbered to 17 after N=4 cell inserted): SC recursive decoder disabled — kron convention bug. BER_SC = 0.5 at all SNRs.",
-      "type": "technical",
-      "severity": "blocking",
-      "workaround": "Fix decoder before Phase 4. FIG-06 and FIG-07 are correct."
+      "id": "quick/fix-polar-sc-decoder",
+      "name": "Fix F_T convention + SC/SCL decoders with partial sums",
+      "status": "done",
+      "commit": "0c02d46"
+    },
+    {
+      "id": "quick/tag-equations-and-cell14-demo",
+      "name": "Ecuaciones tag(1)-(10) + cell14 SC demo s4.2",
+      "status": "done",
+      "commit": "48ad049"
+    },
+    {
+      "id": "quick/sc-decoder-example-clarity",
+      "name": "Restructure SC decoder example s4.2 into 4 stages",
+      "status": "done",
+      "commit": "61dfb39"
     }
   ],
-  "uncommitted_files": [
-    "figures/polar-butterfly-n4.png (modified — corrected label overlap + external legend)",
-    "index.md (minor formatting: blank lines between equations — stash residue, benign)",
-    "figures/ofdm_rx_core.png (deleted — tracked, investigate before committing)",
-    "figures/ofdm_tx_core.png (deleted — tracked, investigate before committing)"
+  "remaining_tasks": [
+    {
+      "id": "phase-06",
+      "name": "QA & Publicacion",
+      "status": "not_started",
+      "description": "mkdocs build limpio, revisar figuras, links, publicar"
+    }
   ],
-  "next_action": "1. Update lab.ipynb cell 16 (N=4 butterfly) with corrected Python code matching the regenerated figure. 2. Commit figures/polar-butterfly-n4.png + lab.ipynb + index.md together. 3. Then gsd-quick fix-sc-decoder for Phase 4."
+  "blockers": [],
+  "uncommitted_files": [
+    "figures/ofdm_rx_core.png (deleted, benign — session 03 cleanup)",
+    "figures/ofdm_tx_core.png (deleted, benign — session 03 cleanup)",
+    "figures/shannon-capacity.png (modified, not staged — investigate)",
+    "explanations.ipynb (untracked — unknown, do not commit without review)"
+  ],
+  "next_action": "Start Phase 6: run mkdocs build, QA all 9 figures, check all links in index.md, then publish.",
+  "human_actions_pending": [],
+  "decisions": [
+    {
+      "decision": "Polar encoder uses F_T=[[1,1],[0,1]] (upper triangular)",
+      "rationale": "Consistent with f/g Arikan decoder formulas, draw_butterfly, and N=4 example in s4.2.",
+      "phase": "04"
+    },
+    {
+      "decision": "SC/SCL decoder uses partial sums x_L = G_{N/2} @ u_hat_left (not u_hat[i])",
+      "rationale": "Bug hidden for N=4 (frozen bits=0), caused ~50% BER for N=64. Root cause: butterfly applies G_{N/2} before XOR.",
+      "phase": "04"
+    }
+  ]
 }
