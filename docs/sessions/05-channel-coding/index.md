@@ -376,6 +376,7 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n =
 **¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
 
 $$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W)$$
+
 $$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W)$$
 
 El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
@@ -385,6 +386,7 @@ El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separació
     Partimos de un canal original con $Z_0 = 0{,}5$ (dificultad media). Primera etapa butterfly:
 
     $$Z^{(-)} = 2Z_0 - Z_0^2 = 2(0{,}5) - (0{,}5)^2 = \mathbf{0{,}75} \quad \text{(canal peor)}$$
+
     $$Z^{(+)} = Z_0^2 = (0{,}5)^2 = \mathbf{0{,}25} \quad \text{(canal mejor)}$$
 
     Segunda etapa — aplicar la misma transformación a cada uno de los dos canales sintéticos:
@@ -398,11 +400,13 @@ El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separació
 
     Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
 
-Aplicando esta transformación $n$ veces en $N = 2^n$ canales:
+Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen:
 
-$$\lim_{N\to\infty} \frac{|\{i : Z(W_N^{(i)}) < \delta\}|}{N} = C(W) \quad \text{para todo } \delta > 0$$
+$$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0$$
 
-Es decir: una fracción $C(W)$ de los canales sintéticos se vuelve perfecta, y la fracción $1-C(W)$ se vuelve inútil. El código Polar pone bits de información en los canales buenos (bajo $Z$) y bits congelados — conocidos por el receptor, convencionalmente 0 — en los canales malos.
+La **fracción de canales sintéticos casi perfectos** converge exactamente a la capacidad de Shannon $C(W)$ del canal físico original. La fracción restante $1-C(W)$ colapsa hacia $Z \approx 1$ — canales casi inútiles.
+
+La consecuencia es directa: poner bits de información en los $k = \lfloor C(W) \cdot N \rfloor$ canales buenos y congelar los demás produce un código de tasa $R = k/N \to C(W)$. Los códigos Polar no se *aproximan* al límite de Shannon — lo **alcanzan**.
 
 <figure markdown="span">
   ![Histograma de polarización de canales sintéticos Polar N=64](figures/polar-polarization.png)
