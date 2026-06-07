@@ -65,6 +65,7 @@ aedb277 chore: exclude .claude/ from git tracking — 2026-06-07
 
 | Date | Slug | Description | Commit |
 |------|------|-------------|--------|
+| 2026-06-07 | tag-equations-and-cell14-demo | Ecuaciones \tag{1}–\tag{10} en index.md + cell 14 demo §4.2 alineado | 61dfb39 |
 | 2026-06-07 | sc-decoder-example-clarity | Restructure SC decoder example into 4 explicit stages (§4.2) | 519f070 |
 | 2026-06-07 | arikan-theorem-clarity | Improve readability of polarization theorem paragraph (§4.1) | 98e71ad |
 | 2026-06-06 | add-polar-butterfly-n4-png-to-the-encodi | Add polar-butterfly-n4.png to §4.1 admonition + lab.ipynb cell | 665a1c5 |
