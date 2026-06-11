@@ -1396,15 +1396,18 @@ En este laboratorio (~90 minutos) construirás un transceptor OFDM completo desd
 
 ## Notas — Laboratorio 1
 
-Las notas corresponden a la entrega del **Laboratorio 1** (transceptor OFDM). La nota se compone de 2 puntos por ejecución completa del notebook y 18 puntos distribuidos entre las preguntas de reflexión de los cinco ejercicios. Las respuestas modelo y el código de verificación están disponibles en el solucionario: [![Solucionario](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/03-ofdm-systems/Laboratorio-01/SOLUCION_lab01.ipynb)
+Las notas corresponden a la entrega del **Laboratorio 1** (transceptor OFDM). La nota se compone de puntos por ejecución del notebook y preguntas de reflexión (Q1, Q2 escritas + Q3 modificación de código) para los seis ejercicios, sobre un total de 20 puntos.
 
-| Alumno | Ej 1 /3 | Ej 2 /3 | Ej 4 /4 | Ej 5 /4 | Ej 6 /4 | Ejec. /2 | **Nota /20** |
-|--------|:-------:|:-------:|:-------:|:-------:|:-------:|:--------:|:------------:|
-| Bermúdez Silva, Moisés   | 0   | 0   | 0    | 0   | 0    | 2 | **2**  |
-| Castilla Alcalá, Luis    | 1.5 | 2   | 2.25 | 1.5 | 3    | 2 | **12** |
-| Livia Mariano, Mariano   | 0   | 0   | 0    | 0   | 0    | 2 | **2**  |
-| Loayza Sáenz, Néstor     | —   | —   | —    | —   | —    | — | **0 ⚠️** |
-| Taipe Quiroz, Meri       | 2.5 | 3   | 4    | 1.5 | 3.25 | 2 | **16** |
+Las respuestas modelo están disponibles en: [![Respuestas modelo](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/03-ofdm-systems/lab01-respuestas.ipynb)
+
+| Alumno | Nota /20 | Observaciones |
+|--------|:--------:|---------------|
+| Bermúdez Silva, Moisés        | **5**  | Notebook ejecutado sin modificaciones; ninguna pregunta de reflexión respondida |
+| Castilla Alcalá, Luis         | **17** | Entrega más completa: respuestas Q1+Q2+Q3 para todos los ejercicios, código modificado y ejecutado |
+| Livia Mariano, Enderson       | **3**  | Celdas de reflexión reemplazadas con código copiado; cero celdas ejecutadas; sin respuestas escritas |
+| Loayza Sáenz, Néstor          | **2**  | Entrega incorrecta: notebook de Sesión 01 (canal inalámbrico) en lugar de Sesión 03 (OFDM); cero celdas ejecutadas |
+| Taipe Quiroz, Meri Karina     | **13** | Respuestas y figuras para Ej2/Ej4/Ej5/Ej6; Ej1 sin respuesta; error conceptual en Ej6-Q2 (MMSE ≠ water-filling/FEC); cero celdas ejecutadas |
+| Sánchez Hernández, Roger      | **—**  | Sin entrega |
 
 !!! warning "Loayza Sáenz, Néstor"
-    Entrega incorrecta: se recibió el notebook de Sesión 01 (canal inalámbrico) en lugar del de Sesión 03 (OFDM). Nota pendiente de nueva entrega.
+    Entregó el notebook de Sesión 01 (canal inalámbrico: Rayleigh, Rician, TR 38.901) en lugar del Lab 01 de Sesión 03 (OFDM). Nota 2/20 por crédito mínimo de entrega.
