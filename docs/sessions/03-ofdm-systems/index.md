@@ -1404,7 +1404,7 @@ Las respuestas modelo están disponibles en: [![Respuestas modelo](https://colab
 |--------|:--------:|---------------|
 | Bermúdez Silva, Moisés        | **5**  | Notebook ejecutado sin modificaciones; ninguna pregunta de reflexión respondida |
 | Castilla Alcalá, Luis         | **17** | Entrega más completa: respuestas Q1+Q2+Q3 para todos los ejercicios, código modificado y ejecutado |
-| Livia Mariano, Enderson       | **3**  | Celdas de reflexión reemplazadas con código copiado; cero celdas ejecutadas; sin respuestas escritas |
+| Livia Mariano, Enderson       | **5**  | Celdas de reflexión reemplazadas con código copiado; cero celdas ejecutadas; sin respuestas escritas |
 | Loayza Sáenz, Néstor          | **2**  | Entrega incorrecta: notebook de Sesión 01 (canal inalámbrico) en lugar de Sesión 03 (OFDM); cero celdas ejecutadas |
 | Taipe Quiroz, Meri Karina     | **13** | Respuestas y figuras para Ej2/Ej4/Ej5/Ej6; Ej1 sin respuesta; error conceptual en Ej6-Q2 (MMSE ≠ water-filling/FEC); cero celdas ejecutadas |
 
