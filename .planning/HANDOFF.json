@@ -1,33 +1,33 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-02T21:09:01-05:00",
+  "timestamp": "2026-06-11T15:30:00-05:00",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
-  "phase_dir": null,
-  "plan": null,
-  "task": null,
-  "total_tasks": null,
-  "status": "paused",
-  "completed_tasks": [
-    {"id": 1, "name": "Restructure sessions: extract 04-gnuradio-ofdm from 04-channel-coding", "status": "done", "commit": "904ff0b"},
-    {"id": 2, "name": "Publish Lab 02 (GNU Radio OFDM) grades — all 5 students 18/20", "status": "done", "commit": "c6a0d2f"},
-    {"id": 3, "name": "Restructure EEE-10 syllabus to 16 classes in syllabus.md + syllabus-EEE10.docx", "status": "done", "commit": "bb81d44"},
-    {"id": 4, "name": "Add weighted evaluation section: Parcial 30%, Final 30%, Labs 40%", "status": "done", "commit": "be6363c"}
+  "phase_dir": ".planning",
+  "status": "between-sessions",
+  "completed_this_session": [
+    "Session 05 Phase 6 verified complete (06-01 notebook QA, 06-02 figure audit done Jun 4)",
+    "Cleaned up uncommitted artifacts post-Phase-6 (519601e)",
+    "Pushed 5 pending commits and deployed session-05 to GitHub Pages",
+    "Reviewed Lab 01 submissions (Session 03 OFDM) — 5 students graded on 20-point scale",
+    "Created docs/sessions/03-ofdm-systems/lab01-respuestas.ipynb (Colab-accessible solution)",
+    "Updated session-03 index.md with grades table and Colab badge",
+    "Removed one student from roster (withdrawn from course)",
+    "Pushed 750a5d4, 2d5ba3d and deployed to GitHub Pages"
   ],
-  "remaining_tasks": [
-    {"id": 5, "name": "Session 05 channel-coding: complete Polar Lab (Phase 4) — was 50% done", "status": "not_started"},
-    {"id": 6, "name": "Sessions 06-16: develop content per new 16-class syllabus structure", "status": "not_started"},
-    {"id": 7, "name": "Lab 03 (MIMO/Massive MIMO): create notebook, publish grades when done", "status": "not_started"},
-    {"id": 8, "name": "Lab 04 (SDR): create notebook, publish grades when done", "status": "not_started"}
+  "remaining_work": [
+    "Session 04 (GNU Radio OFDM) — not started",
+    "Session 06 (MIMO) — not started",
+    "Future lab grading sessions"
   ],
   "blockers": [],
   "human_actions_pending": [],
-  "decisions": [
-    {"decision": "16-session structure with hybrid Teoría+Lab sessions for OFDM, MIMO, SDR", "rationale": "Better pedagogical flow; GNU Radio before channel coding", "phase": null},
-    {"decision": "Evaluation: 30% parcial (class 08), 30% final (class 16), 40% avg of 4 labs", "rationale": "Requested by instructor for EEE-10 grading scheme", "phase": null},
-    {"decision": "Separated 04-gnuradio-ofdm from 05-channel-coding in docs/sessions/", "rationale": "Clean separation between lab and theory sessions", "phase": null}
+  "key_decisions": [
+    "Lab 01 grading: 2 pts execution + 18 pts reflection across 6 exercises",
+    "lab01-respuestas.ipynb = copy of Laboratorio-01/SOLUCION_lab01.ipynb at session root",
+    "tareas/ folder (untracked) — student copies, not needed in repo",
+    "One student removed from grades (withdrew from course)"
   ],
-  "uncommitted_files": [],
-  "next_action": "Resume Session 05 channel-coding content — Polar Lab Phase 4 was at 50%, check docs/sessions/05-channel-coding/ for current state",
-  "context_notes": "All session commits pushed to origin/main. The .claude/worktrees/agent-aa9ef0b7e158c951b modified entry in git status is a stale submodule worktree — not meaningful uncommitted work. Course has 5 enrolled students; labs 01 and 02 grades both published (18/20 all students)."
+  "last_commit": "2d5ba3d",
+  "site_url": "https://ollerenac.github.io/wireless-communication-systems/"
 }
