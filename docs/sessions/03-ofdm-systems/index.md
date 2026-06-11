@@ -1407,7 +1407,6 @@ Las respuestas modelo están disponibles en: [![Respuestas modelo](https://colab
 | Livia Mariano, Enderson       | **3**  | Celdas de reflexión reemplazadas con código copiado; cero celdas ejecutadas; sin respuestas escritas |
 | Loayza Sáenz, Néstor          | **2**  | Entrega incorrecta: notebook de Sesión 01 (canal inalámbrico) en lugar de Sesión 03 (OFDM); cero celdas ejecutadas |
 | Taipe Quiroz, Meri Karina     | **13** | Respuestas y figuras para Ej2/Ej4/Ej5/Ej6; Ej1 sin respuesta; error conceptual en Ej6-Q2 (MMSE ≠ water-filling/FEC); cero celdas ejecutadas |
-| Sánchez Hernández, Roger      | **—**  | Sin entrega |
 
 !!! warning "Loayza Sáenz, Néstor"
     Entregó el notebook de Sesión 01 (canal inalámbrico: Rayleigh, Rician, TR 38.901) en lugar del Lab 01 de Sesión 03 (OFDM). Nota 2/20 por crédito mínimo de entrega.
