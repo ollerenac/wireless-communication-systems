@@ -425,9 +425,11 @@ Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se p
 
 $$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
 
-La **fracción de canales sintéticos casi perfectos** converge exactamente a la capacidad de Shannon $C(W)$ del canal físico original. La fracción restante $1-C(W)$ colapsa hacia $Z \approx 1$ — canales casi inútiles.
+El teorema dice: a medida que $N$ crece, la fracción de canales sintéticos con $Z \approx 0$ (casi perfectos) converge exactamente a $C(W)$ — la capacidad de Shannon del canal físico original. La fracción restante, $1 - C(W)$, colapsa hacia $Z \approx 1$ (casi inútiles). No hay término medio: la polarización empuja todos los canales hacia uno de los dos extremos.
 
-La consecuencia es directa: poner bits de información en los $k = \lfloor C(W) \cdot N \rfloor$ canales buenos y congelar los demás produce un código de tasa $R = k/N \to C(W)$. Los códigos Polar no se *aproximan* al límite de Shannon — lo **alcanzan**.
+**¿Qué significa esto en la práctica?** Supón un canal AWGN con $C(W) = 0{,}7$ bits/uso. Con $N = 1024$ canales sintéticos, aproximadamente $0{,}7 \times 1024 \approx 717$ de ellos tendrán $Z \approx 0$ — son los buenos. Si colocas un bit de información en cada uno de esos 717 canales y congelas los 307 restantes, tu código transmite 717 bits útiles en un bloque de 1024 bits de codeword. Tasa resultante: $r_c = 717/1024 \approx 0{,}7 = C(W)$.
+
+La polarización no crea capacidad de la nada — la **concentra**. El canal físico siempre tuvo $C(W) = 0{,}7$; la red butterfly redistribuye esa capacidad en unos pocos canales casi perfectos y descarta los demás. El resultado es que puedes usar esos canales buenos como si fueran ideales, alcanzando la tasa máxima teórica. Los códigos Polar no se *aproximan* al límite de Shannon — lo **alcanzan**.
 
 <figure markdown="span">
   ![Histograma de polarización de canales sintéticos Polar N=64](figures/polar-polarization.png)
