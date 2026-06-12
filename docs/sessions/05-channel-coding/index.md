@@ -479,6 +479,7 @@ La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conoci
     El codificador combinó en Stage 2 los pares $(x_0, x_2)$ y $(x_1, x_3)$ mediante XOR. El decoder deshace esa mezcla aplicando $f$ a esos mismos pares de LLRs de canal — con la aproximación min-sum $f(a,b) \approx \text{signo}(a)\cdot\text{signo}(b)\cdot\min(|a|,|b|)$. El resultado son dos **LLRs intermedios** que capturan la información conjunta de cada par sin conocer aún qué bit ocupa cada posición:
 
     $$\ell_{02} = f(L_0,\, L_2) = f(-1{,}6,\;-2{,}8) \approx \mathbf{+1{,}6}$$
+    
     $$\ell_{13} = f(L_1,\, L_3) = f(+2{,}4,\;+1{,}2) \approx \mathbf{+1{,}2}$$
 
     ---
