@@ -329,6 +329,15 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n =
   </figcaption>
 </figure>
 
+**El encoder como transformación N→N.** La red butterfly es una transformación cuadrada: recibe exactamente $N$ bits de entrada y produce exactamente $N$ bits de codeword. De esos $N$ bits de entrada, $k$ son **bits de información** (los que el transmisor quiere comunicar) y $N-k$ son **bits congelados**, fijados a 0 por diseño. El transmisor construye el vector completo $\mathbf{u}$ colocando sus $k$ bits en las posiciones "buenas" y un cero en cada posición "mala"; ese $\mathbf{u}$ — completamente conocido — entra al butterfly. La tasa del código es $r_c = k/N$.
+
+**Selección de posiciones: parámetro de Bhattacharyya.** La elección de qué posiciones son "buenas" y cuáles son "malas" se hace fuera de línea, como parte del diseño del código. Para cada canal sintético $i$, el parámetro de Bhattacharyya $Z(W_N^{(i)}) \in [0,1]$ mide su calidad: $Z\approx 0$ indica canal casi perfecto; $Z\approx 1$ indica canal casi inútil. Se ordenan los $N$ canales sintéticos por $Z$ ascendente y se asignan:
+
+- Las $k$ posiciones con $Z$ **más bajo** → bits de información (canales buenos)
+- Las $N-k$ posiciones con $Z$ **más alto** → bits congelados = 0 (canales malos)
+
+Tanto el encoder como el decoder conocen de antemano cuáles posiciones son información y cuáles están congeladas — es información pública del código, no se transmite por el canal.
+
 ??? example "Ejemplo: encoding butterfly N=4 paso a paso"
 
     <figure markdown="span">
@@ -400,7 +409,19 @@ El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separació
 
     Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
 
-Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen:
+**De Z₀ al diseño del código: la receta en tres pasos.** El parámetro inicial $Z_0$ no es arbitrario — proviene directamente del canal físico y el SNR al que se quiere operar. Para AWGN con BPSK:
+
+$$Z_0 = e^{-\frac{1}{2\sigma^2}}$$
+
+donde $\sigma^2$ es la varianza del ruido (fijada por el SNR de diseño). Canal ruidoso → $Z_0$ grande, polarización más lenta. Canal limpio → $Z_0$ pequeño, polarización más rápida. Con $Z_0$ en mano, el diseño de un código Polar $(N, k)$ sigue tres pasos, todos fuera de línea:
+
+1. **Calcular**: Aplicar las ecuaciones (6) y (7) recursivamente $\log_2 N$ veces, partiendo de $Z_0$. Resultado: $N$ valores $Z(W_N^{(i)})$, uno por canal sintético.
+2. **Ordenar**: Ranking de los $N$ canales de mejor a peor — $Z \approx 0$ es confiable, $Z \approx 1$ es inútil.
+3. **Asignar**: Las $k$ posiciones con $Z$ más bajo → bits de información. Las $N-k$ restantes → bits congelados (valor fijo 0).
+
+El resultado es una lista de posiciones — el "mapa del código" — que encoder y decoder conocen antes de cualquier transmisión. El encoder coloca los $k$ bits del usuario en las posiciones buenas, rellena las malas con ceros, y pasa todo el vector por el butterfly.
+
+Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen — y por tanto cuántos bits de información puede cargar el código:
 
 $$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
 
