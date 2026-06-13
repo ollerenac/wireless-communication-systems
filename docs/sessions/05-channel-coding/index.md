@@ -455,6 +455,8 @@ $$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela
 
 La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conocido, deshace el XOR que el codificador aplicó y libera el LLR del siguiente bit con la información completa. La complejidad total es $\mathcal{O}(N\log N)$ — la misma que la FFT.
 
+La Figura 7 muestra las dos pasadas del decodificador SC para el ejemplo N=4. **Pasada 1** (panel izquierdo, naranja): el decoder lee los cuatro LLRs de canal y los combina de a pares con $f$ — obteniendo dos valores intermedios que resumen la información conjunta de $(L_0, L_2)$ y $(L_1, L_3)$ respectivamente. Desde esos dos intermedios, una segunda aplicación de $f$ y $g$ produce los LLRs para $\hat{u}_0$ y $\hat{u}_1$; como son bits congelados, la decisión es trivial: siempre 0. **Pasada 2** (panel derecho, verde): con $\hat{u}_0 = \hat{u}_1 = 0$ ya conocidos, el decoder regresa a los mismos LLRs de canal pero ahora aplica $g$ en lugar de $f$ — la operación $g$ incorpora los bits ya decididos como cancelación, actualizando los intermedios. Los nuevos valores intermedios $(-4{,}4$ y $+3{,}6)$ alimentan $f$ y $g$ para decidir $\hat{u}_2 = 1$ y $\hat{u}_3 = 0$: los bits de información, recuperados correctamente.
+
 <figure markdown="span">
   ![Decodificación SC N=4 — dos pasadas con LLRs anotados](figures/sc-decoding-n4.png)
   <!-- generada por celda 15 de lab.ipynb -->
