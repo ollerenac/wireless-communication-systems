@@ -1,33 +1,20 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-11T15:30:00-05:00",
+  "timestamp": "2026-06-13T01:30:00-05:00",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
   "status": "between-sessions",
   "completed_this_session": [
-    "Session 05 Phase 6 verified complete (06-01 notebook QA, 06-02 figure audit done Jun 4)",
-    "Cleaned up uncommitted artifacts post-Phase-6 (519601e)",
-    "Pushed 5 pending commits and deployed session-05 to GitHub Pages",
-    "Reviewed Lab 01 submissions (Session 03 OFDM) — 5 students graded on 20-point scale",
-    "Created docs/sessions/03-ofdm-systems/lab01-respuestas.ipynb (Colab-accessible solution)",
-    "Updated session-03 index.md with grades table and Colab badge",
-    "Removed one student from roster (withdrawn from course)",
-    "Pushed 750a5d4, 2d5ba3d and deployed to GitHub Pages"
+    "PII purge: git filter-branch rewrote history, force-push completed",
+    "§4.1 opening rewritten to define W, independent copies, synthetic channels (181c59c)",
+    "Frozen bit selection + 3-step design recipe added after Figure 5 (df48f08)",
+    "Bhattacharyya Z0 origin from SNR added before theorem (df48f08)",
+    "Capacity theorem expanded with C(W)=0.7 concrete example (0a8043d)",
+    "Figure 7 SC decoder two-panel flow diagram created (fa4eb62)",
+    "Narrative walkthrough for Figure 7 added (f2215bd)",
+    "§4.1 opening rewritten from scratch — W defined, independence explained (181c59c)"
   ],
-  "remaining_work": [
-    "Session 04 (GNU Radio OFDM) — not started",
-    "Session 06 (MIMO) — not started",
-    "Future lab grading sessions"
-  ],
-  "blockers": [],
-  "human_actions_pending": [],
-  "key_decisions": [
-    "Lab 01 grading: 2 pts execution + 18 pts reflection across 6 exercises",
-    "lab01-respuestas.ipynb = copy of Laboratorio-01/SOLUCION_lab01.ipynb at session root",
-    "tareas/ folder (untracked) — student copies, not needed in repo",
-    "One student removed from grades (withdrew from course)"
-  ],
-  "last_commit": "2d5ba3d",
-  "site_url": "https://ollerenac.github.io/wireless-communication-systems/"
+  "next_action": "Continue pedagogical review of §4 Polar Codes if requested, or begin Session 04 GNU Radio OFDM",
+  "context_notes": "Professor studying polar codes content interactively. §4.1 and §4.2 improved. §4.3 SCL and §5 synthesis not yet reviewed."
 }
