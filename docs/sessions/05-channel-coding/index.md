@@ -312,11 +312,20 @@ Los códigos Polar fueron propuestos por Arıkan (2009) y son los primeros códi
 
 #### 4.1 Polarización del Canal
 
-Llamamos $W$ al canal físico: la descripción estadística completa de una sola transmisión binaria. Para AWGN-BPSK, $W$ captura que envías $x \in \{+1,-1\}$ y recibes $y = x + \text{ruido}$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado que transmitiste $x$. Un canal $W$ tiene una capacidad $C(W)$ — el número máximo de bits que puede transportar por uso de forma confiable.
+Llamamos $W$ al **canal físico**: el modelo que describe cómo el canal transforma cada bit transmitido en señal recibida. Para AWGN-BPSK, $W$ modela que envías $x \in \{+1,-1\}$ y recibes $y = x + \mathcal{N}(0,\sigma^2)$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado que transmitiste $x$. Un canal $W$ tiene una capacidad $C(W)$ — el número máximo de bits que puede transportar por uso de forma confiable. $W$ lo fija la física del enlace (potencia, distancia, frecuencia, ancho de banda) — el diseñador no lo controla, solo lo mide.
 
-Cuando transmites dos bits consecutivos usas el canal dos veces. Cada uso es una **copia independiente** de $W$: mismos parámetros, pero el ruido en el primer instante no tiene ninguna relación con el ruido en el segundo (canal sin memoria). Esas dos transmisiones independientes son la materia prima de la polarización.
+**Copias independientes de $W$.** Cuando transmites dos bits consecutivos usas el mismo canal dos veces. Esas dos transmisiones son **copias independientes** de $W$: los parámetros estadísticos son idénticos (misma $\sigma^2$, misma capacidad), pero el ruido que perturba el primer símbolo no tiene ninguna relación con el que perturba el segundo. Formalmente, la probabilidad conjunta factoriza:
 
-La idea central de Arıkan es no transmitir los dos bits directamente, sino mezclarlos primero con un XOR. Esa mezcla transforma las dos copias independientes en dos **canales sintéticos** con propiedades asimétricas: uno hereda la peor parte de ambas transmisiones (canal malo), y el otro — aprovechando que el primero ya se decodificó — concentra toda la fiabilidad disponible (canal bueno). Repetir este proceso $\log_2 N$ veces con $N = 2^n$ transmisiones produce $N$ canales sintéticos que se polarizan: una fracción tiende a ser perfecta (capacidad 1) y la complementaria tiende a ser inútil (capacidad 0).
+$$W^2(y_1,y_2\mid x_1,x_2) = W(y_1\mid x_1)\cdot W(y_2\mid x_2)$$
+
+Esta ecuación no es un cálculo que se realiza — $W$ ya viene determinado por el enlace físico. La fórmula simplemente expresa qué significa **canal sin memoria**: la probabilidad de ver $(y_1,y_2)$ es el producto de las probabilidades individuales, sin ningún término cruzado. Imagen intuitiva: dos lanzamientos del mismo dado; conocer el primero no ayuda a predecir el segundo. Esas dos transmisiones independientes son la materia prima de la polarización.
+
+**Canales sintéticos.** La idea de Arıkan es no transmitir $(u_1,u_2)$ directamente, sino codificarlos primero: $x_1=u_1\oplus u_2$, $x_2=u_2$. Con esa mezcla, las dos observaciones físicas $y_1,y_2$ transportan información sobre ambos bits de forma entrelazada, redefiniendo el problema de decodificación en dos subproblemas distintos. El subíndice 2 en $W_2^{(-)}$ y $W_2^{(+)}$ indica que esta es la transformación **primitiva** — opera sobre exactamente dos copias del canal físico:
+
+- **Canal sintético malo** $W_2^{(-)}$: decodificar $u_1$ a partir de $(y_1,y_2)$, sin información adicional. El bit $u_1$ llegó embebido en ambas transmisiones pero el receptor no conoce $u_2$ — ve solo ruido mezclado. Resultado: canal peor que el físico original.
+- **Canal sintético bueno** $W_2^{(+)}$: decodificar $u_2$ a partir de $(y_1,y_2)$ **y** de $u_1$ ya conocido. Conocer $u_1$ permite "restar" su efecto de $y_1$, reduciendo la ambigüedad drásticamente. Resultado: canal mejor que el físico original.
+
+Un canal sintético no es un canal físico — es una abstracción matemática que describe la calidad efectiva de un problema de decodificación particular. $W_2^{(+)}$ y $W_2^{(-)}$ comparten las mismas dos transmisiones físicas; la diferencia está en qué información tiene el receptor al decidir. Para $N = 2^n$ transmisiones, esta primitiva se anida recursivamente $n$ veces: la red butterfly aplica $W_2$ de a pares hasta producir $N$ canales sintéticos $W_N^{(i)}$, cada uno con calidad distinta. La transformación XOR *redistribuye* capacidad — no la crea — concentrando fiabilidad en los buenos a expensas de los malos.
 
 **La transformación $W_2$.** Dadas dos copias del canal $W$ y dos bits de entrada $(u_1, u_2)$:
 
@@ -561,7 +570,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
   <!-- generada por celda 18 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 7.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, n=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
+  <figcaption markdown="1">**Figura 8.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, N=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
   </figcaption>
 </figure>
 
