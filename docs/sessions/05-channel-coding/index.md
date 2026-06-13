@@ -312,7 +312,11 @@ Los códigos Polar fueron propuestos por Arıkan (2009) y son los primeros códi
 
 #### 4.1 Polarización del Canal
 
-La idea central es combinar dos copias independientes de un canal $W$ para crear dos canales sintéticos: uno "mejor" que $W$ y otro "peor". Repetir este proceso $\log_2 N$ veces con $N = 2^n$ copias produce $N$ canales sintéticos que se polarizan: una fracción tiende a ser perfecta (capacidad 1) y la complementaria tiende a ser inútil (capacidad 0).
+Llamamos $W$ al canal físico: la descripción estadística completa de una sola transmisión binaria. Para AWGN-BPSK, $W$ captura que envías $x \in \{+1,-1\}$ y recibes $y = x + \text{ruido}$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado que transmitiste $x$. Un canal $W$ tiene una capacidad $C(W)$ — el número máximo de bits que puede transportar por uso de forma confiable.
+
+Cuando transmites dos bits consecutivos usas el canal dos veces. Cada uso es una **copia independiente** de $W$: mismos parámetros, pero el ruido en el primer instante no tiene ninguna relación con el ruido en el segundo (canal sin memoria). Esas dos transmisiones independientes son la materia prima de la polarización.
+
+La idea central de Arıkan es no transmitir los dos bits directamente, sino mezclarlos primero con un XOR. Esa mezcla transforma las dos copias independientes en dos **canales sintéticos** con propiedades asimétricas: uno hereda la peor parte de ambas transmisiones (canal malo), y el otro — aprovechando que el primero ya se decodificó — concentra toda la fiabilidad disponible (canal bueno). Repetir este proceso $\log_2 N$ veces con $N = 2^n$ transmisiones produce $N$ canales sintéticos que se polarizan: una fracción tiende a ser perfecta (capacidad 1) y la complementaria tiende a ser inútil (capacidad 0).
 
 **La transformación $W_2$.** Dadas dos copias del canal $W$ y dos bits de entrada $(u_1, u_2)$:
 
