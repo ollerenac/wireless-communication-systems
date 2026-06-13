@@ -325,7 +325,7 @@ Esta ecuación no es un cálculo que se realiza — $W$ ya viene determinado por
 - **Canal sintético malo** $W_2^{(-)}$: decodificar $u_1$ a partir de $(y_1,y_2)$, sin información adicional. El bit $u_1$ llegó embebido en ambas transmisiones pero el receptor no conoce $u_2$ — ve solo ruido mezclado. Resultado: canal peor que el físico original.
 - **Canal sintético bueno** $W_2^{(+)}$: decodificar $u_2$ a partir de $(y_1,y_2)$ **y** de $u_1$ ya conocido. Conocer $u_1$ permite "restar" su efecto de $y_1$, reduciendo la ambigüedad drásticamente. Resultado: canal mejor que el físico original.
 
-Un canal sintético no es un canal físico — es una abstracción matemática que describe la calidad efectiva de un problema de decodificación particular. $W_2^{(+)}$ y $W_2^{(-)}$ comparten las mismas dos transmisiones físicas; la diferencia está en qué información tiene el receptor al decidir. Para $N = 2^n$ transmisiones, esta primitiva se anida recursivamente $n$ veces: la red butterfly aplica $W_2$ de a pares hasta producir $N$ canales sintéticos $W_N^{(i)}$, cada uno con calidad distinta. La transformación XOR *redistribuye* capacidad — no la crea — concentrando fiabilidad en los buenos a expensas de los malos.
+Un canal sintético no es un canal físico — es una abstracción matemática que describe la calidad efectiva de un problema de decodificación particular. $W_2^{(+)}$ y $W_2^{(-)}$ comparten las mismas dos transmisiones físicas; la diferencia está en qué información tiene el receptor al decidir. Para $N = 2^m$ transmisiones, esta primitiva se anida recursivamente $m$ veces: la red butterfly aplica $W_2$ de a pares hasta producir $N$ canales sintéticos $W_N^{(i)}$, cada uno con calidad distinta. La transformación XOR *redistribuye* capacidad — no la crea — concentrando fiabilidad en los buenos a expensas de los malos.
 
 **La transformación $W_2$.** Dadas dos copias del canal $W$ y dos bits de entrada $(u_1, u_2)$:
 
@@ -333,12 +333,12 @@ Un canal sintético no es un canal físico — es una abstracción matemática q
 - El canal sintético $W_2^{(-)}$ ve $u_1$ con menos información (peor canal).
 - El canal sintético $W_2^{(+)}$ ve $u_2$ con más información, dado $u_1$ ya decodificado (mejor canal).
 
-La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $n = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas; los 8 canales sintéticos que emergen a la derecha del grafo son el resultado de aplicar la polarización $\log_2 8 = 3$ veces consecutivas.
+La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas; los 8 canales sintéticos que emergen a la derecha del grafo son el resultado de aplicar la polarización $\log_2 8 = 3$ veces consecutivas.
 
 <figure markdown="span">
   ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
   <!-- generada por celda 15 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes n}$ de Arıkan; la composición de $n = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
+  <figcaption markdown="1">**Figura 5.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes m}$ de Arıkan; la composición de $m = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
   </figcaption>
 </figure>
 
