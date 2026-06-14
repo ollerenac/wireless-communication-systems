@@ -312,22 +312,38 @@ Los códigos Polar fueron propuestos por Arıkan (2009) y son los primeros códi
 
 #### 4.1 Polarización del Canal
 
-Llamamos $W$ al **canal físico**: el modelo que describe cómo el canal transforma cada bit transmitido en señal recibida. Para AWGN-BPSK, $W$ modela que envías $x \in \{+1,-1\}$ y recibes $y = x + \mathcal{N}(0,\sigma^2)$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado que transmitiste $x$. Un canal $W$ tiene una capacidad $C(W)$ — el número máximo de bits que puede transportar por uso de forma confiable. $W$ lo fija la física del enlace (potencia, distancia, frecuencia, ancho de banda) — el diseñador no lo controla, solo lo mide.
+La idea central de Arıkan: mezclar dos copias del canal físico crea un canal "mejor" y uno "peor". Repetir esta operación $m$ veces produce $N = 2^m$ canales cada vez más polarizados hacia los extremos. El diseñador asigna bits de información a los mejores y deja los peores vacíos — alcanzando la capacidad de Shannon.
 
-**Copias independientes de $W$.** Cuando transmites dos bits consecutivos usas el mismo canal dos veces. Esas dos transmisiones son **copias independientes** de $W$: los parámetros estadísticos son idénticos (misma $\sigma^2$, misma capacidad), pero el ruido que perturba el primer símbolo no tiene ninguna relación con el que perturba el segundo. Formalmente, la probabilidad conjunta factoriza:
+**El canal físico $W$.** $W$ modela cómo el canal transforma cada bit transmitido en señal recibida. Para AWGN-BPSK: envías $x \in \{+1,-1\}$ y recibes $y = x + n$ con $n \sim \mathcal{N}(0,\sigma^2)$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado $x$. La capacidad $C(W)$ es el máximo de bits fiables por uso — fijada por la física del enlace, no por el diseñador.
+
+**Copias independientes de $W$.** Transmitir dos bits consecutivos usa el canal dos veces con **ruidos independientes**: conocer $y_1$ no dice nada sobre $n_2$. Formalmente, la probabilidad conjunta factoriza:
 
 $$W^2(y_1,y_2\mid x_1,x_2) = W(y_1\mid x_1)\cdot W(y_2\mid x_2)$$
 
-Esta ecuación no es un cálculo que se realiza — $W$ ya viene determinado por el enlace físico. La fórmula simplemente expresa qué significa **canal sin memoria**: la probabilidad de ver $(y_1,y_2)$ es el producto de las probabilidades individuales, sin ningún término cruzado. Imagen intuitiva: dos lanzamientos del mismo dado; conocer el primero no ayuda a predecir el segundo. Esas dos transmisiones independientes son la materia prima de la polarización.
+Sin términos cruzados: eso es lo que significa *canal sin memoria*. Esas dos transmisiones independientes son la materia prima de la polarización.
 
-**Canales sintéticos.** La idea de Arıkan es no transmitir $(u_1,u_2)$ directamente, sino codificarlos primero mediante la transformación butterfly $G_2 = \begin{pmatrix}1&0\\1&1\end{pmatrix}$: $x_1=u_1\oplus u_2$, $x_2=u_2$. Con esa mezcla, las dos observaciones físicas $y_1,y_2$ transportan información sobre ambos bits de forma entrelazada, redefiniendo el problema de decodificación en dos subproblemas distintos. El subíndice 2 en $W_2^{(-)}$ y $W_2^{(+)}$ indica que esta es la transformación **primitiva** — opera sobre exactamente dos copias del canal físico:
+<figure markdown="span">
+  ![Canal físico W y dos usos independientes](figures/polar-channel-model.png)
+  <figcaption markdown="1">**Canal físico $W$ y copias independientes.** *Izquierda:* un uso de $W$: el transmisor envía $x$ y el receptor observa $y = x+n$, corrompido por ruido gaussiano. *Derecha:* dos usos consecutivos del mismo canal; los ruidos $n_1$ y $n_2$ son independientes — conocer $y_1$ no reduce la incertidumbre sobre $n_2$. Estas dos transmisiones son la materia prima de la polarización.</figcaption>
+</figure>
 
-- **Canal sintético malo** $W_2^{(-)}$: decodificar $u_1$ a partir de $(y_1,y_2)$, sin información adicional. El bit $u_1$ llegó embebido en ambas transmisiones pero el receptor no conoce $u_2$ — ve solo ruido mezclado. Resultado: canal peor que el físico original.
-- **Canal sintético bueno** $W_2^{(+)}$: decodificar $u_2$ a partir de $(y_1,y_2)$ **y** de $u_1$ ya conocido. Conocer $u_1$ permite "restar" su efecto de $y_1$, reduciendo la ambigüedad drásticamente. Resultado: canal mejor que el físico original.
+**Canales sintéticos $W_2^{(-)}$ y $W_2^{(+)}$.** En lugar de transmitir $(u_1,u_2)$ directamente, Arıkan los mezcla primero con la transformación butterfly primitiva $G_2$:
 
-Un canal sintético no es un canal físico — es una abstracción matemática que describe la calidad efectiva de un problema de decodificación particular. $W_2^{(+)}$ y $W_2^{(-)}$ comparten las mismas dos transmisiones físicas; la diferencia está en qué información tiene el receptor al decidir. Para $N = 2^m$ transmisiones, esta primitiva se anida recursivamente $m$ veces: la red butterfly aplica $W_2$ de a pares hasta producir $N$ canales sintéticos $W_N^{(i)}$, cada uno con calidad distinta. La transformación XOR *redistribuye* capacidad — no la crea — concentrando fiabilidad en los buenos a expensas de los malos.
+$$x_1 = u_1 \oplus u_2, \quad x_2 = u_2$$
 
-La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas; los 8 canales sintéticos que emergen a la derecha del grafo son el resultado de aplicar la polarización $\log_2 8 = 3$ veces consecutivas.
+Esa mezcla crea **dos sub-problemas de decodificación distintos** sobre las mismas observaciones físicas $(y_1, y_2)$:
+
+- **$W_2^{(-)}$** (*canal malo*): estimar $u_1$ desde $(y_1,y_2)$ sin información adicional. El receptor ve ruido mezclado, sin saber $u_2$. Resultado: canal **peor** que $W$.
+- **$W_2^{(+)}$** (*canal bueno*): estimar $u_2$ desde $(y_1,y_2)$ **y** $u_1$ ya conocido. Conocer $u_1$ permite cancelar su efecto de $y_1$, reduciendo drásticamente la ambigüedad. Resultado: canal **mejor** que $W$.
+
+<figure markdown="span">
+  ![Canales sintéticos W₂⁻ y W₂⁺ del código Polar](figures/polar-synthetic-channels.png)
+  <figcaption markdown="1">**Canales sintéticos primitivos.** La transformación $G_2$ (XOR) mezcla $(u_1,u_2)$ antes de transmitir por dos copias del canal físico $W$. Esto genera dos sub-problemas de decodificación con distinto acceso a información lateral: $W_2^{(-)}$ estima $u_1$ sin contexto; $W_2^{(+)}$ estima $u_2$ con $u_1$ ya conocido. La XOR *redistribuye* capacidad — no la crea: $C(W_2^{(-)}) + C(W_2^{(+)}) = 2\,C(W)$.</figcaption>
+</figure>
+
+Un canal sintético no es un canal físico — es una abstracción que describe la dificultad de un sub-problema de decodificación. La diferencia entre $W_2^{(+)}$ y $W_2^{(-)}$ no está en las transmisiones físicas (ambos usan las mismas $y_1,y_2$), sino en qué información tiene el receptor al decidir. Esta primitiva $N=2$ se anida $m$ veces para producir $N = 2^m$ canales sintéticos con calidades cada vez más extremas.
+
+La Figura 5 muestra cómo la primitiva se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas.
 
 <figure markdown="span">
   ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
@@ -336,13 +352,13 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $m =
   </figcaption>
 </figure>
 
-**¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
+**¿Cómo medir si un canal sintético es bueno o malo?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cuantifica la calidad: es cota superior de la probabilidad de error del detector óptimo sobre ese canal. $Z=0$ → canal perfecto; $Z=1$ → canal inútil. Cada etapa butterfly amplifica la separación:
 
 $$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W) \tag{6}$$
 
 $$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W) \tag{7}$$
 
-El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
+El canal malo empeora ($Z$ sube); el bueno mejora ($Z$ baja). Pocas etapas bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
 
 ??? example "Mini-ejemplo: polarización con $N=4$, $Z_0=0{,}5$"
 
@@ -416,15 +432,23 @@ Tanto el encoder como el decoder conocen de antemano cuáles posiciones son info
 
     $u_3$ se distribuye por las 4 posiciones del codeword: el receptor dispone de cuatro observaciones ruidosas independientes para recuperarlo, más la información de cancelación de $\hat{u}_0$, $\hat{u}_1$, $\hat{u}_2$ ya decodificados. $u_0$, en cambio, solo llega a $x_0$ y el decodificador SC lo decodifica primero, sin ninguna información de cancelación. Eso es exactamente lo que mide el parámetro de Bhattacharyya $Z(W)$: la dificultad de recuperar un bit sin contexto adicional.
 
-**De Z₀ al diseño del código: la receta en tres pasos.** El parámetro inicial $Z_0$ no es arbitrario — proviene directamente del canal físico y el SNR al que se quiere operar. Para AWGN con BPSK:
+**De Z₀ al diseño del código: la receta en tres pasos.** El parámetro inicial $Z_0$ proviene del canal físico y el SNR de diseño. Para AWGN con BPSK:
 
 $$Z_0 = e^{-\frac{1}{2\sigma^2}}$$
 
-donde $\sigma^2$ es la varianza del ruido (fijada por el SNR de diseño). Canal ruidoso → $Z_0$ grande, polarización más lenta. Canal limpio → $Z_0$ pequeño, polarización más rápida. Con $Z_0$ en mano, el diseño de un código Polar $(N, k)$ sigue tres pasos, todos fuera de línea:
+Canal ruidoso → $Z_0$ grande (polarización más lenta); canal limpio → $Z_0$ pequeño (polarización más rápida). Con $Z_0$ en mano, el diseño del código sigue tres pasos **offline** — antes de cualquier transmisión:
 
-1. **Calcular**: Aplicar las ecuaciones (6) y (7) recursivamente $\log_2 N$ veces, partiendo de $Z_0$. Resultado: $N$ valores $Z(W_N^{(i)})$, uno por canal sintético.
-2. **Ordenar**: Ranking de los $N$ canales de mejor a peor — $Z \approx 0$ es confiable, $Z \approx 1$ es inútil.
-3. **Asignar**: Las $k$ posiciones con $Z$ más bajo → bits de información. Las $N-k$ restantes → bits congelados (valor fijo 0).
+```mermaid
+flowchart LR
+    A["SNR de diseño<br/>→ σ²"] --> B["Z₀<br/>= exp(-½σ²)"]
+    B --> C["Paso 1 — Calcular<br/>Aplicar ecs. (6) y (7)<br/>log₂N veces desde Z₀<br/>→ N valores Z(Wᵢ)"]
+    C --> D["Paso 2 — Ordenar<br/>ranking por Z<br/>ascendente"]
+    D --> E["Paso 3 — Asignar<br/>k mejores → info<br/>N−k peores → congelados"]
+    E --> F["Mapa del código<br/>TX y RX lo conocen<br/>antes de transmitir"]
+    style A fill:#fff3e0,stroke:#ff9800,color:#333
+    style B fill:#e3f2fd,stroke:#2196f3,color:#333
+    style F fill:#e8f5e9,stroke:#43a047,color:#333
+```
 
 El resultado es una lista de posiciones — el "mapa del código" — que encoder y decoder conocen antes de cualquier transmisión. El encoder coloca los $k$ bits del usuario en las posiciones buenas, rellena las malas con ceros, y pasa todo el vector por el butterfly.
 
@@ -517,6 +541,7 @@ La Figura 7 muestra las dos pasadas del decodificador SC para el ejemplo N=4. **
     Con $\hat{u}_0$ y $\hat{u}_1$ decididos, el decoder vuelve un nivel y aplica $g$ directamente sobre los LLRs de canal — usando los bits que Stage 1 produce para las posiciones $(0,2)$ y $(1,3)$ — para eliminar la contribución de la primera mitad:
 
     $$g_{02} = g(L_0,\,L_2,\,\hat{u}_0 \oplus \hat{u}_1 = 0) = -2{,}8 + 1\cdot(-1{,}6) = \mathbf{-4{,}4}$$
+    
     $$g_{13} = g(L_1,\,L_3,\,\hat{u}_1 = 0) = +1{,}2 + 1\cdot(+2{,}4) = \mathbf{+3{,}6}$$
 
     Estos nuevos LLRs son más informativos que los originales: la incertidumbre sobre $u_0$ y $u_1$ queda eliminada y la información de cuatro posiciones de canal se concentra en dos valores.
