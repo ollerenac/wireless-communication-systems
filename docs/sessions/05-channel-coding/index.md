@@ -352,36 +352,11 @@ La Figura 5 muestra cómo la primitiva se aplica recursivamente $m = \log_2 N$ v
   </figcaption>
 </figure>
 
-**¿Cómo medir si un canal sintético es bueno o malo?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cuantifica la calidad: es cota superior de la probabilidad de error del detector óptimo sobre ese canal. $Z=0$ → canal perfecto; $Z=1$ → canal inútil. Cada etapa butterfly amplifica la separación:
-
-$$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W) \tag{6}$$
-
-$$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W) \tag{7}$$
-
-El canal malo empeora ($Z$ sube); el bueno mejora ($Z$ baja). Pocas etapas bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
-
-??? example "Mini-ejemplo: polarización con $N=4$, $Z_0=0{,}5$"
-
-    Partimos de un canal original con $Z_0 = 0{,}5$ (dificultad media). Primera etapa butterfly:
-
-    $$Z^{(-)} = 2Z_0 - Z_0^2 = 2(0{,}5) - (0{,}5)^2 = \mathbf{0{,}75} \quad \text{(canal peor)}$$
-
-    $$Z^{(+)} = Z_0^2 = (0{,}5)^2 = \mathbf{0{,}25} \quad \text{(canal mejor)}$$
-
-    Segunda etapa — aplicar la misma transformación a cada uno de los dos canales sintéticos:
-
-    | Canal sintético | Fórmula aplicada | $Z$ |
-    |----------------|-----------------|-----|
-    | $W^{(--)}$ (el más malo) | $2(0{,}75)-(0{,}75)^2$ | $\mathbf{0{,}94}$ |
-    | $W^{(-+)}$ | $(0{,}75)^2$ | $0{,}56$ |
-    | $W^{(+-)}$ | $2(0{,}25)-(0{,}25)^2$ | $0{,}44$ |
-    | $W^{(++)}$ (el mejor) | $(0{,}25)^2$ | $\mathbf{0{,}06}$ |
-
-    Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
+La polarización separa los $N$ canales sintéticos en dos grupos a medida que $N$ crece: los mejores se vuelven casi perfectos, los peores casi inútiles. La Figura 5 ya muestra el resultado para $N=8$, $k=4$: los cuatro nodos azules son los canales buenos asignados a bits de información; los cuatro salmón son los malos, congelados en cero.
 
 **El encoder como transformación N→N.** La red butterfly es una transformación cuadrada: recibe exactamente $N$ bits de entrada y produce exactamente $N$ bits de codeword. De esos $N$ bits de entrada, $k$ son **bits de información** (los que el transmisor quiere comunicar) y $N-k$ son **bits congelados**, fijados a 0 por diseño. El transmisor construye el vector completo $\mathbf{u}$ colocando sus $k$ bits en las posiciones "buenas" y un cero en cada posición "mala"; ese $\mathbf{u}$ — completamente conocido — entra al butterfly. La tasa del código es $r_c = k/N$.
 
-**Selección de posiciones: parámetro de Bhattacharyya.** La elección de qué posiciones son "buenas" y cuáles son "malas" se hace fuera de línea, como parte del diseño del código. Para cada canal sintético $i$, el parámetro de Bhattacharyya $Z(W_N^{(i)}) \in [0,1]$ mide su calidad: $Z\approx 0$ indica canal casi perfecto; $Z\approx 1$ indica canal casi inútil. Se ordenan los $N$ canales sintéticos por $Z$ ascendente y se asignan:
+**Selección de posiciones.** La elección de qué posiciones son buenas y cuáles son malas se hace fuera de línea, como parte del diseño del código. Los $N$ canales sintéticos se ordenan por calidad — del mejor al peor — y se asignan:
 
 - Las $k$ posiciones con $Z$ **más bajo** → bits de información (canales buenos)
 - Las $N-k$ posiciones con $Z$ **más alto** → bits congelados = 0 (canales malos)
