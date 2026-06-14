@@ -320,18 +320,12 @@ $$W^2(y_1,y_2\mid x_1,x_2) = W(y_1\mid x_1)\cdot W(y_2\mid x_2)$$
 
 Esta ecuación no es un cálculo que se realiza — $W$ ya viene determinado por el enlace físico. La fórmula simplemente expresa qué significa **canal sin memoria**: la probabilidad de ver $(y_1,y_2)$ es el producto de las probabilidades individuales, sin ningún término cruzado. Imagen intuitiva: dos lanzamientos del mismo dado; conocer el primero no ayuda a predecir el segundo. Esas dos transmisiones independientes son la materia prima de la polarización.
 
-**Canales sintéticos.** La idea de Arıkan es no transmitir $(u_1,u_2)$ directamente, sino codificarlos primero: $x_1=u_1\oplus u_2$, $x_2=u_2$. Con esa mezcla, las dos observaciones físicas $y_1,y_2$ transportan información sobre ambos bits de forma entrelazada, redefiniendo el problema de decodificación en dos subproblemas distintos. El subíndice 2 en $W_2^{(-)}$ y $W_2^{(+)}$ indica que esta es la transformación **primitiva** — opera sobre exactamente dos copias del canal físico:
+**Canales sintéticos.** La idea de Arıkan es no transmitir $(u_1,u_2)$ directamente, sino codificarlos primero mediante la transformación butterfly $G_2 = \begin{pmatrix}1&0\\1&1\end{pmatrix}$: $x_1=u_1\oplus u_2$, $x_2=u_2$. Con esa mezcla, las dos observaciones físicas $y_1,y_2$ transportan información sobre ambos bits de forma entrelazada, redefiniendo el problema de decodificación en dos subproblemas distintos. El subíndice 2 en $W_2^{(-)}$ y $W_2^{(+)}$ indica que esta es la transformación **primitiva** — opera sobre exactamente dos copias del canal físico:
 
 - **Canal sintético malo** $W_2^{(-)}$: decodificar $u_1$ a partir de $(y_1,y_2)$, sin información adicional. El bit $u_1$ llegó embebido en ambas transmisiones pero el receptor no conoce $u_2$ — ve solo ruido mezclado. Resultado: canal peor que el físico original.
 - **Canal sintético bueno** $W_2^{(+)}$: decodificar $u_2$ a partir de $(y_1,y_2)$ **y** de $u_1$ ya conocido. Conocer $u_1$ permite "restar" su efecto de $y_1$, reduciendo la ambigüedad drásticamente. Resultado: canal mejor que el físico original.
 
 Un canal sintético no es un canal físico — es una abstracción matemática que describe la calidad efectiva de un problema de decodificación particular. $W_2^{(+)}$ y $W_2^{(-)}$ comparten las mismas dos transmisiones físicas; la diferencia está en qué información tiene el receptor al decidir. Para $N = 2^m$ transmisiones, esta primitiva se anida recursivamente $m$ veces: la red butterfly aplica $W_2$ de a pares hasta producir $N$ canales sintéticos $W_N^{(i)}$, cada uno con calidad distinta. La transformación XOR *redistribuye* capacidad — no la crea — concentrando fiabilidad en los buenos a expensas de los malos.
-
-**La transformación $W_2$.** Dadas dos copias del canal $W$ y dos bits de entrada $(u_1, u_2)$:
-
-- Se transmiten $(x_1, x_2) = (u_1 \oplus u_2,\, u_2)$ — la transformación butterfly $G_2 = \begin{pmatrix}1&0\\1&1\end{pmatrix}$.
-- El canal sintético $W_2^{(-)}$ ve $u_1$ con menos información (peor canal).
-- El canal sintético $W_2^{(+)}$ ve $u_2$ con más información, dado $u_1$ ya decodificado (mejor canal).
 
 La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas; los 8 canales sintéticos que emergen a la derecha del grafo son el resultado de aplicar la polarización $\log_2 8 = 3$ veces consecutivas.
 
@@ -341,6 +335,33 @@ La Figura 5 muestra cómo esta transformación N=2 se aplica recursivamente $m =
   <figcaption markdown="1">**Figura 5.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes m}$ de Arıkan; la composición de $m = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
   </figcaption>
 </figure>
+
+**¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
+
+$$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W) \tag{6}$$
+
+$$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W) \tag{7}$$
+
+El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
+
+??? example "Mini-ejemplo: polarización con $N=4$, $Z_0=0{,}5$"
+
+    Partimos de un canal original con $Z_0 = 0{,}5$ (dificultad media). Primera etapa butterfly:
+
+    $$Z^{(-)} = 2Z_0 - Z_0^2 = 2(0{,}5) - (0{,}5)^2 = \mathbf{0{,}75} \quad \text{(canal peor)}$$
+
+    $$Z^{(+)} = Z_0^2 = (0{,}5)^2 = \mathbf{0{,}25} \quad \text{(canal mejor)}$$
+
+    Segunda etapa — aplicar la misma transformación a cada uno de los dos canales sintéticos:
+
+    | Canal sintético | Fórmula aplicada | $Z$ |
+    |----------------|-----------------|-----|
+    | $W^{(--)}$ (el más malo) | $2(0{,}75)-(0{,}75)^2$ | $\mathbf{0{,}94}$ |
+    | $W^{(-+)}$ | $(0{,}75)^2$ | $0{,}56$ |
+    | $W^{(+-)}$ | $2(0{,}25)-(0{,}25)^2$ | $0{,}44$ |
+    | $W^{(++)}$ (el mejor) | $(0{,}25)^2$ | $\mathbf{0{,}06}$ |
+
+    Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
 
 **El encoder como transformación N→N.** La red butterfly es una transformación cuadrada: recibe exactamente $N$ bits de entrada y produce exactamente $N$ bits de codeword. De esos $N$ bits de entrada, $k$ son **bits de información** (los que el transmisor quiere comunicar) y $N-k$ son **bits congelados**, fijados a 0 por diseño. El transmisor construye el vector completo $\mathbf{u}$ colocando sus $k$ bits en las posiciones "buenas" y un cero en cada posición "mala"; ese $\mathbf{u}$ — completamente conocido — entra al butterfly. La tasa del código es $r_c = k/N$.
 
@@ -395,33 +416,6 @@ Tanto el encoder como el decoder conocen de antemano cuáles posiciones son info
 
     $u_3$ se distribuye por las 4 posiciones del codeword: el receptor dispone de cuatro observaciones ruidosas independientes para recuperarlo, más la información de cancelación de $\hat{u}_0$, $\hat{u}_1$, $\hat{u}_2$ ya decodificados. $u_0$, en cambio, solo llega a $x_0$ y el decodificador SC lo decodifica primero, sin ninguna información de cancelación. Eso es exactamente lo que mide el parámetro de Bhattacharyya $Z(W)$: la dificultad de recuperar un bit sin contexto adicional.
 
-**¿Cómo medir si un canal sintético es "bueno" o "malo"?** El **parámetro de Bhattacharyya** $Z(W) \in [0,1]$ cumple esa función: es una cota superior de la probabilidad de error del detector de máxima verosimilitud sobre ese canal en solitario, sin ningún código adicional. $Z=0$ significa canal ideal — el detector nunca se equivoca. $Z=1$ significa canal completamente inútil — equivalente a adivinar al azar. Las transformaciones butterfly satisfacen:
-
-$$Z(W_2^{(-)}) = 2Z(W) - Z(W)^2 \geq Z(W) \tag{6}$$
-
-$$Z(W_2^{(+)}) = Z(W)^2 \leq Z(W) \tag{7}$$
-
-El canal malo empeora; el canal bueno mejora. Cada etapa amplifica la separación: comenzando desde un $Z_0$ moderado, pocas iteraciones bastan para producir canales casi perfectos ($Z \approx 0$) y casi inútiles ($Z \approx 1$).
-
-??? example "Mini-ejemplo: polarización con $N=4$, $Z_0=0{,}5$"
-
-    Partimos de un canal original con $Z_0 = 0{,}5$ (dificultad media). Primera etapa butterfly:
-
-    $$Z^{(-)} = 2Z_0 - Z_0^2 = 2(0{,}5) - (0{,}5)^2 = \mathbf{0{,}75} \quad \text{(canal peor)}$$
-
-    $$Z^{(+)} = Z_0^2 = (0{,}5)^2 = \mathbf{0{,}25} \quad \text{(canal mejor)}$$
-
-    Segunda etapa — aplicar la misma transformación a cada uno de los dos canales sintéticos:
-
-    | Canal sintético | Fórmula aplicada | $Z$ |
-    |----------------|-----------------|-----|
-    | $W^{(--)}$ (el más malo) | $2(0{,}75)-(0{,}75)^2$ | $\mathbf{0{,}94}$ |
-    | $W^{(-+)}$ | $(0{,}75)^2$ | $0{,}56$ |
-    | $W^{(+-)}$ | $2(0{,}25)-(0{,}25)^2$ | $0{,}44$ |
-    | $W^{(++)}$ (el mejor) | $(0{,}25)^2$ | $\mathbf{0{,}06}$ |
-
-    Con solo $N=4$ canales ya aparece la polarización: el peor tiene $Z=0{,}94$ (casi inútil) y el mejor tiene $Z=0{,}06$ (casi perfecto). Con $N=64$ (Figura 6) la distribución colapsa en dos picos extremos — exactamente lo que predice el teorema de Arıkan.
-
 **De Z₀ al diseño del código: la receta en tres pasos.** El parámetro inicial $Z_0$ no es arbitrario — proviene directamente del canal físico y el SNR al que se quiere operar. Para AWGN con BPSK:
 
 $$Z_0 = e^{-\frac{1}{2\sigma^2}}$$
@@ -434,7 +428,7 @@ donde $\sigma^2$ es la varianza del ruido (fijada por el SNR de diseño). Canal 
 
 El resultado es una lista de posiciones — el "mapa del código" — que encoder y decoder conocen antes de cualquier transmisión. El encoder coloca los $k$ bits del usuario en las posiciones buenas, rellena las malas con ceros, y pasa todo el vector por el butterfly.
 
-Aplicando esta transformación $n$ veces, los $N = 2^n$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen — y por tanto cuántos bits de información puede cargar el código:
+Aplicando esta transformación $m$ veces, los $N = 2^m$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen — y por tanto cuántos bits de información puede cargar el código:
 
 $$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
 
@@ -460,7 +454,7 @@ El decodificador SC (*Successive Cancellation*) decodifica los bits de entrada $
 - Si $u_i$ es un **bit congelado**: $\hat{u}_i = 0$ — no hay nada que calcular, el receptor ya conoce su valor.
 - Si $u_i$ es un **bit de información**: se calcula el LLR de $u_i$ condicionado en los bits ya decodificados $\hat{u}_0, \ldots, \hat{u}_{i-1}$, y se decide $\hat{u}_i = 0$ si LLR $> 0$, y $1$ en caso contrario.
 
-El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly mediante dos operaciones elementales:
+El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly. En cada nodo hay dos roles: el bit sin contexto previo (primero del par) y el bit cuyo predecesor ya fue decidido (segundo del par). Cada rol tiene su operación:
 
 $$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]} \tag{9}$$
 
