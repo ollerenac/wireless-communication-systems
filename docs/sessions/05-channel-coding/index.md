@@ -432,27 +432,7 @@ Tanto el encoder como el decoder conocen de antemano cuáles posiciones son info
 
     $u_3$ se distribuye por las 4 posiciones del codeword: el receptor dispone de cuatro observaciones ruidosas independientes para recuperarlo, más la información de cancelación de $\hat{u}_0$, $\hat{u}_1$, $\hat{u}_2$ ya decodificados. $u_0$, en cambio, solo llega a $x_0$ y el decodificador SC lo decodifica primero, sin ninguna información de cancelación. Eso es exactamente lo que mide el parámetro de Bhattacharyya $Z(W)$: la dificultad de recuperar un bit sin contexto adicional.
 
-**De Z₀ al diseño del código: la receta en tres pasos.** El parámetro inicial $Z_0$ proviene del canal físico y el SNR de diseño. Para AWGN con BPSK:
-
-$$Z_0 = e^{-\frac{1}{2\sigma^2}}$$
-
-Canal ruidoso → $Z_0$ grande (polarización más lenta); canal limpio → $Z_0$ pequeño (polarización más rápida). Con $Z_0$ en mano, el diseño del código sigue tres pasos **offline** — antes de cualquier transmisión:
-
-```mermaid
-flowchart LR
-    A["SNR de diseño<br/>→ σ²"] --> B["Z₀<br/>= exp(-½σ²)"]
-    B --> C["Paso 1 — Calcular<br/>Aplicar ecs. (6) y (7)<br/>log₂N veces desde Z₀<br/>→ N valores Z(Wᵢ)"]
-    C --> D["Paso 2 — Ordenar<br/>ranking por Z<br/>ascendente"]
-    D --> E["Paso 3 — Asignar<br/>k mejores → info<br/>N−k peores → congelados"]
-    E --> F["Mapa del código<br/>TX y RX lo conocen<br/>antes de transmitir"]
-    style A fill:#fff3e0,stroke:#ff9800,color:#333
-    style B fill:#e3f2fd,stroke:#2196f3,color:#333
-    style F fill:#e8f5e9,stroke:#43a047,color:#333
-```
-
-El resultado es una lista de posiciones — el "mapa del código" — que encoder y decoder conocen antes de cualquier transmisión. El encoder coloca los $k$ bits del usuario en las posiciones buenas, rellena las malas con ceros, y pasa todo el vector por el butterfly.
-
-Aplicando esta transformación $m$ veces, los $N = 2^m$ canales sintéticos se polarizan hacia los extremos. El teorema de Arıkan cuantifica exactamente cuántos canales buenos emergen — y por tanto cuántos bits de información puede cargar el código:
+Con el encoder y el mapa de posiciones definidos, la imagen del lado transmisor queda completa. La pregunta que cierra la teoría: ¿cuántas posiciones buenas produce la polarización cuando $N$ es grande — es decir, cuántos bits de información puede cargar el código? El teorema de Arıkan lo garantiza:
 
 $$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
 
