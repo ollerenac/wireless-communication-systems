@@ -33,3 +33,6 @@ Thumbs.db
 
 # Claude Code
 .claude/
+
+# Scripts locales de generación de figuras (no forman parte del repo)
+docs/**/figures/gen_*.py
