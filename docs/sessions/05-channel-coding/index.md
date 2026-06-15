@@ -316,45 +316,47 @@ La idea central de Arıkan: mezclar dos copias del canal físico crea un canal "
 
 **El canal físico $W$.** $W$ modela cómo el canal transforma cada bit transmitido en señal recibida. Para AWGN-BPSK: envías $x \in \{+1,-1\}$ y recibes $y = x + n$ con $n \sim \mathcal{N}(0,\sigma^2)$; en general, $W(y\mid x)$ es la probabilidad de observar $y$ dado $x$. La capacidad $C(W)$ es el máximo de bits fiables por uso — fijada por la física del enlace, no por el diseñador.
 
-**Copias independientes de $W$.** Transmitir dos bits consecutivos usa el canal dos veces con **ruidos independientes**: conocer $y_1$ no dice nada sobre $n_2$. Formalmente, la probabilidad conjunta factoriza:
+**Copias independientes de $W$.** Transmitir dos bits consecutivos usa el canal dos veces con **ruidos independientes**: conocer $y_0$ no dice nada sobre $n_1$. Formalmente, la probabilidad conjunta factoriza:
 
-$$W^2(y_1,y_2\mid x_1,x_2) = W(y_1\mid x_1)\cdot W(y_2\mid x_2)$$
+$$W^2(y_0,y_1\mid x_0,x_1) = W(y_0\mid x_0)\cdot W(y_1\mid x_1) \tag{6}$$
 
 Sin términos cruzados: eso es lo que significa *canal sin memoria*. Esas dos transmisiones independientes son la materia prima de la polarización.
 
 <figure markdown="span">
   ![Canal físico W y dos usos independientes](figures/polar-channel-model.png)
-  <figcaption markdown="1">**Canal físico $W$ y copias independientes.** *Izquierda:* un uso de $W$: el transmisor envía $x$ y el receptor observa $y = x+n$, corrompido por ruido gaussiano. *Derecha:* dos usos consecutivos del mismo canal; los ruidos $n_1$ y $n_2$ son independientes — conocer $y_1$ no reduce la incertidumbre sobre $n_2$. Estas dos transmisiones son la materia prima de la polarización.</figcaption>
+  <figcaption markdown="1">**Figura 5.** Canal físico $W$ y copias independientes. *Izquierda:* un uso de $W$: el transmisor envía $x$ y el receptor observa $y = x+n$, corrompido por ruido gaussiano. *Derecha:* dos usos consecutivos del mismo canal; los ruidos $n_0$ y $n_1$ son independientes — conocer $y_0$ no reduce la incertidumbre sobre $n_1$. Estas dos transmisiones son la materia prima de la polarización.</figcaption>
 </figure>
 
-**Canales sintéticos $W_2^{(-)}$ y $W_2^{(+)}$.** En lugar de transmitir $(u_1,u_2)$ directamente, Arıkan los mezcla primero con la transformación butterfly primitiva $G_2$:
+**Canales sintéticos $W_2^{(-)}$ y $W_2^{(+)}$.** En lugar de transmitir $(u_0,u_1)$ directamente, Arıkan los mezcla primero con la transformación butterfly primitiva $G_2$:
 
-$$x_1 = u_1 \oplus u_2, \quad x_2 = u_2$$
+$$x_0 = u_0 \oplus u_1, \quad x_1 = u_1 \tag{7}$$
 
-Esa mezcla crea **dos sub-problemas de decodificación distintos** sobre las mismas observaciones físicas $(y_1, y_2)$:
+Esa mezcla crea **dos sub-problemas de decodificación distintos** sobre las mismas observaciones físicas $(y_0, y_1)$:
 
-- **$W_2^{(-)}$** (*canal malo*): estimar $u_1$ desde $(y_1,y_2)$ sin información adicional. El receptor ve ruido mezclado, sin saber $u_2$. Resultado: canal **peor** que $W$.
-- **$W_2^{(+)}$** (*canal bueno*): estimar $u_2$ desde $(y_1,y_2)$ **y** $u_1$ ya conocido. Conocer $u_1$ permite cancelar su efecto de $y_1$, reduciendo drásticamente la ambigüedad. Resultado: canal **mejor** que $W$.
+- **$W_2^{(-)}$** (*canal malo*): estimar $u_0$ desde $(y_0,y_1)$ sin información adicional. El receptor ve ruido mezclado, sin saber $u_1$. Resultado: canal **peor** que $W$.
+- **$W_2^{(+)}$** (*canal bueno*): estimar $u_1$ desde $(y_0,y_1)$ **y** $u_0$ ya conocido. Conocer $u_0$ permite cancelar su efecto de $y_0$, reduciendo drásticamente la ambigüedad. Resultado: canal **mejor** que $W$.
 
 <figure markdown="span">
   ![Canales sintéticos W₂⁻ y W₂⁺ del código Polar](figures/polar-synthetic-channels.png)
-  <figcaption markdown="1">**Canales sintéticos primitivos.** La transformación $G_2$ (XOR) mezcla $(u_1,u_2)$ antes de transmitir por dos copias del canal físico $W$. Esto genera dos sub-problemas de decodificación con distinto acceso a información lateral: $W_2^{(-)}$ estima $u_1$ sin contexto; $W_2^{(+)}$ estima $u_2$ con $u_1$ ya conocido. La XOR *redistribuye* capacidad — no la crea: $C(W_2^{(-)}) + C(W_2^{(+)}) = 2\,C(W)$.</figcaption>
+  <figcaption markdown="1">**Figura 6.** Canales sintéticos primitivos $W_2^{(-)}$ y $W_2^{(+)}$. La transformación $G_2$ (XOR) mezcla $(u_0,u_1)$ antes de transmitir por dos copias del canal físico $W$. Esto genera dos sub-problemas de decodificación con distinto acceso a información lateral: $W_2^{(-)}$ estima $u_0$ sin contexto; $W_2^{(+)}$ estima $u_1$ con $u_0$ ya conocido. La XOR *redistribuye* capacidad — no la crea: $C(W_2^{(-)}) + C(W_2^{(+)}) = 2\,C(W)$.</figcaption>
 </figure>
 
-Un canal sintético no es un canal físico — es una abstracción que describe la dificultad de un sub-problema de decodificación. La diferencia entre $W_2^{(+)}$ y $W_2^{(-)}$ no está en las transmisiones físicas (ambos usan las mismas $y_1,y_2$), sino en qué información tiene el receptor al decidir. Esta primitiva $N=2$ se anida $m$ veces para producir $N = 2^m$ canales sintéticos con calidades cada vez más extremas.
+Un canal sintético no es un canal físico — es una abstracción que describe la dificultad de un sub-problema de decodificación. La diferencia entre $W_2^{(+)}$ y $W_2^{(-)}$ no está en las transmisiones físicas (ambos usan las mismas $y_0,y_1$), sino en qué información tiene el receptor al decidir. Esta primitiva $N=2$ se anida $m$ veces para producir $N = 2^m$ canales sintéticos con calidades cada vez más extremas.
 
-La Figura 5 muestra cómo la primitiva se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas.
+La Figura 7 muestra cómo la primitiva se aplica recursivamente $m = \log_2 N$ veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con $N=8$ hay 3 etapas.
 
 <figure markdown="span">
   ![Red butterfly de Arikan para código Polar N=8](figures/polar-butterfly.png)
   <!-- generada por celda 15 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes m}$ de Arıkan; la composición de $m = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
+  <figcaption markdown="1">**Figura 7.** Red butterfly de Arikan para un código Polar de $N=8$, $k=4$ (tasa $r_c=1/2$). Los nodos de entrada (izquierda) corresponden al vector $\mathbf{u}$: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación $G_N = G_2^{\otimes m}$ de Arıkan; la composición de $m = \log_2 N$ etapas butterfly produce la codeword $\mathbf{x}$ (cuadrados, derecha).
   </figcaption>
 </figure>
 
-La polarización separa los $N$ canales sintéticos en dos grupos a medida que $N$ crece: los mejores se vuelven casi perfectos, los peores casi inútiles. La Figura 5 ya muestra el resultado para $N=8$, $k=4$: los cuatro nodos azules son los canales buenos asignados a bits de información; los cuatro salmón son los malos, congelados en cero.
+La polarización separa los $N$ canales sintéticos en dos grupos a medida que $N$ crece: los mejores se vuelven casi perfectos, los peores casi inútiles. La Figura 7 ya muestra el resultado para $N=8$, $k=4$: los cuatro nodos azules son los canales buenos asignados a bits de información; los cuatro salmón son los malos, congelados en cero.
 
 **El encoder como transformación N→N.** La red butterfly es una transformación cuadrada: recibe exactamente $N$ bits de entrada y produce exactamente $N$ bits de codeword. De esos $N$ bits de entrada, $k$ son **bits de información** (los que el transmisor quiere comunicar) y $N-k$ son **bits congelados**, fijados a 0 por diseño. El transmisor construye el vector completo $\mathbf{u}$ colocando sus $k$ bits en las posiciones "buenas" y un cero en cada posición "mala"; ese $\mathbf{u}$ — completamente conocido — entra al butterfly. La tasa del código es $r_c = k/N$.
+
+**Calidad del canal sintético: el parámetro $Z$.** Para comparar los $N$ canales sintéticos entre sí se necesita una métrica de calidad. El **parámetro de Bhattacharyya** $Z(W_N^{(i)}) \in [0,\,1]$ es esa métrica: mide cuánto se solapan las distribuciones condicionales de $y$ bajo las dos hipótesis posibles ($u_i = 0$ frente a $u_i = 1$). Si $Z \approx 0$, las dos distribuciones son casi disjuntas — el canal sintético es casi perfecto, el decoder difícilmente se equivoca. Si $Z \approx 1$, las distribuciones son casi idénticas — el canal sintético es casi inútil, la información de $u_i$ queda enterrada en ruido. La polarización hace exactamente esto: convierte los valores intermedios de $Z$ del canal físico en extremos — unos pocos $Z \approx 0$ y el resto $Z \approx 1$ — a medida que $N$ crece.
 
 **Selección de posiciones.** La elección de qué posiciones son buenas y cuáles son malas se hace fuera de línea, como parte del diseño del código. Los $N$ canales sintéticos se ordenan por calidad — del mejor al peor — y se asignan:
 
@@ -409,7 +411,7 @@ Tanto el encoder como el decoder conocen de antemano cuáles posiciones son info
 
 Con el encoder y el mapa de posiciones definidos, la imagen del lado transmisor queda completa. La pregunta que cierra la teoría: ¿cuántas posiciones buenas produce la polarización cuando $N$ es grande — es decir, cuántos bits de información puede cargar el código? El teorema de Arıkan lo garantiza:
 
-$$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{8}$$
+$$\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) < \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta > 0 \tag{9}$$
 
 El teorema dice: a medida que $N$ crece, la fracción de canales sintéticos con $Z \approx 0$ (casi perfectos) converge exactamente a $C(W)$ — la capacidad de Shannon del canal físico original. La fracción restante, $1 - C(W)$, colapsa hacia $Z \approx 1$ (casi inútiles). No hay término medio: la polarización empuja todos los canales hacia uno de los dos extremos.
 
@@ -420,7 +422,7 @@ La polarización no crea capacidad de la nada — la **concentra**. El canal fí
 <figure markdown="span">
   ![Histograma de polarización de canales sintéticos Polar N=64](figures/polar-polarization.png)
   <!-- generada por celda 17 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** Histograma del parámetro de Bhattacharyya $Z(W_{64}^{(i)})$ para los $N=64$ canales sintéticos de un código Polar con $r_c=1/2$, diseñado a $E_b/N_0=3\ \text{dB}$. La distribución es bimodal: los 32 canales de información (azul) se concentran en $Z\approx 0$ (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en $Z\approx 1$ (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para $N\to\infty$ — es la propiedad que garantiza que el código alcance la capacidad del canal.
+  <figcaption markdown="1">**Figura 8.** Histograma del parámetro de Bhattacharyya $Z(W_{64}^{(i)})$ para los $N=64$ canales sintéticos de un código Polar con $r_c=1/2$, diseñado a $E_b/N_0=3\ \text{dB}$. La distribución es bimodal: los 32 canales de información (azul) se concentran en $Z\approx 0$ (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en $Z\approx 1$ (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para $N\to\infty$ — es la propiedad que garantiza que el código alcance la capacidad del canal.
   </figcaption>
 </figure>
 
@@ -435,18 +437,18 @@ El decodificador SC (*Successive Cancellation*) decodifica los bits de entrada $
 
 El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly. En cada nodo hay dos roles: el bit sin contexto previo (primero del par) y el bit cuyo predecesor ya fue decidido (segundo del par). Cada rol tiene su operación:
 
-$$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]} \tag{9}$$
+$$f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]} \tag{10}$$
 
-$$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]} \tag{10}$$
+$$g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]} \tag{11}$$
 
 La operación $g$ es la "cancelación sucesiva": una vez que $\hat{u}$ es conocido, deshace el XOR que el codificador aplicó y libera el LLR del siguiente bit con la información completa. La complejidad total es $\mathcal{O}(N\log N)$ — la misma que la FFT.
 
-La Figura 7 muestra las dos pasadas del decodificador SC para el ejemplo N=4. **Pasada 1** (panel izquierdo, naranja): el decoder lee los cuatro LLRs de canal y los combina de a pares con $f$ — obteniendo dos valores intermedios que resumen la información conjunta de $(L_0, L_2)$ y $(L_1, L_3)$ respectivamente. Desde esos dos intermedios, una segunda aplicación de $f$ y $g$ produce los LLRs para $\hat{u}_0$ y $\hat{u}_1$; como son bits congelados, la decisión es trivial: siempre 0. **Pasada 2** (panel derecho, verde): con $\hat{u}_0 = \hat{u}_1 = 0$ ya conocidos, el decoder regresa a los mismos LLRs de canal pero ahora aplica $g$ en lugar de $f$ — la operación $g$ incorpora los bits ya decididos como cancelación, actualizando los intermedios. Los nuevos valores intermedios $(-4{,}4$ y $+3{,}6)$ alimentan $f$ y $g$ para decidir $\hat{u}_2 = 1$ y $\hat{u}_3 = 0$: los bits de información, recuperados correctamente.
+La Figura 9 muestra las dos pasadas del decodificador SC para el ejemplo N=4. **Pasada 1** (panel izquierdo, naranja): el decoder lee los cuatro LLRs de canal y los combina de a pares con $f$ — obteniendo dos valores intermedios que resumen la información conjunta de $(L_0, L_2)$ y $(L_1, L_3)$ respectivamente. Desde esos dos intermedios, una segunda aplicación de $f$ y $g$ produce los LLRs para $\hat{u}_0$ y $\hat{u}_1$; como son bits congelados, la decisión es trivial: siempre 0. **Pasada 2** (panel derecho, verde): con $\hat{u}_0 = \hat{u}_1 = 0$ ya conocidos, el decoder regresa a los mismos LLRs de canal pero ahora aplica $g$ en lugar de $f$ — la operación $g$ incorpora los bits ya decididos como cancelación, actualizando los intermedios. Los nuevos valores intermedios $(-4{,}4$ y $+3{,}6)$ alimentan $f$ y $g$ para decidir $\hat{u}_2 = 1$ y $\hat{u}_3 = 0$: los bits de información, recuperados correctamente.
 
 <figure markdown="span">
   ![Decodificación SC N=4 — dos pasadas con LLRs anotados](figures/sc-decoding-n4.png)
   <!-- generada por celda 15 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 7.** Decodificación SC para el ejemplo N=4, k=2. **Pasada 1** (naranja): los cuatro LLRs de canal se combinan con $f$ para producir dos valores intermedios; luego $f$ y $g$ deciden $\hat{u}_0=0$ y $\hat{u}_1=0$ (bits congelados, siempre correctos). **Pasada 2** (verde): con $\hat{u}_0, \hat{u}_1$ conocidos, la operación $g$ actualiza los intermedios; $f$ y $g$ deciden $\hat{u}_2=1$ y $\hat{u}_3=0$ (bits de información, ambos correctos ✓).
+  <figcaption markdown="1">**Figura 9.** Decodificación SC para el ejemplo N=4, k=2. **Pasada 1** (naranja): los cuatro LLRs de canal se combinan con $f$ para producir dos valores intermedios; luego $f$ y $g$ deciden $\hat{u}_0=0$ y $\hat{u}_1=0$ (bits congelados, siempre correctos). **Pasada 2** (verde): con $\hat{u}_0, \hat{u}_1$ conocidos, la operación $g$ actualiza los intermedios; $f$ y $g$ deciden $\hat{u}_2=1$ y $\hat{u}_3=0$ (bits de información, ambos correctos ✓).
   </figcaption>
 </figure>
 
@@ -544,7 +546,7 @@ La figura siguiente muestra las curvas de BER (*waterfall*) de los dos códigos 
 <figure markdown="span">
   ![Curvas waterfall LDPC y Polar vs BPSK sin código](figures/waterfall-curves.png)
   <!-- generada por celda 18 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 8.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, N=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
+  <figcaption markdown="1">**Figura 10.** Curvas de BER (*waterfall*) en función de $E_b/N_0$ para BPSK sin código (negro), LDPC $r_c\approx1/2$ (azul, Monte Carlo, N=240) y cota de unión Bhattacharyya para Polar $r_c=1/2$ ($N=64$, naranja), todas sobre canal AWGN.
   </figcaption>
 </figure>
 
@@ -578,7 +580,7 @@ La pregunta natural es: el ejemplo end-to-end muestra $R \approx 160$ Mbit/s con
 <figure markdown="span">
   ![BER end-to-end OFDM+LDPC vs sin FEC vs AWGN](figures/ofdm-ldpc-ber.png)
   <!-- generada por celda 20 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 8.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
+  <figcaption markdown="1">**Figura 11.** BER en función de $E_b/N_0$ para un sistema OFDM ($N=128$ subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC $r_c\approx0{,}51$ (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
   El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando $\approx 3\ \text{dB}$ de ganancia a BER $= 10^{-3}$ gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
   </figcaption>
 </figure>
