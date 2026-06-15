@@ -6,6 +6,10 @@ description: "Del límite de Shannon a los códigos que lo alcanzan: LDPC con be
 
 # Sesión 05 — Codificación de Canal: LDPC y Códigos Polar
 
+- [Vídeo - Parte 1](https://youtu.be/eafyTPziosg?si=S6IAtSw0Fj_14okx)
+
+- [Vídeo - Parte 2](https://youtu.be/Y11RbHtiZXY?si=tS5Q1cUh9ATKVz1N)
+
 ## Objetivos de Aprendizaje
 
 Al finalizar esta sesión, el estudiante será capaz de:

@@ -6,9 +6,9 @@ description: "Fundamentos del canal inalámbrico: path loss, shadowing, multipat
 
 # Sesión 01 — Modelado del Canal Inalámbrico
 
-[Video - Parte 1](https://youtu.be/r44p2Y9n89g?si=-8gQ14Bs2J1Q5Dyy)
+[Vídeo - Parte 1](https://youtu.be/r44p2Y9n89g?si=-8gQ14Bs2J1Q5Dyy)
 
-[Video - Parte 2](https://www.youtube.com/live/9JTkiddcbbk?si=HaFTiODmf6XKDOQt)
+[Vídeo - Parte 2](https://www.youtube.com/live/9JTkiddcbbk?si=HaFTiODmf6XKDOQt)
 
 ## Objetivos de Aprendizaje
 

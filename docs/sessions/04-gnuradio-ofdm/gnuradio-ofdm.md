@@ -5,6 +5,8 @@ description: "Construcción visual de la cadena OFDM completa: TX, canal AWGN y 
 
 # Lab — Estudiando OFDM con GNU Radio
 
+- [Vídeo](https://youtu.be/SWQYXDt1svw?si=1wB68uDhIBoqPfg2)
+
 GNU Radio Companion (GRC) permite construir sistemas de procesamiento de señal como **flowgraphs** visuales: cada etapa de la cadena es un bloque, las conexiones son los flujos de datos, y la ejecución corre en tiempo real. En este laboratorio construiremos la cadena OFDM completa y observaremos en vivo el efecto del canal, el prefijo cíclico y el ruido sobre la constelación recibida.
 
 ---

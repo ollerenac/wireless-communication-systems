@@ -6,6 +6,8 @@ description: "Multiportadora, DFT, prefijo cíclico y ecualización de un tap: c
 
 # Sesión 03 — Sistemas OFDM e Implementación
 
+- [Vídeo - Parte 2](https://youtu.be/btakZbTDln8?si=qdIgugkaJC8gYiS-)
+
 ## Objetivos de Aprendizaje
 
 Al finalizar esta sesión, el estudiante será capaz de:
