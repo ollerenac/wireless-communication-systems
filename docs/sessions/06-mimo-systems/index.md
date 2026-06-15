@@ -77,11 +77,11 @@ $$\mathbf{H} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^{\mathsf{H}} \tag{3}$$
 
 donde $\mathbf{U} \in \mathbb{C}^{N_r \times N_r}$ y $\mathbf{V} \in \mathbb{C}^{N_t \times N_t}$ son matrices unitarias ($\mathbf{U}\mathbf{U}^{\mathsf{H}} = \mathbf{I}$, $\mathbf{V}\mathbf{V}^{\mathsf{H}} = \mathbf{I}$), y $\boldsymbol{\Sigma} \in \mathbb{R}^{N_r \times N_t}$ es diagonal con los **valores singulares** $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r \geq 0$, $r = \mathrm{rank}(\mathbf{H}) \leq \min(N_t, N_r)$.
 
-**Diagonalización del canal.** Si el transmisor conoce $\mathbf{H}$ (CSIT completo), puede **precodificar** con $\mathbf{V}$ y el receptor puede **combinar** con $\mathbf{U}^{\mathsf{H}}$:
+**Diagonalización del canal.** Si el transmisor conoce $\mathbf{H}$ (CSIT completo), puede **precodificar** con $\mathbf{V}$: en lugar de transmitir $\mathbf{x}$ directamente, transmite $\mathbf{x} = \mathbf{V}\tilde{\mathbf{x}}$, donde $\tilde{\mathbf{x}} \in \mathbb{C}^r$ es el vector de datos. Simultáneamente, el receptor aplica $\mathbf{U}^{\mathsf{H}}$ sobre la señal recibida:
 
-$$\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y} = \mathbf{U}^{\mathsf{H}}\mathbf{H}\mathbf{V}\tilde{\mathbf{x}} + \mathbf{U}^{\mathsf{H}}\mathbf{n} = \boldsymbol{\Sigma}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} \tag{4}$$
+$$\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y} = \mathbf{U}^{\mathsf{H}}\mathbf{H}\mathbf{V}\tilde{\mathbf{x}} + \mathbf{U}^{\mathsf{H}}\mathbf{n} = \mathbf{U}^{\mathsf{H}}(\mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^{\mathsf{H}})\mathbf{V}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} = \boldsymbol{\Sigma}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} \tag{4}$$
 
-Como $\mathbf{U}$ es unitaria, $\tilde{\mathbf{n}} = \mathbf{U}^{\mathsf{H}}\mathbf{n}$ conserva la distribución $\mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$. El resultado es $r$ **canales AWGN paralelos e independientes**:
+donde en el último paso se usó $\mathbf{V}^{\mathsf{H}}\mathbf{V} = \mathbf{I}$ y $\mathbf{U}^{\mathsf{H}}\mathbf{U} = \mathbf{I}$ (matrices unitarias). Como $\mathbf{U}$ es unitaria, $\tilde{\mathbf{n}} = \mathbf{U}^{\mathsf{H}}\mathbf{n}$ conserva la distribución $\mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$. El resultado es $r$ **canales AWGN paralelos e independientes**:
 
 $$\tilde{y}_k = \sigma_k \tilde{x}_k + \tilde{n}_k, \quad k = 1, \ldots, r \tag{5}$$
 
@@ -98,18 +98,18 @@ El canal MIMO se ha convertido en $r$ canales escalares independientes con ganan
 
 $$\boxed{C_{\text{WF}} = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P_k^* \sigma_k^2}{N_0}\right)} \quad \text{[bit/s/Hz]} \tag{6}$$
 
-con $P_k^* = (\mu - N_0/\sigma_k^2)^+$ y $\mu$ el nivel de agua que satisface $\sum_k P_k^* = P$.
+con $P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$ donde $(x)^+ \triangleq \max(0, x)$, y $\mu$ es el "nivel de agua" que satisface $\sum_k P_k^* = P$.
 
 **Capacidad sin CSIT (potencia uniforme).** En la práctica, el transmisor a menudo no conoce $\mathbf{H}$. Con potencia uniforme $P_k = P/N_t$, la capacidad es:
 
-$$C_{\text{iCSI}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf{H}\mathbf{H}^{\mathsf{H}}\right) = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P \sigma_k^2}{N_t N_0}\right) \tag{7}$$
+$$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf{H}\mathbf{H}^{\mathsf{H}}\right) = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P \sigma_k^2}{N_t N_0}\right) \tag{7}$$
 
 **La clave**: con $N_t = N_r = N$ antenas y en alta SNR, $C \approx N \log_2(\text{SNR}/N) + \text{const}$. La capacidad escala **linealmente** con $N = \min(N_t, N_r)$. Cada factor de 2 en el número de antenas *duplica* la capacidad — sin ancho de banda adicional y sin potencia adicional.
 
 <figure markdown="span">
   ![Capacidad MIMO vs SNR para diferentes configuraciones](figures/mimo-capacity.png)
   <!-- generada por celda 6 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 4.** Capacidad ergódica (media sobre realizaciones del canal) en función de $E_b/N_0$ para sistemas $1\times1$, $2\times2$, $4\times4$ y $8\times8$ con modelo i.i.d. Rayleigh. Las curvas confirman el crecimiento lineal en $N$ a SNR alta (las curvas se separan proporcionalmente). La **pendiente** en esta escala log es $N$ veces la de SISO — la principal razón por la que todos los sistemas inalámbricos modernos son MIMO.
+  <figcaption markdown="1">**Figura 4.** Capacidad ergódica (media sobre realizaciones del canal) en función de la SNR [dB] para sistemas $1\times1$, $2\times2$, $4\times4$ y $8\times8$ con modelo i.i.d. Rayleigh. A SNR alta las curvas son paralelas y separadas verticalmente por un factor $N$ — evidencia directa del crecimiento lineal de la capacidad con el número de antenas. La principal razón por la que todos los sistemas inalámbricos modernos son MIMO.
   </figcaption>
 </figure>
 
@@ -126,8 +126,8 @@ La **curva DMT óptima** para un sistema $N_t \times N_r$ con i.i.d. Rayleigh es
 $$d^*(r) = (N_t - r)(N_r - r), \quad r \in \{0, 1, \ldots, \min(N_t, N_r)\} \tag{8}$$
 
 Los puntos extremos son:
-- $r = 0$: diversidad máxima $d = N_t N_r$ (enviar 0 streams independientes, repetición completa)
-- $r = \min(N_t, N_r)$: multiplexación máxima $d = 0$ (máximos streams, sin protección)
+- $r = 0$: diversidad máxima $d = N_t N_r$ (se transmite un solo stream por todas las antenas, típicamente con codificación espacio-temporal como STBC/Alamouti; la tasa no crece con la SNR pero la fiabilidad sí)
+- $r = \min(N_t, N_r)$: multiplexación máxima $d = 0$ (máximos streams independientes; la tasa crece logarítmicamente con la SNR pero la BER no mejora con ella)
 
 **Regla práctica de diseño:**
 
@@ -142,17 +142,17 @@ En 5G NR, el selector de rango (rank adaptation) elige $r$ dinámicamente basán
 <figure markdown="span">
   ![Curva DMT para sistemas 2×2, 4×4](figures/mimo-dmt.png)
   <!-- generada por celda 8 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** Curva DMT $d^*(r)$ para sistemas $2\times2$ (triángulo) y $4\times4$ (polígono). Los puntos marcados son esquemas concretos: **OSTBC** (Space-Time Block Code) maximiza diversidad operando en $r=1$; **V-BLAST** maximiza multiplexación en $r=\min(N_t,N_r)$; el punto intermedio es la solución de Zheng-Tse para $r=1$ en el sistema $4\times4$. Un sistema que opera al vértice inferior-derecho explota toda la multiplexación — cada dB adicional de SNR se traduce en tasa, no en reducción de errores.
+  <figcaption markdown="1">**Figura 5.** Curva DMT $d^*(r)$ para sistemas $2\times2$ (triángulo) y $4\times4$ (polígono). Los vértices corresponden a esquemas concretos: en $r=0$ opera el **OSTBC/Alamouti** (diversidad máxima $N_tN_r$, sin ganancia de multiplexación); en $r=\min(N_t,N_r)$ opera **V-BLAST** (multiplexación máxima, $d=N_r-N_t+1$ para $N_t \leq N_r$). Los puntos intermedios representan el rango continuo de equilibrios posibles. Un sistema que opera en el vértice inferior-derecho explota toda la multiplexación — cada dB adicional de SNR se traduce en tasa, no en reducción de errores.
   </figcaption>
 </figure>
 
 ### 5. Precodificación Lineal: MRT y ZF
 
-En el escenario multiusuario (MU-MIMO), la estación base tiene $M$ antenas y sirve simultáneamente a $K$ usuarios, cada uno con una sola antena. El canal de bajada es:
+En el escenario multiusuario (MU-MIMO), la estación base tiene $M$ antenas y sirve simultáneamente a $K$ usuarios, cada uno con una sola antena. La notación cambia ligeramente respecto al §2: aquí $M$ es el número de antenas en la BS (rol de $N_t$) y $K$ el número de usuarios (rol de $N_r$). El canal de bajada es:
 
 $$\mathbf{y} = \mathbf{H}\mathbf{W}\mathbf{s} + \mathbf{n} \tag{9}$$
 
-donde $\mathbf{H} \in \mathbb{C}^{K \times M}$ es el canal agregado, $\mathbf{W} \in \mathbb{C}^{M \times K}$ es la **matriz de precodificación** y $\mathbf{s} \in \mathbb{C}^K$ son los símbolos de los $K$ usuarios. La señal recibida por el usuario $k$ es:
+donde $\mathbf{H} \in \mathbb{C}^{K \times M}$ es la matriz de canal agregada, $\mathbf{W} \in \mathbb{C}^{M \times K}$ es la **matriz de precodificación** y $\mathbf{s} \in \mathbb{C}^K$ son los símbolos de los $K$ usuarios. Denotamos $\mathbf{h}_k \in \mathbb{C}^M$ el vector de canal del usuario $k$ (la $k$-ésima fila de $\mathbf{H}$ transpuesta conjugada), y $\mathbf{w}_k \in \mathbb{C}^M$ la $k$-ésima columna de $\mathbf{W}$. La señal recibida por el usuario $k$ es:
 
 $$y_k = \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_k s_k + \underbrace{\sum_{j \neq k} \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j s_j}_{\text{interferencia entre usuarios}} + n_k \tag{10}$$
 
@@ -160,11 +160,11 @@ El diseño del precoder $\mathbf{W}$ es el problema central del MU-MIMO.
 
 **Maximum Ratio Transmission (MRT).** El precoder más simple: apuntar el haz hacia cada usuario con el vector conjugado de su canal:
 
-$$\mathbf{W}_{\text{MRT}} = \mathbf{H}^{\mathsf{H}} \tag{11}$$
+$$\mathbf{W}_{\text{MRT}} = \frac{1}{\sqrt{\rho}}\mathbf{H}^{\mathsf{H}}, \quad \rho = \|\mathbf{H}^{\mathsf{H}}\|_F^2 = \|\mathbf{H}\|_F^2 \tag{11}$$
 
-MRT maximiza la potencia recibida por el usuario objetivo, pero **no cancela la interferencia** entre usuarios. El SINR del usuario $k$ es:
+donde el factor $1/\sqrt{\rho}$ normaliza la potencia transmitida a $P$ (la restricción de potencia se aplica siempre al precoder). MRT maximiza la potencia recibida por el usuario objetivo, pero **no cancela la interferencia** entre usuarios. Asumiendo potencia unitaria por usuario ($P = 1$, SNR absorbida en $N_0$), el SINR del usuario $k$ es:
 
-$$\text{SINR}_k^{\text{MRT}} = \frac{|\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_k|^2}{\sum_{j \neq k} |\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_j|^2 + N_0} \tag{12}$$
+$$\text{SINR}_k^{\text{MRT}} = \frac{\|\mathbf{h}_k\|^4}{\sum_{j \neq k} |\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_j|^2 + \rho N_0} \tag{12}$$
 
 **Zero-Forcing (ZF).** El precoder que **elimina completamente** la interferencia entre usuarios mediante la pseudoinversa:
 
@@ -181,7 +181,7 @@ Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$
 <figure markdown="span">
   ![BER de MRT vs ZF para K=4 usuarios](figures/mimo-mrt-zf.png)
   <!-- generada por celda 10 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** Curvas BER (QPSK) para MRT y ZF con $M=8$ antenas en la BS y $K=4$ usuarios. A SNR baja, MRT domina porque ZF amplifica el ruido. A SNR alta, ZF supera a MRT porque la interferencia (no cancelada por MRT) se convierte en el término limitante. La figura muestra el "cruce" típico alrededor de 10–12 dB para esta configuración.
+  <figcaption markdown="1">**Figura 6.** Curva BER (QPSK) para MRT con $M=8$ antenas en la BS y $K=4$ usuarios, generada automáticamente. El precodificador ZF se obtiene completando el **Ejercicio 3** del laboratorio (`precoder_zf` en `lab.ipynb`): una vez implementado, la curva ZF se superpone y muestra cómo a SNR baja MRT domina (ZF amplifica el ruido) pero a SNR alta ZF supera a MRT (la interferencia inter-usuario se convierte en el término limitante), con un cruce típico alrededor de 10–12 dB.
   </figcaption>
 </figure>
 
@@ -199,7 +199,7 @@ donde $\beta_k$ es la ganancia de gran escala (path loss + shadowing). La potenc
 
 $$\frac{\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_j}{M} \xrightarrow[M \to \infty]{\text{a.s.}} 0, \quad k \neq j \tag{15}$$
 
-Esto significa que la interferencia entre usuarios con MRT (el numerador cruzado en la ec. (12)) tiende a cero conforme $M$ crece — MRT se vuelve **asintóticamente óptimo** y la interferencia entre usuarios desaparece sin necesidad de inversión matricial.
+Esto significa que la interferencia entre usuarios con MRT (el término $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|^2$ en el denominador de la ec. (12)) tiende a cero conforme $M$ crece — MRT se vuelve **asintóticamente óptimo** y la interferencia entre usuarios desaparece sin necesidad de inversión matricial.
 
 **Consecuencia práctica**: con $M \gg K$, MRT es suficiente. El SINR del usuario $k$ converge a:
 
