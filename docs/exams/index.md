@@ -11,8 +11,10 @@
 
 1. Haz clic en el badge **Open in Colab** arriba.
 2. En Colab: `Archivo → Guardar una copia en Drive` para obtener tu copia personal.
-3. Responde en las celdas Markdown señaladas con **"Respuesta:"**.
-4. Al terminar: `Archivo → Descargar → Descargar .ipynb` y súbelo al campus virtual.
+3. **Enciende tu cámara** durante toda la duración del examen.
+4. Responde en las celdas Markdown señaladas con **"Respuesta:"**.
+5. Al terminar: `Archivo → Descargar → Descargar .ipynb` y súbelo a la carpeta de entrega del curso en Google Drive:  
+   [📁 Carpeta de entrega — Google Drive](https://drive.google.com/drive/folders/1s751MSrktR3NrkKgQ0-XutkjTzUdpxzG?usp=sharing)
 
 ### Estructura del examen
 
