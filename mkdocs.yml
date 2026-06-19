@@ -74,3 +74,5 @@ nav:
       - "04 — Lab OFDM con GNU Radio": sessions/04-gnuradio-ofdm/gnuradio-ofdm.md
       - "05 — Codificación de Canal": sessions/05-channel-coding/index.md
       - "06 — MIMO y Massive MIMO": sessions/06-mimo-systems/index.md
+  - Evaluaciones:
+      - "Parcial 01": exams/index.md
