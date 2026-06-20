@@ -7,6 +7,7 @@
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/exams/parcial-01/parcial-01.ipynb)
 
+
 ### Instrucciones de entrega
 
 1. Haz clic en el badge **Open in Colab** arriba.
