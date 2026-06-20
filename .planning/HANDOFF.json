@@ -1,20 +1,88 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-13T01:30:00-05:00",
+  "timestamp": "2026-06-20T14:43:58-05:00",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
-  "status": "between-sessions",
-  "completed_this_session": [
-    "PII purge: git filter-branch rewrote history, force-push completed",
-    "§4.1 opening rewritten to define W, independent copies, synthetic channels (181c59c)",
-    "Frozen bit selection + 3-step design recipe added after Figure 5 (df48f08)",
-    "Bhattacharyya Z0 origin from SNR added before theorem (df48f08)",
-    "Capacity theorem expanded with C(W)=0.7 concrete example (0a8043d)",
-    "Figure 7 SC decoder two-panel flow diagram created (fa4eb62)",
-    "Narrative walkthrough for Figure 7 added (f2215bd)",
-    "§4.1 opening rewritten from scratch — W defined, independence explained (181c59c)"
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Grading Parcial 01 — 5 student notebooks",
+      "status": "done",
+      "commit": "3d8d884",
+      "notes": "Multi-agent workflow graded 40 questions per student on 100-pt scale. Results in notas-parcial-01.csv and notas-parcial-01-detalle.json (local, gitignored)."
+    },
+    {
+      "id": 2,
+      "name": "Publish solutions notebook to exam page",
+      "status": "done",
+      "commit": "3d8d884",
+      "notes": "Added Solucionario section with Colab badge to docs/exams/index.md. Pushed to origin/main."
+    },
+    {
+      "id": 3,
+      "name": "Gitignore student submissions directory",
+      "status": "done",
+      "commit": "3d8d884",
+      "notes": "exams/**/examen-parcial-soluciones/ added to .gitignore — PII stays local forever."
+    },
+    {
+      "id": 4,
+      "name": "Generate per-student Spanish feedback .txt files",
+      "status": "done",
+      "commit": null,
+      "notes": "5 retroalimentacion-*.txt files in exams/parcial-01/examen-parcial-soluciones/ — gitignored, local only. Each has P1-P40 comments + evaluacion general in clear Spanish."
+    }
   ],
-  "next_action": "Continue pedagogical review of §4 Polar Codes if requested, or begin Session 04 GNU Radio OFDM",
-  "context_notes": "Professor studying polar codes content interactively. §4.1 and §4.2 improved. §4.3 SCL and §5 synthesis not yet reviewed."
+  "remaining_tasks": [
+    {
+      "id": 5,
+      "name": "Distribute grades to students",
+      "status": "not_started",
+      "notes": "User deferred email sending. Feedback .txt files ready. Needs student emails."
+    },
+    {
+      "id": 6,
+      "name": "Session 06 MIMO — pending lab todos",
+      "status": "not_started",
+      "notes": "Ejercicio 1: histograma + Marchenko-Pastur; Ejercicio 2: precoder_zf implementation."
+    }
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {
+      "action": "Provide student email addresses and send grade feedback files",
+      "context": "5 retroalimentacion-*.txt files generated in Spanish, ready to attach. User deferred email step this session.",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Grade on 100-pt scale internally, convert to /20 for publishing",
+      "rationale": "Course uses vigesimal scale; internal 100-pt allows per-question 2.5-pt granularity",
+      "phase": null
+    },
+    {
+      "decision": "Solutions notebook pushed to GitHub with Colab badge on exam page",
+      "rationale": "Post-exam distribution — students open directly in Colab without needing repo access",
+      "phase": null
+    },
+    {
+      "decision": "Student submissions (examen-parcial-soluciones/) permanently gitignored",
+      "rationale": "Contains PII (student names, answers, grades) — must never reach the public repo",
+      "phase": null
+    },
+    {
+      "decision": "Grades not published on course site — distributed individually",
+      "rationale": "Privacy — each student receives only their own grade and feedback",
+      "phase": null
+    }
+  ],
+  "uncommitted_files": [],
+  "next_action": "Distribute grade feedback to students via email (needs addresses), then resume Session 06 MIMO lab todos (Ejercicio 1 histograma, Ejercicio 2 precoder_zf)",
+  "context_notes": "Parcial 01 fully closed: exam administered, graded (AI multi-agent workflow), solutions published on site, Spanish feedback files generated. Repo is clean at 3d8d884 (origin/main in sync). All student data is local-only in the gitignored directory exams/parcial-01/examen-parcial-soluciones/."
 }
