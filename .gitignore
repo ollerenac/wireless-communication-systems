@@ -36,3 +36,6 @@ Thumbs.db
 
 # Scripts locales de generación de figuras (no forman parte del repo)
 docs/**/figures/gen_*.py
+
+# Entregas de alumnos y notas — PII, nunca al repo
+exams/**/examen-parcial-soluciones/

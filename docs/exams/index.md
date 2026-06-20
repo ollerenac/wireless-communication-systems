@@ -26,3 +26,11 @@
 | III | Sistemas OFDM | 10 | 25 |
 | IV | Codificación de Canal (LDPC y Polar) | 10 | 25 |
 | **Total** | | **40** | **100** |
+
+---
+
+## Solucionario
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/exams/parcial-01/parcial-01-soluciones.ipynb)
+
+Solucionario completo con derivaciones, valores numéricos verificados y referencias a secciones del curso.
