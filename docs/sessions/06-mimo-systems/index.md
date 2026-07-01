@@ -34,7 +34,9 @@ Es por eso que **todos** los sistemas inalámbricos modernos son MIMO: el están
 
 ### 1. De SISO a MIMO — la Intuición Espacial
 
-El canal SISO tiene una sola "vía" entre el transmisor y el receptor. Con múltiples antenas, existen **múltiples vías simultáneas** que pueden usarse de dos maneras opuestas:
+Piense en una autopista. Un canal SISO es una carretera de un solo carril: por muy potente que sea el camión (la potencia) o por muy bien empaquetada que vaya la carga (la modulación), solo pasa un vehículo a la vez. Añadir antenas equivale a **abrir carriles nuevos** en la misma carretera, sin comprar más terreno (ancho de banda) ni camiones más grandes (potencia). Y una vez abiertos los carriles, hay dos formas opuestas de usarlos: enviar **carga distinta por cada carril** — más mercancía por hora — o enviar **la misma carga por todos los carriles** como un seguro: si un carril se bloquea (un desvanecimiento profundo), la mercancía llega igual por los demás.
+
+Esa es exactamente la disyuntiva del MIMO. El canal SISO tiene una sola "vía" entre el transmisor y el receptor. Con múltiples antenas, existen **múltiples vías simultáneas** que pueden usarse de dos maneras opuestas:
 
 - **Diversidad espacial**: enviar la misma información por todas las vías. Si una vía experimenta *fading* profundo, las otras siguen activas. La confiabilidad aumenta.
 - **Multiplexación espacial**: enviar información *diferente* por cada vía. La tasa total aumenta.
@@ -48,7 +50,11 @@ Estas dos estrategias son las extremas del **compromiso diversidad-multiplexaci�
   </figcaption>
 </figure>
 
+La pregunta natural es: si ya no hay una sola vía sino muchas que se cruzan, ¿cómo se describe matemáticamente ese haz de vías? → con una matriz.
+
 ### 2. El Canal MIMO — Modelo Matricial
+
+Antes del álgebra, la idea física: en el aire no hay cables que separen las señales. Cada antena receptora oye una **mezcla ponderada** de lo que enviaron *todas* las antenas transmisoras a la vez, y la matriz $\mathbf{H}$ no es más que la **tabla de esas ponderaciones**: el elemento $h_{ji}$ responde a la pregunta "¿cuánto de lo que emitió la antena transmisora $i$ llega a la antena receptora $j$, y con qué fase?". Todo el formalismo que sigue es contabilidad ordenada de esa mezcla.
 
 Sea $\mathbf{x} \in \mathbb{C}^{N_t}$ el vector transmitido con restricción de potencia $\mathbb{E}[\|\mathbf{x}\|^2] \leq P$, y $\mathbf{y} \in \mathbb{C}^{N_r}$ el vector recibido. El modelo de canal MIMO de banda estrecha (flat fading) es:
 
@@ -69,7 +75,49 @@ Este modelo corresponde a un entorno con *scattering* denso e isótropo donde no
   </figcaption>
 </figure>
 
+Ya tenemos la tabla de ponderaciones $\mathbf{H}$; la pregunta natural es: ¿cómo desenredamos la mezcla para poder transmitir varios flujos sin que se pisen? → la SVD.
+
 ### 3. Capacidad MIMO vía SVD
+
+La intuición primero. El canal MIMO es como una **mesa de mezclas mal cableada**: cada micrófono (antena TX) suena por todos los altavoces (antenas RX) a la vez, y lo que llega es un revoltijo. La SVD es el técnico de sonido que encuentra los **ejes naturales del canal**: una rotación a la entrada ($\mathbf{V}$) y otra a la salida ($\mathbf{U}$) que convierten ese canal enredado — donde las antenas se interfieren entre sí — en un banco de *faders* independientes: subcanales que **no se mezclan**, cada uno con su propia ganancia $\sigma_k$. Las rotaciones no crean ni destruyen señal (son unitarias); solo eligen el punto de vista correcto para mirar el canal.
+
+#### 3.1 Un ejemplo concreto 2×2
+
+Antes de la maquinaria general, un canal que se resuelve completo con lápiz y papel. Conviene tenerlo a mano durante toda la sección: cada objeto abstracto que aparezca después ($\mathbf{U}$, $\boldsymbol{\Sigma}$, $\mathbf{V}$, capacidad) tiene aquí un número concreto.
+
+??? example "Ejemplo numérico: SVD y capacidad de un canal 2×2"
+
+    **El canal.** Dos antenas por lado, con acoplamiento cruzado moderado:
+
+    $$\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
+
+    La diagonal (1) es el enlace "directo" de cada antena TX a su antena RX enfrentada; el 0,5 es la fuga hacia la otra antena. Como $\mathbf{H}$ es real y simétrica, su SVD coincide con la descomposición espectral: los valores singulares son sus autovalores y $\mathbf{U} = \mathbf{V}$.
+
+    **Paso 1 — Valores singulares.** Los autovalores de $\mathbf{H}$ son $1 \pm 0{,}5$:
+
+    $$\sigma_1 = 1{,}5, \qquad \sigma_2 = 0{,}5$$
+
+    Las ganancias de subcanal son sus cuadrados: $\sigma_1^2 = 2{,}25$ y $\sigma_2^2 = 0{,}25$. El canal tiene un subcanal *fuerte* (9 veces más ganancia) y uno *débil*.
+
+    **Paso 2 — Vectores singulares.** Las columnas de $\mathbf{V} = \mathbf{U}$ son:
+
+    $$\mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+
+    Interpretación física: el canal **favorece la señal enviada en fase por ambas antenas** ($\mathbf{v}_1$, dirección $+45°$, las fugas se suman constructivamente) y **penaliza la señal en contrafase** ($\mathbf{v}_2$, dirección $-45°$, las fugas se restan). Los "ejes naturales" del canal no son las antenas físicas, sino estas combinaciones.
+
+    **Paso 3 — Verificación de energía.** La norma de Frobenius debe repartirse entre los subcanales:
+
+    $$\|\mathbf{H}\|_F^2 = 1^2 + 0{,}5^2 + 0{,}5^2 + 1^2 = 2{,}5 = \sigma_1^2 + \sigma_2^2 = 2{,}25 + 0{,}25 \checkmark$$
+
+    (Esta identidad es exactamente la que verifica el Ejercicio 1 del laboratorio, allí por Monte Carlo.)
+
+    **Paso 4 — Capacidad.** A SNR $= 10$ dB ($P/N_0 = 10$ en lineal), con potencia uniforme $P/N_t$ y $N_t = 2$, la ec. (7) da:
+
+    $$C = \log_2\!\left(1 + \tfrac{10}{2}\cdot 2{,}25\right) + \log_2\!\left(1 + \tfrac{10}{2}\cdot 0{,}25\right) = \log_2(12{,}25) + \log_2(2{,}25) \approx 3{,}61 + 1{,}17 = 4{,}78 \text{ bit/s/Hz}$$
+
+    **Paso 5 — Comparación con SISO.** Un enlace de una sola antena a la misma SNR alcanza $\log_2(1+10) \approx 3{,}46$ bit/s/Hz. Dos antenas por lado dan **4,78 vs 3,46** — la ganancia MIMO en números que puedes verificar a mano. La Figura 3 muestra este mismo esquema en abstracto: aquí los dos subcanales paralelos tienen ganancias 2,25 y 0,25.
+
+#### 3.2 El caso general: diagonalización por SVD
 
 La herramienta central de esta sesión es la **Descomposición en Valores Singulares** (SVD) de la matriz de canal:
 
@@ -85,7 +133,7 @@ donde en el último paso se usó $\mathbf{V}^{\mathsf{H}}\mathbf{V} = \mathbf{I}
 
 $$\tilde{y}_k = \sigma_k \tilde{x}_k + \tilde{n}_k, \quad k = 1, \ldots, r \tag{5}$$
 
-El canal MIMO se ha convertido en $r$ canales escalares independientes con ganancias $\sigma_k^2$.
+El canal MIMO se ha convertido en $r$ canales escalares independientes con ganancias $\sigma_k^2$. Vale la pena detenerse en lo que acaba de pasar: hemos convertido un problema matricial en $r$ problemas escalares **que ya sabemos resolver desde la Sesión 02** — cada subcanal es un canal AWGN ordinario al que se le asigna una modulación y una potencia.
 
 <figure markdown="span">
   ![SVD descompone H en canales paralelos](figures/mimo-svd-channels.png)
@@ -100,6 +148,8 @@ $$\boxed{C_{\text{WF}} = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P_k^* \sigma_k^2
 
 con $P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$ donde $(x)^+ \triangleq \max(0, x)$, y $\mu$ es el "nivel de agua" que satisface $\sum_k P_k^* = P$.
 
+El nombre *water-filling* es literal: imagine verter una cantidad fija de agua (la potencia $P$) en un recipiente de fondo irregular, donde la altura del fondo bajo el subcanal $k$ es $N_0/\sigma_k^2$. Los pozos profundos — los subcanales fuertes, con $N_0/\sigma_k^2$ pequeño — reciben más agua (más potencia); los pozos poco profundos reciben poca, y los que sobresalen del nivel del agua $\mu$ quedan directamente **secos** ($P_k^* = 0$): un subcanal suficientemente malo no merece ni un vatio. En el ejemplo 2×2 del §3.1, el subcanal débil ($\sigma_2^2 = 0{,}25$) es el candidato a secarse si la SNR baja.
+
 **Capacidad sin CSIT (potencia uniforme).** En la práctica, el transmisor a menudo no conoce $\mathbf{H}$. Con potencia uniforme $P_k = P/N_t$, la capacidad es:
 
 $$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf{H}\mathbf{H}^{\mathsf{H}}\right) = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P \sigma_k^2}{N_t N_0}\right) \tag{7}$$
@@ -113,11 +163,13 @@ $$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf
   </figcaption>
 </figure>
 
+Ya sabemos la capacidad máxima cuando el objetivo es la tasa; la pregunta natural es: ¿qué pasa si en vez de maximizar la tasa queremos fiabilidad? → el compromiso diversidad-multiplexación.
+
 ### 4. El Compromiso Diversidad-Multiplexación (DMT)
 
-Con múltiples antenas se puede elegir entre dos tipos de ganancia, pero no maximizar ambas simultáneamente. Esta tensión fue formalizada por Zheng y Tse (2003) en el **Diversity-Multiplexing Tradeoff** (DMT).
+Con múltiples antenas se puede elegir entre dos tipos de ganancia, pero no maximizar ambas simultáneamente. La analogía es **seguro vs velocidad**: cada antena extra es un presupuesto que puede gastarse en correr más (un *stream* de datos adicional) o en asegurarse (una copia redundante más de la misma información). Quien lo gasta todo en velocidad viaja rápido pero sin red; quien lo gasta todo en seguro nunca pierde el paquete pero avanza al ritmo de siempre. Esta tensión fue formalizada por Zheng y Tse (2003) en el **Diversity-Multiplexing Tradeoff** (DMT).
 
-Se definen en el límite de SNR alta:
+Antes de las definiciones formales, lo que cada ganancia significa sin el $\lim$: la **ganancia de multiplexación** $r$ cuenta cuántos *streams* paralelos efectivos transporta el sistema (cuántos "carriles" del §1 se dedican a carga distinta); la **ganancia de diversidad** $d$ mide con qué pendiente cae la probabilidad de error al subir la SNR (cuántas copias independientes protegen cada bit). Formalmente, se definen en el límite de SNR alta:
 - **Ganancia de multiplexación**: $r = \lim_{\text{SNR}\to\infty} R/\log_2\text{SNR}$ (cuántas "dimensiones" de tasa)
 - **Ganancia de diversidad**: $d = -\lim_{\text{SNR}\to\infty} \log P_e / \log\text{SNR}$ (qué tan rápido cae la BER)
 
@@ -146,7 +198,11 @@ En 5G NR, el selector de rango (rank adaptation) elige $r$ dinámicamente basán
   </figcaption>
 </figure>
 
+Hasta aquí todo era un solo enlace punto a punto; la pregunta natural es: ¿y si la estación base sirve a varios usuarios *a la vez*? → precodificación multiusuario.
+
 ### 5. Precodificación Lineal: MRT y ZF
+
+El cambio de escenario trae un problema nuevo: cada usuario tiene una sola antena y no puede "des-mezclar" nada por su cuenta — la SVD del §3 requería cooperación en ambos extremos. Ahora todo el trabajo de separar a los usuarios recae en el transmisor, que debe **dar forma a los haces antes de emitir**: eso es la precodificación.
 
 En el escenario multiusuario (MU-MIMO), la estación base tiene $M$ antenas y sirve simultáneamente a $K$ usuarios, cada uno con una sola antena. La notación cambia ligeramente respecto al §2: aquí $M$ es el número de antenas en la BS (rol de $N_t$) y $K$ el número de usuarios (rol de $N_r$). El canal de bajada es:
 
@@ -156,7 +212,7 @@ donde $\mathbf{H} \in \mathbb{C}^{K \times M}$ es la matriz de canal agregada, $
 
 $$y_k = \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_k s_k + \underbrace{\sum_{j \neq k} \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j s_j}_{\text{interferencia entre usuarios}} + n_k \tag{10}$$
 
-El diseño del precoder $\mathbf{W}$ es el problema central del MU-MIMO.
+El diseño del precoder $\mathbf{W}$ es el problema central del MU-MIMO. Antes de las fórmulas, las dos filosofías opuestas. **MRT es el precoder egoísta y simple**: apunta el haz directamente a cada usuario ignorando a los demás — máxima potencia útil, pero los haces se pisan entre sí. **ZF es el precoder cooperativo**: elige haces que caen exactamente en los *ceros* de los demás usuarios — nadie interfiere a nadie, pero torcer los haces para esquivar a los vecinos cuesta energía útil y **amplifica el ruido**. Toda la comparación que sigue es la cuantificación de este dilema.
 
 **Maximum Ratio Transmission (MRT).** El precoder más simple: apuntar el haz hacia cada usuario con el vector conjugado de su canal:
 
@@ -185,9 +241,11 @@ Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$
   </figcaption>
 </figure>
 
+MRT era simple pero interferente y ZF cancelaba a costa de amplificar ruido; la pregunta natural es: ¿cuándo deja de importar la interferencia y basta el precoder simple? → cuando $M \gg K$.
+
 ### 6. Massive MIMO — Escalar a $M \gg K$ Antenas
 
-Massive MIMO lleva el MU-MIMO al extremo: $M \gg K$ (típicamente $M/K \geq 10$). Dos fenómenos emergentes hacen que el sistema sea analíticamente tratable y, sobre todo, **extremadamente eficiente**:
+Massive MIMO lleva el MU-MIMO al extremo: $M \gg K$ (típicamente $M/K \geq 10$). La intuición detrás de todo lo que sigue es la **ley de los grandes números**. Lance un dado y el resultado es impredecible; lance mil y el promedio se clava en 3,5. Con $M$ antenas ocurre lo mismo en el espacio: la ganancia del canal de un usuario es la suma de $M$ contribuciones aleatorias, y al promediar, **deja de fluctuar** — el *fading* rápido se disuelve en la agregación. Y hay un segundo regalo geométrico: en un espacio de dimensión $M$ alta, dos vectores aleatorios son **casi ortogonales** con probabilidad abrumadora — los canales de dos usuarios apenas se solapan, así que los usuarios *dejan de estorbarse solos*, sin que nadie tenga que cancelar nada. Estos dos fenómenos emergentes hacen que el sistema sea analíticamente tratable y, sobre todo, **extremadamente eficiente**:
 
 **6.1 Channel Hardening.** Con $M$ antenas y canal i.i.d., la norma del canal del usuario $k$ concentra:
 
