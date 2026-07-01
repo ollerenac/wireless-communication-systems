@@ -50,6 +50,18 @@ Estas dos estrategias son las extremas del **compromiso diversidad-multiplexaci�
   </figcaption>
 </figure>
 
+??? question "Comprueba tu comprensión"
+
+    **P1.** ¿Qué estrategia elegirías para un enlace de emergencia con SNR baja: diversidad o multiplexación? ¿Por qué?
+
+    **P2.** En la analogía de la autopista, ¿a qué corresponde "enviar la misma carga por todos los carriles"?
+
+    ---
+
+    **R1.** Diversidad — en un enlace crítico la fiabilidad importa más que la tasa; las copias redundantes protegen contra el *fading* profundo de cualquier vía individual.
+
+    **R2.** A la diversidad espacial: la misma información por todas las antenas, como seguro contra el bloqueo de un carril.
+
 La pregunta natural es: si ya no hay una sola vía sino muchas que se cruzan, ¿cómo se describe matemáticamente ese haz de vías? → con una matriz.
 
 ### 2. El Canal MIMO — Modelo Matricial
@@ -74,6 +86,18 @@ Este modelo corresponde a un entorno con *scattering* denso e isótropo donde no
   <figcaption markdown="1">**Figura 2.** Visualización de la matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada elemento $h_{ji}$ es una variable compleja con módulo $|h_{ji}|$ (intensidad del enlace) y fase $\angle h_{ji}$ (retardo de propagación). El panel izquierdo muestra la magnitud $|\mathbf{H}|$; el panel derecho muestra la fase. En el modelo i.i.d. Rayleigh, todos los elementos son estadísticamente equivalentes — la estructura explotable proviene de la *geometría* de la matriz, no de correlación entre entradas.
   </figcaption>
 </figure>
+
+??? question "Comprueba tu comprensión"
+
+    **P1.** En un sistema $4 \times 4$, ¿cuántos números complejos tiene $\mathbf{H}$?
+
+    **P2.** ¿Qué representa físicamente el elemento $h_{32}$?
+
+    ---
+
+    **R1.** $N_r \times N_t = 16$ números complejos.
+
+    **R2.** La ganancia compleja (atenuación y desfase) del trayecto entre la antena transmisora 2 y la antena receptora 3: cuánto de lo que emite la TX 2 llega a la RX 3.
 
 Ya tenemos la tabla de ponderaciones $\mathbf{H}$; la pregunta natural es: ¿cómo desenredamos la mezcla para poder transmitir varios flujos sin que se pisen? → la SVD.
 
@@ -163,6 +187,18 @@ $$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf
   </figcaption>
 </figure>
 
+??? question "Comprueba tu comprensión"
+
+    **P1.** Si un valor singular $\sigma_k$ es casi cero, ¿qué le pasa a ese subcanal?
+
+    **P2.** En el ejemplo 2×2 del §3.1, ¿por qué conviene enviar la señal en fase por ambas antenas?
+
+    ---
+
+    **R1.** Su ganancia $\sigma_k^2 \approx 0$: es un subcanal casi inútil. El *water-filling* no le asigna potencia ($P_k^* = 0$) — queda seco.
+
+    **R2.** Porque la dirección en fase es $\mathbf{v}_1$, el eje natural fuerte del canal ($\sigma_1 = 1{,}5$): las fugas cruzadas se suman constructivamente. En contrafase ($\mathbf{v}_2$) se restan y la ganancia cae a $\sigma_2 = 0{,}5$.
+
 Ya sabemos la capacidad máxima cuando el objetivo es la tasa; la pregunta natural es: ¿qué pasa si en vez de maximizar la tasa queremos fiabilidad? → el compromiso diversidad-multiplexación.
 
 ### 4. El Compromiso Diversidad-Multiplexación (DMT)
@@ -197,6 +233,14 @@ En 5G NR, el selector de rango (rank adaptation) elige $r$ dinámicamente basán
   <figcaption markdown="1">**Figura 5.** Curva DMT $d^*(r)$ para sistemas $2\times2$ (triángulo) y $4\times4$ (polígono). Los vértices corresponden a esquemas concretos: en $r=0$ opera el **OSTBC/Alamouti** (diversidad máxima $N_tN_r$, sin ganancia de multiplexación); en $r=\min(N_t,N_r)$ opera **V-BLAST** (multiplexación máxima, $d=N_r-N_t+1$ para $N_t \leq N_r$). Los puntos intermedios representan el rango continuo de equilibrios posibles. Un sistema que opera en el vértice inferior-derecho explota toda la multiplexación — cada dB adicional de SNR se traduce en tasa, no en reducción de errores.
   </figcaption>
 </figure>
+
+??? question "Comprueba tu comprensión"
+
+    **P1.** En la curva DMT de un sistema $2\times2$, ¿qué diversidad $d$ obtienes si exiges $r = 2$ streams?
+
+    ---
+
+    **R1.** $d^*(2) = (2-2)(2-2) = 0$. Multiplexación máxima significa diversidad nula: toda la SNR extra se convierte en tasa y la BER no mejora con ella.
 
 Hasta aquí todo era un solo enlace punto a punto; la pregunta natural es: ¿y si la estación base sirve a varios usuarios *a la vez*? → precodificación multiusuario.
 
@@ -241,6 +285,14 @@ Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$
   </figcaption>
 </figure>
 
+??? question "Comprueba tu comprensión"
+
+    **P1.** ¿Por qué ZF puede rendir peor que MRT cuando la SNR es baja?
+
+    ---
+
+    **R1.** ZF amplifica el ruido al invertir $\mathbf{H}\mathbf{H}^{\mathsf{H}}$ (torcer los haces para esquivar a los demás usuarios cuesta ganancia útil). A SNR baja el ruido — no la interferencia — es el término dominante del denominador del SINR, así que pagar ese precio no compensa.
+
 MRT era simple pero interferente y ZF cancelaba a costa de amplificar ruido; la pregunta natural es: ¿cuándo deja de importar la interferencia y basta el precoder simple? → cuando $M \gg K$.
 
 ### 6. Massive MIMO — Escalar a $M \gg K$ Antenas
@@ -281,6 +333,18 @@ La potencia útil crece **linealmente con $M$** (array gain) mientras la interfe
   </figcaption>
 </figure>
 
+??? question "Comprueba tu comprensión"
+
+    **P1.** ¿Por qué con $M \gg K$ basta MRT, sin invertir matrices?
+
+    **P2.** ¿Cuál de los dos fenómenos — *channel hardening* o *favorable propagation* — explica que el enlace deje de fluctuar por *fading* rápido?
+
+    ---
+
+    **R1.** Por *favorable propagation*: los canales de usuarios distintos se vuelven asintóticamente ortogonales, así que la interferencia inter-usuario de MRT tiende a 0 por sí sola — no queda nada que cancelar con ZF.
+
+    **R2.** *Channel hardening*: la norma $\|\mathbf{h}_k\|^2/M$ concentra en $\beta_k$ (ley de los grandes números), y la potencia recibida se vuelve determinística.
+
 ---
 
 ## Laboratorio
@@ -294,6 +358,54 @@ El laboratorio de esta sesión implementa los cuatro pilares analíticos de la t
 
 Accede al laboratorio en:
 [`lab.ipynb`](lab.ipynb)
+
+---
+
+## Ejercicios de Asimilación
+
+Estos ejercicios se resuelven con lápiz y papel en pocos minutos; su objetivo es afianzar la intuición antes de abrir el laboratorio computacional.
+
+**Ejercicio A1 (SVD a mano).** Dado el canal
+
+$$\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}$$
+
+escribe los valores singulares $\sigma_1, \sigma_2$ y las ganancias de subcanal. ¿Quiénes son $\mathbf{U}$ y $\mathbf{V}$?
+
+??? example "Solución"
+
+    La matriz ya es diagonal: no hay mezcla que desenredar. Los valores singulares se leen directamente de la diagonal: $\sigma_1 = 2$, $\sigma_2 = 1$. Las ganancias de subcanal son $\sigma_1^2 = 4$ y $\sigma_2^2 = 1$. Como no hace falta rotar nada, $\mathbf{U} = \mathbf{V} = \mathbf{I}$ — los ejes naturales del canal coinciden con las antenas físicas.
+
+**Ejercicio A2 (capacidad).** Para el canal del Ejercicio A1 a SNR $= 10$ dB con potencia uniforme ($N_t = 2$), calcula la capacidad con la ec. (7).
+
+??? example "Solución"
+
+    SNR $= 10$ dB $= 10$ en lineal, y cada subcanal recibe $P/N_t \Rightarrow P/(N_t N_0) = 5$:
+
+    $$C = \log_2(1 + 5 \cdot 4) + \log_2(1 + 5 \cdot 1) = \log_2 21 + \log_2 6 \approx 4{,}39 + 2{,}58 = 6{,}97 \text{ bit/s/Hz}$$
+
+    Compara con el ejemplo del §3.1 ($4{,}78$ bit/s/Hz): este canal rinde más porque su energía total es mayor ($\|\mathbf{H}\|_F^2 = 5$ frente a $2{,}5$).
+
+**Ejercicio A3 (MRT).** Dado el canal de un solo usuario $\mathbf{h} = [1,\ j]^{\mathsf{T}}$ ($M = 2$), calcula el vector MRT normalizado $\mathbf{w} = \mathbf{h}^* / \|\mathbf{h}\|$ y verifica su potencia.
+
+??? example "Solución"
+
+    La norma: $\|\mathbf{h}\| = \sqrt{|1|^2 + |j|^2} = \sqrt{2}$. El conjugado: $\mathbf{h}^* = [1,\ -j]^{\mathsf{T}}$. Por tanto:
+
+    $$\mathbf{w} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -j \end{pmatrix}$$
+
+    Verificación de potencia: $\|\mathbf{w}\|^2 = \frac{1}{2}(|1|^2 + |-j|^2) = \frac{1}{2}(1+1) = 1$ ✓. El conjugado $-j$ "deshace" el desfase de $+90°$ del segundo trayecto para que ambas contribuciones lleguen en fase al usuario.
+
+**Ejercicio A4 (ortogonalidad / favorable propagation).** Dados $\mathbf{h}_1 = [1,\ 0]^{\mathsf{T}}$ y $\mathbf{h}_2 = [0,\ 1]^{\mathsf{T}}$, calcula $|\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2|$. Repite con $\mathbf{h}_1 = [1,\ 1]^{\mathsf{T}}/\sqrt{2}$ y $\mathbf{h}_2 = [1,\ -1]^{\mathsf{T}}/\sqrt{2}$. ¿Qué significa el resultado para MRT?
+
+??? example "Solución"
+
+    Primer par: $\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2 = 1 \cdot 0 + 0 \cdot 1 = 0$.
+
+    Segundo par: $\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2 = \frac{1}{2}(1 \cdot 1 + 1 \cdot (-1)) = 0$.
+
+    En ambos casos $|\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2| = 0$: los canales son ortogonales, así que con MRT la interferencia entre usuarios es **nula** (el término $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|^2$ de la ec. (12) desaparece) sin necesidad de ZF. Esto es exactamente lo que la *favorable propagation* garantiza de forma asintótica cuando $M \gg K$.
+
+Para los ejercicios computacionales "pesados" — la SVD por Monte Carlo, la implementación de `precoder_zf` y los experimentos de Massive MIMO — continúa en [`lab.ipynb`](lab.ipynb).
 
 ---
 
