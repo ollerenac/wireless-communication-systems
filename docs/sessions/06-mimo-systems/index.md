@@ -107,7 +107,7 @@ La intuición primero. El canal MIMO es como una **mesa de mezclas mal cableada*
 
 #### 3.1 Un ejemplo concreto 2×2
 
-Antes de la maquinaria general, un canal que se resuelve completo con lápiz y papel. Conviene tenerlo a mano durante toda la sección: cada objeto abstracto que aparezca después ($\mathbf{U}$, $\boldsymbol{\Sigma}$, $\mathbf{V}$, capacidad) tiene aquí un número concreto.
+Antes de la maquinaria general, un canal que se resuelve completo con lápiz y papel. Conviene tenerlo a mano durante toda la sección: cada objeto abstracto que aparezca después ($\mathbf{U}$, $\mathbf{\Sigma}$, $\mathbf{V}$, capacidad) tiene aquí un número concreto.
 
 ??? example "Ejemplo numérico: SVD y capacidad de un canal 2×2"
 
@@ -145,13 +145,13 @@ Antes de la maquinaria general, un canal que se resuelve completo con lápiz y p
 
 La herramienta central de esta sesión es la **Descomposición en Valores Singulares** (SVD) de la matriz de canal:
 
-$$\mathbf{H} = \mathbf{U} \boldsymbol{\Sigma} \mathbf{V}^{\mathsf{H}} \tag{3}$$
+$$\mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^{\mathsf{H}} \tag{3}$$
 
-donde $\mathbf{U} \in \mathbb{C}^{N_r \times N_r}$ y $\mathbf{V} \in \mathbb{C}^{N_t \times N_t}$ son matrices unitarias ($\mathbf{U}\mathbf{U}^{\mathsf{H}} = \mathbf{I}$, $\mathbf{V}\mathbf{V}^{\mathsf{H}} = \mathbf{I}$), y $\boldsymbol{\Sigma} \in \mathbb{R}^{N_r \times N_t}$ es diagonal con los **valores singulares** $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r \geq 0$, $r = \mathrm{rank}(\mathbf{H}) \leq \min(N_t, N_r)$.
+donde $\mathbf{U} \in \mathbb{C}^{N_r \times N_r}$ y $\mathbf{V} \in \mathbb{C}^{N_t \times N_t}$ son matrices unitarias ($\mathbf{U}\mathbf{U}^{\mathsf{H}} = \mathbf{I}$, $\mathbf{V}\mathbf{V}^{\mathsf{H}} = \mathbf{I}$), y $\mathbf{\Sigma} \in \mathbb{R}^{N_r \times N_t}$ es diagonal con los **valores singulares** $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r \geq 0$, $r = \mathrm{rank}(\mathbf{H}) \leq \min(N_t, N_r)$.
 
 **Diagonalización del canal.** Si el transmisor conoce $\mathbf{H}$ (CSIT completo), puede **precodificar** con $\mathbf{V}$: en lugar de transmitir $\mathbf{x}$ directamente, transmite $\mathbf{x} = \mathbf{V}\tilde{\mathbf{x}}$, donde $\tilde{\mathbf{x}} \in \mathbb{C}^r$ es el vector de datos. Simultáneamente, el receptor aplica $\mathbf{U}^{\mathsf{H}}$ sobre la señal recibida:
 
-$$\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y} = \mathbf{U}^{\mathsf{H}}\mathbf{H}\mathbf{V}\tilde{\mathbf{x}} + \mathbf{U}^{\mathsf{H}}\mathbf{n} = \mathbf{U}^{\mathsf{H}}(\mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^{\mathsf{H}})\mathbf{V}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} = \boldsymbol{\Sigma}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} \tag{4}$$
+$$\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y} = \mathbf{U}^{\mathsf{H}}\mathbf{H}\mathbf{V}\tilde{\mathbf{x}} + \mathbf{U}^{\mathsf{H}}\mathbf{n} = \mathbf{U}^{\mathsf{H}}(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}})\mathbf{V}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} = \mathbf{\Sigma}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} \tag{4}$$
 
 donde en el último paso se usó $\mathbf{V}^{\mathsf{H}}\mathbf{V} = \mathbf{I}$ y $\mathbf{U}^{\mathsf{H}}\mathbf{U} = \mathbf{I}$ (matrices unitarias). Como $\mathbf{U}$ es unitaria, $\tilde{\mathbf{n}} = \mathbf{U}^{\mathsf{H}}\mathbf{n}$ conserva la distribución $\mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$. El resultado es $r$ **canales AWGN paralelos e independientes**:
 
@@ -414,7 +414,7 @@ Para los ejercicios computacionales "pesados" — la SVD por Monte Carlo, la imp
 | Concepto | Expresión clave | Implicación práctica |
 |---|---|---|
 | Modelo MIMO | $\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$ | Canal matricial — álgebra lineal como herramienta principal |
-| SVD | $\mathbf{H} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^{\mathsf{H}}$ | Descompone H en $r$ canales AWGN independientes |
+| SVD | $\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}$ | Descompone H en $r$ canales AWGN independientes |
 | Capacidad | $C = \sum_k \log_2(1 + P_k^* \sigma_k^2 / N_0)$ | Escala linealmente con $\min(N_t, N_r)$ |
 | DMT | $d^*(r) = (N_t - r)(N_r - r)$ | Elige $r$ según SNR y requisitos de enlace |
 | MRT | $\mathbf{W} = \mathbf{H}^{\mathsf{H}}$ | Simple, óptimo cuando $M \gg K$ |
