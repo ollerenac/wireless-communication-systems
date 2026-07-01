@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-20T14:43:58-05:00",
+  "timestamp": "2026-07-01T22:18:51.323Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -11,78 +11,81 @@
   "completed_tasks": [
     {
       "id": 1,
-      "name": "Grading Parcial 01 — 5 student notebooks",
+      "name": "Quick task 260701-mhk — pedagogical revision of Session 06 MIMO lesson",
       "status": "done",
-      "commit": "3d8d884",
-      "notes": "Multi-agent workflow graded 40 questions per student on 100-pt scale. Results in notas-parcial-01.csv and notas-parcial-01-detalle.json (local, gitignored)."
+      "commit": "f882f6f",
+      "notes": "docs/sessions/06-mimo-systems/index.md restructured intuition-before-algebra: opening analogy per section §1-§6, new §3.1 worked 2x2 example (H=[[1,0.5],[0.5,1]], sigma={1.5,0.5}, C=4.78 vs SISO 3.46 bit/s/Hz), 6 collapsible concept-checks, new 'Ejercicios de Asimilación' section with drills A1-A4 + step-by-step solutions, bridge sentences. Equations/figures/lab.ipynb untouched. mkdocs build --strict clean. Commits: eca2a9e (plan), 3f7d13c (scaffolding), 04f041f (exercises), 35ad2e6 (worktree merge), f882f6f (summary). Artifacts in .planning/quick/260701-mhk-mejorar-sesion-06-mimo/."
     },
     {
       "id": 2,
-      "name": "Publish solutions notebook to exam page",
-      "status": "done",
-      "commit": "3d8d884",
-      "notes": "Added Solucionario section with Colab badge to docs/exams/index.md. Pushed to origin/main."
-    },
-    {
-      "id": 3,
-      "name": "Gitignore student submissions directory",
-      "status": "done",
-      "commit": "3d8d884",
-      "notes": "exams/**/examen-parcial-soluciones/ added to .gitignore — PII stays local forever."
-    },
-    {
-      "id": 4,
-      "name": "Generate per-student Spanish feedback .txt files",
+      "name": "GSD updated 1.6.0 -> 1.6.1",
       "status": "done",
       "commit": null,
-      "notes": "5 retroalimentacion-*.txt files in exams/parcial-01/examen-parcial-soluciones/ — gitignored, local only. Each has P1-P40 comments + evaluacion general in clear Spanish."
+      "notes": "Global install refreshed; Sonnet 5 is now the standard-tier model in GSD's catalog."
     }
   ],
   "remaining_tasks": [
     {
-      "id": 5,
-      "name": "Distribute grades to students",
+      "id": 3,
+      "name": "Instructor review of revised Session 06 lesson",
       "status": "not_started",
-      "notes": "User deferred email sending. Feedback .txt files ready. Needs student emails."
+      "notes": "User asked for the revision because he found the lesson too hard to digest/teach — he should read the new version and flag anything still unclear before class."
+    },
+    {
+      "id": 4,
+      "name": "Push main to origin",
+      "status": "not_started",
+      "notes": "main is 6 commits ahead of origin/main (fc734cd through f882f6f). User pushes deliberately; publishing also deploys the revised lesson to the course site."
+    },
+    {
+      "id": 5,
+      "name": "Distribute Parcial 01 grades to students via email",
+      "status": "not_started",
+      "notes": "5 retroalimentacion-*.txt files ready (Spanish) in gitignored exams/parcial-01/examen-parcial-soluciones/. Still needs student email addresses."
     },
     {
       "id": 6,
       "name": "Session 06 MIMO — pending lab todos",
       "status": "not_started",
-      "notes": "Ejercicio 1: histograma + Marchenko-Pastur; Ejercicio 2: precoder_zf implementation."
+      "notes": "lab.ipynb: Marchenko-Pastur histogram exercise polish; precoder_zf implementation (Ejercicio 3). Lesson text now references these; notebook itself unchanged this session."
     }
   ],
   "blockers": [],
   "human_actions_pending": [
     {
-      "action": "Provide student email addresses and send grade feedback files",
-      "context": "5 retroalimentacion-*.txt files generated in Spanish, ready to attach. User deferred email step this session.",
+      "action": "Provide student email addresses to send Parcial 01 feedback",
+      "context": "Feedback files ready since June 20 session; email step deferred twice.",
+      "blocking": false
+    },
+    {
+      "action": "Review revised Session 06 MIMO lesson and push to origin when satisfied",
+      "context": "The pedagogical revision is committed locally only; the live course site still shows the old dense version.",
       "blocking": false
     }
   ],
   "decisions": [
     {
-      "decision": "Grade on 100-pt scale internally, convert to /20 for publishing",
-      "rationale": "Course uses vigesimal scale; internal 100-pt allows per-question 2.5-pt granularity",
+      "decision": "Ran /gsd-quick at repo root despite missing ROADMAP.md",
+      "rationale": "This repo runs GSD per-session (05-channel-coding has its own .planning); session 06 has none. Scaffolding a full project for a content revision was overkill. Quick artifacts live in .planning/quick/260701-mhk-mejorar-sesion-06-mimo/.",
       "phase": null
     },
     {
-      "decision": "Solutions notebook pushed to GitHub with Colab badge on exam page",
-      "rationale": "Post-exam distribution — students open directly in Colab without needing repo access",
+      "decision": "Skipped root STATE.md creation/update for the quick task",
+      "rationale": "No root STATE.md has ever existed; SUMMARY.md + git history capture the record.",
       "phase": null
     },
     {
-      "decision": "Student submissions (examen-parcial-soluciones/) permanently gitignored",
-      "rationale": "Contains PII (student names, answers, grades) — must never reach the public repo",
+      "decision": "Exercises live in index.md, not lab.ipynb",
+      "rationale": "Assimilation drills are pencil-and-paper 2x2 exercises with collapsible solutions; heavier computational exercises stay in lab.ipynb.",
       "phase": null
     },
     {
-      "decision": "Grades not published on course site — distributed individually",
-      "rationale": "Privacy — each student receives only their own grade and feedback",
+      "decision": "Accepted origin/main (3d8d884) as worktree base during execution",
+      "rationale": "Claude Code forked the executor worktree from origin/main instead of the local tip; the diverging commits touched only .planning/handoff files, so the base was content-safe. Known gotcha for future worktree-isolated quick tasks in this repo while main has unpushed commits.",
       "phase": null
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Distribute grade feedback to students via email (needs addresses), then resume Session 06 MIMO lab todos (Ejercicio 1 histograma, Ejercicio 2 precoder_zf)",
-  "context_notes": "Parcial 01 fully closed: exam administered, graded (AI multi-agent workflow), solutions published on site, Spanish feedback files generated. Repo is clean at 3d8d884 (origin/main in sync). All student data is local-only in the gitignored directory exams/parcial-01/examen-parcial-soluciones/."
+  "next_action": "Ask user to review the revised docs/sessions/06-mimo-systems/index.md and push to origin; then either send Parcial 01 feedback emails (needs addresses) or tackle Session 06 lab todos (precoder_zf, Marchenko-Pastur polish)",
+  "context_notes": "Session flow: GSD self-update 1.6.1, then /gsd-quick 260701-mhk revising the MIMO lesson for teachability (instructor found it too dense). Planner diagnosed the lesson as content-correct but pedagogically front-loaded; executor added analogies, the 2x2 numeric anchor, concept-checks and an Ejercicios de Asimilación section. All work merged to local main; NOTHING pushed — origin/main is 6 commits behind at 3d8d884. Parcial 01 remains fully closed with student data local-only in the gitignored exams/parcial-01/examen-parcial-soluciones/."
 }
