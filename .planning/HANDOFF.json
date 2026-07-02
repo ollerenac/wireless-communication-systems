@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-07-01T22:18:51.323Z",
+  "timestamp": "2026-07-02T00:20:36.624Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -14,78 +14,99 @@
       "name": "Quick task 260701-mhk — pedagogical revision of Session 06 MIMO lesson",
       "status": "done",
       "commit": "f882f6f",
-      "notes": "docs/sessions/06-mimo-systems/index.md restructured intuition-before-algebra: opening analogy per section §1-§6, new §3.1 worked 2x2 example (H=[[1,0.5],[0.5,1]], sigma={1.5,0.5}, C=4.78 vs SISO 3.46 bit/s/Hz), 6 collapsible concept-checks, new 'Ejercicios de Asimilación' section with drills A1-A4 + step-by-step solutions, bridge sentences. Equations/figures/lab.ipynb untouched. mkdocs build --strict clean. Commits: eca2a9e (plan), 3f7d13c (scaffolding), 04f041f (exercises), 35ad2e6 (worktree merge), f882f6f (summary). Artifacts in .planning/quick/260701-mhk-mejorar-sesion-06-mimo/."
+      "notes": "index.md restructured intuition-before-algebra: analogy per section §1-§6, §3.1 worked 2x2 example (H=[[1,0.5],[0.5,1]], sigma={1.5,0.5}, C=4.78 vs SISO 3.46), 6 concept-checks, Ejercicios de Asimilación A1-A4 with solutions. Commits eca2a9e/3f7d13c/04f041f/35ad2e6/f882f6f."
     },
     {
       "id": 2,
+      "name": "Quick task 260701-ol6 — \\boldsymbol rendered literally in equations",
+      "status": "done",
+      "commit": "188dcba",
+      "notes": "6 replacements \\boldsymbol -> \\mathbf (index.md x5, lab.ipynb x1, session 06 only). Root cause: macro not available in all MathJax/Colab renderers. Executed inline, no subagents. Commits 9a591cf (fix) + 188dcba (artifacts)."
+    },
+    {
+      "id": 3,
+      "name": "Intro: minimal 2x2 'virtual cables' illustration after SVD sentence",
+      "status": "done",
+      "commit": "971b2ca",
+      "notes": "User found intro's 'SVD -> min(Nt,Nr) parallel channels' sentence dropped too fast. New paragraph: signals mix in air -> SVD untangles -> two virtual cables (one good, one modest) -> forwards to §3.1 worked example."
+    },
+    {
+      "id": 4,
+      "name": "Quick task 260701-qhz — plain-language i.i.d. explanation in §2",
+      "status": "done",
+      "commit": "585703b",
+      "notes": "Paragraph '¿Qué significa i.i.d.?' after eq (2): independence and identical distribution unpacked separately, dice mental image (one roll per H entry, same die), Rayleigh name origin linked to Session 01. Commits 0129cfc (content) + 585703b (artifacts)."
+    },
+    {
+      "id": 5,
       "name": "GSD updated 1.6.0 -> 1.6.1",
       "status": "done",
       "commit": null,
-      "notes": "Global install refreshed; Sonnet 5 is now the standard-tier model in GSD's catalog."
+      "notes": "Global install refreshed."
     }
   ],
   "remaining_tasks": [
     {
-      "id": 3,
+      "id": 6,
       "name": "Instructor review of revised Session 06 lesson",
-      "status": "not_started",
-      "notes": "User asked for the revision because he found the lesson too hard to digest/teach — he should read the new version and flag anything still unclear before class."
+      "status": "in_progress",
+      "notes": "User is actively reading the revised lesson and requesting targeted clarity fixes (intro SVD example, i.i.d. explanation so far). Expect more spot-improvement requests on resume."
     },
     {
-      "id": 4,
+      "id": 7,
       "name": "Push main to origin",
       "status": "not_started",
-      "notes": "main is 6 commits ahead of origin/main (fc734cd through f882f6f). User pushes deliberately; publishing also deploys the revised lesson to the course site."
+      "notes": "main is 12 commits ahead of origin/main (fc734cd..585703b). Live course site still shows the old dense lesson until push."
     },
     {
-      "id": 5,
+      "id": 8,
       "name": "Distribute Parcial 01 grades to students via email",
       "status": "not_started",
       "notes": "5 retroalimentacion-*.txt files ready (Spanish) in gitignored exams/parcial-01/examen-parcial-soluciones/. Still needs student email addresses."
     },
     {
-      "id": 6,
+      "id": 9,
       "name": "Session 06 MIMO — pending lab todos",
       "status": "not_started",
-      "notes": "lab.ipynb: Marchenko-Pastur histogram exercise polish; precoder_zf implementation (Ejercicio 3). Lesson text now references these; notebook itself unchanged this session."
+      "notes": "lab.ipynb: Marchenko-Pastur histogram polish (Ejercicio 1); precoder_zf implementation (Ejercicio 3)."
     }
   ],
   "blockers": [],
   "human_actions_pending": [
     {
-      "action": "Provide student email addresses to send Parcial 01 feedback",
-      "context": "Feedback files ready since June 20 session; email step deferred twice.",
+      "action": "Continue reviewing revised Session 06 lesson; push to origin when satisfied",
+      "context": "Review in progress — two clarity fixes already requested and applied this session. 12 local commits unpushed.",
       "blocking": false
     },
     {
-      "action": "Review revised Session 06 MIMO lesson and push to origin when satisfied",
-      "context": "The pedagogical revision is committed locally only; the live course site still shows the old dense version.",
+      "action": "Provide student email addresses to send Parcial 01 feedback",
+      "context": "Feedback files ready since June 20; email step deferred across sessions.",
       "blocking": false
     }
   ],
   "decisions": [
     {
+      "decision": "Trivial 1-2 file quick tasks executed inline with GSD guarantees (PLAN/SUMMARY/atomic commits) but no subagents",
+      "rationale": "Planner/executor subagents add nothing to mechanical sed-level or single-paragraph edits; artifacts and commit discipline preserved.",
+      "phase": null
+    },
+    {
+      "decision": "\\boldsymbol replaced by \\mathbf instead of loading MathJax boldsymbol extension",
+      "rationale": "\\mathbf universally available (site MathJax + Colab), matches document's existing bold-math style; no config change needed.",
+      "phase": null
+    },
+    {
       "decision": "Ran /gsd-quick at repo root despite missing ROADMAP.md",
-      "rationale": "This repo runs GSD per-session (05-channel-coding has its own .planning); session 06 has none. Scaffolding a full project for a content revision was overkill. Quick artifacts live in .planning/quick/260701-mhk-mejorar-sesion-06-mimo/.",
+      "rationale": "Repo runs GSD per-session; root quick artifacts live in .planning/quick/.",
       "phase": null
     },
     {
-      "decision": "Skipped root STATE.md creation/update for the quick task",
-      "rationale": "No root STATE.md has ever existed; SUMMARY.md + git history capture the record.",
-      "phase": null
-    },
-    {
-      "decision": "Exercises live in index.md, not lab.ipynb",
-      "rationale": "Assimilation drills are pencil-and-paper 2x2 exercises with collapsible solutions; heavier computational exercises stay in lab.ipynb.",
-      "phase": null
-    },
-    {
-      "decision": "Accepted origin/main (3d8d884) as worktree base during execution",
-      "rationale": "Claude Code forked the executor worktree from origin/main instead of the local tip; the diverging commits touched only .planning/handoff files, so the base was content-safe. Known gotcha for future worktree-isolated quick tasks in this repo while main has unpushed commits.",
+      "decision": "Accepted origin/main as worktree base during 260701-mhk execution",
+      "rationale": "Claude Code forks executor worktrees from origin/main, not local tip; diverging commits touched only .planning files. Gotcha persists while main has unpushed commits.",
       "phase": null
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Ask user to review the revised docs/sessions/06-mimo-systems/index.md and push to origin; then either send Parcial 01 feedback emails (needs addresses) or tackle Session 06 lab todos (precoder_zf, Marchenko-Pastur polish)",
-  "context_notes": "Session flow: GSD self-update 1.6.1, then /gsd-quick 260701-mhk revising the MIMO lesson for teachability (instructor found it too dense). Planner diagnosed the lesson as content-correct but pedagogically front-loaded; executor added analogies, the 2x2 numeric anchor, concept-checks and an Ejercicios de Asimilación section. All work merged to local main; NOTHING pushed — origin/main is 6 commits behind at 3d8d884. Parcial 01 remains fully closed with student data local-only in the gitignored exams/parcial-01/examen-parcial-soluciones/."
+  "next_action": "Continue instructor's clarity-review loop on docs/sessions/06-mimo-systems/index.md (spot fixes on request); when review done, push 12 pending commits to origin; then Parcial 01 feedback emails (needs addresses) or lab todos (precoder_zf, Marchenko-Pastur)",
+  "context_notes": "Session pattern: user reads the revised MIMO lesson section by section and requests plain-language clarifications where concepts pass too fast. Fixed so far: intro SVD 2x2 'virtual cables' example, i.i.d. dice explanation in §2, boldsymbol rendering. Caveman mode (full) + ponytail active. All work on local main — origin/main 12 behind at 3d8d884. Parcial 01 closed; student data local-only, gitignored."
 }
