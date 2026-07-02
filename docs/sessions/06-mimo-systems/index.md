@@ -268,6 +268,31 @@ Los puntos extremos son:
 - $r = 0$: diversidad máxima $d = N_t N_r$ (se transmite un solo stream por todas las antenas, típicamente con codificación espacio-temporal como STBC/Alamouti; la tasa no crece con la SNR pero la fiabilidad sí)
 - $r = \min(N_t, N_r)$: multiplexación máxima $d = 0$ (máximos streams independientes; la tasa crece logarítmicamente con la SNR pero la BER no mejora con ella)
 
+??? example "El esquema de Alamouti (2×1): diversidad plena sin CSIT"
+
+    El vértice $r=0$ tiene un representante concreto y elegante: el **código de Alamouti**, el space-time block code más simple. Dos antenas TX, una RX, y aunque el transmisor **no** conoce el canal, extrae **diversidad de orden 2**. Es el "hola mundo" de la codificación espacio-temporal.
+
+    Opera en dos ranuras temporales (se asume $h_1, h_2$ constantes durante ambas):
+
+    | | Antena 1 | Antena 2 |
+    |---|---|---|
+    | Ranura 1 | $s_1$ | $s_2$ |
+    | Ranura 2 | $-s_2^*$ | $s_1^*$ |
+
+    El receptor (una sola antena) observa:
+
+    $$r_1 = h_1 s_1 + h_2 s_2 + n_1, \qquad r_2 = -h_1 s_2^* + h_2 s_1^* + n_2$$
+
+    y combina linealmente:
+
+    $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^*, \qquad \hat{s}_2 = h_2^* r_1 - h_1 r_2^*$$
+
+    Al sustituir, los términos cruzados se **cancelan exactamente** (esa es la magia de la estructura ortogonal) y queda:
+
+    $$\hat{s}_k = (|h_1|^2 + |h_2|^2)\, s_k + \tilde{n}_k$$
+
+    Cada símbolo llega con ganancia $|h_1|^2+|h_2|^2$: **ambos trayectos contribuyen a cada símbolo**. Para que $\hat{s}_k$ se desvanezca tendrían que anularse $h_1$ **y** $h_2$ a la vez — mucho menos probable que fallar uno solo. Eso es diversidad de orden 2, con tasa 1 (dos símbolos en dos ranuras) y sin CSIT. Es el vértice opuesto a V-BLAST del §3.3: allí $r=2$ símbolos por uso pero $d=0$; aquí un símbolo protegido pero máxima fiabilidad.
+
 **Regla práctica de diseño:**
 
 | Condición del enlace | Estrategia recomendada | Razón |
@@ -455,6 +480,20 @@ escribe los valores singulares $\sigma_1, \sigma_2$ y las ganancias de subcanal.
     Segundo par: $\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2 = \frac{1}{2}(1 \cdot 1 + 1 \cdot (-1)) = 0$.
 
     En ambos casos $|\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2| = 0$: los canales son ortogonales, así que con MRT la interferencia entre usuarios es **nula** (el término $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|^2$ de la ec. (12) desaparece) sin necesidad de ZF. Esto es exactamente lo que la *favorable propagation* garantiza de forma asintótica cuando $M \gg K$.
+
+**Ejercicio A5 (Alamouti a mano).** Canal 2×1 con $h_1 = 1$ y $h_2 = j$ (constante en las dos ranuras). Con símbolos $s_1, s_2$ e ignorando el ruido, escribe $r_1$ y $r_2$ del esquema de Alamouti (§4) y verifica que el combinador $\hat{s}_1 = h_1^* r_1 + h_2 r_2^*$ recupera $(|h_1|^2+|h_2|^2)\,s_1 = 2 s_1$.
+
+??? example "Solución"
+
+    Con $h_1 = 1$, $h_2 = j$, las señales recibidas son:
+
+    $$r_1 = s_1 + j s_2, \qquad r_2 = -s_2^* + j s_1^*$$
+
+    Su conjugado: $r_2^* = -s_2 - j s_1$ (recordando $\overline{j} = -j$). Ahora el combinador, con $h_1^* = 1$ y $h_2 = j$:
+
+    $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^* = (s_1 + j s_2) + j(-s_2 - j s_1) = s_1 + j s_2 - j s_2 + s_1 = 2 s_1 \checkmark$$
+
+    Los términos en $s_2$ se cancelan ($j s_2 - j s_2 = 0$) y el $-j^2 = +1$ duplica $s_1$. La ganancia $|h_1|^2 + |h_2|^2 = 1 + 1 = 2$ confirma que **ambas antenas** aportan a $s_1$: diversidad de orden 2.
 
 Para los ejercicios computacionales "pesados" — la SVD por Monte Carlo, la implementación de `precoder_zf` y los experimentos de Massive MIMO — continúa en [`lab.ipynb`](lab.ipynb).
 
