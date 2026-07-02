@@ -373,7 +373,7 @@ Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$
 
 MRT era simple pero interferente y ZF cancelaba a costa de amplificar ruido; la pregunta natural es: ¿cuándo deja de importar la interferencia y basta el precoder simple? → cuando $M \gg K$.
 
-### 6. Massive MIMO — Escalar a $M \gg K$ Antenas
+### 6. Massive MIMO — Escalar a M >> K Antenas
 
 Massive MIMO lleva el MU-MIMO al extremo: $M \gg K$ (típicamente $M/K \geq 10$). La intuición detrás de todo lo que sigue es la **ley de los grandes números**. Lance un dado y el resultado es impredecible; lance mil y el promedio se clava en 3,5. Con $M$ antenas ocurre lo mismo en el espacio: la ganancia del canal de un usuario es la suma de $M$ contribuciones aleatorias, y al promediar, **deja de fluctuar** — el *fading* rápido se disuelve en la agregación. Y hay un segundo regalo geométrico: en un espacio de dimensión $M$ alta, dos vectores aleatorios son **casi ortogonales** con probabilidad abrumadora — los canales de dos usuarios apenas se solapan, así que los usuarios *dejan de estorbarse solos*, sin que nadie tenga que cancelar nada. Estos dos fenómenos emergentes hacen que el sistema sea analíticamente tratable y, sobre todo, **extremadamente eficiente**:
 
