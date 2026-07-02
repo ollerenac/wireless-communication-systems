@@ -78,15 +78,16 @@
       "status": "done",
       "commit": null,
       "notes": "pnpm installed globally, core package built (BUILT-OK) at ~/.claude/plugins/cache/understand-anything/understand-anything/2.8.1. pnpm v11 build-script gate solved via allowBuilds:true in pnpm-workspace.yaml."
+    },
+    {
+      "id": 15,
+      "name": "Artifact page of the lecture script",
+      "status": "done",
+      "commit": null,
+      "notes": "Rebuilt guión from lesson index.md (prior chat cleared) and published as HTML Artifact: https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87. 100-min timeline with cumulative clocks, pizarra §3.1 block, dependency map, cut order, 8 anticipated questions. Source HTML in session scratchpad (guion-sesion-06-mimo.html)."
     }
   ],
   "remaining_tasks": [
-    {
-      "id": 15,
-      "name": "Artifact page of the lecture script (INTERRUPTED MID-TASK — next step)",
-      "status": "in_progress",
-      "notes": "User asked to see the guión as an Artifact page to keep open while lecturing. artifact-design skill loaded; interrupted before writing HTML. Rebuild content from chat history message 'Guión narrativo — Sesión 06 MIMO'. Spanish, scannable design (used live during class), not editorial."
-    },
     {
       "id": 16,
       "name": "/understand pipeline on session 06 (aborted Phase 0, optional)",
