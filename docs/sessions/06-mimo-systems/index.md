@@ -366,7 +366,7 @@ Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$
 <figure markdown="span">
   ![BER de MRT vs ZF para K=4 usuarios](figures/mimo-mrt-zf.png)
   <!-- generada por celda 10 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** Curva BER (QPSK) para MRT con $M=8$ antenas en la BS y $K=4$ usuarios, generada automáticamente. El precodificador ZF se obtiene completando el **Ejercicio 3** del laboratorio (`precoder_zf` en `lab.ipynb`): una vez implementado, la curva ZF se superpone y muestra cómo a SNR baja MRT domina (ZF amplifica el ruido) pero a SNR alta ZF supera a MRT (la interferencia inter-usuario se convierte en el término limitante), con un cruce típico alrededor de 10–12 dB.
+  <figcaption markdown="1">**Figura 6.** Curva BER (QPSK) para MRT y ZF con $M=8$ antenas en la BS y $K=4$ usuarios (el `precoder_zf` se implementa en el **Ejercicio 3** del laboratorio). La lección del dilema en números: a SNR muy baja ambos rinden parecido (el ruido domina y torcer los haces no aporta), pero MRT **satura en un piso de interferencia** (~$6 \times 10^{-2}$) — subir la potencia sube la señal *y* la interferencia por igual — mientras que ZF, con interferencia nula, cae sin piso. Con $M/K = 2$ el cruce ocurre ya a ~2 dB; solo cuando $M \gg K$ (§6) la interferencia de MRT se disuelve sola y el piso desaparece.
   </figcaption>
 </figure>
 
