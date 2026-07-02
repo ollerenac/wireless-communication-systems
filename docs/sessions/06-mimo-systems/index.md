@@ -84,6 +84,8 @@ $$h_{ji} \sim \mathcal{CN}(0, 1) \tag{2}$$
 
 Este modelo corresponde a un entorno con *scattering* denso e isótropo donde no hay línea de visión directa (NLOS) y las antenas están suficientemente separadas ($\geq \lambda/2$) para que los coeficientes sean estadísticamente independientes. En 5G NR los canales espacialmente correlacionados (antenas en ULA compacto) requieren modelos más sofisticados como el CDL-C/D del TR 38.901, pero el modelo i.i.d. captura la física esencial y produce todos los resultados analíticos clave.
 
+Una aclaración de alcance: este $\mathbf{H}$ es de **banda estrecha** (un solo coeficiente por par de antenas). En sistemas de banda ancha reales, OFDM (Sesión 03) convierte el canal selectivo en frecuencia en cientos de subportadoras planas, y **todo este formalismo MIMO se aplica idénticamente en cada subportadora** — hay una matriz $\mathbf{H}$ por subportadora. Esa combinación, **MIMO-OFDM**, es la arquitectura física de 5G NR y WiFi; esta sesión estudia una subportadora, y la Sesión 03 ya cubrió cómo se generan las cientos restantes.
+
 <figure markdown="span">
   ![Estructura de la matriz de canal MIMO](figures/mimo-channel-matrix.png)
   <!-- generada por celda 3 de lab.ipynb -->
@@ -393,6 +395,10 @@ $$\text{SINR}_k^{\text{MRT}} \xrightarrow{M \to \infty} \frac{M \beta_k P / K}{N
 
 La potencia útil crece **linealmente con $M$** (array gain) mientras la interferencia desaparece. Esto es la esencia del "free lunch" del Massive MIMO: más antenas en la BS aumentan la SNR de todos los usuarios sin coste de potencia en el terminal.
 
+**6.3 ¿De dónde sale $\mathbf{H}$? Reciprocidad TDD y *pilot contamination*.** Todo lo anterior supuso que la BS conoce $\mathbf{H}$ — pero con $M$ grande, obtenerla es el verdadero cuello de botella. Estimar el canal por **pilotos de bajada** no escala: entrenar $M$ antenas cuesta del orden de $M$ símbolos de piloto, prohibitivo con $M = 256$. La salida es la **reciprocidad TDD**: en duplexación por tiempo, subida y bajada comparten frecuencia y el canal físico es el mismo en ambos sentidos. Los $K$ usuarios (no las $M$ antenas) envían pilotos en el enlace de subida, la BS estima $\mathbf{H}$ y la reutiliza para precodificar en bajada. El costo de entrenamiento pasa a ser proporcional a $K$ (usuarios), **no a $M$** (antenas) — por eso el Massive MIMO real es esencialmente TDD.
+
+El límite fundamental aparece al salir de una sola celda: los pilotos ortogonales son un recurso finito (proporcional al tiempo de coherencia del canal), así que en una red multicelda hay que **reutilizarlos** entre celdas. Un usuario de una celda vecina que use el mismo piloto **contamina** la estimación de $\mathbf{H}$ — la *pilot contamination*. A diferencia del ruido y la interferencia ordinaria, esta contaminación **no desaparece** al aumentar $M$: escala junto con la señal útil. Es el techo real del Massive MIMO, invisible en el modelo monocelda idealizado de esta sección.
+
 <figure markdown="span">
   ![Channel hardening y favorable propagation vs M](figures/mimo-massive.png)
   <!-- generada por celdas 12–13 de lab.ipynb -->
@@ -400,7 +406,7 @@ La potencia útil crece **linealmente con $M$** (array gain) mientras la interfe
   </figcaption>
 </figure>
 
-**MIMO Masivo en 5G NR.** La estación base 5G NR utiliza arrays de antenas activas (AAS) con configuraciones típicas de 32T32R, 64T64R o 128T128R en FR1 (sub-6 GHz). El estándar soporta hasta $r = 8$ capas (streams) simultáneos por UE en DL (Tabla 7.3.1.3-1 del TS 38.214). El bloque de precodificación en el gNB implementa en la práctica una variante del ZF regularizado (RZF / MMSE precoder) que equilibra los costes computacionales de la inversión matricial con las ganancias de cancelación de interferencia.
+**MIMO Masivo en 5G NR.** La estación base 5G NR utiliza arrays de antenas activas (AAS) con configuraciones típicas de 32T32R, 64T64R o 128T128R en FR1 (sub-6 GHz). El estándar soporta hasta $r = 8$ capas (streams) simultáneos por UE en DL (Tabla 7.3.1.3-1 del TS 38.214). El bloque de precodificación en el gNB implementa en la práctica una variante del ZF regularizado (RZF / MMSE precoder) que equilibra los costes computacionales de la inversión matricial con las ganancias de cancelación de interferencia. En FR2 (mmWave, 24–52 GHz) el precoding **totalmente digital** de este capítulo deja de ser viable — una cadena de RF por antena es demasiado cara y consume demasiado — y se recurre al **beamforming híbrido**: un desfasador analógico forma haces gruesos y un número reducido de cadenas digitales hace el precoding fino sobre ellos. Esa arquitectura se detalla en la Sesión 07.
 
 <figure markdown="span">
   ![Sum-rate MRT vs ZF vs óptimo para Massive MIMO](figures/mimo-sumrate.png)
