@@ -80,6 +80,8 @@ donde $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ es la **matriz de canal** y $
 
 $$h_{ji} \sim \mathcal{CN}(0, 1) \tag{2}$$
 
+**¿Qué significa i.i.d.?** Son dos condiciones separadas, y conviene leerlas por separado. **Independientes**: conocer el valor de un coeficiente no dice nada sobre los demás — que el enlace entre la antena transmisora 1 y la receptora 3 esté en desvanecimiento profundo no hace más ni menos probable que el enlace vecino también lo esté. **Idénticamente distribuidas**: todas las entradas siguen la misma estadística — ninguna pareja de antenas es "especial", todas juegan con las mismas reglas. La imagen mental: rellenar la matriz $\mathbf{H}$ lanzando un dado una vez por cada casilla. Cada lanzamiento ignora los anteriores (independencia) y siempre se usa el mismo dado (idéntica distribución). Aquí el "dado" es la gaussiana compleja $\mathcal{CN}(0,1)$, y el módulo $|h_{ji}|$ de cada resultado sigue una distribución Rayleigh — de ahí el nombre del modelo, que conecta directamente con la Sesión 01.
+
 Este modelo corresponde a un entorno con *scattering* denso e isótropo donde no hay línea de visión directa (NLOS) y las antenas están suficientemente separadas ($\geq \lambda/2$) para que los coeficientes sean estadísticamente independientes. En 5G NR los canales espacialmente correlacionados (antenas en ULA compacto) requieren modelos más sofisticados como el CDL-C/D del TR 38.901, pero el modelo i.i.d. captura la física esencial y produce todos los resultados analíticos clave.
 
 <figure markdown="span">
