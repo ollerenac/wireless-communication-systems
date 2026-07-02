@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-07-02T20:09:56.714Z",
+  "timestamp": "2026-07-02T20:47:01.791Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -64,9 +64,35 @@
       "status": "done",
       "commit": null,
       "notes": "All work pushed (origin/main = f30a113). GitHub Pages incident mid-session: 3x 'Deployment failed, try again later' + API 503s, self-resolved in ~12 min; nothing repo-side. Live site verified with curl+grep after each push."
+    },
+    {
+      "id": 13,
+      "name": "Teaching narrative (guión de clase) for Session 06 delivered in chat",
+      "status": "done",
+      "commit": null,
+      "notes": "Full lecture script: driving question 'que compran las antenas', per-section walkthrough with timings (5/10/15/25/10/15/15/5 min), blackboard moment §3.1, concept dependency map, cut-order if short on time, anticipated-questions table. Delivered in chat, not committed."
+    },
+    {
+      "id": 14,
+      "name": "understand-anything plugin setup",
+      "status": "done",
+      "commit": null,
+      "notes": "pnpm installed globally, core package built (BUILT-OK) at ~/.claude/plugins/cache/understand-anything/understand-anything/2.8.1. pnpm v11 build-script gate solved via allowBuilds:true in pnpm-workspace.yaml."
     }
   ],
   "remaining_tasks": [
+    {
+      "id": 15,
+      "name": "Artifact page of the lecture script (INTERRUPTED MID-TASK — next step)",
+      "status": "in_progress",
+      "notes": "User asked to see the guión as an Artifact page to keep open while lecturing. artifact-design skill loaded; interrupted before writing HTML. Rebuild content from chat history message 'Guión narrativo — Sesión 06 MIMO'. Spanish, scannable design (used live during class), not editorial."
+    },
+    {
+      "id": 16,
+      "name": "/understand pipeline on session 06 (aborted Phase 0, optional)",
+      "status": "not_started",
+      "notes": "Setup done (see task 14). If resumed: PROJECT_ROOT = docs/sessions/06-mimo-systems/ (NOT repo root — avoids scanning PII in exams/), output language es, add .understand-anything/ to .gitignore."
+    },
     {
       "id": 9,
       "name": "Distribute Parcial 01 grades to students via email",
@@ -128,6 +154,6 @@
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Session 06 complete. Next: Parcial 01 feedback emails (blocked on addresses) or start Session 07 'Arquitectura 5G NR' (lesson 06 already forward-references it); long-term: labs 05/03.",
-  "context_notes": "Session pattern today: conceptual gap review -> 6 inline quick tasks closing all gaps (det-rx, alamouti, csi-tdd, fig-detectores, precoder-zf, marchenko-pastur). All pushed and live. Caveman full + ponytail full active. Deploy: deploy.yml (mkdocs gh-deploy) + legacy Pages from gh-pages; verify live content via curl+grep. Math: \\mathbf never \\boldsymbol; headings without complex LaTeX (TOC render). Student PII stays in gitignored exams/**/examen-parcial-soluciones/."
+  "next_action": "Build the Artifact page of the Session 06 lecture script (interrupted mid-task; content in chat history). Then: Parcial 01 emails (blocked on addresses) or Session 07.",
+  "context_notes": "Session pattern today: conceptual gap review -> 6 inline quick tasks closing all gaps (det-rx, alamouti, csi-tdd, fig-detectores, precoder-zf, marchenko-pastur). All pushed and live. Caveman full + ponytail full active. Deploy: deploy.yml (mkdocs gh-deploy) + legacy Pages from gh-pages; verify live content via curl+grep. Math: \\mathbf never \\boldsymbol; headings without complex LaTeX (TOC render). Student PII stays in gitignored exams/**/examen-parcial-soluciones/. POST-PAUSE ADDENDUM: user shifted to lecture preparation — asked conceptual step-by-step narrative (delivered in chat), then invoked /understand-anything (pipeline aborted), then asked for the narrative as an Artifact page (interrupted mid-task, next step on resume)."
 }
