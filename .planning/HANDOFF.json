@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-07-02T00:20:36.624Z",
+  "timestamp": "2026-07-02T20:09:56.714Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -11,102 +11,123 @@
   "completed_tasks": [
     {
       "id": 1,
-      "name": "Quick task 260701-mhk — pedagogical revision of Session 06 MIMO lesson",
+      "name": "Conceptual review of Session 06 MIMO lesson",
       "status": "done",
-      "commit": "f882f6f",
-      "notes": "index.md restructured intuition-before-algebra: analogy per section §1-§6, §3.1 worked 2x2 example (H=[[1,0.5],[0.5,1]], sigma={1.5,0.5}, C=4.78 vs SISO 3.46), 6 concept-checks, Ejercicios de Asimilación A1-A4 with solutions. Commits eca2a9e/3f7d13c/04f041f/35ad2e6/f882f6f."
+      "commit": null,
+      "notes": "Verdict: solid info-theoretic backbone, 4 gaps found (RX detection, Alamouti concrete, CSI acquisition, mmWave/MIMO-OFDM one-liners). All closed same day."
     },
     {
       "id": 2,
-      "name": "Quick task 260701-ol6 — \\boldsymbol rendered literally in equations",
+      "name": "Quick 260702-det-rx — §3.3 receiver detection (ZF/MMSE/ML/SIC)",
       "status": "done",
-      "commit": "188dcba",
-      "notes": "6 replacements \\boldsymbol -> \\mathbf (index.md x5, lab.ipynb x1, session 06 only). Root cause: macro not available in all MathJax/Colab renderers. Executed inline, no subagents. Commits 9a591cf (fix) + 188dcba (artifacts)."
+      "commit": "98905f0",
+      "notes": "New §3.3 dual of precoding: linear ZF/MMSE + ML/SIC, hand example noise amplification x2.22 reusing §3.1 2x2 channel, comparison table, TX-RX duality note, concept-check. Subsection avoids renumbering §4-§6."
     },
     {
       "id": 3,
-      "name": "Intro: minimal 2x2 'virtual cables' illustration after SVD sentence",
+      "name": "Quick 260702-alamouti — Alamouti STBC concrete + Exercise A5",
       "status": "done",
-      "commit": "971b2ca",
-      "notes": "User found intro's 'SVD -> min(Nt,Nr) parallel channels' sentence dropped too fast. New paragraph: signals mix in air -> SVD untangles -> two virtual cables (one good, one modest) -> forwards to §3.1 worked example."
+      "commit": "a05ae90",
+      "notes": "??? example box at DMT r=0 vertex (2-slot scheme, combiner, diversity order 2 no CSIT) + hand exercise A5 (h1=1, h2=j -> 2*s1). Algebra verified."
     },
     {
       "id": 4,
-      "name": "Quick task 260701-qhz — plain-language i.i.d. explanation in §2",
+      "name": "Quick 260702-csi-tdd — §6.3 CSI acquisition + one-liners",
       "status": "done",
-      "commit": "585703b",
-      "notes": "Paragraph '¿Qué significa i.i.d.?' after eq (2): independence and identical distribution unpacked separately, dice mental image (one roll per H entry, same die), Rayleigh name origin linked to Session 01. Commits 0129cfc (content) + 585703b (artifacts)."
+      "commit": "725ea2b",
+      "notes": "§6.3: DL pilots don't scale with M -> TDD reciprocity (cost prop K) -> pilot contamination as real multicell ceiling. Plus MIMO-OFDM sentence in §2 (Session 03 link) and hybrid beamforming FR2 sentence (Session 07 link)."
     },
     {
       "id": 5,
-      "name": "GSD updated 1.6.0 -> 1.6.1",
+      "name": "Quick 260702-fig-detectores — Figure 4b BER of detectors",
+      "status": "done",
+      "commit": "eb901fd",
+      "notes": "New lab.ipynb cell (after DMT): 2x2 QPSK Monte Carlo ZF/MMSE/ML -> figures/mimo-detectors.png, inserted in §3.3. Physics verified: ML<MMSE<ZF, ML steeper slope. Also committed user's manual §6 heading fix (7b89052)."
+    },
+    {
+      "id": 6,
+      "name": "Quick 260702-precoder-zf — implement precoder_zf (lab Exercise 3)",
+      "status": "done",
+      "commit": "dd7b9e5",
+      "notes": "pinv + normalization; Figure 6 regenerated with both curves (N_mc 300->2000). FINDING: real crossover ~2 dB at M/K=2 (caption speculated 10-12 dB); MRT saturates at interference floor ~6e-2. Caption corrected with real data. Exercise now reference solution (instructor's pending todo); reversible."
+    },
+    {
+      "id": 7,
+      "name": "Quick 260702-marchenko-pastur — solve lab Exercise 1",
+      "status": "done",
+      "commit": "f30a113",
+      "notes": "Cell 7 TODO -> solution: eigenvalue histogram lambda=sigma^2/Nr + analytic MP pdf overlay + Frobenius check. Fixed 3 traps in original TODO: filename clobber of Figure 3, wrong expected-mean formula, 1/sqrt(lambda) divergence at 0 (grid trim + ylim). New figures/mimo-marchenko-pastur.png."
+    },
+    {
+      "id": 8,
+      "name": "Push + deploy verification",
       "status": "done",
       "commit": null,
-      "notes": "Global install refreshed."
+      "notes": "All work pushed (origin/main = f30a113). GitHub Pages incident mid-session: 3x 'Deployment failed, try again later' + API 503s, self-resolved in ~12 min; nothing repo-side. Live site verified with curl+grep after each push."
     }
   ],
   "remaining_tasks": [
     {
-      "id": 6,
-      "name": "Instructor review of revised Session 06 lesson",
-      "status": "in_progress",
-      "notes": "User is actively reading the revised lesson and requesting targeted clarity fixes (intro SVD example, i.i.d. explanation so far). Expect more spot-improvement requests on resume."
-    },
-    {
-      "id": 7,
-      "name": "Push main to origin",
-      "status": "not_started",
-      "notes": "main is 12 commits ahead of origin/main (fc734cd..585703b). Live course site still shows the old dense lesson until push."
-    },
-    {
-      "id": 8,
+      "id": 9,
       "name": "Distribute Parcial 01 grades to students via email",
       "status": "not_started",
-      "notes": "5 retroalimentacion-*.txt files ready (Spanish) in gitignored exams/parcial-01/examen-parcial-soluciones/. Still needs student email addresses."
+      "notes": "5 retroalimentacion-*.txt files ready (Spanish) in gitignored exams/parcial-01/examen-parcial-soluciones/. Still needs student email addresses from instructor."
     },
     {
-      "id": 9,
-      "name": "Session 06 MIMO — pending lab todos",
+      "id": 10,
+      "name": "Session 05 lab — Polar BER N=64 Monte Carlo (Exercises 5-6)",
       "status": "not_started",
-      "notes": "lab.ipynb: Marchenko-Pastur histogram polish (Ejercicio 1); precoder_zf implementation (Ejercicio 3)."
+      "notes": "Long-term backlog."
+    },
+    {
+      "id": 11,
+      "name": "Session 03 lab — OFDM+LDPC integrator",
+      "status": "not_started",
+      "notes": "Long-term backlog."
+    },
+    {
+      "id": 12,
+      "name": "Session 07 — Arquitectura 5G NR",
+      "status": "not_started",
+      "notes": "Lesson 06 now forward-references it twice: hybrid beamforming (§6) and rank adaptation (§4)."
     }
   ],
   "blockers": [],
   "human_actions_pending": [
     {
-      "action": "Continue reviewing revised Session 06 lesson; push to origin when satisfied",
-      "context": "Review in progress — two clarity fixes already requested and applied this session. 12 local commits unpushed.",
-      "blocking": false
-    },
-    {
       "action": "Provide student email addresses to send Parcial 01 feedback",
       "context": "Feedback files ready since June 20; email step deferred across sessions.",
+      "blocking": true
+    },
+    {
+      "action": "Read expanded Session 06 lesson (§3.3, Alamouti box, A5, §6.3 are new) — may trigger more spot-clarity requests",
+      "context": "Session 06 backlog otherwise empty; everything live on the site.",
       "blocking": false
     }
   ],
   "decisions": [
     {
-      "decision": "Trivial 1-2 file quick tasks executed inline with GSD guarantees (PLAN/SUMMARY/atomic commits) but no subagents",
-      "rationale": "Planner/executor subagents add nothing to mechanical sed-level or single-paragraph edits; artifacts and commit discipline preserved.",
+      "decision": "Lab 06 exercises precoder_zf and Marchenko-Pastur converted from student TODO to reference solutions",
+      "rationale": "They were the instructor's own pending todos across sessions. Reversible: restore pass + re-comment plot lines.",
       "phase": null
     },
     {
-      "decision": "\\boldsymbol replaced by \\mathbf instead of loading MathJax boldsymbol extension",
-      "rationale": "\\mathbf universally available (site MathJax + Colab), matches document's existing bold-math style; no config change needed.",
+      "decision": "RX detection added as §3.3 subsection; new figure numbered 4b",
+      "rationale": "Avoids renumbering §4-§6 and Figures 5-8 plus their cross-references.",
       "phase": null
     },
     {
-      "decision": "Ran /gsd-quick at repo root despite missing ROADMAP.md",
-      "rationale": "Repo runs GSD per-session; root quick artifacts live in .planning/quick/.",
+      "decision": "Notebook cells executed via extracted script (cell 1 + target cell), not nbconvert --execute",
+      "rationale": "Avoids running the heavy Monte Carlo cells of the whole notebook on every figure regeneration.",
       "phase": null
     },
     {
-      "decision": "Accepted origin/main as worktree base during 260701-mhk execution",
-      "rationale": "Claude Code forks executor worktrees from origin/main, not local tip; diverging commits touched only .planning files. Gotcha persists while main has unpushed commits.",
+      "decision": "SIC detector not simulated in Figure 4b (mentioned in caption only)",
+      "rationale": "Natural student exercise; caption places it between MMSE and ML.",
       "phase": null
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Continue instructor's clarity-review loop on docs/sessions/06-mimo-systems/index.md (spot fixes on request); when review done, push 12 pending commits to origin; then Parcial 01 feedback emails (needs addresses) or lab todos (precoder_zf, Marchenko-Pastur)",
-  "context_notes": "Session pattern: user reads the revised MIMO lesson section by section and requests plain-language clarifications where concepts pass too fast. Fixed so far: intro SVD 2x2 'virtual cables' example, i.i.d. dice explanation in §2, boldsymbol rendering. Caveman mode (full) + ponytail active. All work on local main — origin/main 12 behind at 3d8d884. Parcial 01 closed; student data local-only, gitignored."
+  "next_action": "Session 06 complete. Next: Parcial 01 feedback emails (blocked on addresses) or start Session 07 'Arquitectura 5G NR' (lesson 06 already forward-references it); long-term: labs 05/03.",
+  "context_notes": "Session pattern today: conceptual gap review -> 6 inline quick tasks closing all gaps (det-rx, alamouti, csi-tdd, fig-detectores, precoder-zf, marchenko-pastur). All pushed and live. Caveman full + ponytail full active. Deploy: deploy.yml (mkdocs gh-deploy) + legacy Pages from gh-pages; verify live content via curl+grep. Math: \\mathbf never \\boldsymbol; headings without complex LaTeX (TOC render). Student PII stays in gitignored exams/**/examen-parcial-soluciones/."
 }
