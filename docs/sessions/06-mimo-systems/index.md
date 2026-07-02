@@ -203,7 +203,54 @@ $$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf
 
     **R2.** Porque la dirección en fase es $\mathbf{v}_1$, el eje natural fuerte del canal ($\sigma_1 = 1{,}5$): las fugas cruzadas se suman constructivamente. En contrafase ($\mathbf{v}_2$) se restan y la ganancia cae a $\sigma_2 = 0{,}5$.
 
-Ya sabemos la capacidad máxima cuando el objetivo es la tasa; la pregunta natural es: ¿qué pasa si en vez de maximizar la tasa queremos fiabilidad? → el compromiso diversidad-multiplexación.
+#### 3.3 El problema dual: detección en el receptor
+
+El §3.2 supuso que **ambos extremos** conocen $\mathbf{H}$: el transmisor precodifica con $\mathbf{V}$ y el receptor combina con $\mathbf{U}^{\mathsf{H}}$, una coreografía coordinada. Pero en muchos sistemas el transmisor **no** conoce el canal (sin CSIT): envía flujos independientes a ciegas, $\mathbf{x}$ directamente, y todo el trabajo de separar la mezcla recae en el receptor, que sí estima $\mathbf{H}$ (mediante pilotos). La pregunta es la imagen especular de la precodificación: dado $\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$ y conocido $\mathbf{H}$, ¿cómo recupero $\mathbf{x}$ **solo desde la recepción**?
+
+La analogía: en el §3.2 el técnico de sonido controlaba la mesa de mezclas por los dos lados. Ahora está atrapado solo en el lado de los altavoces, con el revoltijo ya hecho, y debe deshacerlo a mano. Hay cuatro herramientas, de la más simple a la más cara:
+
+**Detectores lineales** (una multiplicación matricial):
+
+- **Zero-Forcing (ZF).** Invierte el canal: $\hat{\mathbf{x}} = \mathbf{H}^+\mathbf{y} = (\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}\mathbf{H}^{\mathsf{H}}\mathbf{y}$. Cancela **exactamente** la interferencia entre flujos, pero cuando $\mathbf{H}$ está mal condicionada (subcanales débiles) la inversión **amplifica el ruido** — es el gemelo receptor del precoder ZF del §5, con el mismo defecto.
+- **MMSE.** Regulariza la inversión: $\hat{\mathbf{x}} = (\mathbf{H}^{\mathsf{H}}\mathbf{H} + \tfrac{N_t}{\text{SNR}}\mathbf{I})^{-1}\mathbf{H}^{\mathsf{H}}\mathbf{y}$. Equilibra interferencia residual contra ruido: a SNR alta tiende a ZF, a SNR baja al filtro adaptado. Casi siempre mejor que ZF puro.
+
+**Detectores no lineales** (más cómputo, mejor rendimiento):
+
+- **Máxima verosimilitud (ML).** $\hat{\mathbf{x}} = \arg\min_{\mathbf{x}} \|\mathbf{y} - \mathbf{H}\mathbf{x}\|^2$ sobre la constelación. Óptimo, pero su costo crece **exponencialmente** con $N_t$ (probar todas las combinaciones de símbolos).
+- **Cancelación sucesiva (SIC / V-BLAST).** Detecta el flujo más fuerte, lo resta de $\mathbf{y}$, y repite con el residuo. Es el esquema **V-BLAST** que nombra el pie de la Figura 5, ahora con mecanismo: pela la mezcla capa por capa.
+
+??? example "Ejemplo: amplificación de ruido del ZF en el canal 2×2"
+
+    Reusamos el canal del §3.1, $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$. El ruido de cada flujo tras el detector ZF se multiplica por el elemento diagonal de $(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}$. Como $\mathbf{H}$ es real y simétrica:
+
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \mathbf{H}^2 = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}, \qquad \det = 1{,}25^2 - 1 = 0{,}5625$$
+
+    $$(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 & -1 \\ -1 & 1{,}25 \end{pmatrix} \Rightarrow \text{diagonal} = \frac{1{,}25}{0{,}5625} \approx 2{,}22$$
+
+    El ruido de cada flujo se amplifica **×2,22**. Ese es el precio de forzar interferencia nula: cuanto peor condicionado el canal (mayor razón $\sigma_1/\sigma_2 = 3$ aquí), más se dispara el factor. MMSE evitaría esta amplificación a costa de dejar algo de interferencia residual.
+
+| Detector | Interferencia | Ruido | Costo |
+|---|---|---|---|
+| ZF | Nula | Amplificado | Bajo (una inversión) |
+| MMSE | Residual pequeña | Balanceado | Bajo (una inversión) |
+| ML | Nula | Mínimo (óptimo) | Exponencial en $N_t$ |
+| SIC / V-BLAST | Cancelada por capas | Intermedio | Medio |
+
+Nótese la **dualidad TX↔RX**: ZF, MMSE y la variante regularizada aparecen tanto como *precodificadores* (§5, el transmisor da forma a los haces) como *detectores* (aquí, el receptor deshace la mezcla). Es el mismo álgebra vista desde los dos extremos del enlace.
+
+??? question "Comprueba tu comprensión"
+
+    **P1.** ¿Por qué el detector ZF amplifica el ruido, igual que el precoder ZF del §5?
+
+    **P2.** En el canal 2×2 del ejemplo, ¿por cuánto se multiplica el ruido de cada flujo con ZF?
+
+    ---
+
+    **R1.** Ambos invierten $\mathbf{H}$ (o $\mathbf{H}\mathbf{H}^{\mathsf{H}}$). Cuando el canal tiene subcanales débiles (mal condicionamiento), la inversión los amplifica mucho, y con ellos el ruido proyectado sobre esas direcciones. Forzar interferencia exactamente nula cuesta energía de señal útil.
+
+    **R2.** ×2,22 — el elemento diagonal de $(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}$.
+
+Ya sabemos transmitir (precodificación) y recibir (detección) cuando el objetivo es la tasa; la pregunta natural es: ¿y si en vez de maximizar la tasa queremos fiabilidad? → el compromiso diversidad-multiplexación.
 
 ### 4. El Compromiso Diversidad-Multiplexación (DMT)
 
