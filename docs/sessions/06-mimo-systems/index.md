@@ -238,6 +238,13 @@ La analogía: en el §3.2 el técnico de sonido controlaba la mesa de mezclas po
 | ML | Nula | Mínimo (óptimo) | Exponencial en $N_t$ |
 | SIC / V-BLAST | Cancelada por capas | Intermedio | Medio |
 
+<figure markdown="span">
+  ![BER de detectores ZF, MMSE y ML en canal 2×2](figures/mimo-detectors.png)
+  <!-- generada por celda "Figura 4b" de lab.ipynb -->
+  <figcaption markdown="1">**Figura 4b.** BER (QPSK) de los tres detectores sobre un canal $2 \times 2$ i.i.d. Rayleigh. ZF paga la amplificación de ruido en todo el rango; MMSE lo mejora balanceando interferencia y ruido; ML no solo es el mejor — su curva cae con **pendiente más empinada** (mayor orden de diversidad), porque no proyecta la señal sobre direcciones débiles del canal. El precio: costo exponencial en $N_t$. SIC/V-BLAST (no mostrado) queda entre MMSE y ML.
+  </figcaption>
+</figure>
+
 Nótese la **dualidad TX↔RX**: ZF, MMSE y la variante regularizada aparecen tanto como *precodificadores* (§5, el transmisor da forma a los haces) como *detectores* (aquí, el receptor deshace la mezcla). Es el mismo álgebra vista desde los dos extremos del enlace.
 
 ??? question "Comprueba tu comprensión"
