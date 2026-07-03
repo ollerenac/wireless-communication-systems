@@ -200,6 +200,48 @@ con $P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$ donde $(x)^+ \triangle
 
 El nombre *water-filling* es literal: imagine verter una cantidad fija de agua (la potencia $P$) en un recipiente de fondo irregular, donde la altura del fondo bajo el subcanal $k$ es $N_0/\sigma_k^2$. Los pozos profundos — los subcanales fuertes, con $N_0/\sigma_k^2$ pequeño — reciben más agua (más potencia); los pozos poco profundos reciben poca, y los que sobresalen del nivel del agua $\mu$ quedan directamente **secos** ($P_k^* = 0$): un subcanal suficientemente malo no merece ni un vatio. En el ejemplo 2×2 del §3.1, el subcanal débil ($\sigma_2^2 = 0{,}25$) es el candidato a secarse si la SNR baja.
 
+**¿De dónde sale la fórmula de $P_k^*$?** Es un problema de optimización con restricción: maximizar la suma de tasas $\sum_k \log_2(1 + P_k\sigma_k^2/N_0)$ sujeto a gastar exactamente el presupuesto $\sum_k P_k = P$. El método de Lagrange introduce un multiplicador $\lambda$ (el "precio" común de cada vatio) y al derivar e igualar a cero queda $P_k = \tfrac{1}{\lambda \ln 2} - \tfrac{N_0}{\sigma_k^2}$. La constante $\tfrac{1}{\lambda \ln 2}$ — la misma para todos los subcanales — es precisamente el **nivel de agua** $\mu$: no se calcula $\lambda$ en sí, sino directamente $\mu$ imponiendo que las potencias sumen $P$.
+
+??? example "Ejemplo numérico: SVD y water-filling en un canal 3×3"
+
+    Un segundo canal resuelto a mano, ahora con la asignación **óptima** de potencia (el §3.1 usó potencia uniforme). Basado en el curso NPTEL *Principles of CDMA/MIMO/OFDM Wireless Communications* (A. Jagannatham).
+
+    **El canal.**
+
+    $$\mathbf{H} = \begin{pmatrix} 2 & -6 & 0 \\ 3 & 4 & 0 \\ 0 & 0 & 2 \end{pmatrix}$$
+
+    **Paso 1 — Otro atajo: columnas ortogonales.** Las tres columnas son mutuamente ortogonales — p. ej. $\mathbf{c}_1^{\mathsf{H}}\mathbf{c}_2 = 2\cdot(-6) + 3\cdot 4 + 0 = 0$. Cuando las columnas de $\mathbf{H}$ son ortogonales, la SVD sale por **normalización directa**: cada columna dividida por su norma es una columna de $\mathbf{U}$, y las normas son los valores singulares:
+
+    $$\|\mathbf{c}_1\| = \sqrt{4+9} = \sqrt{13}, \qquad \|\mathbf{c}_2\| = \sqrt{36+16} = \sqrt{52}, \qquad \|\mathbf{c}_3\| = 2$$
+
+    Ordenando de mayor a menor (la SVD lo exige): $\sigma_1 = \sqrt{52}$, $\sigma_2 = \sqrt{13}$, $\sigma_3 = 2$; el reordenamiento se absorbe en $\mathbf{V}$, que aquí resulta una simple **matriz de permutación** (intercambia los flujos 1 y 2). Ganancias de subcanal: $\sigma_1^2 = 52$, $\sigma_2^2 = 13$, $\sigma_3^2 = 4$.
+
+    Chequeo de energía (mismo test del §3.1): $\|\mathbf{H}\|_F^2 = 4+36+9+16+4 = 69 = 52+13+4$ ✓
+
+    **Paso 2 — Canales desacoplados.** Con $\mathbf{x} = \mathbf{V}\tilde{\mathbf{x}}$ en el TX y $\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y}$ en el RX (ec. 4):
+
+    $$\tilde{y}_1 = \sqrt{52}\,\tilde{x}_1 + \tilde{n}_1, \qquad \tilde{y}_2 = \sqrt{13}\,\tilde{x}_2 + \tilde{n}_2, \qquad \tilde{y}_3 = 2\,\tilde{x}_3 + \tilde{n}_3$$
+
+    Tres símbolos simultáneos, misma banda, misma ranura — multiplexación espacial pura.
+
+    **Paso 3 — Water-filling con números.** Datos: ruido $N_0 = 0$ dB $= 1$; potencia total $P = 3$ dB $\approx 2$. Suponiendo los tres subcanales activos, la ec. (6) exige:
+
+    $$\sum_{k=1}^{3} P_k^* = 3\mu - \left(\frac{1}{52} + \frac{1}{13} + \frac{1}{4}\right) = 2 \;\Rightarrow\; \mu = \frac{2 + \frac{1}{52} + \frac{1}{13} + \frac{1}{4}}{3} \approx 0{,}782$$
+
+    Las alturas del fondo son $N_0/\sigma_k^2 = 0{,}019$, $0{,}077$ y $0{,}25$ — las tres **por debajo** del nivel de agua $\mu = 0{,}782$, así que la suposición era correcta: nadie queda seco. Las potencias son el agua sobre cada fondo:
+
+    $$P_1^* = 0{,}782 - 0{,}019 = 0{,}763, \qquad P_2^* = 0{,}705, \qquad P_3^* = 0{,}532$$
+
+    (en dB: $-1{,}18$, $-1{,}52$ y $-2{,}74$ dB; suman $2$ ✓). El patrón del water-filling a la vista: **más potencia al subcanal más fuerte**, menos al más débil — al revés que un reparto "justo".
+
+    **Paso 4 — Capacidad.** Con la ec. (6):
+
+    $$C_{\text{WF}} = \log_2(1 + 0{,}763 \cdot 52) + \log_2(1 + 0{,}705 \cdot 13) + \log_2(1 + 0{,}532 \cdot 4) \approx 5{,}35 + 3{,}35 + 1{,}65 = 10{,}34 \text{ bit/s/Hz}$$
+
+    Dato instructivo: la potencia uniforme ($P_k = 2/3$) habría dado $10{,}30$ bit/s/Hz — casi lo mismo. El water-filling gana poco cuando **todos** los subcanales son fuertes (SNR alta); su ventaja aparece cuando hay subcanales débiles que conviene secar, como el $\sigma_2^2 = 0{,}25$ del §3.1.
+
+    **Nota de notación** (si consultas la fuente en inglés): allí el nivel de agua se escribe $1/\lambda$ — el recíproco del multiplicador de Lagrange, nuestro $\mu$ — y la potencia de ruido se llama $\sigma^2$ *sin* subíndice, que colisiona con los valores singulares $\sigma_i$. El cociente $\sigma^2/\sigma_i^2$ de la fuente es nuestro $N_0/\sigma_k^2$: ruido sobre ganancia, la altura del fondo del recipiente.
+
 **Capacidad sin CSIT (potencia uniforme).** En la práctica, el transmisor a menudo no conoce $\mathbf{H}$. Con potencia uniforme $P_k = P/N_t$, la capacidad es:
 
 $$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf{H}\mathbf{H}^{\mathsf{H}}\right) = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P \sigma_k^2}{N_t N_0}\right) \tag{7}$$
