@@ -125,27 +125,43 @@ Antes de la maquinaria general, un canal que se resuelve completo con lápiz y p
 
     $$\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
 
-    La diagonal (1) es el enlace "directo" de cada antena TX a su antena RX enfrentada; el 0,5 es la fuga hacia la otra antena. Como $\mathbf{H}$ es real y simétrica, su SVD coincide con la descomposición espectral: los valores singulares son sus autovalores y $\mathbf{U} = \mathbf{V}$.
+    La diagonal (1) es el enlace "directo" de cada antena TX a su antena RX enfrentada; el 0,5 es la fuga hacia la otra antena.
 
-    **Paso 1 — Valores singulares.** Los autovalores de $\mathbf{H}$ son $1 \pm 0{,}5$:
+    **Paso 0 — Qué buscamos.** La SVD (ec. 3) factoriza el canal como
+
+    $$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \sum_{k=1}^{r} \sigma_k\, \mathbf{u}_k \mathbf{v}_k^{\mathsf{H}}$$
+
+    La forma de suma es la lectura física: el canal es la superposición de $r$ "tuberías" independientes — se inyecta por la dirección $\mathbf{v}_k$, se recoge por la dirección $\mathbf{u}_k$, y la ganancia de amplitud es $\sigma_k$. El objetivo del ejemplo es encontrar $\sigma_1, \sigma_2$ y $\mathbf{v}_1, \mathbf{v}_2$ a mano.
+
+    **El atajo de las matrices simétricas.** En general los valores singulares se obtienen de los autovalores de $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (con $\mathbf{U} \neq \mathbf{V}$). Pero esta $\mathbf{H}$ es real, simétrica ($\mathbf{H} = \mathbf{H}^{\mathsf{T}}$) y sus autovalores saldrán positivos; para esa familia, la descomposición espectral ordinaria $\mathbf{H} = \mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{\mathsf{T}}$ (autovalores y autovectores de toda la vida) ya tiene *exactamente* la forma de una SVD: matriz ortogonal a ambos lados, diagonal no negativa en el centro. Comparando factorizaciones término a término: $\mathbf{U} = \mathbf{V} = \mathbf{Q}$ y $\sigma_k = \lambda_k$. Por eso aquí basta diagonalizar $\mathbf{H}$ directamente — la mitad del trabajo.
+
+    **Paso 1 — Valores singulares (= autovalores).** Polinomio característico:
+
+    $$\det(\mathbf{H} - \lambda\mathbf{I}) = (1-\lambda)^2 - 0{,}5^2 = 0 \;\Rightarrow\; 1-\lambda = \pm 0{,}5 \;\Rightarrow\; \lambda = 1 \pm 0{,}5$$
 
     $$\sigma_1 = 1{,}5, \qquad \sigma_2 = 0{,}5$$
 
-    Las ganancias de subcanal son sus cuadrados: $\sigma_1^2 = 2{,}25$ y $\sigma_2^2 = 0{,}25$. El canal tiene un subcanal *fuerte* (9 veces más ganancia) y uno *débil*.
+    **¿Por qué las ganancias de subcanal son los cuadrados?** Porque $\sigma_k$ multiplica la **amplitud** de la señal ($\tilde{y}_k = \sigma_k \tilde{x}_k + \tilde{n}_k$, ec. 5), y la capacidad depende de la **potencia** — amplitud al cuadrado: la SNR del subcanal $k$ es $\sigma_k^2 P_k/N_0$. Ganancias: $\sigma_1^2 = 2{,}25$ y $\sigma_2^2 = 0{,}25$ — un subcanal *fuerte* con 9 veces la ganancia del *débil*.
 
-    **Paso 2 — Vectores singulares.** Las columnas de $\mathbf{V} = \mathbf{U}$ son:
+    **Paso 2 — Vectores singulares (= autovectores).** Se resuelve $(\mathbf{H} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$ para cada autovalor. Con $\lambda_1 = 1{,}5$:
 
-    $$\mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+    $$\begin{pmatrix} -0{,}5 & 0{,}5 \\ 0{,}5 & -0{,}5 \end{pmatrix}\mathbf{v} = \mathbf{0} \;\Rightarrow\; v_1 = v_2 \;\Rightarrow\; \mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+
+    Con $\lambda_2 = 0{,}5$ el mismo procedimiento da $v_1 = -v_2$:
+
+    $$\mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
+
+    (el $1/\sqrt{2}$ solo normaliza a longitud 1). Y $\mathbf{U} = \mathbf{V}$ por el atajo del Paso 0 — no hay segunda base que calcular.
 
     Interpretación física: el canal **favorece la señal enviada en fase por ambas antenas** ($\mathbf{v}_1$, dirección $+45°$, las fugas se suman constructivamente) y **penaliza la señal en contrafase** ($\mathbf{v}_2$, dirección $-45°$, las fugas se restan). Los "ejes naturales" del canal no son las antenas físicas, sino estas combinaciones.
 
-    **Paso 3 — Verificación de energía.** La norma de Frobenius debe repartirse entre los subcanales:
+    **Paso 3 — Verificación de energía.** ¿Para qué sirve la norma de Frobenius? $\|\mathbf{H}\|_F^2 = \sum_{ij}|h_{ji}|^2$ suma la energía de **todos los enlaces físicos** de la tabla $\mathbf{H}$ — es la energía total que el canal puede transferir. Como $\mathbf{U}$ y $\mathbf{V}$ son rotaciones (unitarias: no crean ni destruyen energía), esa misma energía tiene que reaparecer íntegra repartida entre las tuberías: $\|\mathbf{H}\|_F^2 = \sum_k \sigma_k^2$. Es el chequeo estándar de una SVD hecha a mano — si no cuadra, hay un error de cálculo:
 
     $$\|\mathbf{H}\|_F^2 = 1^2 + 0{,}5^2 + 0{,}5^2 + 1^2 = 2{,}5 = \sigma_1^2 + \sigma_2^2 = 2{,}25 + 0{,}25 \checkmark$$
 
     (Esta identidad es exactamente la que verifica el Ejercicio 1 del laboratorio, allí por Monte Carlo.)
 
-    **Paso 4 — Capacidad.** A SNR $= 10$ dB ($P/N_0 = 10$ en lineal), con potencia uniforme $P/N_t$ y $N_t = 2$, la ec. (7) da:
+    **Paso 4 — Capacidad.** ¿Por qué potencia $P/N_t$? La restricción de potencia es **una sola para todo el array** ($\mathbb{E}[\|\mathbf{x}\|^2] \leq P$, §2): los flujos comparten un único presupuesto — no hay "$P$ por antena". Sin CSIT el transmisor no sabe cuál dirección es la fuerte, así que lo reparte en partes iguales: $P/N_t$ a cada flujo. A SNR $= 10$ dB ($P/N_0 = 10$ en lineal) con $N_t = 2$, cada subcanal recibe el factor $10/2 = 5$, y la ec. (7) da:
 
     $$C = \log_2\!\left(1 + \tfrac{10}{2}\cdot 2{,}25\right) + \log_2\!\left(1 + \tfrac{10}{2}\cdot 0{,}25\right) = \log_2(12{,}25) + \log_2(2{,}25) \approx 3{,}61 + 1{,}17 = 4{,}78 \text{ bit/s/Hz}$$
 
