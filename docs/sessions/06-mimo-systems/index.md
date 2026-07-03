@@ -64,6 +64,10 @@ Estas dos estrategias son las extremas del **compromiso diversidad-multiplexaci�
 
     **R2.** A la diversidad espacial: la misma información por todas las antenas, como seguro contra el bloqueo de un carril.
 
+!!! note "¿Y el espectro? Las vías no se reparten nada"
+
+    Pregunta natural al ver "carriles": ¿no habrá que dividir la banda entre ellos, o modular cada pareja de antenas con formas de onda ortogonales? **No.** Todas las antenas transmiten **a la vez y en la misma banda**; las señales se mezclan en el aire deliberadamente. La ortogonalidad que separa los flujos no está en la forma de onda sino en el **espacio**: cada antena transmisora deja en el array receptor una *firma espacial* distinta — su columna de $\mathbf{H}$ (§2) — y con *scattering* rico esas firmas son linealmente independientes: el receptor tiene tantas ecuaciones como incógnitas y puede deshacer la mezcla (§3.3). Si además el transmisor conoce el canal, la SVD (§3) fabrica ortogonalidad exacta rotando las señales hacia los ejes propios del canal. Tampoco existen "parejas dedicadas" TX 1 → RX 1: cada vía es una *combinación* de todas las antenas, no un cable físico. El espacio actúa así como una **dimensión de ortogonalidad nueva**, junto al tiempo (TDMA), la frecuencia (FDMA/OFDM, Sesión 03) y el código (CDMA) — por eso la capacidad escala con $\min(N_t, N_r)$ sin gastar un hercio ni un vatio adicional.
+
 La pregunta natural es: si ya no hay una sola vía sino muchas que se cruzan, ¿cómo se describe matemáticamente ese haz de vías? → con una matriz.
 
 ### 2. El Canal MIMO — Modelo Matricial
