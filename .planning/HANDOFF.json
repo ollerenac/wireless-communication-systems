@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-07-02T20:47:01.791Z",
+  "timestamp": "2026-07-04T00:00:00Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -85,6 +85,27 @@
       "status": "done",
       "commit": null,
       "notes": "Rebuilt guión from lesson index.md (prior chat cleared) and published as HTML Artifact: https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87. 100-min timeline with cumulative clocks, pizarra §3.1 block, dependency map, cut order, 8 anticipated questions. Source HTML in session scratchpad (guion-sesion-06-mimo.html)."
+    },
+    {
+      "id": 17,
+      "name": "Study-mode improvements round (2026-07-03): §1 spectrum box, Fig 1 fix, §3.1 full math walkthrough",
+      "status": "done",
+      "commit": "ba928bb",
+      "notes": "ec3a40d spectrum box; eaa81ab Fig 1 MIMO panel C≈N·log2(SNR/N); ba928bb §3.1 expanded (SVD sum form, symmetric shortcut, charpoly, eigenvectors, Frobenius meaning, P/Nt)."
+    },
+    {
+      "id": 18,
+      "name": "Quick 260703-svd-wf-example — 3x3 water-filling example from NPTEL video",
+      "status": "done",
+      "commit": "194e3b1",
+      "notes": "Lagrange derivation paragraph + numeric WF box (mu=0.782, P*=0.763/0.705/0.532, C_WF 10.34 vs uniform 10.30) + notation note (1/lambda=mu, video sigma^2=N0). Numbers verified with numpy; transcript has 3 typos."
+    },
+    {
+      "id": 19,
+      "name": "Quick 260703-s3-digest — dedup §3, section map",
+      "status": "done",
+      "commit": "be793b5",
+      "notes": "3x3 box trimmed ~40% to WF-only; section map added to §3 intro. DECISION: did NOT replace §3.1 (anchors 5 cross-refs + physical interpretation); explicit division of labor instead. Open offer: rewrite refs if user insists."
     }
   ],
   "remaining_tasks": [
@@ -155,6 +176,6 @@
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Build the Artifact page of the Session 06 lecture script (interrupted mid-task; content in chat history). Then: Parcial 01 emails (blocked on addresses) or Session 07.",
-  "context_notes": "Session pattern today: conceptual gap review -> 6 inline quick tasks closing all gaps (det-rx, alamouti, csi-tdd, fig-detectores, precoder-zf, marchenko-pastur). All pushed and live. Caveman full + ponytail full active. Deploy: deploy.yml (mkdocs gh-deploy) + legacy Pages from gh-pages; verify live content via curl+grep. Math: \\mathbf never \\boldsymbol; headings without complex LaTeX (TOC render). Student PII stays in gitignored exams/**/examen-parcial-soluciones/. POST-PAUSE ADDENDUM: user shifted to lecture preparation — asked conceptual step-by-step narrative (delivered in chat), then invoked /understand-anything (pipeline aborted), then asked for the narrative as an Artifact page (interrupted mid-task, next step on resume)."
+  "next_action": "Resume study loop: user reads lesson/Artifact and requests clarity improvements (§4–§6 not yet deep-reviewed in this mode). Admin pendings (Parcial 01 emails, Session 07, guion-clase.md) EXCLUDED by explicit user order — do not offer until asked.",
+  "context_notes": "STUDY MODE ACTIVE: sole focus = user mastering MIMO to lecture fluently. Artifact URL https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87 (source HTML in ephemeral session scratchpad — new session must WebFetch the URL and redeploy with url: param). Caveman full + ponytail full. Math: \\mathbf never \\boldsymbol. Notebook cells via extracted script. PII stays in gitignored exams/**."
 }
