@@ -1,575 +1,439 @@
 ---
-title: "Sesión 06 — MIMO: Múltiples Antenas, Múltiples Posibilidades"
+title: "Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios"
 session: 6
-description: "De SISO a MIMO masivo: el canal matricial, capacidad vía SVD, el compromiso diversidad-multiplexación, y los precodificadores MRT y ZF que usa 5G NR."
+description: "Cómo elegir entre diversidad, beamforming, SU-MIMO, MU-MIMO y Massive MIMO según SNR, rank, CSI, interferencia, pilotos y arquitectura de red."
 ---
 
-# Sesión 06 — MIMO: Múltiples Antenas, Múltiples Posibilidades
+# Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios
 
 ## Objetivos de Aprendizaje
 
 Al finalizar esta sesión, el estudiante será capaz de:
 
-1. Explicar cómo el canal MIMO se modela como una matriz **H** y por qué añadir antenas aumenta la capacidad linealmente (no logarítmicamente)
-2. Aplicar la descomposición SVD de **H** para obtener canales paralelos independientes y calcular la capacidad MIMO con y sin información de canal en el transmisor
-3. Describir el compromiso diversidad-multiplexación (DMT) y elegir el régimen adecuado según las condiciones del enlace
-4. Calcular los precodificadores MRT y ZF para un sistema multiusuario y comparar su SINR resultante
-5. Explicar los fenómenos de *channel hardening* y *favorable propagation* que hacen que Massive MIMO con MRT sea prácticamente óptimo
+1. Diagnosticar qué problema de red intenta resolver un sistema multiantena: cobertura, throughput, interferencia, densidad de usuarios o pérdida de propagación en bandas altas.
+2. Elegir entre SIMO, MISO, SU-MIMO, MU-MIMO, Massive MIMO y beamforming híbrido según el escenario de despliegue.
+3. Interpretar la matriz de canal $\mathbf{H}$ como herramienta de diseño: rank, valores singulares, condicionamiento, correlación espacial, normas de canal y CSI.
+4. Decidir cuándo conviene diversidad, beamforming o multiplexación espacial, y cuándo subir o bajar el rank de transmisión.
+5. Comparar detectores y precodificadores implementables (ZF, MMSE, SIC, ML, MRT, ZF y RZF/MMSE) en términos de interferencia, ruido, cómputo y disponibilidad de CSI.
+6. Explicar por qué Massive MIMO depende de TDD, pilotos, reciprocidad, scheduler y control de contaminación de pilotos.
 
 ---
 
 ## Introducción
 
-En las sesiones anteriores el canal fue siempre un escalar: una sola señal entra, una sola señal sale. La Sesión 01 caracterizó estadísticamente ese escalar (Rayleigh, Rician). La Sesión 02 diseñó modulaciones para transmitir bits a través de él. La Sesión 03 demostró que OFDM transforma un canal selectivo en frecuencia en cientos de canales planos — pero cada subportadora seguía siendo un escalar. La Sesión 05 añadió redundancia para corregir los errores que ese escalar introduce.
+En las sesiones anteriores el problema parecía tener una sola dimensión: una señal entra, una señal sale, y el diseñador ajusta modulación, codificación, OFDM o potencia para que los bits sobrevivan. MIMO cambia la pregunta. La pregunta ya no es solo "cuánta capacidad tiene una matriz", sino:
 
-La pregunta que abre esta sesión es diferente: ¿qué ocurre si añadimos más antenas en el transmisor, en el receptor, o en ambos? La respuesta es contraintuitiva y poderosa. Con $N_t$ antenas transmisoras y $N_r$ receptoras, el canal deja de ser un escalar y pasa a ser una **matriz** $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$. Esta matriz tiene estructura — concretamente, una descomposición SVD — que permite transformarla en hasta $\min(N_t, N_r)$ canales AWGN paralelos e independientes.
+> Tengo un problema de cobertura, capacidad, interferencia o densidad de usuarios. ¿Qué hago con las antenas?
 
-Un ejemplo mínimo para fijar la idea: con 2 antenas en cada extremo ($N_t = N_r = 2$), las señales de ambas antenas se mezclan en el aire — cada antena receptora escucha una combinación de las dos transmisiones. Parece un problema. Pero la SVD *desenreda* esa mezcla matemáticamente: el enlace se comporta como **dos cables virtuales separados**, uno de buena calidad y otro más modesto, cada uno llevando su propio símbolo sin interferir con el otro. Es decir: dos canales SISO ordinarios donde antes parecía haber solo interferencia. En el §3.1 se resuelve exactamente este caso $2 \times 2$ con números a mano.
+Esa es la lectura implementativa de MIMO. Las antenas no son decoración ni una fórmula de capacidad: son grados de libertad espaciales que se pueden gastar de formas distintas. A veces se usan para que un usuario en borde de celda reciba suficiente energía. A veces para enviar dos o cuatro capas al mismo terminal. A veces para servir varios usuarios al mismo tiempo. A veces para formar un haz estrecho en mmWave, donde sin ganancia de array el enlace ni siquiera cierra.
 
-La consecuencia es fundamental: mientras que la capacidad SISO crece como $\log_2(1 + \text{SNR})$ — logarítmicamente, con rendimientos decrecientes — la capacidad MIMO puede crecer **linealmente** con $\min(N_t, N_r)$ a cualquier SNR fijo. Un sistema $4 \times 4$ con 10 dB de SNR puede cuadruplicar la tasa de un sistema $1 \times 1$ con la misma potencia y ancho de banda.
+La decisión correcta depende del canal, no de una regla fija. Si el canal tiene buen rank y SNR alta, subir capas aumenta throughput. Si el canal está mal condicionado, forzar muchas capas hace que el receptor o el precoder amplifique ruido. Si los usuarios tienen canales casi ortogonales, MU-MIMO funciona bien. Si los canales son paralelos, el scheduler debe separarlos en tiempo/frecuencia o el precoder pagará mucha potencia para cancelar interferencia.
 
-Es por eso que **todos** los sistemas inalámbricos modernos son MIMO: el estándar 5G NR define antenas de hasta 256 elementos en la estación base. La sesión pasa de la intuición al álgebra lineal que subyace a esas antenas, y de ahí a los algoritmos de precodificación que las hacen funcionar.
+El objetivo de esta sesión es construir esa brújula. La matemática sigue estando: $\mathbf{H}$, SVD, DMT, MRT, ZF y Massive MIMO. Pero aquí aparecen como herramientas para tomar decisiones de red.
 
 ---
 
 ## Teoría
 
-### 1. De SISO a MIMO — la Intuición Espacial
+### 1. Primero el problema de red
 
-Piense en una autopista. Un canal SISO es una carretera de un solo carril: por muy potente que sea el camión (la potencia) o por muy bien empaquetada que vaya la carga (la modulación), solo pasa un vehículo a la vez. Añadir antenas equivale a **abrir carriles nuevos** en la misma carretera, sin comprar más terreno (ancho de banda) ni camiones más grandes (potencia). Y una vez abiertos los carriles, hay dos formas opuestas de usarlos: enviar **carga distinta por cada carril** — más mercancía por hora — o enviar **la misma carga por todos los carriles** como un seguro: si un carril se bloquea (un desvanecimiento profundo), la mercancía llega igual por los demás.
+Antes de hablar de SVD conviene mirar el síntoma del sistema. El mismo array de antenas puede resolver problemas diferentes según cómo se use.
 
-Esa es exactamente la disyuntiva del MIMO. El canal SISO tiene una sola "vía" entre el transmisor y el receptor. Con múltiples antenas, existen **múltiples vías simultáneas** que pueden usarse de dos maneras opuestas:
+| Escenario | Síntoma de red | Estrategia MIMO natural | Costo o riesgo principal |
+|---|---|---|---|
+| Borde de celda rural | SNR baja, enlace frágil | Beamforming o diversidad | Subir rank demasiado rompe la robustez |
+| Hotspot urbano | Muchos usuarios, interferencia alta | MU-MIMO con ZF/RZF y scheduler | CSI fresco y canales separables |
+| Indoor / small cell | Canal rico, distancias cortas | SU-MIMO rank 2/4 | Antenas muy juntas reducen rank efectivo |
+| Massive MIMO sub-6 GHz | Muchos UEs por celda | $M \gg K$, TDD, RZF/MRT | Pilotos, reciprocidad y contaminación |
+| FR2 / mmWave | Path loss alto, haces estrechos | Arrays grandes y beamforming híbrido | Bloqueo, alineamiento de beams y RF chains |
 
-- **Diversidad espacial**: enviar la misma información por todas las vías. Si una vía experimenta *fading* profundo, las otras siguen activas. La confiabilidad aumenta.
-- **Multiplexación espacial**: enviar información *diferente* por cada vía. La tasa total aumenta.
+Una regla práctica aparece desde el primer minuto:
 
-Estas dos estrategias son las extremas del **compromiso diversidad-multiplexación** (§4). Entre ellas existe un continuo de soluciones óptimas según la SNR y los requisitos del enlace.
+!!! note "Regla de diseño"
+
+    Primero se **cierra el enlace**; después se sube el rank. Si el UE apenas recibe señal, la prioridad es beamforming/diversidad. Si el enlace ya es robusto y el canal tiene modos espaciales independientes, entonces se explota multiplexación.
+
+MIMO ofrece tres usos básicos:
+
+- **Diversidad**: repetir o codificar la misma información sobre caminos independientes para reducir probabilidad de error.
+- **Beamforming**: sumar señales con fases controladas para concentrar energía hacia un usuario o dirección.
+- **Multiplexación espacial**: enviar capas distintas al mismo tiempo y en la misma banda para aumentar throughput.
+
+La dificultad real es que esas tres metas compiten por los mismos grados de libertad espaciales. Un array no puede gastar todos sus recursos en robustez, máxima tasa y cancelación perfecta de interferencia a la vez.
+
+??? question "Comprueba tu comprensión"
+
+    **P1.** Un UE en borde de celda reporta bajo SNR y alto BLER. ¿Subirías rank o reforzarías beamforming/diversidad?
+
+    **P2.** Dos usuarios tienen canales casi paralelos. ¿Es buen momento para servirlos simultáneamente con MU-MIMO?
+
+    ---
+
+    **R1.** Reforzaría beamforming/diversidad. Subir rank aumenta la carga espacial antes de cerrar el enlace.
+
+    **R2.** No es ideal. Si los canales son paralelos, separarlos espacialmente exige ZF agresivo y amplificación de ruido; el scheduler probablemente debería separarlos.
+
+### 2. Qué arreglo de antenas usar
+
+La Figura 1 muestra las configuraciones básicas. La lectura práctica no es "más antenas siempre es mejor", sino "qué extremo tiene antenas, quién conoce el canal y qué se quiere optimizar".
 
 <figure markdown="span">
   ![Configuraciones SISO, SIMO, MISO y MIMO](figures/mimo-configurations.png)
   <!-- generada por celda 2 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 1.** Las cuatro configuraciones de antenas. **SISO** ($N_t=1, N_r=1$): canal escalar, capacidad $\log_2(1+\text{SNR})$. **SIMO** ($N_t=1, N_r>1$): el receptor combina $N_r$ copias de la señal (diversidad de recepción, ganancia de array de hasta $N_r$). **MISO** ($N_t>1, N_r=1$): el transmisor forma el haz (beamforming) hacia el receptor. **MIMO** ($N_t>1, N_r>1$): capacidad para multiplexación espacial y/o diversidad simultánea.
+  <figcaption markdown="1">**Figura 1.** Configuraciones de antenas. **SISO**: referencia escalar. **SIMO**: varias ramas de recepción para diversidad/combining. **MISO**: varias antenas transmisoras para formar haz hacia un receptor simple. **MIMO**: antenas en ambos extremos para diversidad, beamforming y/o multiplexación espacial.
   </figcaption>
 </figure>
 
-??? question "Comprueba tu comprensión"
+| Configuración | Dónde aparece | Cuándo usarla | Qué gana | Qué no resuelve |
+|---|---|---|---|---|
+| SIMO | Receptor con varias ramas | Mejorar recepción sin cambiar TX | Diversidad RX y combining | No crea múltiples capas si TX=1 |
+| MISO | BS con varias antenas, UE simple | Cobertura downlink | Array gain y beamforming | No multiplexa varios streams a un UE de una antena |
+| SU-MIMO | BS y UE multiantena | Throughput por usuario | Rank espacial y capas simultáneas | Exige canal bien condicionado |
+| MU-MIMO | BS multiantena, varios UEs | Capacidad de celda | Reutilización espacial | Exige CSI y scheduler |
+| Massive MIMO | $M$ mucho mayor que $K$ | Densidad y eficiencia energética | Hardening y canales casi ortogonales | Pilotos, TDD, correlación y contaminación |
+| Híbrido mmWave | Arrays grandes con pocas cadenas RF | FR2/sub-THz | Ganancia de haz viable en hardware | Bloqueo y entrenamiento de beams |
 
-    **P1.** ¿Qué estrategia elegirías para un enlace de emergencia con SNR baja: diversidad o multiplexación? ¿Por qué?
+Un punto de implementación que se olvida fácilmente: **antenas físicas no equivalen automáticamente a grados de libertad independientes**. Para que MIMO entregue multiplexación, las firmas espaciales deben ser distinguibles. Importan:
 
-    **P2.** En la analogía de la autopista, ¿a qué corresponde "enviar la misma carga por todos los carriles"?
+- separación de antenas, típicamente alrededor de $\lambda/2$;
+- geometría del array: ULA, UPA, paneles activos;
+- polarización;
+- entorno de scattering;
+- línea de vista y correlación espacial;
+- orientación del UE.
 
-    ---
+En un teléfono pequeño, dos antenas pueden estar tan correlacionadas que el segundo modo espacial sea débil. En una estación base con muchos elementos, el problema opuesto aparece: hay muchas antenas, pero el sistema necesita CSI y calibración para usarlas bien.
 
-    **R1.** Diversidad — en un enlace crítico la fiabilidad importa más que la tasa; las copias redundantes protegen contra el *fading* profundo de cualquier vía individual.
+!!! note "¿Y el espectro? Las capas no se reparten la banda"
 
-    **R2.** A la diversidad espacial: la misma información por todas las antenas, como seguro contra el bloqueo de un carril.
+    Los streams espaciales transmiten **al mismo tiempo y en la misma banda**. No se separan por subportadoras, slots ni códigos distintos. Se separan porque cada stream deja una firma espacial diferente en el receptor, codificada en las columnas de $\mathbf{H}$. Por eso MIMO puede aumentar throughput sin comprar más espectro, siempre que el canal tenga rank suficiente.
 
-!!! note "¿Y el espectro? Las vías no se reparten nada"
+### 3. El canal como diagnóstico operativo
 
-    Pregunta natural al ver "carriles": ¿no habrá que dividir la banda entre ellos, o modular cada pareja de antenas con formas de onda ortogonales? **No.** Todas las antenas transmiten **a la vez y en la misma banda**; las señales se mezclan en el aire deliberadamente. La ortogonalidad que separa los flujos no está en la forma de onda sino en el **espacio**: cada antena transmisora deja en el array receptor una *firma espacial* distinta — su columna de $\mathbf{H}$ (§2) — y con *scattering* rico esas firmas son linealmente independientes: el receptor tiene tantas ecuaciones como incógnitas y puede deshacer la mezcla (§3.3). Si además el transmisor conoce el canal, la SVD (§3) fabrica ortogonalidad exacta rotando las señales hacia los ejes propios del canal. Tampoco existen "parejas dedicadas" TX 1 → RX 1: cada vía es una *combinación* de todas las antenas, no un cable físico. El espacio actúa así como una **dimensión de ortogonalidad nueva**, junto al tiempo (TDMA), la frecuencia (FDMA/OFDM, Sesión 03) y el código (CDMA) — por eso la capacidad escala con $\min(N_t, N_r)$ sin gastar un hercio ni un vatio adicional.
+La matriz de canal no es solo notación. En un sistema real, $\mathbf{H}$ es el objeto que se estima con pilotos y del que salen decisiones de scheduler, rank, beamforming, precoding y detección.
 
-La pregunta natural es: si ya no hay una sola vía sino muchas que se cruzan, ¿cómo se describe matemáticamente ese haz de vías? → con una matriz.
-
-### 2. El Canal MIMO — Modelo Matricial
-
-Antes del álgebra, la idea física: en el aire no hay cables que separen las señales. Cada antena receptora oye una **mezcla ponderada** de lo que enviaron *todas* las antenas transmisoras a la vez, y la matriz $\mathbf{H}$ no es más que la **tabla de esas ponderaciones**: el elemento $h_{ji}$ responde a la pregunta "¿cuánto de lo que emitió la antena transmisora $i$ llega a la antena receptora $j$, y con qué fase?". Todo el formalismo que sigue es contabilidad ordenada de esa mezcla.
-
-Sea $\mathbf{x} \in \mathbb{C}^{N_t}$ el vector transmitido con restricción de potencia $\mathbb{E}[\|\mathbf{x}\|^2] \leq P$, y $\mathbf{y} \in \mathbb{C}^{N_r}$ el vector recibido. El modelo de canal MIMO de banda estrecha (flat fading) es:
+Para un canal de banda estrecha:
 
 $$\boxed{\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}} \tag{1}$$
 
-donde $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ es la **matriz de canal** y $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, N_0\mathbf{I}_{N_r})$ es ruido gaussiano complejo circular i.i.d. El elemento $h_{ji} = [\mathbf{H}]_{j,i}$ es la ganancia compleja entre la antena transmisora $i$ y la antena receptora $j$, incluyendo pérdida de propagación, desvanecimiento y desfase.
-
-**Modelo i.i.d. Rayleigh.** El caso analíticamente más tractable y pedagógicamente fundamental asume que todos los $h_{ji}$ son i.i.d.:
-
-$$h_{ji} \sim \mathcal{CN}(0, 1) \tag{2}$$
-
-**¿Qué significa i.i.d.?** Son dos condiciones separadas, y conviene leerlas por separado. **Independientes**: conocer el valor de un coeficiente no dice nada sobre los demás — que el enlace entre la antena transmisora 1 y la receptora 3 esté en desvanecimiento profundo no hace más ni menos probable que el enlace vecino también lo esté. **Idénticamente distribuidas**: todas las entradas siguen la misma estadística — ninguna pareja de antenas es "especial", todas juegan con las mismas reglas. La imagen mental: rellenar la matriz $\mathbf{H}$ lanzando un dado una vez por cada casilla. Cada lanzamiento ignora los anteriores (independencia) y siempre se usa el mismo dado (idéntica distribución). Aquí el "dado" es la gaussiana compleja $\mathcal{CN}(0,1)$, y el módulo $|h_{ji}|$ de cada resultado sigue una distribución Rayleigh — de ahí el nombre del modelo, que conecta directamente con la Sesión 01.
-
-Este modelo corresponde a un entorno con *scattering* denso e isótropo donde no hay línea de visión directa (NLOS) y las antenas están suficientemente separadas ($\geq \lambda/2$) para que los coeficientes sean estadísticamente independientes. En 5G NR los canales espacialmente correlacionados (antenas en ULA compacto) requieren modelos más sofisticados como el CDL-C/D del TR 38.901, pero el modelo i.i.d. captura la física esencial y produce todos los resultados analíticos clave.
-
-Una aclaración de alcance: este $\mathbf{H}$ es de **banda estrecha** (un solo coeficiente por par de antenas). En sistemas de banda ancha reales, OFDM (Sesión 03) convierte el canal selectivo en frecuencia en cientos de subportadoras planas, y **todo este formalismo MIMO se aplica idénticamente en cada subportadora** — hay una matriz $\mathbf{H}$ por subportadora. Esa combinación, **MIMO-OFDM**, es la arquitectura física de 5G NR y WiFi; esta sesión estudia una subportadora, y la Sesión 03 ya cubrió cómo se generan las cientos restantes.
+donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \in \mathbb{C}^{N_r}$ el vector recibido, $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ la matriz de canal y $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$ el ruido. Cada entrada $h_{ji}$ responde: cuánto de la antena TX $i$ llega a la antena RX $j$, con qué amplitud y fase.
 
 <figure markdown="span">
   ![Estructura de la matriz de canal MIMO](figures/mimo-channel-matrix.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 2.** Visualización de la matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada elemento $h_{ji}$ es una variable compleja con módulo $|h_{ji}|$ (intensidad del enlace) y fase $\angle h_{ji}$ (retardo de propagación). El panel izquierdo muestra la magnitud $|\mathbf{H}|$; el panel derecho muestra la fase. En el modelo i.i.d. Rayleigh, todos los elementos son estadísticamente equivalentes — la estructura explotable proviene de la *geometría* de la matriz, no de correlación entre entradas.
+  <figcaption markdown="1">**Figura 2.** Matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada casilla contiene magnitud y fase del acoplamiento entre una antena transmisora y una receptora. Para implementación, esta matriz no es abstracta: es el insumo que estima el receptor o la estación base para decidir rank, precoder y detector.
   </figcaption>
 </figure>
 
-??? question "Comprueba tu comprensión"
+El modelo pedagógico más limpio es Rayleigh i.i.d.:
 
-    **P1.** En un sistema $4 \times 4$, ¿cuántos números complejos tiene $\mathbf{H}$?
+$$h_{ji} \sim \mathcal{CN}(0,1) \tag{2}$$
 
-    **P2.** ¿Qué representa físicamente el elemento $h_{32}$?
+Significa dos cosas. **Independientes**: saber un coeficiente no predice los demás. **Idénticamente distribuidos**: todos los pares TX-RX siguen la misma estadística. Es un buen laboratorio mental para entender MIMO, aunque una red real usa modelos correlacionados como CDL del TR 38.901, con geometría de array, clusters, retardos y ángulos.
 
-    ---
+En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una sola matriz $\mathbf{H}$, sino una matriz $\mathbf{H}[k]$ por subportadora $k$. La Sesión 03 ya explicó cómo OFDM convierte un canal selectivo en frecuencia en muchos canales planos; aquí se decide qué hacer espacialmente en cada uno.
 
-    **R1.** $N_r \times N_t = 16$ números complejos.
+#### 3.1 Qué mirar dentro de H
 
-    **R2.** La ganancia compleja (atenuación y desfase) del trayecto entre la antena transmisora 2 y la antena receptora 3: cuánto de lo que emite la TX 2 llega a la RX 3.
+| Indicador | Cómo se lee | Decisión de diseño |
+|---|---|---|
+| $\mathrm{rank}(\mathbf{H})$ | Número de modos espaciales útiles | Límite superior de capas simultáneas |
+| Valores singulares $\sigma_k$ | Ganancia de cada modo espacial | Qué capas merecen potencia |
+| Condicionamiento $\kappa = \sigma_1/\sigma_r$ | Desbalance entre modo fuerte y débil | Si ZF va a amplificar mucho ruido |
+| Producto interno $\mathbf{h}_i^{\mathsf{H}}\mathbf{h}_j$ | Separabilidad entre usuarios | Si MU-MIMO simultáneo es razonable |
+| Norma $\|\mathbf{h}_k\|^2$ | Fuerza del canal de un usuario | Scheduling, beamforming y power control |
+| Tiempo de coherencia | Cuánto dura el CSI | Coste de pilotos y velocidad de adaptación |
 
-Ya tenemos la tabla de ponderaciones $\mathbf{H}$; la pregunta natural es: ¿cómo desenredamos la mezcla para poder transmitir varios flujos sin que se pisen? → la SVD.
+La SVD aparece como herramienta de diagnóstico:
 
-### 3. Capacidad MIMO vía SVD
+$$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} \tag{3}$$
 
-La intuición primero. El canal MIMO es como una **mesa de mezclas mal cableada**: cada micrófono (antena TX) suena por todos los altavoces (antenas RX) a la vez, y lo que llega es un revoltijo. La SVD es el técnico de sonido que encuentra los **ejes naturales del canal**: una rotación a la entrada ($\mathbf{V}$) y otra a la salida ($\mathbf{U}$) que convierten ese canal enredado — donde las antenas se interfieren entre sí — en un banco de *faders* independientes: subcanales que **no se mezclan**, cada uno con su propia ganancia $\sigma_k$. Las rotaciones no crean ni destruyen señal (son unitarias); solo eligen el punto de vista correcto para mirar el canal.
-
-El plan de la sección, en tres movimientos y con un ejemplo por herramienta: **§3.1** construye una SVD completa a mano y extrae su significado físico (canal 2×2); **§3.2** generaliza y responde *cuánta potencia poner en cada subcanal* — ahí vive el ejemplo de water-filling (canal 3×3); **§3.3** resuelve el caso en que el transmisor no puede precodificar y todo recae en el receptor.
-
-#### 3.1 Un ejemplo concreto 2×2
-
-Antes de la maquinaria general, un canal que se resuelve completo con lápiz y papel. Conviene tenerlo a mano durante toda la sección: cada objeto abstracto que aparezca después ($\mathbf{U}$, $\mathbf{\Sigma}$, $\mathbf{V}$, capacidad) tiene aquí un número concreto.
-
-??? example "Ejemplo numérico: SVD y capacidad de un canal 2×2"
-
-    **El canal.** Dos antenas por lado, con acoplamiento cruzado moderado:
-
-    $$\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
-
-    La diagonal (1) es el enlace "directo" de cada antena TX a su antena RX enfrentada; el 0,5 es la fuga hacia la otra antena.
-
-    **Paso 0 — Qué buscamos.** La SVD (ec. 3) factoriza el canal como
-
-    $$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \sum_{k=1}^{r} \sigma_k\, \mathbf{u}_k \mathbf{v}_k^{\mathsf{H}}$$
-
-    La forma de suma es la lectura física: el canal es la superposición de $r$ "tuberías" independientes — se inyecta por la dirección $\mathbf{v}_k$, se recoge por la dirección $\mathbf{u}_k$, y la ganancia de amplitud es $\sigma_k$. El objetivo del ejemplo es encontrar $\sigma_1, \sigma_2$ y $\mathbf{v}_1, \mathbf{v}_2$ a mano.
-
-    **El atajo de las matrices simétricas.** En general los valores singulares se obtienen de los autovalores de $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (con $\mathbf{U} \neq \mathbf{V}$). Pero esta $\mathbf{H}$ es real, simétrica ($\mathbf{H} = \mathbf{H}^{\mathsf{T}}$) y sus autovalores saldrán positivos; para esa familia, la descomposición espectral ordinaria $\mathbf{H} = \mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{\mathsf{T}}$ (autovalores y autovectores de toda la vida) ya tiene *exactamente* la forma de una SVD: matriz ortogonal a ambos lados, diagonal no negativa en el centro. Comparando factorizaciones término a término: $\mathbf{U} = \mathbf{V} = \mathbf{Q}$ y $\sigma_k = \lambda_k$. Por eso aquí basta diagonalizar $\mathbf{H}$ directamente — la mitad del trabajo.
-
-    **Paso 1 — Valores singulares (= autovalores).** Polinomio característico:
-
-    $$\det(\mathbf{H} - \lambda\mathbf{I}) = (1-\lambda)^2 - 0{,}5^2 = 0 \;\Rightarrow\; 1-\lambda = \pm 0{,}5 \;\Rightarrow\; \lambda = 1 \pm 0{,}5$$
-
-    $$\sigma_1 = 1{,}5, \qquad \sigma_2 = 0{,}5$$
-
-    **¿Por qué las ganancias de subcanal son los cuadrados?** Porque $\sigma_k$ multiplica la **amplitud** de la señal ($\tilde{y}_k = \sigma_k \tilde{x}_k + \tilde{n}_k$, ec. 5), y la capacidad depende de la **potencia** — amplitud al cuadrado: la SNR del subcanal $k$ es $\sigma_k^2 P_k/N_0$. Ganancias: $\sigma_1^2 = 2{,}25$ y $\sigma_2^2 = 0{,}25$ — un subcanal *fuerte* con 9 veces la ganancia del *débil*.
-
-    **Paso 2 — Vectores singulares (= autovectores).** Se resuelve $(\mathbf{H} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$ para cada autovalor. Con $\lambda_1 = 1{,}5$:
-
-    $$\begin{pmatrix} -0{,}5 & 0{,}5 \\ 0{,}5 & -0{,}5 \end{pmatrix}\mathbf{v} = \mathbf{0} \;\Rightarrow\; v_1 = v_2 \;\Rightarrow\; \mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
-
-    Con $\lambda_2 = 0{,}5$ el mismo procedimiento da $v_1 = -v_2$:
-
-    $$\mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
-
-    (el $1/\sqrt{2}$ solo normaliza a longitud 1). Y $\mathbf{U} = \mathbf{V}$ por el atajo del Paso 0 — no hay segunda base que calcular.
-
-    Interpretación física: el canal **favorece la señal enviada en fase por ambas antenas** ($\mathbf{v}_1$, dirección $+45°$, las fugas se suman constructivamente) y **penaliza la señal en contrafase** ($\mathbf{v}_2$, dirección $-45°$, las fugas se restan). Los "ejes naturales" del canal no son las antenas físicas, sino estas combinaciones.
-
-    **Paso 3 — Verificación de energía.** ¿Para qué sirve la norma de Frobenius? $\|\mathbf{H}\|_F^2 = \sum_{ij}|h_{ji}|^2$ suma la energía de **todos los enlaces físicos** de la tabla $\mathbf{H}$ — es la energía total que el canal puede transferir. Como $\mathbf{U}$ y $\mathbf{V}$ son rotaciones (unitarias: no crean ni destruyen energía), esa misma energía tiene que reaparecer íntegra repartida entre las tuberías: $\|\mathbf{H}\|_F^2 = \sum_k \sigma_k^2$. Es el chequeo estándar de una SVD hecha a mano — si no cuadra, hay un error de cálculo:
-
-    $$\|\mathbf{H}\|_F^2 = 1^2 + 0{,}5^2 + 0{,}5^2 + 1^2 = 2{,}5 = \sigma_1^2 + \sigma_2^2 = 2{,}25 + 0{,}25 \checkmark$$
-
-    (Esta identidad es exactamente la que verifica el Ejercicio 1 del laboratorio, allí por Monte Carlo.)
-
-    **Paso 4 — Capacidad.** ¿Por qué potencia $P/N_t$? La restricción de potencia es **una sola para todo el array** ($\mathbb{E}[\|\mathbf{x}\|^2] \leq P$, §2): los flujos comparten un único presupuesto — no hay "$P$ por antena". Sin CSIT el transmisor no sabe cuál dirección es la fuerte, así que lo reparte en partes iguales: $P/N_t$ a cada flujo. A SNR $= 10$ dB ($P/N_0 = 10$ en lineal) con $N_t = 2$, cada subcanal recibe el factor $10/2 = 5$, y la ec. (7) da:
-
-    $$C = \log_2\!\left(1 + \tfrac{10}{2}\cdot 2{,}25\right) + \log_2\!\left(1 + \tfrac{10}{2}\cdot 0{,}25\right) = \log_2(12{,}25) + \log_2(2{,}25) \approx 3{,}61 + 1{,}17 = 4{,}78 \text{ bit/s/Hz}$$
-
-    **Paso 5 — Comparación con SISO.** Un enlace de una sola antena a la misma SNR alcanza $\log_2(1+10) \approx 3{,}46$ bit/s/Hz. Dos antenas por lado dan **4,78 vs 3,46** — la ganancia MIMO en números que puedes verificar a mano. La Figura 3 muestra este mismo esquema en abstracto: aquí los dos subcanales paralelos tienen ganancias 2,25 y 0,25.
-
-#### 3.2 El caso general: diagonalización por SVD
-
-La herramienta central de esta sesión es la **Descomposición en Valores Singulares** (SVD) de la matriz de canal:
-
-$$\mathbf{H} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^{\mathsf{H}} \tag{3}$$
-
-donde $\mathbf{U} \in \mathbb{C}^{N_r \times N_r}$ y $\mathbf{V} \in \mathbb{C}^{N_t \times N_t}$ son matrices unitarias ($\mathbf{U}\mathbf{U}^{\mathsf{H}} = \mathbf{I}$, $\mathbf{V}\mathbf{V}^{\mathsf{H}} = \mathbf{I}$), y $\mathbf{\Sigma} \in \mathbb{R}^{N_r \times N_t}$ es diagonal con los **valores singulares** $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_r \geq 0$, $r = \mathrm{rank}(\mathbf{H}) \leq \min(N_t, N_r)$.
-
-**Diagonalización del canal.** Si el transmisor conoce $\mathbf{H}$ (CSIT completo), puede **precodificar** con $\mathbf{V}$: en lugar de transmitir $\mathbf{x}$ directamente, transmite $\mathbf{x} = \mathbf{V}\tilde{\mathbf{x}}$, donde $\tilde{\mathbf{x}} \in \mathbb{C}^r$ es el vector de datos. Simultáneamente, el receptor aplica $\mathbf{U}^{\mathsf{H}}$ sobre la señal recibida:
-
-$$\tilde{\mathbf{y}} = \mathbf{U}^{\mathsf{H}}\mathbf{y} = \mathbf{U}^{\mathsf{H}}\mathbf{H}\mathbf{V}\tilde{\mathbf{x}} + \mathbf{U}^{\mathsf{H}}\mathbf{n} = \mathbf{U}^{\mathsf{H}}(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}})\mathbf{V}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} = \mathbf{\Sigma}\tilde{\mathbf{x}} + \tilde{\mathbf{n}} \tag{4}$$
-
-donde en el último paso se usó $\mathbf{V}^{\mathsf{H}}\mathbf{V} = \mathbf{I}$ y $\mathbf{U}^{\mathsf{H}}\mathbf{U} = \mathbf{I}$ (matrices unitarias). Como $\mathbf{U}$ es unitaria, $\tilde{\mathbf{n}} = \mathbf{U}^{\mathsf{H}}\mathbf{n}$ conserva la distribución $\mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$. El resultado es $r$ **canales AWGN paralelos e independientes**:
-
-$$\tilde{y}_k = \sigma_k \tilde{x}_k + \tilde{n}_k, \quad k = 1, \ldots, r \tag{5}$$
-
-El canal MIMO se ha convertido en $r$ canales escalares independientes con ganancias $\sigma_k^2$. Vale la pena detenerse en lo que acaba de pasar: hemos convertido un problema matricial en $r$ problemas escalares **que ya sabemos resolver desde la Sesión 02** — cada subcanal es un canal AWGN ordinario al que se le asigna una modulación y una potencia.
+La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direcciones de transmisión; las columnas de $\mathbf{U}$ son combinaciones de recepción; los valores singulares $\sigma_k$ dicen cuán bueno es cada modo. Si el segundo valor singular es pequeño, el segundo stream existe en álgebra, pero será caro en BER.
 
 <figure markdown="span">
   ![SVD descompone H en canales paralelos](figures/mimo-svd-channels.png)
   <!-- generada por celda 5 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 3.** La SVD transforma el canal MIMO $\mathbf{H}$ (izquierda) en $r = \min(N_t, N_r)$ canales AWGN escalares independientes con SNR$_k = \sigma_k^2 P_k / N_0$ (derecha). La precodificación con $\mathbf{V}$ en el transmisor y la combinación con $\mathbf{U}^{\mathsf{H}}$ en el receptor realizan esta transformación sin pérdida de información. El SNR de cada subcanal es proporcional al cuadrado del $k$-ésimo valor singular de $\mathbf{H}$.
+  <figcaption markdown="1">**Figura 3.** La SVD interpreta el canal MIMO como modos espaciales paralelos. En una lección implementativa, esto se usa como diagnóstico de rank y calidad de capas: no basta contar antenas; hay que mirar cuántos modos espaciales son fuertes.
   </figcaption>
 </figure>
 
-**Capacidad con CSIT (water-filling).** Dado que los $r$ subcanales son independientes, la capacidad total se maximiza distribuyendo la potencia $P$ con *water-filling* (WF):
+??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
-$$\boxed{C_{\text{WF}} = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P_k^* \sigma_k^2}{N_0}\right)} \quad \text{[bit/s/Hz]} \tag{6}$$
+    Canal con acoplamiento cruzado moderado:
 
-con $P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$ donde $(x)^+ \triangleq \max(0, x)$, y $\mu$ es el "nivel de agua" que satisface $\sum_k P_k^* = P$.
+    $$\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
 
-El nombre *water-filling* es literal: imagine verter una cantidad fija de agua (la potencia $P$) en un recipiente de fondo irregular, donde la altura del fondo bajo el subcanal $k$ es $N_0/\sigma_k^2$. Los pozos profundos — los subcanales fuertes, con $N_0/\sigma_k^2$ pequeño — reciben más agua (más potencia); los pozos poco profundos reciben poca, y los que sobresalen del nivel del agua $\mu$ quedan directamente **secos** ($P_k^* = 0$): un subcanal suficientemente malo no merece ni un vatio. En el ejemplo 2×2 del §3.1, el subcanal débil ($\sigma_2^2 = 0{,}25$) es el candidato a secarse si la SNR baja.
+    Sus direcciones naturales son la señal en fase y en contrafase:
 
-**¿De dónde sale la fórmula de $P_k^*$?** Es un problema de optimización con restricción: maximizar la suma de tasas $\sum_k \log_2(1 + P_k\sigma_k^2/N_0)$ sujeto a gastar exactamente el presupuesto $\sum_k P_k = P$. El método de Lagrange introduce un multiplicador $\lambda$ (el "precio" común de cada vatio) y al derivar e igualar a cero queda $P_k = \tfrac{1}{\lambda \ln 2} - \tfrac{N_0}{\sigma_k^2}$. La constante $\tfrac{1}{\lambda \ln 2}$ — la misma para todos los subcanales — es precisamente el **nivel de agua** $\mu$: no se calcula $\lambda$ en sí, sino directamente $\mu$ imponiendo que las potencias sumen $P$.
+    $$\mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
 
-??? example "Ejemplo numérico: water-filling en un canal 3×3"
+    con valores singulares $\sigma_1 = 1{,}5$ y $\sigma_2 = 0{,}5$. La primera capa tiene ganancia $\sigma_1^2 = 2{,}25$; la segunda solo $\sigma_2^2 = 0{,}25$. El rank es 2, pero el canal ya avisa: la segunda capa será frágil y ZF pagará ruido para separarla.
 
-    El §3.1 enseñó a **construir** la SVD y a leer su física; este ejemplo hace una sola cosa nueva: **repartir la potencia de forma óptima**. Canal (curso NPTEL, A. Jagannatham):
+    El chequeo de energía cuadra:
 
-    $$\mathbf{H} = \begin{pmatrix} 2 & -6 & 0 \\ 3 & 4 & 0 \\ 0 & 0 & 2 \end{pmatrix}$$
+    $$\|\mathbf{H}\|_F^2 = 1^2 + 0{,}5^2 + 0{,}5^2 + 1^2 = 2{,}5 = 2{,}25 + 0{,}25$$
 
-    **La SVD, en una línea.** Las columnas de esta $\mathbf{H}$ son mutuamente ortogonales (verifícalo: $\mathbf{c}_1^{\mathsf{H}}\mathbf{c}_2 = -12+12+0 = 0$), y en ese caso los valores singulares son directamente las **normas de las columnas**, ordenadas: $\sigma_1^2 = 52$, $\sigma_2^2 = 13$, $\sigma_3^2 = 4$. (El chequeo del §3.1 cuadra: $\|\mathbf{H}\|_F^2 = 69 = 52+13+4$ ✓.) La ec. (5) da entonces tres subcanales desacoplados con esas ganancias — hasta aquí, nada nuevo respecto al §3.1.
+### 4. Diversidad, beamforming y multiplexación
 
-    **Water-filling con números** (lo nuevo). Datos: ruido $N_0 = 0$ dB $= 1$; potencia total $P = 3$ dB $\approx 2$. Suponiendo los tres subcanales activos, la ec. (6) exige:
+Ahora podemos formular la decisión central. Con grados de libertad espaciales, ¿qué se optimiza?
 
-    $$\sum_{k=1}^{3} P_k^* = 3\mu - \left(\frac{1}{52} + \frac{1}{13} + \frac{1}{4}\right) = 2 \;\Rightarrow\; \mu = \frac{2 + \frac{1}{52} + \frac{1}{13} + \frac{1}{4}}{3} \approx 0{,}782$$
-
-    Las alturas del fondo son $N_0/\sigma_k^2 = 0{,}019$, $0{,}077$ y $0{,}25$ — las tres **por debajo** del nivel de agua $\mu = 0{,}782$, así que la suposición era correcta: nadie queda seco. Las potencias son el agua sobre cada fondo:
-
-    $$P_1^* = 0{,}782 - 0{,}019 = 0{,}763, \qquad P_2^* = 0{,}705, \qquad P_3^* = 0{,}532$$
-
-    (en dB: $-1{,}18$, $-1{,}52$ y $-2{,}74$ dB; suman $2$ ✓). El patrón del water-filling a la vista: **más potencia al subcanal más fuerte**, menos al más débil — al revés que un reparto "justo".
-
-    **Capacidad.** Con la ec. (6):
-
-    $$C_{\text{WF}} = \log_2(1 + 0{,}763 \cdot 52) + \log_2(1 + 0{,}705 \cdot 13) + \log_2(1 + 0{,}532 \cdot 4) \approx 5{,}35 + 3{,}35 + 1{,}65 = 10{,}34 \text{ bit/s/Hz}$$
-
-    Dato instructivo: la potencia uniforme ($P_k = 2/3$) habría dado $10{,}30$ bit/s/Hz — casi lo mismo. El water-filling gana poco cuando **todos** los subcanales son fuertes (SNR alta); su ventaja aparece cuando hay subcanales débiles que conviene secar, como el $\sigma_2^2 = 0{,}25$ del §3.1.
-
-    **Nota de notación** (si consultas la fuente en inglés): allí el nivel de agua se escribe $1/\lambda$ — el recíproco del multiplicador de Lagrange, nuestro $\mu$ — y la potencia de ruido se llama $\sigma^2$ *sin* subíndice, que colisiona con los valores singulares $\sigma_i$. El cociente $\sigma^2/\sigma_i^2$ de la fuente es nuestro $N_0/\sigma_k^2$: ruido sobre ganancia, la altura del fondo del recipiente.
-
-**Capacidad sin CSIT (potencia uniforme).** En la práctica, el transmisor a menudo no conoce $\mathbf{H}$. Con potencia uniforme $P_k = P/N_t$, la capacidad es:
-
-$$C_{\text{uni}} = \log_2\det\!\left(\mathbf{I}_{N_r} + \frac{P}{N_t N_0}\mathbf{H}\mathbf{H}^{\mathsf{H}}\right) = \sum_{k=1}^{r} \log_2\!\left(1 + \frac{P \sigma_k^2}{N_t N_0}\right) \tag{7}$$
-
-**La clave**: con $N_t = N_r = N$ antenas y en alta SNR, $C \approx N \log_2(\text{SNR}/N) + \text{const}$. La capacidad escala **linealmente** con $N = \min(N_t, N_r)$. Cada factor de 2 en el número de antenas *duplica* la capacidad — sin ancho de banda adicional y sin potencia adicional.
-
-<figure markdown="span">
-  ![Capacidad MIMO vs SNR para diferentes configuraciones](figures/mimo-capacity.png)
-  <!-- generada por celda 6 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 4.** Capacidad ergódica (media sobre realizaciones del canal) en función de la SNR [dB] para sistemas $1\times1$, $2\times2$, $4\times4$ y $8\times8$ con modelo i.i.d. Rayleigh. A SNR alta las curvas son paralelas y separadas verticalmente por un factor $N$ — evidencia directa del crecimiento lineal de la capacidad con el número de antenas. La principal razón por la que todos los sistemas inalámbricos modernos son MIMO.
-  </figcaption>
-</figure>
-
-??? question "Comprueba tu comprensión"
-
-    **P1.** Si un valor singular $\sigma_k$ es casi cero, ¿qué le pasa a ese subcanal?
-
-    **P2.** En el ejemplo 2×2 del §3.1, ¿por qué conviene enviar la señal en fase por ambas antenas?
-
-    ---
-
-    **R1.** Su ganancia $\sigma_k^2 \approx 0$: es un subcanal casi inútil. El *water-filling* no le asigna potencia ($P_k^* = 0$) — queda seco.
-
-    **R2.** Porque la dirección en fase es $\mathbf{v}_1$, el eje natural fuerte del canal ($\sigma_1 = 1{,}5$): las fugas cruzadas se suman constructivamente. En contrafase ($\mathbf{v}_2$) se restan y la ganancia cae a $\sigma_2 = 0{,}5$.
-
-#### 3.3 El problema dual: detección en el receptor
-
-El §3.2 supuso que **ambos extremos** conocen $\mathbf{H}$: el transmisor precodifica con $\mathbf{V}$ y el receptor combina con $\mathbf{U}^{\mathsf{H}}$, una coreografía coordinada. Pero en muchos sistemas el transmisor **no** conoce el canal (sin CSIT): envía flujos independientes a ciegas, $\mathbf{x}$ directamente, y todo el trabajo de separar la mezcla recae en el receptor, que sí estima $\mathbf{H}$ (mediante pilotos). La pregunta es la imagen especular de la precodificación: dado $\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$ y conocido $\mathbf{H}$, ¿cómo recupero $\mathbf{x}$ **solo desde la recepción**?
-
-La analogía: en el §3.2 el técnico de sonido controlaba la mesa de mezclas por los dos lados. Ahora está atrapado solo en el lado de los altavoces, con el revoltijo ya hecho, y debe deshacerlo a mano. Hay cuatro herramientas, de la más simple a la más cara:
-
-**Detectores lineales** (una multiplicación matricial):
-
-- **Zero-Forcing (ZF).** Invierte el canal: $\hat{\mathbf{x}} = \mathbf{H}^+\mathbf{y} = (\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}\mathbf{H}^{\mathsf{H}}\mathbf{y}$. Cancela **exactamente** la interferencia entre flujos, pero cuando $\mathbf{H}$ está mal condicionada (subcanales débiles) la inversión **amplifica el ruido** — es el gemelo receptor del precoder ZF del §5, con el mismo defecto.
-- **MMSE.** Regulariza la inversión: $\hat{\mathbf{x}} = (\mathbf{H}^{\mathsf{H}}\mathbf{H} + \tfrac{N_t}{\text{SNR}}\mathbf{I})^{-1}\mathbf{H}^{\mathsf{H}}\mathbf{y}$. Equilibra interferencia residual contra ruido: a SNR alta tiende a ZF, a SNR baja al filtro adaptado. Casi siempre mejor que ZF puro.
-
-**Detectores no lineales** (más cómputo, mejor rendimiento):
-
-- **Máxima verosimilitud (ML).** $\hat{\mathbf{x}} = \arg\min_{\mathbf{x}} \|\mathbf{y} - \mathbf{H}\mathbf{x}\|^2$ sobre la constelación. Óptimo, pero su costo crece **exponencialmente** con $N_t$ (probar todas las combinaciones de símbolos).
-- **Cancelación sucesiva (SIC / V-BLAST).** Detecta el flujo más fuerte, lo resta de $\mathbf{y}$, y repite con el residuo. Es el esquema **V-BLAST** que nombra el pie de la Figura 5, ahora con mecanismo: pela la mezcla capa por capa.
-
-??? example "Ejemplo: amplificación de ruido del ZF en el canal 2×2"
-
-    Reusamos el canal del §3.1, $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$. El ruido de cada flujo tras el detector ZF se multiplica por el elemento diagonal de $(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}$. Como $\mathbf{H}$ es real y simétrica:
-
-    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \mathbf{H}^2 = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}, \qquad \det = 1{,}25^2 - 1 = 0{,}5625$$
-
-    $$(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 & -1 \\ -1 & 1{,}25 \end{pmatrix} \Rightarrow \text{diagonal} = \frac{1{,}25}{0{,}5625} \approx 2{,}22$$
-
-    El ruido de cada flujo se amplifica **×2,22**. Ese es el precio de forzar interferencia nula: cuanto peor condicionado el canal (mayor razón $\sigma_1/\sigma_2 = 3$ aquí), más se dispara el factor. MMSE evitaría esta amplificación a costa de dejar algo de interferencia residual.
-
-| Detector | Interferencia | Ruido | Costo |
+| Modo de uso | Qué transmite | Cuándo conviene | Riesgo |
 |---|---|---|---|
-| ZF | Nula | Amplificado | Bajo (una inversión) |
-| MMSE | Residual pequeña | Balanceado | Bajo (una inversión) |
-| ML | Nula | Mínimo (óptimo) | Exponencial en $N_t$ |
-| SIC / V-BLAST | Cancelada por capas | Intermedio | Medio |
+| Diversidad | Misma información por caminos independientes | Cobertura, baja SNR, enlace crítico | No aumenta throughput por capas |
+| Beamforming | Señal alineada en fase hacia un usuario/dirección | Cobertura DL, FR2, UEs simples | Requiere CSI o búsqueda de haz |
+| Multiplexación espacial | Capas distintas simultáneas | Alto SNR y buen rank | BER alta si el canal está mal condicionado |
 
-<figure markdown="span">
-  ![BER de detectores ZF, MMSE y ML en canal 2×2](figures/mimo-detectors.png)
-  <!-- generada por celda "Figura 4b" de lab.ipynb -->
-  <figcaption markdown="1">**Figura 4b.** BER (QPSK) de los tres detectores sobre un canal $2 \times 2$ i.i.d. Rayleigh. ZF paga la amplificación de ruido en todo el rango; MMSE lo mejora balanceando interferencia y ruido; ML no solo es el mejor — su curva cae con **pendiente más empinada** (mayor orden de diversidad), porque no proyecta la señal sobre direcciones débiles del canal. El precio: costo exponencial en $N_t$. SIC/V-BLAST (no mostrado) queda entre MMSE y ML.
-  </figcaption>
-</figure>
+La teoría clásica del Diversity-Multiplexing Tradeoff (DMT) formaliza esta tensión. Para $N_t \times N_r$ i.i.d. Rayleigh:
 
-Nótese la **dualidad TX↔RX**: ZF, MMSE y la variante regularizada aparecen tanto como *precodificadores* (§5, el transmisor da forma a los haces) como *detectores* (aquí, el receptor deshace la mezcla). Es el mismo álgebra vista desde los dos extremos del enlace.
+$$d^*(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
 
-??? question "Comprueba tu comprensión"
+La lectura práctica no es memorizar el límite, sino entender la pendiente: gastar antenas en más capas reduce la diversidad que protege cada capa.
 
-    **P1.** ¿Por qué el detector ZF amplifica el ruido, igual que el precoder ZF del §5?
+| Si el sistema ve... | Acción razonable | Por qué |
+|---|---|---|
+| SNR baja o borde de celda | Rank bajo + beamforming/diversidad | Primero cerrar enlace |
+| SNR alta y valores singulares equilibrados | Subir rank | El canal soporta capas |
+| Segundo valor singular muy débil | Bajar rank o usar más codificación | La capa extra cuesta demasiada BER |
+| Usuarios casi ortogonales | MU-MIMO simultáneo | La interferencia espacial es baja |
+| Usuarios casi paralelos | Scheduler o ZF/RZF con cuidado | Separarlos cuesta potencia y ruido |
 
-    **P2.** En el canal 2×2 del ejemplo, ¿por cuánto se multiplica el ruido de cada flujo con ZF?
+??? example "Alamouti: diversidad plena sin CSIT"
 
-    ---
-
-    **R1.** Ambos invierten $\mathbf{H}$ (o $\mathbf{H}\mathbf{H}^{\mathsf{H}}$). Cuando el canal tiene subcanales débiles (mal condicionamiento), la inversión los amplifica mucho, y con ellos el ruido proyectado sobre esas direcciones. Forzar interferencia exactamente nula cuesta energía de señal útil.
-
-    **R2.** ×2,22 — el elemento diagonal de $(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1}$.
-
-Ya sabemos transmitir (precodificación) y recibir (detección) cuando el objetivo es la tasa; la pregunta natural es: ¿y si en vez de maximizar la tasa queremos fiabilidad? → el compromiso diversidad-multiplexación.
-
-### 4. El Compromiso Diversidad-Multiplexación (DMT)
-
-Con múltiples antenas se puede elegir entre dos tipos de ganancia, pero no maximizar ambas simultáneamente. La analogía es **seguro vs velocidad**: cada antena extra es un presupuesto que puede gastarse en correr más (un *stream* de datos adicional) o en asegurarse (una copia redundante más de la misma información). Quien lo gasta todo en velocidad viaja rápido pero sin red; quien lo gasta todo en seguro nunca pierde el paquete pero avanza al ritmo de siempre. Esta tensión fue formalizada por Zheng y Tse (2003) en el **Diversity-Multiplexing Tradeoff** (DMT).
-
-Antes de las definiciones formales, lo que cada ganancia significa sin el $\lim$: la **ganancia de multiplexación** $r$ cuenta cuántos *streams* paralelos efectivos transporta el sistema (cuántos "carriles" del §1 se dedican a carga distinta); la **ganancia de diversidad** $d$ mide con qué pendiente cae la probabilidad de error al subir la SNR (cuántas copias independientes protegen cada bit). Formalmente, se definen en el límite de SNR alta:
-- **Ganancia de multiplexación**: $r = \lim_{\text{SNR}\to\infty} R/\log_2\text{SNR}$ (cuántas "dimensiones" de tasa)
-- **Ganancia de diversidad**: $d = -\lim_{\text{SNR}\to\infty} \log P_e / \log\text{SNR}$ (qué tan rápido cae la BER)
-
-La **curva DMT óptima** para un sistema $N_t \times N_r$ con i.i.d. Rayleigh es:
-
-$$d^*(r) = (N_t - r)(N_r - r), \quad r \in \{0, 1, \ldots, \min(N_t, N_r)\} \tag{8}$$
-
-Los puntos extremos son:
-- $r = 0$: diversidad máxima $d = N_t N_r$ (se transmite un solo stream por todas las antenas, típicamente con codificación espacio-temporal como STBC/Alamouti; la tasa no crece con la SNR pero la fiabilidad sí)
-- $r = \min(N_t, N_r)$: multiplexación máxima $d = 0$ (máximos streams independientes; la tasa crece logarítmicamente con la SNR pero la BER no mejora con ella)
-
-??? example "El esquema de Alamouti (2×1): diversidad plena sin CSIT"
-
-    El vértice $r=0$ tiene un representante concreto y elegante: el **código de Alamouti**, el space-time block code más simple. Dos antenas TX, una RX, y aunque el transmisor **no** conoce el canal, extrae **diversidad de orden 2**. Es el "hola mundo" de la codificación espacio-temporal.
-
-    Opera en dos ranuras temporales (se asume $h_1, h_2$ constantes durante ambas):
+    El ejemplo clásico de diversidad es el código de Alamouti 2×1. Dos antenas TX, una RX, dos ranuras temporales:
 
     | | Antena 1 | Antena 2 |
     |---|---|---|
     | Ranura 1 | $s_1$ | $s_2$ |
     | Ranura 2 | $-s_2^*$ | $s_1^*$ |
 
-    El receptor (una sola antena) observa:
+    Con canales $h_1, h_2$ constantes durante las dos ranuras:
 
-    $$r_1 = h_1 s_1 + h_2 s_2 + n_1, \qquad r_2 = -h_1 s_2^* + h_2 s_1^* + n_2$$
+    $$r_1 = h_1s_1 + h_2s_2 + n_1, \qquad r_2 = -h_1s_2^* + h_2s_1^* + n_2$$
 
-    y combina linealmente:
+    El receptor combina:
 
-    $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^*, \qquad \hat{s}_2 = h_2^* r_1 - h_1 r_2^*$$
+    $$\hat{s}_1 = h_1^*r_1 + h_2r_2^*, \qquad \hat{s}_2 = h_2^*r_1 - h_1r_2^*$$
 
-    Al sustituir, los términos cruzados se **cancelan exactamente** (esa es la magia de la estructura ortogonal) y queda:
+    y los términos cruzados se cancelan:
 
-    $$\hat{s}_k = (|h_1|^2 + |h_2|^2)\, s_k + \tilde{n}_k$$
+    $$\hat{s}_k = (|h_1|^2 + |h_2|^2)s_k + \tilde{n}_k$$
 
-    Cada símbolo llega con ganancia $|h_1|^2+|h_2|^2$: **ambos trayectos contribuyen a cada símbolo**. Para que $\hat{s}_k$ se desvanezca tendrían que anularse $h_1$ **y** $h_2$ a la vez — mucho menos probable que fallar uno solo. Eso es diversidad de orden 2, con tasa 1 (dos símbolos en dos ranuras) y sin CSIT. Es el vértice opuesto a V-BLAST del §3.3: allí $r=2$ símbolos por uso pero $d=0$; aquí un símbolo protegido pero máxima fiabilidad.
-
-**Regla práctica de diseño:**
-
-| Condición del enlace | Estrategia recomendada | Razón |
-|---|---|---|
-| SNR baja, cobertura crítica | Diversidad ($r$ pequeño) | La BER cae más rápido con SNR |
-| SNR alta, throughput máximo | Multiplexación ($r = \min(N_t,N_r)$) | La tasa crece linealmente |
-| SNR media | Punto intermedio DMT | Equilibrio tasa/confiabilidad |
-
-En 5G NR, el selector de rango (rank adaptation) elige $r$ dinámicamente basándose en el CQI reportado por el UE — exactamente esta lógica.
+    Cada símbolo aprovecha ambos trayectos. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
 
 <figure markdown="span">
   ![Curva DMT para sistemas 2×2, 4×4](figures/mimo-dmt.png)
   <!-- generada por celda 8 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** Curva DMT $d^*(r)$ para sistemas $2\times2$ (triángulo) y $4\times4$ (polígono). Los vértices corresponden a esquemas concretos: en $r=0$ opera el **OSTBC/Alamouti** (diversidad máxima $N_tN_r$, sin ganancia de multiplexación); en $r=\min(N_t,N_r)$ opera **V-BLAST** (multiplexación máxima, $d=N_r-N_t+1$ para $N_t \leq N_r$). Los puntos intermedios representan el rango continuo de equilibrios posibles. Un sistema que opera en el vértice inferior-derecho explota toda la multiplexación — cada dB adicional de SNR se traduce en tasa, no en reducción de errores.
+  <figcaption markdown="1">**Figura 4.** Curva DMT para sistemas $2\times2$ y $4\times4$. En operación real se traduce como rank adaptation: el sistema sube capas cuando el canal y el SNR lo permiten, y baja capas cuando necesita robustez.
   </figcaption>
 </figure>
 
-??? question "Comprueba tu comprensión"
+### 5. Detección y precodificación que se implementan
 
-    **P1.** En la curva DMT de un sistema $2\times2$, ¿qué diversidad $d$ obtienes si exiges $r = 2$ streams?
+Una vez elegido el uso del espacio, aparece el bloque de procesamiento: ¿quién separa la mezcla? ¿El receptor, el transmisor o ambos?
 
-    ---
+#### 5.1 Detección en el receptor
 
-    **R1.** $d^*(2) = (2-2)(2-2) = 0$. Multiplexación máxima significa diversidad nula: toda la SNR extra se convierte en tasa y la BER no mejora con ella.
+Si el transmisor no conoce $\mathbf{H}$, envía flujos y el receptor separa:
 
-Hasta aquí todo era un solo enlace punto a punto; la pregunta natural es: ¿y si la estación base sirve a varios usuarios *a la vez*? → precodificación multiusuario.
+$$\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$$
 
-### 5. Precodificación Lineal: MRT y ZF
-
-El cambio de escenario trae un problema nuevo: cada usuario tiene una sola antena y no puede "des-mezclar" nada por su cuenta — la SVD del §3 requería cooperación en ambos extremos. Ahora todo el trabajo de separar a los usuarios recae en el transmisor, que debe **dar forma a los haces antes de emitir**: eso es la precodificación.
-
-En el escenario multiusuario (MU-MIMO), la estación base tiene $M$ antenas y sirve simultáneamente a $K$ usuarios, cada uno con una sola antena. La notación cambia ligeramente respecto al §2: aquí $M$ es el número de antenas en la BS (rol de $N_t$) y $K$ el número de usuarios (rol de $N_r$). El canal de bajada es:
-
-$$\mathbf{y} = \mathbf{H}\mathbf{W}\mathbf{s} + \mathbf{n} \tag{9}$$
-
-donde $\mathbf{H} \in \mathbb{C}^{K \times M}$ es la matriz de canal agregada, $\mathbf{W} \in \mathbb{C}^{M \times K}$ es la **matriz de precodificación** y $\mathbf{s} \in \mathbb{C}^K$ son los símbolos de los $K$ usuarios. Denotamos $\mathbf{h}_k \in \mathbb{C}^M$ el vector de canal del usuario $k$ (la $k$-ésima fila de $\mathbf{H}$ transpuesta conjugada), y $\mathbf{w}_k \in \mathbb{C}^M$ la $k$-ésima columna de $\mathbf{W}$. La señal recibida por el usuario $k$ es:
-
-$$y_k = \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_k s_k + \underbrace{\sum_{j \neq k} \mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j s_j}_{\text{interferencia entre usuarios}} + n_k \tag{10}$$
-
-El diseño del precoder $\mathbf{W}$ es el problema central del MU-MIMO. Antes de las fórmulas, las dos filosofías opuestas. **MRT es el precoder egoísta y simple**: apunta el haz directamente a cada usuario ignorando a los demás — máxima potencia útil, pero los haces se pisan entre sí. **ZF es el precoder cooperativo**: elige haces que caen exactamente en los *ceros* de los demás usuarios — nadie interfiere a nadie, pero torcer los haces para esquivar a los vecinos cuesta energía útil y **amplifica el ruido**. Toda la comparación que sigue es la cuantificación de este dilema.
-
-**Maximum Ratio Transmission (MRT).** El precoder más simple: apuntar el haz hacia cada usuario con el vector conjugado de su canal:
-
-$$\mathbf{W}_{\text{MRT}} = \frac{1}{\sqrt{\rho}}\mathbf{H}^{\mathsf{H}}, \quad \rho = \|\mathbf{H}^{\mathsf{H}}\|_F^2 = \|\mathbf{H}\|_F^2 \tag{11}$$
-
-donde el factor $1/\sqrt{\rho}$ normaliza la potencia transmitida a $P$ (la restricción de potencia se aplica siempre al precoder). MRT maximiza la potencia recibida por el usuario objetivo, pero **no cancela la interferencia** entre usuarios. Asumiendo potencia unitaria por usuario ($P = 1$, SNR absorbida en $N_0$), el SINR del usuario $k$ es:
-
-$$\text{SINR}_k^{\text{MRT}} = \frac{\|\mathbf{h}_k\|^4}{\sum_{j \neq k} |\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_j|^2 + \rho N_0} \tag{12}$$
-
-**Zero-Forcing (ZF).** El precoder que **elimina completamente** la interferencia entre usuarios mediante la pseudoinversa:
-
-$$\mathbf{W}_{\text{ZF}} = \mathbf{H}^{\mathsf{H}}(\mathbf{H}\mathbf{H}^{\mathsf{H}})^{-1} \tag{13}$$
-
-Con ZF, $\mathbf{h}_k^{\mathsf{H}} \mathbf{w}_j^{\text{ZF}} = 0$ para $k \neq j$ (interferencia nula), pero la inversión de $\mathbf{H}\mathbf{H}^{\mathsf{H}}$ amplifica el ruido cuando los canales son casi paralelos (mal condicionamiento).
-
-| Precoder | Interferencia | Ruido | Óptimo cuando |
+| Detector | Idea | Ventaja | Costo |
 |---|---|---|---|
-| MRT | Alta (no cancelada) | Bajo | $M \gg K$ (canales casi ortogonales) |
-| ZF | Cero | Amplificado | SNR alta, $M \geq K$ |
-| Óptimo (MMSE/RZF) | Cancelada parcialmente | Balance óptimo | Siempre (mayor coste computacional) |
+| ZF | Invertir el canal con $\mathbf{H}^+$ | Cancela interferencia entre capas | Amplifica ruido si $\mathbf{H}$ está mal condicionada |
+| MMSE | Invertir con regularización | Balancea ruido e interferencia | Requiere estimar SNR/ruido |
+| SIC / V-BLAST | Detectar una capa, restarla y repetir | Mejor que lineal puro | Propagación de errores y ordenamiento |
+| ML | Probar combinaciones de símbolos | Óptimo | Costo exponencial con $N_t$ |
+
+??? example "Por qué ZF amplifica ruido"
+
+    En el canal 2×2 del §3.1:
+
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
+
+    y:
+
+    $$(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 & -1 \\ -1 & 1{,}25 \end{pmatrix}$$
+
+    La diagonal vale $1{,}25/0{,}5625 \approx 2{,}22$. ZF elimina interferencia, pero multiplica el ruido de cada flujo por 2,22. Esa es la razón operativa para preferir MMSE cuando el SNR no es alto o el canal está mal condicionado.
+
+<figure markdown="span">
+  ![BER de detectores ZF, MMSE y ML en canal 2×2](figures/mimo-detectors.png)
+  <!-- generada por celda "Figura 4b" de lab.ipynb -->
+  <figcaption markdown="1">**Figura 5.** BER de detectores ZF, MMSE y ML en un canal $2\times2$ con QPSK. La curva ilustra una decisión implementativa: ZF es barato pero paga ruido; MMSE suele ser el detector lineal práctico; ML sirve como referencia óptima pero no escala bien.
+  </figcaption>
+</figure>
+
+#### 5.2 Precodificación en la estación base
+
+En MU-MIMO downlink, la BS tiene $M$ antenas y sirve a $K$ usuarios:
+
+$$\mathbf{y} = \mathbf{H}\mathbf{W}\mathbf{s} + \mathbf{n} \tag{5}$$
+
+El usuario $k$ recibe:
+
+$$y_k = \mathbf{h}_k^{\mathsf{H}}\mathbf{w}_ks_k + \sum_{j\neq k}\mathbf{h}_k^{\mathsf{H}}\mathbf{w}_js_j + n_k \tag{6}$$
+
+La matriz $\mathbf{W}$ decide cuánta energía va al usuario deseado y cuánta interferencia cae sobre los demás.
+
+| Precoder | Fórmula base | Cuándo usarlo | Costo |
+|---|---|---|---|
+| MRT | $\mathbf{W}\propto \mathbf{H}^{\mathsf{H}}$ | SNR baja, $M/K$ grande, canales casi ortogonales | No cancela interferencia |
+| ZF | $\mathbf{W}=\mathbf{H}^{\mathsf{H}}(\mathbf{H}\mathbf{H}^{\mathsf{H}})^{-1}$ | Interferencia dominante, SNR alta, $M\geq K$ | Amplifica ruido y pierde potencia si canales son paralelos |
+| RZF/MMSE | ZF regularizado | Caso práctico general | Necesita regularización y estimación de ruido |
 
 <figure markdown="span">
   ![BER de MRT vs ZF para K=4 usuarios](figures/mimo-mrt-zf.png)
   <!-- generada por celda 10 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** Curva BER (QPSK) para MRT y ZF con $M=8$ antenas en la BS y $K=4$ usuarios (el `precoder_zf` se implementa en el **Ejercicio 3** del laboratorio). La lección del dilema en números: a SNR muy baja ambos rinden parecido (el ruido domina y torcer los haces no aporta), pero MRT **satura en un piso de interferencia** (~$6 \times 10^{-2}$) — subir la potencia sube la señal *y* la interferencia por igual — mientras que ZF, con interferencia nula, cae sin piso. Con $M/K = 2$ el cruce ocurre ya a ~2 dB; solo cuando $M \gg K$ (§6) la interferencia de MRT se disuelve sola y el piso desaparece.
+  <figcaption markdown="1">**Figura 6.** BER de MRT y ZF para $M=8$, $K=4$. A baja SNR, torcer haces con ZF no siempre compensa. A mayor SNR, MRT satura por interferencia y ZF cae sin piso. Esta es una decisión de diseño, no una preferencia estética.
   </figcaption>
 </figure>
 
-??? question "Comprueba tu comprensión"
+La dualidad es importante: ZF/MMSE aparecen tanto en receptor como en transmisor. Es la misma álgebra vista desde lados distintos. La decisión depende de dónde está el CSI, quién tiene capacidad de cómputo y qué extremo puede coordinarse.
 
-    **P1.** ¿Por qué ZF puede rendir peor que MRT cuando la SNR es baja?
+### 6. Rank adaptation y capacidad útil
 
-    ---
+La capacidad MIMO sigue siendo el marco teórico que explica por qué subir capas puede aumentar throughput:
 
-    **R1.** ZF amplifica el ruido al invertir $\mathbf{H}\mathbf{H}^{\mathsf{H}}$ (torcer los haces para esquivar a los demás usuarios cuesta ganancia útil). A SNR baja el ruido — no la interferencia — es el término dominante del denominador del SINR, así que pagar ese precio no compensa.
+$$C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}$$
 
-MRT era simple pero interferente y ZF cancelaba a costa de amplificar ruido; la pregunta natural es: ¿cuándo deja de importar la interferencia y basta el precoder simple? → cuando $M \gg K$.
+Pero en implementación el sistema no calcula esta expresión para lucirse. La usa como intuición para rank adaptation:
 
-### 6. Massive MIMO — Escalar a M >> K Antenas
+1. medir o estimar calidad del canal;
+2. mirar SNR, valores singulares, correlación e interferencia;
+3. elegir cuántas capas enviar;
+4. reportar o usar indicadores como CQI, RI y PMI;
+5. verificar BLER objetivo después de la adaptación.
 
-Massive MIMO lleva el MU-MIMO al extremo: $M \gg K$ (típicamente $M/K \geq 10$). La intuición detrás de todo lo que sigue es la **ley de los grandes números**. Lance un dado y el resultado es impredecible; lance mil y el promedio se clava en 3,5. Con $M$ antenas ocurre lo mismo en el espacio: la ganancia del canal de un usuario es la suma de $M$ contribuciones aleatorias, y al promediar, **deja de fluctuar** — el *fading* rápido se disuelve en la agregación. Y hay un segundo regalo geométrico: en un espacio de dimensión $M$ alta, dos vectores aleatorios son **casi ortogonales** con probabilidad abrumadora — los canales de dos usuarios apenas se solapan, así que los usuarios *dejan de estorbarse solos*, sin que nadie tenga que cancelar nada. Estos dos fenómenos emergentes hacen que el sistema sea analíticamente tratable y, sobre todo, **extremadamente eficiente**:
+<figure markdown="span">
+  ![Capacidad MIMO vs SNR para diferentes configuraciones](figures/mimo-capacity.png)
+  <!-- generada por celda 6 de lab.ipynb -->
+  <figcaption markdown="1">**Figura 7.** Capacidad ergódica para $1\times1$, $2\times2$, $4\times4$ y $8\times8$. La lectura práctica: más antenas solo se convierten en throughput si el canal ofrece modos espaciales utilizables y el sistema puede estimarlos y explotarlos.
+  </figcaption>
+</figure>
 
-**6.1 Channel Hardening.** Con $M$ antenas y canal i.i.d., la norma del canal del usuario $k$ concentra:
+??? example "Water-filling como criterio de apagado de capas"
 
-$$\frac{\|\mathbf{h}_k\|^2}{M} \xrightarrow[M \to \infty]{\text{a.s.}} \beta_k \tag{14}$$
+    Si el transmisor conoce los valores singulares, puede repartir potencia con water-filling:
 
-donde $\beta_k$ es la ganancia de gran escala (path loss + shadowing). La potencia recibida con MRT deja de ser aleatoria — se **endurece** (hardening). El canal efectivo actúa como un canal AWGN determinístico. Las fluctuaciones por *fading* rápido desaparecen en la agregación de $M$ antenas.
+    $$P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$$
 
-**6.2 Favorable Propagation.** Con $M \gg K$, los canales de distintos usuarios se vuelven asintóticamente ortogonales:
+    La idea implementativa es simple: un modo espacial muy débil no merece potencia. En un canal 3×3 con ganancias $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$, todos los modos son fuertes y water-filling gana poco frente a potencia uniforme. En cambio, si un modo cae cerca de cero, el sistema debe bajar rank o asignarle cero potencia.
 
-$$\frac{\mathbf{h}_k^{\mathsf{H}} \mathbf{h}_j}{M} \xrightarrow[M \to \infty]{\text{a.s.}} 0, \quad k \neq j \tag{15}$$
+### 7. Massive MIMO como problema de red
 
-Esto significa que la interferencia entre usuarios con MRT (el término $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|^2$ en el denominador de la ec. (12)) tiende a cero conforme $M$ crece — MRT se vuelve **asintóticamente óptimo** y la interferencia entre usuarios desaparece sin necesidad de inversión matricial.
+Massive MIMO no es solo "muchas antenas". Es un régimen operativo: una estación base con $M$ antenas sirve a $K$ usuarios con $M \gg K$. Ese exceso de dimensiones espaciales cambia la ingeniería del sistema.
 
-**Consecuencia práctica**: con $M \gg K$, MRT es suficiente. El SINR del usuario $k$ converge a:
+**Channel hardening.** La norma del canal de cada usuario se estabiliza:
 
-$$\text{SINR}_k^{\text{MRT}} \xrightarrow{M \to \infty} \frac{M \beta_k P / K}{N_0} \tag{16}$$
+$$\frac{\|\mathbf{h}_k\|^2}{M} \xrightarrow[M\to\infty]{\text{a.s.}} \beta_k \tag{8}$$
 
-La potencia útil crece **linealmente con $M$** (array gain) mientras la interferencia desaparece. Esto es la esencia del "free lunch" del Massive MIMO: más antenas en la BS aumentan la SNR de todos los usuarios sin coste de potencia en el terminal.
+El fading rápido se promedia en muchas antenas. Para scheduling y control de enlace, el canal efectivo fluctúa menos.
 
-**6.3 ¿De dónde sale $\mathbf{H}$? Reciprocidad TDD y *pilot contamination*.** Todo lo anterior supuso que la BS conoce $\mathbf{H}$ — pero con $M$ grande, obtenerla es el verdadero cuello de botella. Estimar el canal por **pilotos de bajada** no escala: entrenar $M$ antenas cuesta del orden de $M$ símbolos de piloto, prohibitivo con $M = 256$. La salida es la **reciprocidad TDD**: en duplexación por tiempo, subida y bajada comparten frecuencia y el canal físico es el mismo en ambos sentidos. Los $K$ usuarios (no las $M$ antenas) envían pilotos en el enlace de subida, la BS estima $\mathbf{H}$ y la reutiliza para precodificar en bajada. El costo de entrenamiento pasa a ser proporcional a $K$ (usuarios), **no a $M$** (antenas) — por eso el Massive MIMO real es esencialmente TDD.
+**Favorable propagation.** Los canales de usuarios distintos tienden a ser ortogonales:
 
-El límite fundamental aparece al salir de una sola celda: los pilotos ortogonales son un recurso finito (proporcional al tiempo de coherencia del canal), así que en una red multicelda hay que **reutilizarlos** entre celdas. Un usuario de una celda vecina que use el mismo piloto **contamina** la estimación de $\mathbf{H}$ — la *pilot contamination*. A diferencia del ruido y la interferencia ordinaria, esta contaminación **no desaparece** al aumentar $M$: escala junto con la señal útil. Es el techo real del Massive MIMO, invisible en el modelo monocelda idealizado de esta sección.
+$$\frac{\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j}{M} \xrightarrow[M\to\infty]{\text{a.s.}} 0, \quad k\neq j \tag{9}$$
+
+La interferencia de MRT disminuye sin invertir matrices. Por eso MRT se vuelve competitivo cuando $M/K$ es grande, aunque en sistemas reales RZF/MMSE suele ser más robusto.
 
 <figure markdown="span">
   ![Channel hardening y favorable propagation vs M](figures/mimo-massive.png)
   <!-- generada por celdas 12–13 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 7.** Izquierda: *Channel hardening* — la distribución de $\|\mathbf{h}_k\|^2/M$ se estrecha entorno a $\beta_k=1$ conforme aumenta $M$ (de $M=4$ a $M=256$). Derecha: *Favorable propagation* — el módulo del producto interno normalizado $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|/M$ (interferencia entre dos usuarios) tiende a 0 con $M$ creciente. Ambas curvas ilustran la ley de los grandes números aplicada al espacio: las fluctuaciones de fading se promedian en las $M$ antenas.
+  <figcaption markdown="1">**Figura 8.** Channel hardening y favorable propagation al aumentar $M$. Para el ingeniero, estas curvas dicen cuándo el exceso de antenas empieza a simplificar el precoding y estabilizar el enlace.
   </figcaption>
 </figure>
 
-**MIMO Masivo en 5G NR.** La estación base 5G NR utiliza arrays de antenas activas (AAS) con configuraciones típicas de 32T32R, 64T64R o 128T128R en FR1 (sub-6 GHz). El estándar soporta hasta $r = 8$ capas (streams) simultáneos por UE en DL (Tabla 7.3.1.3-1 del TS 38.214). El bloque de precodificación en el gNB implementa en la práctica una variante del ZF regularizado (RZF / MMSE precoder) que equilibra los costes computacionales de la inversión matricial con las ganancias de cancelación de interferencia. En FR2 (mmWave, 24–52 GHz) el precoding **totalmente digital** de este capítulo deja de ser viable — una cadena de RF por antena es demasiado cara y consume demasiado — y se recurre al **beamforming híbrido**: un desfasador analógico forma haces gruesos y un número reducido de cadenas digitales hace el precoding fino sobre ellos. Esa arquitectura se detalla en la Sesión 07.
+#### 7.1 CSI: el cuello de botella
+
+Todo lo anterior supone que la BS conoce el canal. Con $M$ grande, ese supuesto decide la arquitectura:
+
+- En **FDD**, el UE tendría que estimar muchos canales de bajada y reportarlos. El overhead crece con el número de antenas y se vuelve caro.
+- En **TDD**, los usuarios envían pilotos en subida; por reciprocidad, la BS estima el canal y lo reutiliza para precodificar en bajada. El coste escala con $K$, no con $M$.
+- En una red multicelda, los pilotos se reutilizan. Si un usuario vecino usa el mismo piloto, contamina la estimación. Esa interferencia no desaparece simplemente añadiendo más antenas.
+
+Por eso Massive MIMO práctico está profundamente ligado a TDD, calibración de reciprocidad, diseño de pilotos y scheduler.
 
 <figure markdown="span">
   ![Sum-rate MRT vs ZF vs óptimo para Massive MIMO](figures/mimo-sumrate.png)
   <!-- generada por celda 14 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 8.** Suma de tasas (sum-rate) en función del número de antenas en la BS $M$ para $K=4$ usuarios, SNR $= 10$ dB. MRT se acerca al óptimo conforme $M$ crece (favorable propagation) y supera a ZF para $M$ grandes porque evita la amplificación de ruido del inverso. La brecha entre MRT y ZF se cierra cuando $M/K \geq 10$ — la región de Massive MIMO en la que trabajan las BS 5G.
+  <figcaption markdown="1">**Figura 9.** Sum-rate frente a número de antenas BS para $K=4$. La curva muestra una decisión de arquitectura: con pocas antenas ZF/RZF controla interferencia; con muchas antenas, MRT se aproxima al óptimo porque los canales se separan solos.
   </figcaption>
 </figure>
 
-??? question "Comprueba tu comprensión"
+#### 7.2 FR1, FR2 y beamforming híbrido
 
-    **P1.** ¿Por qué con $M \gg K$ basta MRT, sin invertir matrices?
+En FR1 sub-6 GHz, las configuraciones 32T32R, 64T64R o 128T128R permiten precoding digital amplio en estaciones base activas. En FR2/mmWave, una cadena RF por elemento es cara y consume demasiado. Por eso se usa **beamforming híbrido**: una etapa analógica forma haces gruesos con desfasadores, y una etapa digital de menor dimensión ajusta capas y usuarios.
 
-    **P2.** ¿Cuál de los dos fenómenos — *channel hardening* o *favorable propagation* — explica que el enlace deje de fluctuar por *fading* rápido?
-
-    ---
-
-    **R1.** Por *favorable propagation*: los canales de usuarios distintos se vuelven asintóticamente ortogonales, así que la interferencia inter-usuario de MRT tiende a 0 por sí sola — no queda nada que cancelar con ZF.
-
-    **R2.** *Channel hardening*: la norma $\|\mathbf{h}_k\|^2/M$ concentra en $\beta_k$ (ley de los grandes números), y la potencia recibida se vuelve determinística.
+La consecuencia para diseño es concreta: en FR2 no basta "usar Massive MIMO"; también hay que entrenar beams, seguir bloqueo, gestionar movilidad angular y decidir cuántas cadenas RF justifican el throughput esperado.
 
 ---
 
 ## Laboratorio
 
-El laboratorio de esta sesión implementa los cuatro pilares analíticos de la teoría:
-
-1. **Ejercicio 1 — Canal MIMO y SVD**: construir realizaciones de $\mathbf{H}$ i.i.d. Rayleigh, calcular la SVD y visualizar la distribución de valores singulares (comparar con la distribución Marchenko-Pastur).
-2. **Ejercicio 2 — Capacidad MIMO**: trazar la capacidad ergódica (media sobre realizaciones) para $1\times1$, $2\times2$, $4\times4$ y $8\times8$ en función del SNR; verificar el escalado lineal en $N$.
-3. **Ejercicio 3 — Precodificadores MRT y ZF**: simular curvas BER (QPSK) para un sistema $8\times4$ (8 antenas BS, 4 usuarios), comparar MRT y ZF a distintas SNR, identificar el cruce.
-4. **Ejercicio 4 — Massive MIMO**: demostrar *channel hardening* y *favorable propagation* variando $M$ de 4 a 512; graficar la suma de tasas MRT vs ZF vs óptimo.
-
-Accede al laboratorio en:
+El laboratorio de esta sesión se puede leer como una serie de decisiones implementativas. El notebook sigue en:
 [`lab.ipynb`](lab.ipynb)
+
+1. **Diagnóstico de canal y rank**: generar matrices $\mathbf{H}$ Rayleigh, calcular SVD y observar distribución de valores singulares. Pregunta de diseño: ¿cuántas capas son razonables?
+2. **Capacidad y rank adaptation**: comparar $1\times1$, $2\times2$, $4\times4$ y $8\times8$. Pregunta de diseño: ¿cuándo las antenas se convierten realmente en throughput?
+3. **Detección ZF/MMSE/ML**: simular BER en un canal $2\times2$. Pregunta de diseño: ¿cuándo vale la pena pagar cómputo o regularización?
+4. **Precodificadores MRT y ZF**: comparar BER para $M=8$, $K=4$. Pregunta de diseño: ¿cuándo domina ruido y cuándo domina interferencia?
+5. **Massive MIMO**: barrer $M$ para observar hardening, favorable propagation y sum-rate. Pregunta de diseño: ¿a partir de qué $M/K$ el precoder simple empieza a funcionar?
+
+Extensión natural para una versión futura del laboratorio: añadir un mini selector de rank que use SNR, valores singulares y BLER objetivo para decidir si transmitir 1, 2 o más capas.
 
 ---
 
 ## Ejercicios de Asimilación
 
-Estos ejercicios se resuelven con lápiz y papel en pocos minutos; su objetivo es afianzar la intuición antes de abrir el laboratorio computacional.
+Estos ejercicios están planteados como mini-casos de diseño. La meta es justificar decisiones, no solo sustituir números.
 
-**Ejercicio A1 (SVD a mano).** Dado el canal
-
-$$\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}$$
-
-escribe los valores singulares $\sigma_1, \sigma_2$ y las ganancias de subcanal. ¿Quiénes son $\mathbf{U}$ y $\mathbf{V}$?
+**Ejercicio A1 (borde de celda).** Un UE reporta bajo SNR y alto BLER. La BS puede usar 2 capas SU-MIMO o un haz de mayor ganancia con rank 1. ¿Qué eliges primero y por qué?
 
 ??? example "Solución"
 
-    La matriz ya es diagonal: no hay mezcla que desenredar. Los valores singulares se leen directamente de la diagonal: $\sigma_1 = 2$, $\sigma_2 = 1$. Las ganancias de subcanal son $\sigma_1^2 = 4$ y $\sigma_2^2 = 1$. Como no hace falta rotar nada, $\mathbf{U} = \mathbf{V} = \mathbf{I}$ — los ejes naturales del canal coinciden con las antenas físicas.
+    Elegiría rank 1 con beamforming/diversidad. Si el enlace no cierra, dos capas solo reparten potencia y hacen más frágil la detección. Primero se estabiliza el enlace; luego se intenta subir rank si el SNR y el canal lo permiten.
 
-**Ejercicio A2 (capacidad).** Para el canal del Ejercicio A1 a SNR $= 10$ dB con potencia uniforme ($N_t = 2$), calcula la capacidad con la ec. (7).
-
-??? example "Solución"
-
-    SNR $= 10$ dB $= 10$ en lineal, y cada subcanal recibe $P/N_t \Rightarrow P/(N_t N_0) = 5$:
-
-    $$C = \log_2(1 + 5 \cdot 4) + \log_2(1 + 5 \cdot 1) = \log_2 21 + \log_2 6 \approx 4{,}39 + 2{,}58 = 6{,}97 \text{ bit/s/Hz}$$
-
-    Compara con el ejemplo del §3.1 ($4{,}78$ bit/s/Hz): este canal rinde más porque su energía total es mayor ($\|\mathbf{H}\|_F^2 = 5$ frente a $2{,}5$).
-
-**Ejercicio A3 (MRT).** Dado el canal de un solo usuario $\mathbf{h} = [1,\ j]^{\mathsf{T}}$ ($M = 2$), calcula el vector MRT normalizado $\mathbf{w} = \mathbf{h}^* / \|\mathbf{h}\|$ y verifica su potencia.
+**Ejercicio A2 (rank y valores singulares).** Un canal 2×2 tiene $\sigma_1^2=2{,}25$ y $\sigma_2^2=0{,}25$. ¿El rank algebraico permite 2 capas? ¿El diseño debería usar siempre 2 capas?
 
 ??? example "Solución"
 
-    La norma: $\|\mathbf{h}\| = \sqrt{|1|^2 + |j|^2} = \sqrt{2}$. El conjugado: $\mathbf{h}^* = [1,\ -j]^{\mathsf{T}}$. Por tanto:
+    El rank algebraico puede ser 2, pero la segunda capa es mucho más débil. A SNR alta quizá se use; a SNR baja o BLER alto conviene rank 1. La decisión no es contar antenas, sino mirar calidad de modos espaciales.
 
-    $$\mathbf{w} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -j \end{pmatrix}$$
-
-    Verificación de potencia: $\|\mathbf{w}\|^2 = \frac{1}{2}(|1|^2 + |-j|^2) = \frac{1}{2}(1+1) = 1$ ✓. El conjugado $-j$ "deshace" el desfase de $+90°$ del segundo trayecto para que ambas contribuciones lleguen en fase al usuario.
-
-**Ejercicio A4 (ortogonalidad / favorable propagation).** Dados $\mathbf{h}_1 = [1,\ 0]^{\mathsf{T}}$ y $\mathbf{h}_2 = [0,\ 1]^{\mathsf{T}}$, calcula $|\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2|$. Repite con $\mathbf{h}_1 = [1,\ 1]^{\mathsf{T}}/\sqrt{2}$ y $\mathbf{h}_2 = [1,\ -1]^{\mathsf{T}}/\sqrt{2}$. ¿Qué significa el resultado para MRT?
+**Ejercicio A3 (usuarios paralelos).** Dos usuarios tienen canales con producto interno normalizado cercano a 1. ¿Los servirías juntos con MU-MIMO? ¿Qué alternativa tiene el scheduler?
 
 ??? example "Solución"
 
-    Primer par: $\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2 = 1 \cdot 0 + 0 \cdot 1 = 0$.
+    No son buenos candidatos simultáneos: sus canales se pisan espacialmente. ZF puede separarlos, pero pagará potencia y ruido. El scheduler puede separarlos en tiempo/frecuencia y emparejar cada uno con otro usuario más ortogonal.
 
-    Segundo par: $\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2 = \frac{1}{2}(1 \cdot 1 + 1 \cdot (-1)) = 0$.
-
-    En ambos casos $|\mathbf{h}_1^{\mathsf{H}} \mathbf{h}_2| = 0$: los canales son ortogonales, así que con MRT la interferencia entre usuarios es **nula** (el término $|\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j|^2$ de la ec. (12) desaparece) sin necesidad de ZF. Esto es exactamente lo que la *favorable propagation* garantiza de forma asintótica cuando $M \gg K$.
-
-**Ejercicio A5 (Alamouti a mano).** Canal 2×1 con $h_1 = 1$ y $h_2 = j$ (constante en las dos ranuras). Con símbolos $s_1, s_2$ e ignorando el ruido, escribe $r_1$ y $r_2$ del esquema de Alamouti (§4) y verifica que el combinador $\hat{s}_1 = h_1^* r_1 + h_2 r_2^*$ recupera $(|h_1|^2+|h_2|^2)\,s_1 = 2 s_1$.
+**Ejercicio A4 (MRT o ZF).** En un sistema $M=8$, $K=4$, a SNR muy baja, ZF no mejora la BER frente a MRT. ¿Por qué?
 
 ??? example "Solución"
 
-    Con $h_1 = 1$, $h_2 = j$, las señales recibidas son:
+    A SNR baja domina el ruido térmico. ZF elimina interferencia, pero al invertir un canal finito pierde ganancia útil y amplifica ruido. Si la interferencia aún no domina, ese pago no compensa. MMSE/RZF es el compromiso práctico.
 
-    $$r_1 = s_1 + j s_2, \qquad r_2 = -s_2^* + j s_1^*$$
+**Ejercicio A5 (TDD frente a FDD).** Una BS tiene 128 antenas y sirve 8 usuarios. ¿Por qué TDD es más natural para Massive MIMO que FDD?
 
-    Su conjugado: $r_2^* = -s_2 - j s_1$ (recordando $\overline{j} = -j$). Ahora el combinador, con $h_1^* = 1$ y $h_2 = j$:
+??? example "Solución"
 
-    $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^* = (s_1 + j s_2) + j(-s_2 - j s_1) = s_1 + j s_2 - j s_2 + s_1 = 2 s_1 \checkmark$$
+    En FDD, estimar y reportar CSI de bajada escala con el número de antenas de la BS. En TDD, los 8 usuarios envían pilotos en subida y la BS usa reciprocidad para precodificar en bajada. El overhead escala con usuarios, no con antenas.
 
-    Los términos en $s_2$ se cancelan ($j s_2 - j s_2 = 0$) y el $-j^2 = +1$ duplica $s_1$. La ganancia $|h_1|^2 + |h_2|^2 = 1 + 1 = 2$ confirma que **ambas antenas** aportan a $s_1$: diversidad de orden 2.
+**Ejercicio A6 (FR2).** En mmWave, ¿por qué no basta decir "usemos 256 antenas digitales"?
 
-Para los ejercicios computacionales "pesados" — la SVD por Monte Carlo, la implementación de `precoder_zf` y los experimentos de Massive MIMO — continúa en [`lab.ipynb`](lab.ipynb).
+??? example "Solución"
+
+    Porque una cadena RF por antena es costosa y consume mucha potencia. FR2 usa arrays grandes para ganar link budget, pero suele implementar beamforming híbrido: fase analógica para formar haces y pocas cadenas digitales para multiplexación/precoding fino.
 
 ---
 
 ## Resumen
 
-| Concepto | Expresión clave | Implicación práctica |
+| Decisión | Indicador que miras | Acción típica |
 |---|---|---|
-| Modelo MIMO | $\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$ | Canal matricial — álgebra lineal como herramienta principal |
-| SVD | $\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}$ | Descompone H en $r$ canales AWGN independientes |
-| Capacidad | $C = \sum_k \log_2(1 + P_k^* \sigma_k^2 / N_0)$ | Escala linealmente con $\min(N_t, N_r)$ |
-| DMT | $d^*(r) = (N_t - r)(N_r - r)$ | Elige $r$ según SNR y requisitos de enlace |
-| MRT | $\mathbf{W} = \mathbf{H}^{\mathsf{H}}$ | Simple, óptimo cuando $M \gg K$ |
-| ZF | $\mathbf{W} = \mathbf{H}^{\mathsf{H}}(\mathbf{H}\mathbf{H}^{\mathsf{H}})^{-1}$ | Cancela interferencia, amplifica ruido |
-| Massive MIMO | $M \gg K \Rightarrow$ MRT $\approx$ óptimo | *Channel hardening* + *favorable propagation* |
+| Cerrar cobertura | SNR, BLER, norma de canal | Beamforming, diversidad, rank bajo |
+| Subir throughput por UE | Valores singulares, rank, SNR | SU-MIMO con más capas |
+| Servir varios usuarios | Ortogonalidad entre canales, $M/K$ | MU-MIMO, scheduler, RZF/ZF |
+| Elegir detector | Condicionamiento y SNR | MMSE si ZF amplifica ruido; ML solo como referencia o baja dimensión |
+| Elegir precoder | Interferencia vs ruido | MRT para $M/K$ grande o SNR baja; ZF/RZF si interferencia domina |
+| Escalar a Massive MIMO | Pilotos, TDD, reciprocidad | Estimar CSI por UL, controlar contaminación de pilotos |
+| Usar FR2/mmWave | Path loss, bloqueo, RF chains | Beamforming híbrido y entrenamiento de haces |
+
+La frase clave de la sesión: **MIMO no se diseña contando antenas; se diseña leyendo el canal y el problema de red**. Las fórmulas de SVD, capacidad y DMT explican por qué funcionan las decisiones, pero la tarea del ingeniero es escoger la estrategia correcta para el escenario correcto.
