@@ -22,8 +22,8 @@ See: .planning/PROJECT.md (updated 2026-07-07)
 
 Phase: N/A of N/A (quick-task study workflow, no active milestone roadmap)
 Plan: N/A of N/A
-Status: Paused, Session 06 implementation-first rewrite and design figures complete
-Last activity: 2026-07-07 — Completed quick task 260707-4b5: added reproducible implementation figures to Session 06 MIMO.
+Status: Paused, Session 06 implementation-first rewrite, figures and instructor artifact complete
+Last activity: 2026-07-07 — Completed quick task 260707-53z: created instructor narrative artifact for dictating Session 06 MIMO.
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -59,6 +59,7 @@ Recent decisions affecting current work:
 - Session 06: New requested direction is implementation-first. The next rewrite should start from deployment decisions such as coverage, throughput, interference, density, CSI overhead, rank selection, and precoder choice.
 - Session 06: Implementation-first rewrite completed in commit `6d1e0d3`; next optional content step is aligning `lab.ipynb` with a scenario-driven rank/precoder selector.
 - Session 06: Three deterministic Matplotlib figures now support the implementation-first framing: network symptom to MIMO strategy, rank/precoder decision flow, and CSI overhead scaling.
+- Session 06: Instructor-facing HTML artifact now provides narrative dictation notes, teaching transitions, figure explanations, student questions and common pitfalls.
 
 ### Pending Todos
 
@@ -82,6 +83,7 @@ Recent decisions affecting current work:
 | 260707-3ok | Analizar reenfoque implementativo de docs/sessions/06-mimo-systems/index.md | 2026-07-07 | n/a-analysis-only | [260707-3ok-analizar-reenfoque-implementativo-de-doc](./quick/260707-3ok-analizar-reenfoque-implementativo-de-doc/) |
 | 260707-3v6 | Reescribir Sesion 06 MIMO con enfoque implementativo y decisiones de red | 2026-07-07 | 6d1e0d3 | [260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im](./quick/260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im/) |
 | 260707-4b5 | Agregar figuras implementativas a Sesion 06 MIMO | 2026-07-07 | df85cbf | [260707-4b5-agregar-figuras-implementativas-a-sesion](./quick/260707-4b5-agregar-figuras-implementativas-a-sesion/) |
+| 260707-53z | Crear artifact narrativo para dictar Tema 06 MIMO usando contexto understand-anything | 2026-07-07 | 92e6ee1 | [260707-53z-crear-artifact-narrativo-para-dictar-tem](./quick/260707-53z-crear-artifact-narrativo-para-dictar-tem/) |
 
 ## Deferred Items
 
@@ -94,5 +96,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-07-07
-Stopped at: Session 06 MIMO implementation-first rewrite and supporting figures completed and verified; optional next action is updating `lab.ipynb` to match the new scenario-driven framing.
+Stopped at: Session 06 MIMO implementation-first rewrite, supporting figures and instructor narrative artifact completed and verified; optional next action is updating `lab.ipynb` to match the new scenario-driven framing.
 Resume file: `.planning/HANDOFF.json`, `.continue-here.md`, `.planning/.continue-here.md`

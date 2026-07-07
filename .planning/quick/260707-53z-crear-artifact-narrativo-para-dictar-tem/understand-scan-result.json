@@ -1,0 +1,45 @@
+{
+  "scriptCompleted": true,
+  "files": [
+    {
+      "path": "figures/svd-based-mimo/transcript-svd-based-mimo.txt",
+      "language": "txt",
+      "sizeLines": 1318,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "generate_design_figures.py",
+      "language": "python",
+      "sizeLines": 486,
+      "fileCategory": "code"
+    },
+    {
+      "path": "index.md",
+      "language": "markdown",
+      "sizeLines": 460,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "lab.ipynb",
+      "language": "ipynb",
+      "sizeLines": 832,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 4,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "small",
+  "stats": {
+    "filesScanned": 4,
+    "byCategory": {
+      "docs": 2,
+      "code": 2
+    },
+    "byLanguage": {
+      "txt": 1,
+      "python": 1,
+      "markdown": 1,
+      "ipynb": 1
+    }
+  }
+}
