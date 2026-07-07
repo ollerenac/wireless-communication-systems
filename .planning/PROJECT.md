@@ -16,6 +16,7 @@ Help the instructor understand and teach MIMO concepts clearly, with mathematica
 - [x] Session 06 MIMO content includes expanded treatment of receiver detection, Alamouti STBC, CSI acquisition, SVD/water-filling, and detector BER comparisons.
 - [x] Figure and notebook updates are verified before publication; notebook cells for targeted figures are executed via extracted scripts rather than full `nbconvert --execute`.
 - [x] Session 06 MIMO lesson is refocused around implementation and network-design decisions: antenna strategy, CSI, rank, precoding, user separation, Massive MIMO and deployment constraints.
+- [x] Session 06 MIMO lesson includes three reproducible implementation-oriented figures for network symptom mapping, rank/precoder selection, and CSI overhead scaling.
 
 ### Active
 
@@ -57,6 +58,7 @@ Help the instructor understand and teach MIMO concepts clearly, with mathematica
 | Convert selected Lab 06 TODO exercises into instructor reference solutions. | They were the instructor's pending tasks and can be reversed by restoring `pass` and comments. | Good |
 | Scope optional understand-anything work to `docs/sessions/06-mimo-systems/`, not the repository root. | Avoids scanning PII in `exams/**`. | Pending |
 | Reframe Session 06 from theory-first capacity/SVD toward deployment/design decisions. | The user clarified that the course audience is more implementation-oriented and needs to know when to use each antenna arrangement in real networks. | Good |
+| Generate new implementation figures with deterministic Matplotlib scripts instead of image generation. | The diagrams need exact Spanish labels, stable layout, and reproducible updates for course maintenance. | Good |
 
 ---
-*Last updated: 2026-07-07 after implementing Session 06 MIMO refocus.*
+*Last updated: 2026-07-07 after adding reproducible implementation figures to Session 06 MIMO.*
