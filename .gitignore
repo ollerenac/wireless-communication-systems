@@ -37,5 +37,8 @@ Thumbs.db
 # Scripts locales de generación de figuras (no forman parte del repo)
 docs/**/figures/gen_*.py
 
+# Material fuente local recuperado; no forma parte del sitio versionado
+docs/sessions/06-mimo-systems/figures/svd-based-mimo/
+
 # Entregas de alumnos y notas — PII, nunca al repo
 exams/**/examen-parcial-soluciones/

@@ -38,7 +38,7 @@ Help the instructor understand and teach MIMO concepts clearly, with mathematica
 - Latest recovered handoff: `.planning/HANDOFF.json` and `.continue-here.md`, dated 2026-07-04 after the 2026-07-03 study session.
 - Lecture-script artifact URL: https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87
 - The source HTML for the lecture-script artifact was in an ephemeral scratchpad. In a fresh session, fetch the artifact URL before redeploying with the same URL if iteration is needed.
-- Current repo divergence from handoff: `docs/sessions/06-mimo-systems/figures/svd-based-mimo/` is untracked and contains NPTEL water-filling source screenshots plus transcript.
+- Local-only recovered source material: `docs/sessions/06-mimo-systems/figures/svd-based-mimo/` contains NPTEL water-filling screenshots plus transcript and is intentionally ignored.
 
 ## Constraints
 

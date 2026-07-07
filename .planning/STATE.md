@@ -74,7 +74,7 @@ Recent decisions affecting current work:
 
 - Student email addresses are needed before Parcial 01 feedback can be sent.
 - The lecture-script source HTML was ephemeral; fetch the artifact URL before editing/redeploying the existing artifact.
-- `docs/sessions/06-mimo-systems/figures/svd-based-mimo/` is currently untracked and should be treated as recovered source material until the user decides whether to commit or ignore it.
+- `docs/sessions/06-mimo-systems/figures/svd-based-mimo/` is kept as local-only recovered source material and is intentionally ignored.
 
 ### Quick Tasks Completed
 
