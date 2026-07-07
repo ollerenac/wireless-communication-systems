@@ -47,6 +47,13 @@ Antes de hablar de SVD conviene mirar el síntoma del sistema. El mismo array de
 | Massive MIMO sub-6 GHz | Muchos UEs por celda | $M \gg K$, TDD, RZF/MRT | Pilotos, reciprocidad y contaminación |
 | FR2 / mmWave | Path loss alto, haces estrechos | Arrays grandes y beamforming híbrido | Bloqueo, alineamiento de beams y RF chains |
 
+<figure markdown="span">
+  ![Mapa de decisión de estrategias MIMO según problema de red](figures/mimo-design-map.png)
+  <!-- generada por generate_design_figures.py -->
+  <figcaption markdown="1">**Figura 1.** Mapa de decisión para traducir un síntoma de red en una estrategia MIMO y en el costo operativo que debe vigilarse. Sirve como brújula antes de elegir rank, detector o precoder.
+  </figcaption>
+</figure>
+
 Una regla práctica aparece desde el primer minuto:
 
 !!! note "Regla de diseño"
@@ -75,12 +82,12 @@ La dificultad real es que esas tres metas compiten por los mismos grados de libe
 
 ### 2. Qué arreglo de antenas usar
 
-La Figura 1 muestra las configuraciones básicas. La lectura práctica no es "más antenas siempre es mejor", sino "qué extremo tiene antenas, quién conoce el canal y qué se quiere optimizar".
+La Figura 2 muestra las configuraciones básicas. La lectura práctica no es "más antenas siempre es mejor", sino "qué extremo tiene antenas, quién conoce el canal y qué se quiere optimizar".
 
 <figure markdown="span">
   ![Configuraciones SISO, SIMO, MISO y MIMO](figures/mimo-configurations.png)
   <!-- generada por celda 2 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 1.** Configuraciones de antenas. **SISO**: referencia escalar. **SIMO**: varias ramas de recepción para diversidad/combining. **MISO**: varias antenas transmisoras para formar haz hacia un receptor simple. **MIMO**: antenas en ambos extremos para diversidad, beamforming y/o multiplexación espacial.
+  <figcaption markdown="1">**Figura 2.** Configuraciones de antenas. **SISO**: referencia escalar. **SIMO**: varias ramas de recepción para diversidad/combining. **MISO**: varias antenas transmisoras para formar haz hacia un receptor simple. **MIMO**: antenas en ambos extremos para diversidad, beamforming y/o multiplexación espacial.
   </figcaption>
 </figure>
 
@@ -121,7 +128,7 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
 <figure markdown="span">
   ![Estructura de la matriz de canal MIMO](figures/mimo-channel-matrix.png)
   <!-- generada por celda 3 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 2.** Matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada casilla contiene magnitud y fase del acoplamiento entre una antena transmisora y una receptora. Para implementación, esta matriz no es abstracta: es el insumo que estima el receptor o la estación base para decidir rank, precoder y detector.
+  <figcaption markdown="1">**Figura 3.** Matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada casilla contiene magnitud y fase del acoplamiento entre una antena transmisora y una receptora. Para implementación, esta matriz no es abstracta: es el insumo que estima el receptor o la estación base para decidir rank, precoder y detector.
   </figcaption>
 </figure>
 
@@ -153,7 +160,7 @@ La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direccion
 <figure markdown="span">
   ![SVD descompone H en canales paralelos](figures/mimo-svd-channels.png)
   <!-- generada por celda 5 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 3.** La SVD interpreta el canal MIMO como modos espaciales paralelos. En una lección implementativa, esto se usa como diagnóstico de rank y calidad de capas: no basta contar antenas; hay que mirar cuántos modos espaciales son fuertes.
+  <figcaption markdown="1">**Figura 4.** La SVD interpreta el canal MIMO como modos espaciales paralelos. En una lección implementativa, esto se usa como diagnóstico de rank y calidad de capas: no basta contar antenas; hay que mirar cuántos modos espaciales son fuertes.
   </figcaption>
 </figure>
 
@@ -223,7 +230,7 @@ La lectura práctica no es memorizar el límite, sino entender la pendiente: gas
 <figure markdown="span">
   ![Curva DMT para sistemas 2×2, 4×4](figures/mimo-dmt.png)
   <!-- generada por celda 8 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 4.** Curva DMT para sistemas $2\times2$ y $4\times4$. En operación real se traduce como rank adaptation: el sistema sube capas cuando el canal y el SNR lo permiten, y baja capas cuando necesita robustez.
+  <figcaption markdown="1">**Figura 5.** Curva DMT para sistemas $2\times2$ y $4\times4$. En operación real se traduce como rank adaptation: el sistema sube capas cuando el canal y el SNR lo permiten, y baja capas cuando necesita robustez.
   </figcaption>
 </figure>
 
@@ -259,7 +266,7 @@ $$\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$$
 <figure markdown="span">
   ![BER de detectores ZF, MMSE y ML en canal 2×2](figures/mimo-detectors.png)
   <!-- generada por celda "Figura 4b" de lab.ipynb -->
-  <figcaption markdown="1">**Figura 5.** BER de detectores ZF, MMSE y ML en un canal $2\times2$ con QPSK. La curva ilustra una decisión implementativa: ZF es barato pero paga ruido; MMSE suele ser el detector lineal práctico; ML sirve como referencia óptima pero no escala bien.
+  <figcaption markdown="1">**Figura 6.** BER de detectores ZF, MMSE y ML en un canal $2\times2$ con QPSK. La curva ilustra una decisión implementativa: ZF es barato pero paga ruido; MMSE suele ser el detector lineal práctico; ML sirve como referencia óptima pero no escala bien.
   </figcaption>
 </figure>
 
@@ -284,7 +291,7 @@ La matriz $\mathbf{W}$ decide cuánta energía va al usuario deseado y cuánta i
 <figure markdown="span">
   ![BER de MRT vs ZF para K=4 usuarios](figures/mimo-mrt-zf.png)
   <!-- generada por celda 10 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 6.** BER de MRT y ZF para $M=8$, $K=4$. A baja SNR, torcer haces con ZF no siempre compensa. A mayor SNR, MRT satura por interferencia y ZF cae sin piso. Esta es una decisión de diseño, no una preferencia estética.
+  <figcaption markdown="1">**Figura 7.** BER de MRT y ZF para $M=8$, $K=4$. A baja SNR, torcer haces con ZF no siempre compensa. A mayor SNR, MRT satura por interferencia y ZF cae sin piso. Esta es una decisión de diseño, no una preferencia estética.
   </figcaption>
 </figure>
 
@@ -305,9 +312,16 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 5. verificar BLER objetivo después de la adaptación.
 
 <figure markdown="span">
+  ![Flujo de decisión para elegir rank, capas y precoder](figures/mimo-rank-precoder-flow.png)
+  <!-- generada por generate_design_figures.py -->
+  <figcaption markdown="1">**Figura 8.** Flujo de decisión para rank adaptation y selección de precoder. La ruta baja el rank si el enlace no cierra o si el segundo modo espacial es débil, y solo usa ZF/RZF cuando la interferencia domina y los canales son separables.
+  </figcaption>
+</figure>
+
+<figure markdown="span">
   ![Capacidad MIMO vs SNR para diferentes configuraciones](figures/mimo-capacity.png)
   <!-- generada por celda 6 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 7.** Capacidad ergódica para $1\times1$, $2\times2$, $4\times4$ y $8\times8$. La lectura práctica: más antenas solo se convierten en throughput si el canal ofrece modos espaciales utilizables y el sistema puede estimarlos y explotarlos.
+  <figcaption markdown="1">**Figura 9.** Capacidad ergódica para $1\times1$, $2\times2$, $4\times4$ y $8\times8$. La lectura práctica: más antenas solo se convierten en throughput si el canal ofrece modos espaciales utilizables y el sistema puede estimarlos y explotarlos.
   </figcaption>
 </figure>
 
@@ -338,7 +352,7 @@ La interferencia de MRT disminuye sin invertir matrices. Por eso MRT se vuelve c
 <figure markdown="span">
   ![Channel hardening y favorable propagation vs M](figures/mimo-massive.png)
   <!-- generada por celdas 12–13 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 8.** Channel hardening y favorable propagation al aumentar $M$. Para el ingeniero, estas curvas dicen cuándo el exceso de antenas empieza a simplificar el precoding y estabilizar el enlace.
+  <figcaption markdown="1">**Figura 10.** Channel hardening y favorable propagation al aumentar $M$. Para el ingeniero, estas curvas dicen cuándo el exceso de antenas empieza a simplificar el precoding y estabilizar el enlace.
   </figcaption>
 </figure>
 
@@ -350,12 +364,19 @@ Todo lo anterior supone que la BS conoce el canal. Con $M$ grande, ese supuesto 
 - En **TDD**, los usuarios envían pilotos en subida; por reciprocidad, la BS estima el canal y lo reutiliza para precodificar en bajada. El coste escala con $K$, no con $M$.
 - En una red multicelda, los pilotos se reutilizan. Si un usuario vecino usa el mismo piloto, contamina la estimación. Esa interferencia no desaparece simplemente añadiendo más antenas.
 
+<figure markdown="span">
+  ![Sobrecarga de CSI en FDD y TDD para Massive MIMO](figures/mimo-csi-overhead.png)
+  <!-- generada por generate_design_figures.py -->
+  <figcaption markdown="1">**Figura 11.** Sobrecarga de CSI para $K=8$ usuarios al crecer $M$. En FDD el coste de estimación y realimentación de canal de bajada crece con las antenas de la BS; en TDD el coste de pilotos queda ligado al número de usuarios.
+  </figcaption>
+</figure>
+
 Por eso Massive MIMO práctico está profundamente ligado a TDD, calibración de reciprocidad, diseño de pilotos y scheduler.
 
 <figure markdown="span">
   ![Sum-rate MRT vs ZF vs óptimo para Massive MIMO](figures/mimo-sumrate.png)
   <!-- generada por celda 14 de lab.ipynb -->
-  <figcaption markdown="1">**Figura 9.** Sum-rate frente a número de antenas BS para $K=4$. La curva muestra una decisión de arquitectura: con pocas antenas ZF/RZF controla interferencia; con muchas antenas, MRT se aproxima al óptimo porque los canales se separan solos.
+  <figcaption markdown="1">**Figura 12.** Sum-rate frente a número de antenas BS para $K=4$. La curva muestra una decisión de arquitectura: con pocas antenas ZF/RZF controla interferencia; con muchas antenas, MRT se aproxima al óptimo porque los canales se separan solos.
   </figcaption>
 </figure>
 
