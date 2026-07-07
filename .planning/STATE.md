@@ -22,8 +22,8 @@ See: .planning/PROJECT.md (updated 2026-07-07)
 
 Phase: N/A of N/A (quick-task study workflow, no active milestone roadmap)
 Plan: N/A of N/A
-Status: Paused, ready for Session 06 content rewrite
-Last activity: 2026-07-07 — Completed quick analysis 260707-3ok: refocus Session 06 MIMO from theory-first SVD/capacity toward implementation and real-network design decisions.
+Status: Paused, Session 06 implementation-first rewrite complete
+Last activity: 2026-07-07 — Completed quick task 260707-3v6: rewrote Session 06 MIMO around implementation and real-network design decisions.
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -57,6 +57,7 @@ Recent decisions affecting current work:
 - Session 06: Keep the active focus on MIMO teaching readiness; admin and future-session work are deferred until explicitly requested.
 - Lab 06: `precoder_zf` and Marchenko-Pastur exercises were converted from student TODOs to instructor reference solutions.
 - Session 06: New requested direction is implementation-first. The next rewrite should start from deployment decisions such as coverage, throughput, interference, density, CSI overhead, rank selection, and precoder choice.
+- Session 06: Implementation-first rewrite completed in commit `6d1e0d3`; next optional content step is aligning `lab.ipynb` with a scenario-driven rank/precoder selector.
 
 ### Pending Todos
 
@@ -78,6 +79,7 @@ Recent decisions affecting current work:
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260707-3ok | Analizar reenfoque implementativo de docs/sessions/06-mimo-systems/index.md | 2026-07-07 | n/a-analysis-only | [260707-3ok-analizar-reenfoque-implementativo-de-doc](./quick/260707-3ok-analizar-reenfoque-implementativo-de-doc/) |
+| 260707-3v6 | Reescribir Sesion 06 MIMO con enfoque implementativo y decisiones de red | 2026-07-07 | 6d1e0d3 | [260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im](./quick/260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im/) |
 
 ## Deferred Items
 
@@ -90,5 +92,5 @@ Recent decisions affecting current work:
 ## Session Continuity
 
 Last session: 2026-07-07
-Stopped at: Quick analysis completed; next action is to rewrite `docs/sessions/06-mimo-systems/index.md` around implementation and design decisions if the user confirms.
+Stopped at: Session 06 MIMO implementation-first rewrite completed and verified; optional next action is updating `lab.ipynb` to match the new scenario-driven framing.
 Resume file: `.planning/HANDOFF.json`, `.continue-here.md`, `.planning/.continue-here.md`
