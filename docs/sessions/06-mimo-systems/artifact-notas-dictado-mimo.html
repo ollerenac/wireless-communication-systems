@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notas de dictado - Sesion 06 MIMO</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #55616f;
+      --line: #d9e1e8;
+      --paper: #ffffff;
+      --band: #f5f7fa;
+      --blue: #1f77b4;
+      --green: #2ca02c;
+      --orange: #d97706;
+      --red: #c2410c;
+      --teal: #0f766e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+    }
+
+    header {
+      padding: 34px clamp(20px, 5vw, 64px) 28px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px clamp(18px, 4vw, 42px) 56px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4.6vw, 54px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 42px 0 12px;
+      padding-top: 8px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 21px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul, ol {
+      margin: 0 0 18px;
+      padding-left: 24px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    strong {
+      font-weight: 720;
+    }
+
+    code {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 0.94em;
+      background: #eef2f6;
+      padding: 0.12rem 0.32rem;
+      border-radius: 4px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-weight: 780;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .subtitle {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta span {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 24px 0 10px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc a {
+      display: block;
+      min-height: 100%;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--blue);
+      border-radius: 7px;
+      padding: 10px 12px;
+      color: var(--ink);
+      text-decoration: none;
+      background: #fff;
+    }
+
+    .toc small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .band {
+      margin: 28px calc(clamp(18px, 4vw, 42px) * -1);
+      padding: 26px clamp(18px, 4vw, 42px);
+      background: var(--band);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--green);
+      border-radius: 7px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .note.orange {
+      border-left-color: var(--orange);
+    }
+
+    .note.red {
+      border-left-color: var(--red);
+    }
+
+    .note.teal {
+      border-left-color: var(--teal);
+    }
+
+    .label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 780;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+
+    .script {
+      border-left: 4px solid var(--blue);
+      padding: 12px 0 12px 18px;
+      margin: 14px 0 20px;
+      color: #24313f;
+      background: #f8fbfe;
+    }
+
+    .class-block {
+      padding: 26px 0 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .class-block:first-of-type {
+      border-top: 0;
+    }
+
+    .block-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 680;
+      font-size: 14px;
+    }
+
+    figure {
+      margin: 22px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    figcaption {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      background: #fbfcfd;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 0;
+      background: #fff;
+      margin: 12px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 720;
+    }
+
+    details > div {
+      padding: 0 14px 14px;
+      color: #2d3742;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 0;
+    }
+
+    .checklist li:last-child {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 760px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding-top: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Guia docente interna</p>
+    <h1>Sesion 06 - MIMO en redes reales</h1>
+    <p class="subtitle">Notas narrativas para dictar la clase con enfoque implementativo: como llevar al estudiante desde un problema de red hasta la eleccion de arreglo, rank, detector, precoder y arquitectura CSI.</p>
+    <div class="meta">
+      <span>Base: <code>index.md</code></span>
+      <span>Laboratorio: <code>lab.ipynb</code></span>
+      <span>Figuras nuevas: mapa, flujo rank/precoder, CSI</span>
+      <span>Uso: preparacion y dictado</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="tesis">
+      <h2>Tesis de la clase</h2>
+      <p>La frase que debe sostener toda la sesion es: <strong>MIMO no se diseña contando antenas; se diseña leyendo el canal y el problema de red</strong>. Cada bloque debe volver a esa idea. Si una parte se vuelve demasiado algebraica, regresar a la pregunta operativa: "¿que decision de red sale de esta formula?".</p>
+      <div class="script">
+        <strong>Apertura sugerida.</strong> "Hasta ahora hemos peleado contra el canal ajustando potencia, modulacion, codificacion y OFDM. MIMO cambia la forma de pensar: ahora tenemos varios caminos espaciales. La pregunta no es solo cuanta capacidad promete una matriz, sino que problema real de red queremos resolver con esas antenas."
+      </div>
+      <div class="grid">
+        <div class="note">
+          <span class="label">Objetivo emocional</span>
+          <p>Que el estudiante deje de ver MIMO como una formula de capacidad y lo vea como una caja de decisiones: cobertura, rank, interferencia, CSI y arquitectura.</p>
+        </div>
+        <div class="note orange">
+          <span class="label">Cuidado</span>
+          <p>No empezar con SVD. La SVD llega despues, como herramienta para diagnosticar si el canal permite varias capas.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">Ancla recurrente</span>
+          <p>"Primero cierro el enlace; despues subo el rank." Repetirla al hablar de borde de celda, DMT, rank adaptation y FR2.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ruta" class="band">
+      <h2>Ruta sugerida de dictado</h2>
+      <ol>
+        <li><strong>10 min:</strong> abrir con sintomas de red y el mapa problema -> estrategia.</li>
+        <li><strong>12 min:</strong> elegir arreglos: SIMO, MISO, SU-MIMO, MU-MIMO, Massive MIMO e hibrido FR2.</li>
+        <li><strong>18 min:</strong> presentar <code>\mathbf{H}</code> como diagnostico operativo, no como notacion.</li>
+        <li><strong>12 min:</strong> contrastar diversidad, beamforming y multiplexacion usando DMT y Alamouti.</li>
+        <li><strong>18 min:</strong> explicar deteccion y precodificacion: ZF, MMSE, ML, MRT, ZF/RZF.</li>
+        <li><strong>12 min:</strong> rank adaptation y capacidad util, con el flujo de decision.</li>
+        <li><strong>15 min:</strong> Massive MIMO como problema de pilotos, TDD, scheduler, hardening y FR2.</li>
+        <li><strong>8 min:</strong> cerrar con ejercicios como mini-casos de diseño.</li>
+      </ol>
+    </section>
+
+    <nav aria-label="Indice del artifact">
+      <h2>Bloques de explicacion</h2>
+      <ul class="toc">
+        <li><a href="#bloque-1">1. Problema de red <small>La clase empieza por sintomas, no por algebra.</small></a></li>
+        <li><a href="#bloque-2">2. Arreglos de antenas <small>Que puede resolver cada configuracion.</small></a></li>
+        <li><a href="#bloque-3">3. Canal <code>H</code> <small>Rank, valores singulares, condicionamiento y CSI.</small></a></li>
+        <li><a href="#bloque-4">4. Tres usos del espacio <small>Diversidad, beamforming y multiplexacion.</small></a></li>
+        <li><a href="#bloque-5">5. Separar la mezcla <small>Detectores y precoders implementables.</small></a></li>
+        <li><a href="#bloque-6">6. Rank adaptation <small>Cuando subir o bajar capas.</small></a></li>
+        <li><a href="#bloque-7">7. Massive MIMO <small>TDD, pilotos, hardening y FR2.</small></a></li>
+      </ul>
+    </nav>
+
+    <section id="bloque-1" class="class-block">
+      <div class="block-head">
+        <h2>1. Primero el problema de red</h2>
+        <span class="time">Tiempo sugerido: 10 min</span>
+      </div>
+      <p>Este bloque debe romper una intuicion peligrosa: "mas antenas = mas velocidad". Presentar MIMO como un presupuesto espacial. Ese presupuesto puede gastarse en robustez, direccion, capas o usuarios. La eleccion depende del sintoma.</p>
+      <figure>
+        <img src="figures/mimo-design-map.png" alt="Mapa de decision MIMO">
+        <figcaption>Usar esta figura como primera pizarra: de izquierda a derecha se pasa de sintoma a estrategia y luego a costo operativo.</figcaption>
+      </figure>
+      <div class="script">
+        "Miren la primera fila. Si estoy en borde de celda y el UE reporta SNR baja y BLER alto, no tiene sentido emocionarse con rank 4. Antes de multiplexar necesito que el enlace exista. En cambio, si estoy en un hotspot con muchos usuarios, el problema no es solo energia: es interferencia y separabilidad espacial."
+      </div>
+      <details>
+        <summary>Pregunta para la clase</summary>
+        <div>
+          <p>"Si dos usuarios estan cerca angularmente y sus canales se parecen, ¿MU-MIMO ayuda o complica?" Buscar que respondan que complica: ZF tendra que forzar ortogonalidad y puede perder potencia o amplificar ruido.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Error comun que conviene corregir</summary>
+        <div>
+          <p>No decir "MIMO aumenta capacidad" como verdad aislada. Mejor: "MIMO puede aumentar capacidad si el canal tiene modos espaciales utilizables y el sistema puede estimarlos".</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-2" class="class-block">
+      <div class="block-head">
+        <h2>2. Que arreglo de antenas usar</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>La explicacion debe responder tres preguntas: donde estan las antenas, quien conoce el canal y que se quiere optimizar. SIMO y MISO son excelentes para introducir la diferencia entre diversidad de recepcion y beamforming de transmision. SU-MIMO y MU-MIMO ya exigen hablar de rank y separabilidad.</p>
+      <figure>
+        <img src="figures/mimo-configurations.png" alt="Configuraciones SISO SIMO MISO MIMO">
+        <figcaption>Recorrer la figura desde SISO hasta MIMO, pero deteniendose en el caso de uso de cada configuracion.</figcaption>
+      </figure>
+      <div class="grid">
+        <div class="note">
+          <span class="label">SIMO</span>
+          <p>Explicar como "varios oidos escuchando la misma transmision". Sirve para combinar y reducir desvanecimientos, no para crear varias capas si el transmisor tiene una sola antena.</p>
+        </div>
+        <div class="note">
+          <span class="label">MISO</span>
+          <p>Explicar como "varias bocas coordinadas para que la onda llegue alineada". Es natural para cobertura downlink y UEs simples.</p>
+        </div>
+        <div class="note">
+          <span class="label">SU-MIMO vs MU-MIMO</span>
+          <p>SU-MIMO exprime un UE multiantena; MU-MIMO reparte dimensiones espaciales entre usuarios. El segundo depende mucho mas del scheduler.</p>
+        </div>
+      </div>
+      <div class="script">
+        "No confundan antenas fisicas con grados de libertad. Un telefono puede tener dos antenas, pero si estan correlacionadas el segundo modo espacial sera debil. La red no deberia subir rank solo porque el equipo tiene dos puertos."
+      </div>
+    </section>
+
+    <section id="bloque-3" class="class-block">
+      <div class="block-head">
+        <h2>3. La matriz <code>H</code> como diagnostico operativo</h2>
+        <span class="time">Tiempo sugerido: 18 min</span>
+      </div>
+      <p>La matriz <code>\mathbf{H}</code> debe aparecer como instrumento de medicion. En sistemas reales, el receptor o la estacion base estiman el canal con pilotos y esa estimacion alimenta rank, beamforming, precoding, deteccion y scheduling.</p>
+      <div class="two-col">
+        <div>
+          <figure>
+            <img src="figures/mimo-channel-matrix.png" alt="Matriz de canal MIMO">
+            <figcaption>Cada celda responde cuanto llega desde una antena transmisora a una antena receptora, con magnitud y fase.</figcaption>
+          </figure>
+        </div>
+        <div>
+          <h3>Como narrarlo</h3>
+          <p>Primero escribir <code>y = Hx + n</code> y traducirlo verbalmente: "lo que recibo es una mezcla espacial de lo que transmiti, mas ruido". Luego conectar cada fila con una antena RX y cada columna con una antena TX.</p>
+          <p>Despues introducir la tabla de indicadores: rank, valores singulares, condicionamiento, producto interno entre usuarios, norma del canal y tiempo de coherencia.</p>
+        </div>
+      </div>
+      <figure>
+        <img src="figures/mimo-svd-channels.png" alt="SVD del canal MIMO">
+        <figcaption>La SVD se presenta como forma de ver cuantos canales paralelos realmente existen.</figcaption>
+      </figure>
+      <div class="script">
+        "La SVD no es la protagonista por ser elegante; es util porque me dice si hay una segunda o tercera capa que valga la pena. Si <code>sigma_2</code> es pequeña, la segunda capa existe en algebra pero sera cara en BER."
+      </div>
+      <details>
+        <summary>Pizarra recomendada</summary>
+        <div>
+          <p>Usar el canal 2x2 del material: <code>[[1, 0.5], [0.5, 1]]</code>. Mostrar que tiene dos modos, pero uno fuerte y otro debil. Rematar con: "rank algebraico no siempre significa rank util".</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-4" class="class-block">
+      <div class="block-head">
+        <h2>4. Diversidad, beamforming y multiplexacion</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>Este bloque debe sentirse como una decision de presupuesto: si gasto dimensiones en robustez, no las gasto todas en throughput; si gasto dimensiones en capas, pierdo margen de diversidad.</p>
+      <figure>
+        <img src="figures/mimo-dmt.png" alt="Curva DMT MIMO">
+        <figcaption>No vender DMT como formula para memorizar. Usarlo como dibujo de tradeoff: mas multiplexacion reduce diversidad.</figcaption>
+      </figure>
+      <div class="script">
+        "El DMT formaliza una tension de ingenieria. Cuando estoy desesperado por robustez, bajo rank y uso diversidad o beamforming. Cuando el canal ya es fuerte y tiene modos independientes, subo capas."
+      </div>
+      <div class="note orange">
+        <span class="label">Alamouti</span>
+        <p>Explicarlo como ejemplo de diversidad elegante: dos antenas transmiten una estructura que permite al receptor cancelar terminos cruzados. La moraleja no es el codigo en si; es que a veces conviene usar antenas para confiabilidad, no para velocidad.</p>
+      </div>
+    </section>
+
+    <section id="bloque-5" class="class-block">
+      <div class="block-head">
+        <h2>5. Separar la mezcla: detector o precoder</h2>
+        <span class="time">Tiempo sugerido: 18 min</span>
+      </div>
+      <p>Plantear la pregunta: si las capas o usuarios llegan mezclados, ¿quien hace el trabajo de separacion? Si el transmisor no conoce el canal, separa el receptor. Si la base conoce el canal, puede precodificar antes de transmitir.</p>
+      <figure>
+        <img src="figures/mimo-detectors.png" alt="BER de detectores MIMO">
+        <figcaption>Usar esta figura para comparar costo y robustez: ZF es barato, MMSE regulariza, ML es referencia optima pero no escala.</figcaption>
+      </figure>
+      <div class="script">
+        "ZF dice: voy a invertir el canal y eliminar interferencia. Eso suena perfecto, hasta que el canal esta mal condicionado. Entonces al invertir tambien agrando el ruido. MMSE acepta un poco de interferencia para no destruir el SNR."
+      </div>
+      <figure>
+        <img src="figures/mimo-mrt-zf.png" alt="MRT vs ZF">
+        <figcaption>Para downlink MU-MIMO, cambiar el lenguaje: ya no separa cada UE, la estacion base intenta no contaminar a los demas.</figcaption>
+      </figure>
+      <div class="grid">
+        <div class="note">
+          <span class="label">MRT</span>
+          <p>Bueno cuando domina ruido o cuando <code>M/K</code> es grande. Se alinea con el usuario deseado, pero no cancela completamente interferencia.</p>
+        </div>
+        <div class="note red">
+          <span class="label">ZF</span>
+          <p>Bueno cuando domina interferencia y los canales son separables. Malo si los usuarios tienen canales casi paralelos.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">RZF/MMSE</span>
+          <p>Presentarlo como el compromiso practico: cancelar interferencia sin pagar una inversion agresiva cuando el canal o el SNR no lo justifican.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="bloque-6" class="class-block">
+      <div class="block-head">
+        <h2>6. Rank adaptation y capacidad util</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>Aqui conviene reconciliar teoria y operacion. La capacidad explica por que varias capas pueden aumentar throughput, pero el sistema real no sube rank por entusiasmo: mira SNR, BLER, valores singulares, RI, CQI, PMI e interferencia.</p>
+      <figure>
+        <img src="figures/mimo-rank-precoder-flow.png" alt="Flujo de decision rank y precoder">
+        <figcaption>Este flujo es la pieza central para estudiantes implementativos: cada decision sale de una medicion.</figcaption>
+      </figure>
+      <figure>
+        <img src="figures/mimo-capacity.png" alt="Capacidad MIMO">
+        <figcaption>La curva de capacidad debe cerrar el argumento, no abrirlo: las antenas se convierten en tasa si el canal permite modos utiles.</figcaption>
+      </figure>
+      <div class="script">
+        "La capacidad promete una pendiente mejor con mas antenas. La implementacion pregunta: ¿puedo estimar el canal?, ¿el segundo modo es fuerte?, ¿el BLER quedo bajo control?, ¿el UE reporta un RI que justifica mas capas?"
+      </div>
+      <details>
+        <summary>Pregunta rapida</summary>
+        <div>
+          <p>"Si el sistema reporta alto SNR pero <code>sigma_2</code> es muy pequeño, ¿subimos a dos capas?" La respuesta esperada es: no necesariamente; alto SNR no corrige por completo un modo espacial debil o mala condicion.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-7" class="class-block">
+      <div class="block-head">
+        <h2>7. Massive MIMO como problema de red</h2>
+        <span class="time">Tiempo sugerido: 15 min</span>
+      </div>
+      <p>Massive MIMO debe explicarse como un regimen: <code>M >> K</code>. No es solo agregar antenas. Con muchas antenas, el canal se estabiliza y los usuarios tienden a separarse, pero aparece el costo de estimar CSI y mantener reciprocidad.</p>
+      <figure>
+        <img src="figures/mimo-massive.png" alt="Channel hardening y favorable propagation">
+        <figcaption>Hardening: el canal efectivo fluctua menos. Favorable propagation: usuarios distintos se vuelven mas ortogonales al crecer M.</figcaption>
+      </figure>
+      <figure>
+        <img src="figures/mimo-csi-overhead.png" alt="Sobrecarga CSI FDD TDD">
+        <figcaption>Usar esta figura para explicar por que Massive MIMO practico suele preferir TDD.</figcaption>
+      </figure>
+      <div class="script">
+        "Si tengo 128 antenas, FDD me obliga a conocer y reportar un canal enorme de bajada. En TDD, los usuarios mandan pilotos en subida y la base reutiliza esa estimacion por reciprocidad. El overhead queda ligado a usuarios, no a antenas."
+      </div>
+      <figure>
+        <img src="figures/mimo-sumrate.png" alt="Sum rate Massive MIMO">
+        <figcaption>La comparacion MRT/ZF ayuda a mostrar que con M grande algunos precoders simples empiezan a ser competitivos.</figcaption>
+      </figure>
+      <div class="note orange">
+        <span class="label">Cierre FR2</span>
+        <p>En mmWave, no basta decir "muchas antenas". El problema es link budget, bloqueo, busqueda de haces y costo de cadenas RF. Por eso aparece beamforming hibrido.</p>
+      </div>
+    </section>
+
+    <section id="laboratorio" class="band">
+      <h2>Puente hacia el laboratorio</h2>
+      <p>Presentar el notebook como una secuencia de decisiones, no como una coleccion de graficos. Cada bloque del laboratorio responde una pregunta de diseño:</p>
+      <ul class="checklist">
+        <li><strong>SVD y valores singulares:</strong> ¿cuantas capas son razonables?</li>
+        <li><strong>Capacidad:</strong> ¿cuando las antenas se vuelven throughput?</li>
+        <li><strong>ZF/MMSE/ML:</strong> ¿cuando vale pagar regularizacion o complejidad?</li>
+        <li><strong>MRT/ZF:</strong> ¿domina ruido o interferencia?</li>
+        <li><strong>Massive MIMO:</strong> ¿a partir de que <code>M/K</code> se estabiliza el sistema?</li>
+      </ul>
+    </section>
+
+    <section id="cierre">
+      <h2>Cierre de clase</h2>
+      <div class="script">
+        "Si se llevan una sola idea: MIMO es una herramienta de diseño espacial. A veces la uso para que el enlace cierre, a veces para subir capas, a veces para separar usuarios, y a veces para compensar path loss con haces. La matematica nos dice que opciones existen; el canal y la red nos dicen cual conviene."
+      </div>
+      <div class="grid">
+        <div class="note">
+          <span class="label">Tres preguntas finales</span>
+          <p>¿Cierra el enlace? ¿El canal tiene rank util? ¿La interferencia o el CSI hacen viable servir mas capas o usuarios?</p>
+        </div>
+        <div class="note red">
+          <span class="label">Mala decision tipica</span>
+          <p>Subir rank porque hay antenas disponibles, sin mirar BLER, SNR, valores singulares o correlacion espacial.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">Buena decision tipica</span>
+          <p>Usar rank bajo y beamforming para robustez; subir capas solo cuando el canal y el enlace ya lo permiten.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
