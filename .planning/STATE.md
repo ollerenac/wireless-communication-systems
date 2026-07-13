@@ -95,6 +95,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-07-07
-Stopped at: Session 06 MIMO implementation-first rewrite, supporting figures and instructor narrative artifact completed and verified; optional next action is updating `lab.ipynb` to match the new scenario-driven framing.
-Resume file: `.planning/HANDOFF.json`, `.continue-here.md`, `.planning/.continue-here.md`
+Last session: 2026-07-13
+Stopped at: Knowledge graph for Session 06 generated via /understand (local-only, gitignored); Jul 7 commits pushed to origin (were local-only for 6 days); paused back into study mode awaiting user questions on §4–§6.
+Resume file: `.planning/HANDOFF.json`, `.continue-here.md` (root; the `.planning/.continue-here.md` copy is stale from Jun 13)

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-07-04T00:00:00Z",
+  "timestamp": "2026-07-13T09:25:00Z",
   "phase": null,
   "phase_name": "wireless-communication-systems course materials",
   "phase_dir": ".planning",
@@ -106,15 +106,16 @@
       "status": "done",
       "commit": "be793b5",
       "notes": "3x3 box trimmed ~40% to WF-only; section map added to §3 intro. DECISION: did NOT replace §3.1 (anchors 5 cross-refs + physical interpretation); explicit division of labor instead. Open offer: rewrite refs if user insists."
+    },
+    {
+      "id": 16,
+      "name": "/understand pipeline on session 06 — knowledge graph built (2026-07-13)",
+      "status": "done",
+      "commit": "6344346",
+      "notes": "PROJECT_ROOT = docs/sessions/06-mimo-systems/, language es. Graph: 16 nodes (1 document, 3 file, 12 function), 21 edges, 3 layers (Leccion / Laboratorio y figuras / Material del instructor), tour 4 pasos. Output docs/sessions/06-mimo-systems/.understand-anything/knowledge-graph.json (LOCAL ONLY, gitignored via 6344346). Excluded via .understandignore: figures/svd-based-mimo/ + *.png. Deviations: Phase 3/4/5 subagents skipped (single batch, 0 merge corrections; layers+tour authored inline). Fingerprints baseline written -> incremental updates work. Dashboard NOT launched; /understand-dashboard when wanted. NOTE: Jul 7 commits were unpushed until this session; origin/main now at 6344346."
     }
   ],
   "remaining_tasks": [
-    {
-      "id": 16,
-      "name": "/understand pipeline on session 06 (aborted Phase 0, optional)",
-      "status": "not_started",
-      "notes": "Setup done (see task 14). If resumed: PROJECT_ROOT = docs/sessions/06-mimo-systems/ (NOT repo root — avoids scanning PII in exams/), output language es, add .understand-anything/ to .gitignore."
-    },
     {
       "id": 9,
       "name": "Distribute Parcial 01 grades to students via email",
@@ -176,6 +177,6 @@
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Resume study loop: user reads lesson/Artifact and requests clarity improvements (§4–§6 not yet deep-reviewed in this mode). Admin pendings (Parcial 01 emails, Session 07, guion-clase.md) EXCLUDED by explicit user order — do not offer until asked.",
-  "context_notes": "STUDY MODE ACTIVE: sole focus = user mastering MIMO to lecture fluently. Artifact URL https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87 (source HTML in ephemeral session scratchpad — new session must WebFetch the URL and redeploy with url: param). Caveman full + ponytail full. Math: \\mathbf never \\boldsymbol. Notebook cells via extracted script. PII stays in gitignored exams/**."
+  "next_action": "Resume study loop: user reads lesson/Artifact and requests clarity improvements (§4–§6 not yet deep-reviewed in this mode). Knowledge graph now available for lesson queries (docs/sessions/06-mimo-systems/.understand-anything/knowledge-graph.json; dashboard via /understand-dashboard). Admin pendings (Parcial 01 emails, Session 07, guion-clase.md) EXCLUDED by explicit user order — do not offer until asked.",
+  "context_notes": "STUDY MODE ACTIVE: sole focus = user mastering MIMO to lecture fluently. Lesson now implementation-first (rewrite 6d1e0d3, figures df85cbf, instructor narrative artifact-notas-dictado-mimo.html committed 92e6ee1). Old guión Artifact URL https://claude.ai/code/artifact/05541ca0-6518-40aa-8f2c-a9f5a4de6a87 (source HTML ephemeral — WebFetch URL and redeploy with url: param). Caveman full + ponytail full. Math: \\mathbf never \\boldsymbol. Notebook cells via extracted script. PII stays in gitignored exams/**. Push discipline: verify origin/main after commits — Jul 7 work sat unpushed for 6 days."
 }
