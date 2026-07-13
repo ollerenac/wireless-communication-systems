@@ -42,3 +42,6 @@ docs/sessions/06-mimo-systems/figures/svd-based-mimo/
 
 # Entregas de alumnos y notas — PII, nunca al repo
 exams/**/examen-parcial-soluciones/
+
+# understand-anything knowledge graph (local)
+.understand-anything/
