@@ -84,7 +84,7 @@ Recent decisions affecting current work:
 | 260707-3v6 | Reescribir Sesion 06 MIMO con enfoque implementativo y decisiones de red | 2026-07-07 | 6d1e0d3 | [260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im](./quick/260707-3v6-reescribir-sesion-06-mimo-con-enfoque-im/) |
 | 260707-4b5 | Agregar figuras implementativas a Sesion 06 MIMO | 2026-07-07 | df85cbf | [260707-4b5-agregar-figuras-implementativas-a-sesion](./quick/260707-4b5-agregar-figuras-implementativas-a-sesion/) |
 | 260707-53z | Crear artifact narrativo para dictar Tema 06 MIMO usando contexto understand-anything | 2026-07-07 | 92e6ee1 | [260707-53z-crear-artifact-narrativo-para-dictar-tem](./quick/260707-53z-crear-artifact-narrativo-para-dictar-tem/) |
-| 260714-8kp | Verificar suficiencia de notas de dictado y agregar 7 guias de pizarra | 2026-07-14 | pending | [260714-8kp-pizarras-notas-dictado](./quick/260714-8kp-pizarras-notas-dictado/) |
+| 260714-8kp | Verificar suficiencia de notas de dictado y agregar 7 guias de pizarra | 2026-07-14 | 21e4678 | [260714-8kp-pizarras-notas-dictado](./quick/260714-8kp-pizarras-notas-dictado/) |
 
 ## Deferred Items
 
