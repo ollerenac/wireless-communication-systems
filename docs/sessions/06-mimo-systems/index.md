@@ -78,7 +78,7 @@ La dificultad real es que esas tres metas compiten por los mismos grados de libe
 
     **R1.** Reforzaría beamforming/diversidad. Subir rank aumenta la carga espacial antes de cerrar el enlace.
 
-    **R2.** No es ideal. Si los canales son paralelos, separarlos espacialmente exige ZF agresivo y amplificación de ruido; el scheduler probablemente debería separarlos.
+    **R2.** No es ideal. Si los canales son casi paralelos, los dos usuarios "se ven iguales" desde la estación base: cualquier señal dirigida a uno llega casi idéntica al otro, y no hay geometría espacial que explotar. Separarlos espacialmente es posible pero caro (en §5 se verá cuánto cuesta); lo razonable es que el scheduler los sirva en tiempos o frecuencias distintas.
 
 ### 2. Qué arreglo de antenas usar
 
