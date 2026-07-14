@@ -467,6 +467,13 @@
           <p>Despues introducir la tabla de indicadores: rank, valores singulares, condicionamiento, producto interno entre usuarios, norma del canal y tiempo de coherencia.</p>
           <p>Si preguntan por OFDM: hay una <code>H[k]</code> por subportadora; la Sesion 03 dejo canales planos y aqui la decision espacial se repite en cada uno.</p>
           <p>Definir CSI aqui, sin dejarlo flotando: es la estimacion de <code>H</code> que alguien obtuvo midiendo pilotos. <strong>CSIR</strong> (el receptor conoce H) es barato y casi siempre esta. <strong>CSIT</strong> (el transmisor conoce H) es caro — feedback en FDD o reciprocidad en TDD — y caduca con el tiempo de coherencia: "CSI fresco" significa mas nuevo que la coherencia del canal. Jerarquia de exigencia: Alamouti sin CSIT &lt; beamforming &lt; MU-MIMO con CSI preciso y fresco. Esa exigencia creciente es la razon de ser del bloque 7.</p>
+          <details>
+            <summary>Pizarra: la jerarquia CSIT en tres lineas</summary>
+            <div>
+              <p>Tabla de dos columnas. <strong>¿Que sabe el TX?</strong> → nada / hacia donde / hacia donde + hacia donde NO, de todos, ahora. <strong>¿Como falla si el CSI se degrada?</strong> → no falla / pierde unos dB / piso de interferencia que ningun SNR arregla.</p>
+              <p>Imagen para dictarla: apuntar un haz es alumbrar con una linterna — si tiemblas, sigues alumbrando (el maximo de un haz es plano ante el error). Poner un nulo es mantener una sombra exacta sobre los ojos de otro — si tiemblas, lo encandilas (el nulo es filoso, y la fuga escala con la potencia de la señal ajena, no con el ruido). Conecta directo con la figura MRT vs ZF del bloque 5: MRT robusto pero satura; ZF exigente pero sin piso cuando el CSI es bueno.</p>
+            </div>
+          </details>
         </div>
       </div>
       <figure>
