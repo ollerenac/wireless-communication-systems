@@ -414,6 +414,13 @@
       <div class="script">
         "No confundan antenas fisicas con grados de libertad. Un telefono puede tener dos antenas, pero si estan correlacionadas el segundo modo espacial sera debil. La red no deberia subir rank solo porque el equipo tiene dos puertos."
       </div>
+      <details>
+        <summary>Pizarra: fases alineadas vs fases al azar</summary>
+        <div>
+          <p>Dibujar un UE y dos antenas TX. Caso 1: las dos ondas llegan alineadas en fase (dos sinusoides que suman) — eso es beamforming y necesita CSI. Caso 2: fases al azar — a veces suman, a veces se cancelan. Misma geometria, distinto conocimiento del canal, distinto resultado.</p>
+          <p>Al lado, dos flechas desde la BS: ambas al mismo UE (SU-MIMO, capas) contra una a cada UE (MU-MIMO, usuarios). Recalcar en voz alta: las capas viajan <strong>al mismo tiempo y en la misma banda</strong>; se separan por firma espacial, no por subportadoras ni slots. Es la confusion mas comun del bloque.</p>
+        </div>
+      </details>
     </section>
 
     <section id="bloque-3" class="class-block">
@@ -433,6 +440,7 @@
           <h3>Como narrarlo</h3>
           <p>Primero escribir <code>y = Hx + n</code> y traducirlo verbalmente: "lo que recibo es una mezcla espacial de lo que transmiti, mas ruido". Luego conectar cada fila con una antena RX y cada columna con una antena TX.</p>
           <p>Despues introducir la tabla de indicadores: rank, valores singulares, condicionamiento, producto interno entre usuarios, norma del canal y tiempo de coherencia.</p>
+          <p>Si preguntan por OFDM: hay una <code>H[k]</code> por subportadora; la Sesion 03 dejo canales planos y aqui la decision espacial se repite en cada uno.</p>
         </div>
       </div>
       <figure>
@@ -443,9 +451,15 @@
         "La SVD no es la protagonista por ser elegante; es util porque me dice si hay una segunda o tercera capa que valga la pena. Si <code>sigma_2</code> es pequeña, la segunda capa existe en algebra pero sera cara en BER."
       </div>
       <details>
-        <summary>Pizarra recomendada</summary>
+        <summary>Pizarra recomendada (momento central de algebra)</summary>
         <div>
-          <p>Usar el canal 2x2 del material: <code>[[1, 0.5], [0.5, 1]]</code>. Mostrar que tiene dos modos, pero uno fuerte y otro debil. Rematar con: "rank algebraico no siempre significa rank util".</p>
+          <ol>
+            <li>Escribir <code>H = [[1, 0.5], [0.5, 1]]</code> y al lado <code>y = Hx + n</code>.</li>
+            <li>Probar las direcciones naturales sin calcular SVD completa: <code>v1 = (1,1)/&radic;2</code> y <code>v2 = (1,-1)/&radic;2</code>. Multiplicar en vivo: <code>H&middot;v1 = 1.5&middot;v1</code>, <code>H&middot;v2 = 0.5&middot;v2</code>. Matriz simetrica: los modos son la suma y la resta.</li>
+            <li>Anotar ganancias: <code>sigma_1^2 = 2.25</code> contra <code>sigma_2^2 = 0.25</code>. La segunda capa es nueve veces mas debil.</li>
+            <li>Chequeo de energia en la misma pizarra: <code>||H||_F^2 = 1 + 0.25 + 0.25 + 1 = 2.5 = 2.25 + 0.25</code>. La energia total se reparte entre modos.</li>
+          </ol>
+          <p>Rematar con: "rank algebraico no siempre significa rank util". Dejar el canal escrito: vuelve en el bloque 5 para mostrar cuanto ruido paga ZF.</p>
         </div>
       </details>
     </section>
@@ -467,6 +481,24 @@
         <span class="label">Alamouti</span>
         <p>Explicarlo como ejemplo de diversidad elegante: dos antenas transmiten una estructura que permite al receptor cancelar terminos cruzados. La moraleja no es el codigo en si; es que a veces conviene usar antenas para confiabilidad, no para velocidad.</p>
       </div>
+      <details>
+        <summary>Pizarra: Alamouti en cuatro lineas</summary>
+        <div>
+          <ol>
+            <li>Tabla 2 ranuras x 2 antenas: ranura 1 envia <code>s1, s2</code>; ranura 2 envia <code>-s2*, s1*</code>.</li>
+            <li>Recibido: <code>r1 = h1&middot;s1 + h2&middot;s2 + n1</code>, <code>r2 = -h1&middot;s2* + h2&middot;s1* + n2</code>.</li>
+            <li>Combinador: <code>s1_hat = h1*&middot;r1 + h2&middot;r2*</code>. Expandir en vivo y mostrar que los terminos cruzados se cancelan.</li>
+            <li>Resultado: <code>sk_hat = (|h1|^2 + |h2|^2)&middot;sk + ruido</code> — cada simbolo cobra ambos trayectos, sin CSIT.</li>
+          </ol>
+          <p>Caso numerico rapido si hay tiempo: <code>h1 = 1, h2 = j</code> da <code>s1_hat = 2&middot;s1</code>. Verificable en una linea.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Pizarra: DMT como dibujo, no como formula</summary>
+        <div>
+          <p>Ejes: diversidad <code>d</code> contra multiplexacion <code>r</code>. Para 2x2 marcar solo tres puntos: <code>(r=0, d=4)</code>, <code>(r=1, d=1)</code>, <code>(r=2, d=0)</code>, y unirlos con recta quebrada. Leerlo en voz alta: "cada capa que agrego me quita proteccion". Es la Figura 5 hecha a mano, para que quede la pendiente y no la formula.</p>
+        </div>
+      </details>
     </section>
 
     <section id="bloque-5" class="class-block">
@@ -482,6 +514,16 @@
       <div class="script">
         "ZF dice: voy a invertir el canal y eliminar interferencia. Eso suena perfecto, hasta que el canal esta mal condicionado. Entonces al invertir tambien agrando el ruido. MMSE acepta un poco de interferencia para no destruir el SNR."
       </div>
+      <details>
+        <summary>Pizarra: cuanto ruido paga ZF (numero concreto)</summary>
+        <div>
+          <ol>
+            <li>Recuperar el canal 2x2 del bloque 3. Escribir <code>H^H&middot;H = [[1.25, 1], [1, 1.25]]</code>.</li>
+            <li>Invertir en vivo: determinante <code>0.5625</code>, diagonal de la inversa <code>1.25/0.5625 &asymp; 2.22</code>.</li>
+            <li>Conclusion en una frase: ZF elimina la interferencia pero multiplica el ruido de cada flujo por 2.22. MMSE existe para no pagar eso completo.</li>
+          </ol>
+        </div>
+      </details>
       <figure>
         <img src="figures/mimo-mrt-zf.png" alt="MRT vs ZF">
         <figcaption>Para downlink MU-MIMO, cambiar el lenguaje: ya no separa cada UE, la estacion base intenta no contaminar a los demas.</figcaption>
@@ -500,6 +542,12 @@
           <p>Presentarlo como el compromiso practico: cancelar interferencia sin pagar una inversion agresiva cuando el canal o el SNR no lo justifican.</p>
         </div>
       </div>
+      <details>
+        <summary>Pizarra: la ecuacion del downlink con el enemigo subrayado</summary>
+        <div>
+          <p>Escribir <code>y_k = h_k^H&middot;w_k&middot;s_k + &Sigma;_{j&ne;k} h_k^H&middot;w_j&middot;s_j + n_k</code> y subrayar el termino de la suma. Todo el bloque se resume ahi: MRT maximiza el primer termino e ignora el subrayado; ZF anula el subrayado aunque encoja el primero; RZF negocia entre ambos segun SNR. Dejar la ecuacion escrita mientras se comenta la Figura de MRT vs ZF.</p>
+        </div>
+      </details>
     </section>
 
     <section id="bloque-6" class="class-block">
@@ -525,6 +573,12 @@
           <p>"Si el sistema reporta alto SNR pero <code>sigma_2</code> es muy pequeño, ¿subimos a dos capas?" La respuesta esperada es: no necesariamente; alto SNR no corrige por completo un modo espacial debil o mala condicion.</p>
         </div>
       </details>
+      <details>
+        <summary>Pizarra: water-filling como recipiente</summary>
+        <div>
+          <p>Dibujar un recipiente con un escalon por modo espacial, de altura <code>N0/sigma_k^2</code>: el modo fuerte es un escalon bajo, el debil uno alto. Verter "agua" hasta el nivel <code>mu</code>; la potencia de cada modo es el agua que queda sobre su escalon. Con las ganancias del material (<code>sigma^2 = 52, 13, 4</code>) los tres escalones quedan bajo el agua y water-filling gana poco frente al reparto uniforme. El mensaje operativo: si un escalon sobresale del agua, ese modo recibe cero potencia — y apagar un modo ES bajar rank.</p>
+        </div>
+      </details>
     </section>
 
     <section id="bloque-7" class="class-block">
@@ -544,6 +598,13 @@
       <div class="script">
         "Si tengo 128 antenas, FDD me obliga a conocer y reportar un canal enorme de bajada. En TDD, los usuarios mandan pilotos en subida y la base reutiliza esa estimacion por reciprocidad. El overhead queda ligado a usuarios, no a antenas."
       </div>
+      <details>
+        <summary>Pizarra: contaminacion de pilotos en dos celdas</summary>
+        <div>
+          <p>Dibujar dos celdas vecinas. UE A en la celda 1 y UE B en la celda 2 usan el MISMO piloto <code>p</code>. Flechas de ambos llegando a la BS 1: su estimacion queda <code>h_hat = h_A + h_B + ruido</code> — el canal del vecino queda pegado a la estimacion. Remate: agregar antenas no limpia esto; el haz de la BS 1 apunta en parte hacia B para siempre. Por eso el diseño de pilotos y su reutilizacion entre celdas son problema de red, no de algebra.</p>
+          <p>Al lado, el contraste FDD/TDD en dos flechas: FDD baja <code>M</code> pilotos y sube reportes; TDD sube <code>K</code> pilotos y reusa por reciprocidad. El costo escala con usuarios, no con antenas.</p>
+        </div>
+      </details>
       <figure>
         <img src="figures/mimo-sumrate.png" alt="Sum rate Massive MIMO">
         <figcaption>La comparacion MRT/ZF ayuda a mostrar que con M grande algunos precoders simples empiezan a ser competitivos.</figcaption>
