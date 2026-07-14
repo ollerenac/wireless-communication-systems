@@ -368,10 +368,30 @@
       <p>Este bloque debe romper una intuicion peligrosa: "mas antenas = mas velocidad". Presentar MIMO como un presupuesto espacial. Ese presupuesto puede gastarse en robustez, direccion, capas o usuarios. La eleccion depende del sintoma.</p>
       <figure>
         <img src="figures/mimo-design-map.png" alt="Mapa de decision MIMO">
-        <figcaption>Usar esta figura como primera pizarra: de izquierda a derecha se pasa de sintoma a estrategia y luego a costo operativo.</figcaption>
+        <figcaption>Division de trabajo: en clase usar solo esta figura — las flechas se narran como decisiones ("leo el sintoma, elijo estrategia, y me llevo el costo"). La tabla del material es la version para releer en casa. No explicar ambas: dicen lo mismo.</figcaption>
       </figure>
       <div class="script">
-        "Miren la primera fila. Si estoy en borde de celda y el UE reporta SNR baja y BLER alto, no tiene sentido emocionarse con rank 4. Antes de multiplexar necesito que el enlace exista. En cambio, si estoy en un hotspot con muchos usuarios, el problema no es solo energia: es interferencia y separabilidad espacial."
+        <strong>Protocolo de lectura (antes de tocar filas).</strong> "Esto se lee como recetario medico: sintoma, tratamiento, efecto secundario. Ningun tratamiento es gratis — la columna derecha es lo que hay que vigilar. Si alguien les vende una estrategia MIMO sin decirles el costo, desconfien." La habilidad que se lleva el estudiante es el protocolo sintoma → estrategia → costo, no memorizar cinco escenarios.
+      </div>
+      <div class="script">
+        <strong>Dictar a fondo solo los dos extremos.</strong> "Borde de celda: sobra espectro, falta energia — concentro (rank 1, beamforming o diversidad). Hotspot: sobra energia, la interferencia mata — separo (nulos espaciales, MU-MIMO con scheduler)." Son polos opuestos y entre ambos abarcan el espacio de decision. Indoor se lanza como pregunta a la clase: "canal rico, distancias cortas — ¿cual es la trampa?" (antenas juntas, correlacion, rank efectivo menor al nominal). Massive y FR2 se despachan como regimenes extremos que se retoman al final.
+      </div>
+      <details>
+        <summary>Pizarra: que recurso escasea en cada fila</summary>
+        <div>
+          <p>Escribir esta tabla corta y dictarla con la pregunta guia <strong>"¿que falta aqui?"</strong> — el estudiante que aprende a preguntar eso ya no necesita memorizar la tabla grande.</p>
+          <ol>
+            <li>Borde de celda → falta <strong>energia</strong> (SNR): concentrarla.</li>
+            <li>Hotspot → falta <strong>separacion espacial</strong> (interferencia): gastar dimensiones en nulos.</li>
+            <li>Indoor → falta <strong>descorrelacion</strong> (antenas juntas): mirar rank efectivo, no nominal.</li>
+            <li>Massive sub-6 → falta <strong>CSI</strong> (pilotos): el conocimiento del canal es el cuello.</li>
+            <li>FR2 → falta <strong>link budget y cadenas RF</strong>: el limite es hardware.</li>
+          </ol>
+        </div>
+      </details>
+      <div class="note teal">
+        <span class="label">La tabla es el indice de la clase</span>
+        <p>Decirlo explicito: "esta tabla es el mapa de hoy; la recorremos fila por fila". Borde de celda → bloque 4 (diversidad/DMT); hotspot → bloque 5 (precoders); indoor → bloque 3 (rank y SVD); massive → bloque 7 (TDD/pilotos); FR2 → cierre del bloque 7. Cada seccion posterior "regresa" a su fila y la tabla se aprende sola por repeticion.</p>
       </div>
       <details>
         <summary>Pregunta para la clase</summary>

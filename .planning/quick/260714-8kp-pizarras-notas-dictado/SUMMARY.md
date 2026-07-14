@@ -42,3 +42,17 @@ status: complete
 `mkdocs build --strict` limpio (0.87 s). Todos los números de pizarra
 provienen de ejemplos ya verificados en `index.md` (§3.1, §5.1, water-filling
 box, Alamouti box).
+
+## Follow-up (mismo día, pedido en study loop)
+
+Bloque 1 reescrito con protocolo de lectura para tabla/Figura 1:
+
+- Script "recetario médico": síntoma → tratamiento → efecto secundario;
+  la habilidad es el protocolo de columnas, no memorizar filas.
+- Script "dos extremos": dictar a fondo solo borde de celda (falta energía)
+  vs hotspot (falta separación); indoor como pregunta; Massive/FR2 como
+  regímenes.
+- Pizarra nueva: tabla "qué recurso escasea" (energía / separación /
+  descorrelación / CSI / hardware) con pregunta guía "¿qué falta aquí?".
+- Nota: la tabla es el índice de la clase (mapa fila → bloque 3/4/5/7).
+- Figcaption: división de trabajo — figura en clase, tabla para casa.
