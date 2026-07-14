@@ -56,3 +56,16 @@ Bloque 1 reescrito con protocolo de lectura para tabla/Figura 1:
   descorrelación / CSI / hardware) con pregunta guía "¿qué falta aquí?".
 - Nota: la tabla es el índice de la clase (mapa fila → bloque 3/4/5/7).
 - Figcaption: división de trabajo — figura en clase, tabla para casa.
+
+Segundo follow-up (study loop, mismo día):
+
+- Bloque 2, pizarra SU/MU expandida: flecha = flujo/capa (no antena),
+  requisitos de cada modo, remate "la flecha es información, la antena
+  es fierro".
+- Bloque 1: P1/P2 enlazadas a filas 1-2 del mapa como verificación de
+  los dos extremos.
+- Bloque 3: definición de CSI + distinción CSIR/CSIT + "fresco" vs
+  tiempo de coherencia + jerarquía de exigencia (Alamouti < beamforming
+  < MU-MIMO), enlazada al bloque 7.
+- index.md (commit 819da68): R2 de §1 reescrita sin referencia
+  adelantada a ZF.

@@ -374,7 +374,7 @@
         <strong>Protocolo de lectura (antes de tocar filas).</strong> "Esto se lee como recetario medico: sintoma, tratamiento, efecto secundario. Ningun tratamiento es gratis — la columna derecha es lo que hay que vigilar. Si alguien les vende una estrategia MIMO sin decirles el costo, desconfien." La habilidad que se lleva el estudiante es el protocolo sintoma → estrategia → costo, no memorizar cinco escenarios.
       </div>
       <div class="script">
-        <strong>Dictar a fondo solo los dos extremos.</strong> "Borde de celda: sobra espectro, falta energia — concentro (rank 1, beamforming o diversidad). Hotspot: sobra energia, la interferencia mata — separo (nulos espaciales, MU-MIMO con scheduler)." Son polos opuestos y entre ambos abarcan el espacio de decision. Indoor se lanza como pregunta a la clase: "canal rico, distancias cortas — ¿cual es la trampa?" (antenas juntas, correlacion, rank efectivo menor al nominal). Massive y FR2 se despachan como regimenes extremos que se retoman al final.
+        <strong>Dictar a fondo solo los dos extremos.</strong> "Borde de celda: sobra espectro, falta energia — concentro (rank 1, beamforming o diversidad). Hotspot: sobra energia, la interferencia mata — separo (nulos espaciales, MU-MIMO con scheduler)." Son polos opuestos y entre ambos abarcan el espacio de decision. Indoor se lanza como pregunta a la clase: "canal rico, distancias cortas — ¿cual es la trampa?" (antenas juntas, correlacion, rank efectivo menor al nominal). Massive y FR2 se despachan como regimenes extremos que se retoman al final. Verificacion inmediata: lanzar P1 y P2 del material — P1 es la fila 1 y P2 es la fila 2 (el caso donde falla el requisito "canales separables"). Las dos preguntas cierran los dos extremos recien dictados.
       </div>
       <details>
         <summary>Pizarra: que recurso escasea en cada fila</summary>
@@ -438,7 +438,12 @@
         <summary>Pizarra: fases alineadas vs fases al azar</summary>
         <div>
           <p>Dibujar un UE y dos antenas TX. Caso 1: las dos ondas llegan alineadas en fase (dos sinusoides que suman) — eso es beamforming y necesita CSI. Caso 2: fases al azar — a veces suman, a veces se cancelan. Misma geometria, distinto conocimiento del canal, distinto resultado.</p>
-          <p>Al lado, dos flechas desde la BS: ambas al mismo UE (SU-MIMO, capas) contra una a cada UE (MU-MIMO, usuarios). Recalcar en voz alta: las capas viajan <strong>al mismo tiempo y en la misma banda</strong>; se separan por firma espacial, no por subportadoras ni slots. Es la confusion mas comun del bloque.</p>
+          <p>Al lado, el mismo par de flechas apuntado de dos maneras. Aclarar primero: la flecha <strong>no es una antena</strong>, es un flujo de datos (una capa). Con 2 grados de libertad espaciales la BS puede empujar 2 flujos simultaneos; la decision de diseño es hacia donde apunta cada uno.</p>
+          <ul>
+            <li><strong>SU-MIMO (capas):</strong> ambas flechas terminan en el mismo UE — recibe <code>s1</code> y <code>s2</code> a la vez, doble throughput para el. Exige UE con 2+ antenas y rank 2 util.</li>
+            <li><strong>MU-MIMO (usuarios):</strong> una flecha a cada UE — cada uno recibe 1 capa, la celda sirve 2 usuarios a la vez en el mismo recurso. Los UEs pueden ser simples (1 antena), pero los canales deben ser separables y la BS necesita CSI.</li>
+          </ul>
+          <p>Moraleja del dibujo: misma BS, mismo espectro, mismas dimensiones espaciales — lo que cambia es a quien se asignan (concentrar vs repartir; el presupuesto del bloque 1 hecho flechas). Remate anti-confusion: "la BS puede tener 64 antenas y dibujar solo 2 flechas; la flecha es informacion, la antena es fierro". Y recalcar: las capas viajan <strong>al mismo tiempo y en la misma banda</strong>; se separan por firma espacial, no por subportadoras ni slots. Es la confusion mas comun del bloque.</p>
         </div>
       </details>
     </section>
@@ -461,6 +466,7 @@
           <p>Primero escribir <code>y = Hx + n</code> y traducirlo verbalmente: "lo que recibo es una mezcla espacial de lo que transmiti, mas ruido". Luego conectar cada fila con una antena RX y cada columna con una antena TX.</p>
           <p>Despues introducir la tabla de indicadores: rank, valores singulares, condicionamiento, producto interno entre usuarios, norma del canal y tiempo de coherencia.</p>
           <p>Si preguntan por OFDM: hay una <code>H[k]</code> por subportadora; la Sesion 03 dejo canales planos y aqui la decision espacial se repite en cada uno.</p>
+          <p>Definir CSI aqui, sin dejarlo flotando: es la estimacion de <code>H</code> que alguien obtuvo midiendo pilotos. <strong>CSIR</strong> (el receptor conoce H) es barato y casi siempre esta. <strong>CSIT</strong> (el transmisor conoce H) es caro — feedback en FDD o reciprocidad en TDD — y caduca con el tiempo de coherencia: "CSI fresco" significa mas nuevo que la coherencia del canal. Jerarquia de exigencia: Alamouti sin CSIT &lt; beamforming &lt; MU-MIMO con CSI preciso y fresco. Esa exigencia creciente es la razon de ser del bloque 7.</p>
         </div>
       </div>
       <figure>
