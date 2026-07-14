@@ -69,3 +69,8 @@ Segundo follow-up (study loop, mismo día):
   < MU-MIMO), enlazada al bloque 7.
 - index.md (commit 819da68): R2 de §1 reescrita sin referencia
   adelantada a ZF.
+- Bloque 3, pizarra nueva "3+2+1" para la tabla de indicadores de §3.1:
+  tres preguntas (capas / usuarios juntos / duración de la foto),
+  números del 2×2 reutilizados (κ=3 calculado en vivo → gancho al
+  ×2.22), metáfora análisis de laboratorio, filas como índice de
+  bloques posteriores.

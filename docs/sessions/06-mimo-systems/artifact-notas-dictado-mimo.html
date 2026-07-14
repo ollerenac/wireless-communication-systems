@@ -488,6 +488,19 @@
           <p>Rematar con: "rank algebraico no siempre significa rank util". Dejar el canal escrito: vuelve en el bloque 5 para mostrar cuanto ruido paga ZF.</p>
         </div>
       </details>
+      <details>
+        <summary>Pizarra: la tabla de indicadores son solo 3 preguntas (3+2+1)</summary>
+        <div>
+          <p>No leer las 6 filas en orden. Dibujar <code>H</code> al centro y sacar tres flechas:</p>
+          <ol>
+            <li><strong>¿Cuantas capas?</strong> (mirar DENTRO de una H): rank cuenta los tuneles, <code>sigma_k</code> mide el ancho de cada uno, <code>kappa</code> compara el mejor contra el peor. Propiedades de UN usuario; alimentan la decision de multiplexacion.</li>
+            <li><strong>¿Que usuarios van juntos?</strong> (mirar ENTRE usuarios): el producto interno dice cuanto se parecen dos usuarios vistos desde la BS — esto ES la P2 del bloque 1: producto cerca de 1 = "se ven iguales". La norma dice quien llega fuerte y quien necesita ayuda. Alimentan scheduler y MU-MIMO.</li>
+            <li><strong>¿Cuanto dura la foto?</strong> (mirar el RELOJ): el tiempo de coherencia no mide el canal — mide la fecha de caducidad de las otras cinco filas. De ahi el costo de pilotos y la velocidad de adaptacion.</li>
+          </ol>
+          <p>Gancho con el 2x2 recien calculado: las tres primeras filas ya tienen numeros en la pizarra — rank 2, <code>sigma = 1.5 / 0.5</code>, y calcular en vivo <code>kappa = 1.5/0.5 = 3</code>. Anunciar: "recuerden este 3: es el desbalance que en el bloque 5 se traduce en el x2.22 de ruido que paga ZF".</p>
+          <p>Metafora que continua el bloque 1: alla fueron sintomas externos (SNR, BLER); aqui llego el analisis de laboratorio (la H estimada con pilotos). Frase de dictado: <strong>"H no se mira, se interroga; estas son las seis preguntas"</strong>. Y como la tabla del bloque 1, esta tambien es indice: kappa → bloque 5 (detectores), sigma_k → bloque 6 (water-filling y rank), producto interno → bloque 5 (MU-MIMO), coherencia → bloque 7 (CSI y pilotos).</p>
+        </div>
+      </details>
     </section>
 
     <section id="bloque-4" class="class-block">
