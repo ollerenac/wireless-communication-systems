@@ -38,23 +38,23 @@ El objetivo de esta sesión es construir esa brújula. La matemática sigue esta
 
 ## Teoría
 
-!!! note "Vocabulario de la sesión (léelo primero: evita el 80% de la confusión)"
+!!! note "Vocabulario de la sesión"
 
-    - **Capa = stream = flujo**: son la misma cosa y este documento los usa como sinónimos. Es un chorro de datos independiente que se transmite al mismo tiempo que los demás. Los estándares dicen *layers*; los papers dicen *streams*.
+    - **Capa = stream = flujo**: son la misma cosa y este documento los usa como sinónimos. Es una secuencia de datos independiente que se transmite al mismo tiempo que las demás. Los estándares dicen *layers*; la literatura dice *streams*.
     - **Modo espacial** (o "tubo"): cada canal paralelo e independiente escondido dentro de $\mathbf{H}$; la SVD los revela. No es sinónimo de capa: la **capa** es *lo que mandas*, el **modo** es *por dónde pasa*. Idealmente cada capa viaja por su propio modo.
-    - **Grados de libertad espaciales**: cuántas "cosas distintas a la vez" permite hacer el arreglo de antenas. Se gastan en robustez, en throughput o en servir más usuarios — no en todo a la vez.
+    - **Grados de libertad espaciales**: cuántas señales independientes puede manejar simultáneamente el arreglo de antenas. Se gastan en robustez, en throughput o en servir más usuarios — no alcanzan para todo a la vez.
     - **Cerrar el enlace**: lograr que la potencia que llega al receptor alcance el SNR mínimo que exige la tasa de error objetivo. Si el enlace "no cierra", ninguna otra optimización importa.
     - **CSI / CSIT / CSIR**: *channel state information* — el conocimiento de $\mathbf{H}$. La T o R final indica quién lo tiene: el Transmisor o el Receptor.
     - **BS / UE**: estación base / terminal del usuario.
     - **TDD / FDD**: duplexación por tiempo (subida y bajada alternan sobre la **misma** frecuencia → el canal de ida y el de vuelta son el mismo: *reciprocidad*) / por frecuencia (subida y bajada en bandas **distintas** → canales distintos, la reciprocidad no aplica).
     - **FR1 / FR2**: los dos rangos de frecuencia de 5G. FR1: sub-6 GHz. FR2: ondas milimétricas (24 GHz en adelante), donde la pérdida de propagación es tan alta que sin ganancia de haz el enlace no cierra.
-    - Los términos propios de Massive MIMO (*channel hardening*, *favorable propagation*, contaminación de pilotos) se definen en §7, donde se usan de verdad.
+    - Los términos propios de Massive MIMO (*channel hardening*, *favorable propagation*, contaminación de pilotos) se definen en §7.
 
 ### 1. Primero el problema de red
 
 Antes de hablar de SVD conviene mirar el síntoma del sistema. El mismo array de antenas puede resolver problemas diferentes según cómo se use.
 
-Esta tabla es un mapa de la sesión completa: nombra estrategias y precodificadores que se definen recién en §5 y §7. Léela ahora como panorama — sin exigirte entender cada sigla — y vuelve a ella al final, cuando cada celda tenga contenido.
+Esta tabla es un mapa de la sesión completa: nombra estrategias y precodificadores que se definen en §5 y §7. Conviene leerla primero como panorama, sin necesidad de entender cada sigla todavía, y volver a ella al final de la sesión.
 
 | Escenario | Síntoma de red | Estrategia MIMO natural | Costo o riesgo principal |
 |---|---|---|---|
@@ -134,7 +134,7 @@ En un teléfono pequeño, dos antenas pueden estar tan correlacionadas que el se
 
 ### 3. El canal como diagnóstico operativo
 
-El título merece una línea: "diagnóstico operativo" significa que $\mathbf{H}$ funciona como el análisis de sangre del enlace. No se estima por curiosidad matemática — se estima porque cada decisión de operación se **lee** de ahí: quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Diagnóstico primero, tratamiento después; sin $\mathbf{H}$ medida, todas las decisiones de esta sesión serían a ciegas.
+"Diagnóstico operativo" significa que $\mathbf{H}$ funciona como el análisis de sangre del enlace. No se estima por curiosidad matemática — se estima porque cada decisión de operación se **lee** de ahí: quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Diagnóstico primero, tratamiento después; sin $\mathbf{H}$ medida, todas las decisiones de esta sesión serían a ciegas.
 
 La matriz de canal no es solo notación. En un sistema real, $\mathbf{H}$ es el objeto que se estima con pilotos y del que salen decisiones de scheduler, rank, beamforming, precoding y detección.
 
@@ -151,9 +151,9 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
   </figcaption>
 </figure>
 
-??? example "De dónde sale H: pilotos, silencio y una división por casilla"
+??? example "Cómo se estima H con pilotos"
 
-    $\mathbf{H}$ no se conoce por decreto: se mide. El mecanismo completo cabe en tres ideas.
+    $\mathbf{H}$ no se conoce a priori: se estima. El mecanismo tiene tres partes.
 
     **1. Un piloto es una pregunta cuya respuesta ya se conoce.** El transmisor envía un símbolo $x_p$ pactado de antemano — el receptor sabe exactamente qué se transmitió. Recibe $y_p = h\,x_p + n$ y despeja:
 
@@ -166,7 +166,7 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
     - *Instante 1*: TX$_1$ transmite su piloto; TX$_2, \ldots,$ TX$_{N_t}$ guardan silencio. Cada antena receptora $j$ escucha su propia versión, $y_j = h_{j1}x_p + n_j$, y divide: $\hat{h}_{j1} = y_j/x_p$. Las $N_r$ divisiones simultáneas llenan la **columna 1**.
     - *Instante 2*: habla TX$_2$ → columna 2. Y así hasta TX$_{N_t}$.
 
-    Un 2×2: 2 pilotos × 2 "oídos" = 4 divisiones = las 4 casillas. En el grid tiempo-frecuencia de OFDM, cada antena TX tiene reservados sus *resource elements* de piloto — separados en tiempo, en frecuencia o por códigos ortogonales — y en los REs de piloto de una antena, las demás transmiten cero.
+    Un 2×2: 2 pilotos × 2 antenas receptoras = 4 divisiones = las 4 casillas. En el grid tiempo-frecuencia de OFDM, cada antena TX tiene reservados sus *resource elements* de piloto — separados en tiempo, en frecuencia o por códigos ortogonales — y en los REs de piloto de una antena, las demás transmiten cero.
 
     **3. El contraste que le da sentido al diseño:**
 
@@ -176,7 +176,7 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
     | sin mezcla → división directa | mezcla total → hace falta $\mathbf{H}$ |
     | aquí se **mide** $\mathbf{H}$ | aquí se **usa** $\mathbf{H}$ |
 
-    Nada es gratis: cada RE gastado en piloto no lleva datos, y la medida caduca — vale durante el tiempo de coherencia y en las subportadoras vecinas dentro del ancho de banda de coherencia; entre pilotos se interpola. Quién ejecuta la división y cómo llega el resultado al otro extremo (feedback en FDD vía RI/PMI/CQI, o reciprocidad en TDD) es exactamente el cuello de botella que decide la arquitectura de Massive MIMO en §7.1.
+    Cada RE gastado en piloto no lleva datos, y la medida caduca — vale durante el tiempo de coherencia y en las subportadoras vecinas dentro del ancho de banda de coherencia; entre pilotos se interpola. Quién ejecuta la división y cómo llega el resultado al otro extremo (feedback en FDD vía RI/PMI/CQI, o reciprocidad en TDD) es exactamente el cuello de botella que decide la arquitectura de Massive MIMO en §7.1.
 
 El modelo pedagógico más limpio es Rayleigh i.i.d.:
 
@@ -224,7 +224,7 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
   </figcaption>
 </figure>
 
-??? example "Receta: la SVD de un 2×2 a mano, una vez en la vida"
+??? example "Cálculo de la SVD de un canal 2×2"
 
     El ejemplo siguiente usa $\mathbf{v}_1$, $\mathbf{v}_2$, $\sigma_1$, $\sigma_2$ — esta caja muestra de dónde salen. Cuatro pasos que funcionan para cualquier matriz; aquí con $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$.
 
@@ -246,7 +246,7 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     **Paso 4.** Las columnas de $\mathbf{U}$: $\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k$. Aquí da $\mathbf{u}_1 = \mathbf{v}_1$ y $\mathbf{u}_2 = \mathbf{v}_2$ — coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas.
 
-    **Verificación en una línea:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$ — cuatro productos, irrefutable. En la práctica esto lo hace `numpy.linalg.svd(H)`; la cuenta a mano es la que convierte la ecuación (3) de jeroglífico en procedimiento.
+    **Verificación:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$; basta comprobar los cuatro productos. En la práctica este cálculo lo realiza `numpy.linalg.svd(H)`.
 
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
@@ -274,7 +274,7 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     Ganancias por modo: $\sigma_1^2 = 3{,}61$ contra $\sigma_2^2 = 0{,}01$ — el segundo modo transporta **361 veces menos** energía que el primero.
 
-    **La moraleja que da nombre al ejemplo:** ambos canales tienen rank algebraico 2 (ningún determinante es cero), pero sus destinos son opuestos. El canal A multiplexa 2 capas con SNR razonable; el canal B tiene un segundo modo tan hundido que forzar 2 capas es pagar BER — en la práctica se opera con rank 1. **El rank cuenta los modos; κ dice si valen algo.**
+    **Lectura conjunta:** ambos canales tienen rank algebraico 2 (ningún determinante es cero), pero sus destinos son opuestos. El canal A multiplexa 2 capas con SNR razonable; el canal B tiene un segundo modo tan hundido que forzar 2 capas es pagar BER — en la práctica se opera con rank 1. **El rank cuenta los modos; κ dice si valen algo.**
 
     El precio exacto de ignorar κ lo calcula el ejemplo de ZF en §5.1: separar las capas del canal A multiplica el ruido por 2,22; hacerlo con el canal B lo multiplica por 50.
 
@@ -307,17 +307,17 @@ $$d^*(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
 
 La lectura práctica no es memorizar el límite, sino la pendiente del compromiso: cada capa adicional (sube $r$) resta caminos de protección (baja $d$). No se puede tener el máximo de ambos a la vez.
 
-??? example "DMT evaluada: el menú completo de un 2×2"
+??? example "DMT evaluada para un canal 2×2"
 
     Con $N_t = N_r = 2$, la fórmula (4) da exactamente tres opciones:
 
-    | $r$ (capas) | $d^* = (2-r)(2-r)$ | Qué compraste |
+    | $r$ (capas) | $d^* = (2-r)(2-r)$ | Interpretación |
     |---|---|---|
-    | 0 | 4 | Cero throughput extra; las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$: robustez máxima (Alamouti vive aquí) |
+    | 0 | 4 | Sin throughput extra; las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$: robustez máxima (el régimen de Alamouti, §4) |
     | 1 | 1 | Una capa con protección modesta: BER cae como $\text{SNR}^{-1}$, igual que un SISO |
     | 2 | 0 | Throughput máximo, protección extra nula: cada capa queda expuesta a su propio fading |
 
-    El menú es discreto y sin opción gratis: pasar de $r=0$ a $r=2$ cuesta **toda** la diversidad. La fila del medio explica una decisión real de red: transmitir 1 capa con beamforming no es "desperdiciar la segunda antena" — es haber convertido esa antena en protección o ganancia en lugar de throughput.
+    Las opciones son discretas y no hay punto intermedio gratuito: pasar de $r=0$ a $r=2$ cuesta toda la diversidad. La fila intermedia describe una decisión real de red: transmitir 1 capa con beamforming no desperdicia la segunda antena — la convierte en protección o ganancia en lugar de throughput.
 
 | Si el sistema ve... | Acción razonable | Por qué |
 |---|---|---|
@@ -344,7 +344,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     $$\hat{s}_1 = h_1^*r_1 + h_2r_2^*, \qquad \hat{s}_2 = h_2^*r_1 - h_1r_2^*$$
 
-    Veamos la cancelación con las manos, término a término para $\hat{s}_1$. Primero conjugar $r_2$:
+    Desarrollo término a término para $\hat{s}_1$. Primero se conjuga $r_2$:
 
     $$r_2^* = -h_1^*s_2 + h_2^*s_1 + n_2^*$$
 
@@ -358,7 +358,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)s_1 + \tilde{n}_1$$
 
-    (y lo simétrico ocurre para $\hat{s}_2$). Aquí se ve que el patrón de la tabla no es magia: el $-s_2^*$ y el $s_1^*$ de la ranura 2 están elegidos **al revés, desde la cancelación** — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
+    (y lo simétrico ocurre para $\hat{s}_2$). El patrón de la tabla no es arbitrario: el $-s_2^*$ y el $s_1^*$ de la ranura 2 se eligen precisamente desde esta cancelación — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
 
     Cada símbolo aprovecha ambos trayectos: la ganancia $|h_1|^2 + |h_2|^2$ es diversidad 2 — el enlace solo cae si **ambos** caminos caen a la vez. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
 
@@ -446,7 +446,7 @@ $$C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}$$
 
 donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura lo dice todo: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un tubo con ganancia $\sigma_k^2$.
 
-Pero en implementación el sistema no calcula esta expresión para lucirse. La usa como intuición para rank adaptation:
+En implementación esta expresión no se evalúa como fin en sí mismo: se usa como criterio para rank adaptation:
 
 1. medir o estimar calidad del canal;
 2. mirar SNR, valores singulares, correlación e interferencia;
@@ -454,7 +454,7 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 4. reportar o usar indicadores como CQI, RI y PMI;
 5. verificar BLER objetivo después de la adaptación.
 
-??? example "Rank 1 o rank 2: la fórmula (7) decide, con los números de §3.1"
+??? example "Rank 1 o rank 2 según la fórmula (7), con los números de §3.1"
 
     Canal A: $\sigma_1^2 = 2{,}25$, $\sigma_2^2 = 0{,}25$. Potencia total $P = 2$.
 
@@ -472,9 +472,9 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 
     $$C_{\text{rank 1}} = \log_2(1 + 4{,}5) \approx 2{,}5 \text{ bits/s/Hz}$$
 
-    Gana rank 1: el modo débil ya no paga su renta (0,32 bits) frente a concentrar la potencia en el modo fuerte.
+    Gana rank 1: los 0,32 bits que aporta el modo débil no compensan frente a concentrar la potencia en el modo fuerte.
 
-    **Misma matriz, decisión opuesta según el SNR.** Eso — y no una fórmula elegante — es rank adaptation: el logaritmo premia repartir cuando hay SNR de sobra y castiga repartir cuando escasea.
+    **Misma matriz, decisión opuesta según el SNR.** Eso es rank adaptation: el logaritmo premia repartir potencia cuando el SNR sobra y lo castiga cuando escasea.
 
 <figure markdown="span">
   ![Flujo de decisión para elegir rank, capas y precoder](figures/mimo-rank-precoder-flow.png)
@@ -498,7 +498,7 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 
     donde $\mu$ es el "nivel del agua" — una constante que se ajusta hasta que las potencias asignadas suman la potencia total disponible — y $(x)^+ = \max(x, 0)$: un modo que queda "bajo el agua" recibe potencia cero, no potencia negativa.
 
-    La idea implementativa es simple: un modo espacial muy débil no merece potencia. Hagamos la cuenta dos veces.
+    La idea implementativa es simple: un modo espacial muy débil no merece potencia. La cuenta, en dos casos:
 
     **Caso 1 — todos los modos fuertes.** Canal 3×3 con $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$; $N_0 = 1$, $P_{\text{total}} = 1$. Los "pisos" $N_0/\sigma_k^2$ valen $0{,}019$, $0{,}077$ y $0{,}25$. Con los tres modos activos, $\mu$ sale de exigir que las potencias sumen 1:
 
@@ -506,13 +506,13 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 
     $$P_1^* = 0{,}43, \qquad P_2^* = 0{,}37, \qquad P_3^* = 0{,}20$$
 
-    Compárese con el reparto uniforme $(0{,}33,\, 0{,}33,\, 0{,}33)$: casi lo mismo. Eso es "water-filling gana poco cuando todos los modos son fuertes" — ya no como frase, sino como número.
+    Compárese con el reparto uniforme $(0{,}33,\, 0{,}33,\, 0{,}33)$: la diferencia es pequeña. Cuando todos los modos son fuertes, water-filling gana poco frente a potencia uniforme.
 
     **Caso 2 — un modo hundido.** Mismo canal pero $\sigma_3^2 = 0{,}04$: su piso es $N_0/\sigma_3^2 = 25$, muchísimo más alto que cualquier nivel de agua alcanzable con $P_{\text{total}} = 1$. El $(\cdot)^+$ lo apaga: $P_3^* = 0$, y el agua se reparte entre los dos que quedan:
 
     $$\mu = \frac{1 + 0{,}019 + 0{,}077}{2} = 0{,}548, \qquad P_1^* = 0{,}53, \qquad P_2^* = 0{,}47, \qquad P_3^* = 0$$
 
-    Water-filling acaba de hacer **rank adaptation por sí solo**: bajó de 3 capas a 2 sin que nadie se lo pidiera. Apagar un modo y bajar el rank son la misma decisión vista desde dos fórmulas.
+    Water-filling ejecuta **rank adaptation por sí solo**: bajó de 3 capas a 2. Apagar un modo y bajar el rank son la misma decisión vista desde dos fórmulas.
 
 ### 7. Massive MIMO como problema de red
 
