@@ -305,9 +305,17 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     La fila 1 da $-1{,}35\,x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x$: dirección $(4, 3)$, normalizada $\mathbf{v}_1 = \binom{0{,}8}{0{,}6}$. (La fila 2, $1{,}8\,x - 2{,}4\,y = 0$, da la misma recta — con $\lambda$ correcto las filas son proporcionales, así que basta una; si dieran rectas distintas, el eigenvalor está mal calculado.) Con $\lambda_2 = 0{,}25$, la fila 1 da $2{,}4\,x + 1{,}8\,y = 0 \Rightarrow$ $\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}$.
 
-    *Paso 4:*
+    *Paso 4:* primero la multiplicación $\mathbf{H}\mathbf{v}_1$, fila por columna:
 
-    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{2}\begin{pmatrix} 1{,}2 \\ 1{,}6 \end{pmatrix} = \begin{pmatrix} 0{,}6 \\ 0{,}8 \end{pmatrix}, \qquad \mathbf{u}_2 = \frac{\mathbf{H}\mathbf{v}_2}{\sigma_2} = \frac{1}{0{,}5}\begin{pmatrix} -0{,}4 \\ 0{,}3 \end{pmatrix} = \begin{pmatrix} -0{,}8 \\ 0{,}6 \end{pmatrix}$$
+    $$\mathbf{H}\mathbf{v}_1 = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix}\begin{pmatrix} 0{,}8 \\ 0{,}6 \end{pmatrix} = \begin{pmatrix} 1{,}2 \cdot 0{,}8 + 0{,}4 \cdot 0{,}6 \\ 1{,}1 \cdot 0{,}8 + 1{,}2 \cdot 0{,}6 \end{pmatrix} = \begin{pmatrix} 0{,}96 + 0{,}24 \\ 0{,}88 + 0{,}72 \end{pmatrix} = \begin{pmatrix} 1{,}2 \\ 1{,}6 \end{pmatrix}$$
+
+    Dividir entre $\sigma_1 = 2$ es dividir cada componente:
+
+    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \begin{pmatrix} 1{,}2/2 \\ 1{,}6/2 \end{pmatrix} = \begin{pmatrix} 0{,}6 \\ 0{,}8 \end{pmatrix}$$
+
+    Lo mismo con $\mathbf{v}_2$:
+
+    $$\mathbf{H}\mathbf{v}_2 = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix}\begin{pmatrix} -0{,}6 \\ 0{,}8 \end{pmatrix} = \begin{pmatrix} -0{,}72 + 0{,}32 \\ -0{,}66 + 0{,}96 \end{pmatrix} = \begin{pmatrix} -0{,}4 \\ 0{,}3 \end{pmatrix}, \qquad \mathbf{u}_2 = \begin{pmatrix} -0{,}4/0{,}5 \\ 0{,}3/0{,}5 \end{pmatrix} = \begin{pmatrix} -0{,}8 \\ 0{,}6 \end{pmatrix}$$
 
     $$\mathbf{U} = \begin{pmatrix} 0{,}6 & -0{,}8 \\ 0{,}8 & 0{,}6 \end{pmatrix} \neq \mathbf{V} = \begin{pmatrix} 0{,}8 & -0{,}6 \\ 0{,}6 & 0{,}8 \end{pmatrix}$$
 
