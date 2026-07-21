@@ -197,7 +197,7 @@ Significa dos cosas. **Independientes**: saber un coeficiente no predice los dem
 
 En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una sola matriz $\mathbf{H}$, sino una matriz $\mathbf{H}[k]$ por subportadora $k$. La Sesión 03 ya explicó cómo OFDM convierte un canal selectivo en frecuencia en muchos canales planos; aquí se decide qué hacer espacialmente en cada uno.
 
-#### 3.1 Qué mirar dentro de H
+#### 3.1 Indicadores de diagnóstico del canal
 
 | Indicador | Cómo se lee | Decisión de diseño |
 |---|---|---|
