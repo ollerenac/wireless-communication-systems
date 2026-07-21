@@ -653,19 +653,27 @@ En implementación esta expresión no se evalúa como fin en sí mismo: se usa c
 
 ### 7. Massive MIMO como problema de red
 
-Massive MIMO no es solo "muchas antenas". Es un régimen operativo: una estación base con $M$ antenas sirve a $K$ usuarios con $M \gg K$. Ese exceso de dimensiones espaciales cambia la ingeniería del sistema.
+Massive MIMO no es solo "muchas antenas". Es un régimen operativo: una estación base con $M$ antenas sirve a $K$ usuarios con $M \gg K$ — por ejemplo, 64 antenas para 8 usuarios. La idea central de esta sección: cuando $M$ crece mucho, el canal deja de comportarse como un objeto aleatorio caprichoso y empieza a comportarse de forma predecible. Dos fenómenos estadísticos hacen ese trabajo, y cada uno resuelve un problema distinto de la sesión.
 
-**Channel hardening.** La norma del canal de cada usuario se estabiliza:
+**Channel hardening: el canal de cada usuario deja de fluctuar.**
 
 $$\frac{\|\mathbf{h}_k\|^2}{M} \xrightarrow[M\to\infty]{\text{a.s.}} \beta_k \tag{8}$$
 
-El fading rápido se promedia en muchas antenas. Para scheduling y control de enlace, el canal efectivo fluctúa menos.
+Cada término, en orden. $\mathbf{h}_k$ es el **vector de canal del usuario $k$**: tiene $M$ entradas, una por antena de la estación base — es la firma espacial del usuario vista desde el array completo. $\|\mathbf{h}_k\|^2$ es la **energía total** que las $M$ antenas capturan juntas de ese usuario: la suma de las $M$ ganancias de potencia individuales. Al dividir entre $M$ queda la **energía promedio por antena**. La flecha dice que ese promedio converge cuando $M$ crece; la etiqueta "a.s." (*almost surely*, casi seguramente) es lenguaje de probabilidad para "converge salvo casos de probabilidad cero". Y $\beta_k$ es el destino de la convergencia: la **componente lenta del canal** — pérdida de trayecto más sombra — que depende de dónde está el usuario, no del multitrayecto rápido.
 
-**Favorable propagation.** Los canales de usuarios distintos tienden a ser ortogonales:
+La mecánica es la ley de los grandes números. Con una sola antena, $|h|^2$ es una variable aleatoria que salta con el fading: el enlace puede caer 10 dB de un instante a otro. Con $M$ antenas, cada una ve un fading independiente, y el promedio de muchas variables independientes se aplana — igual que el promedio de 64 dados se pega a 3,5 aunque cada dado siga siendo impredecible. El fading rápido no desaparece del aire; desaparece del **agregado**.
+
+Consecuencia operativa: el enlace de cada usuario se vuelve estable y predecible. El scheduler ya no persigue picos de canal (el scheduling oportunista pierde sentido: no hay picos), el control de potencia y de MCS trabaja sobre un canal casi constante, y los márgenes de diseño se encogen.
+
+**Favorable propagation: los usuarios se separan solos.**
 
 $$\frac{\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j}{M} \xrightarrow[M\to\infty]{\text{a.s.}} 0, \quad k\neq j \tag{9}$$
 
-La interferencia de MRT disminuye sin invertir matrices. Por eso MRT se vuelve competitivo cuando $M/K$ es grande, aunque en sistemas reales RZF/MMSE suele ser más robusto.
+De nuevo término a término. $\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j$ es el **producto interno** entre las firmas de dos usuarios distintos — el mismo indicador de la tabla de §3.1: mide cuánto se parecen dos usuarios vistos desde la estación base. Producto grande = firmas parecidas = interferencia mutua si se les sirve a la vez; producto cero = firmas ortogonales = pueden compartir el mismo recurso sin estorbarse. La división entre $M$ normaliza para comparar con la energía propia de cada usuario, y la flecha dice que esa semejanza normalizada **tiende a cero** al crecer $M$.
+
+La intuición: la firma de cada usuario es un vector de $M$ números aleatorios, y dos vectores aleatorios largos son casi ortogonales casi siempre — con $M$ grande, hay tantas dimensiones disponibles que dos usuarios cualesquiera prácticamente nunca coinciden en dirección. Es el efecto huella digital: con 3 rasgos, dos personas pueden confundirse; con 64, no.
+
+Consecuencia operativa, dicha con el vocabulario de la sesión: cada usuario se convierte en su **propio subcanal espacial casi ortogonal, gratis**. La separación que ZF compraba invirtiendo matrices (y pagando ruido), aquí la regala la estadística. Por eso MRT — el precoder más simple, que solo apunta y no cancela nada — se vuelve competitivo cuando $M/K$ es grande: la interferencia que MRT ignora se está yendo a cero sola. En sistemas reales RZF/MMSE sigue siendo más robusto, porque $M$ es grande pero no infinito y los residuos de interferencia existen.
 
 <figure markdown="span">
   ![Channel hardening y favorable propagation vs M](figures/mimo-massive.png)
@@ -676,11 +684,11 @@ La interferencia de MRT disminuye sin invertir matrices. Por eso MRT se vuelve c
 
 #### 7.1 CSI: el cuello de botella
 
-Todo lo anterior supone que la BS conoce el canal. Con $M$ grande, ese supuesto decide la arquitectura:
+Todo lo anterior tiene una letra pequeña: supone que la estación base **conoce** los $K$ vectores de canal. Y conocerlos cuesta pilotos — la mecánica de la caja de §3 ("una división por casilla"), solo que ahora las casillas son muchas. Con $M$ grande, ese costo decide la arquitectura completa:
 
-- En **FDD**, el UE tendría que estimar muchos canales de bajada y reportarlos. El overhead crece con el número de antenas y se vuelve caro.
-- En **TDD**, los usuarios envían pilotos en subida; por reciprocidad, la BS estima el canal y lo reutiliza para precodificar en bajada. El coste escala con $K$, no con $M$.
-- En una red multicelda, los pilotos se reutilizan. Si un usuario vecino usa el mismo piloto, contamina la estimación. Esa interferencia no desaparece simplemente añadiendo más antenas.
+- En **FDD**, subida y bajada van en frecuencias distintas, así que el canal de bajada solo puede medirlo el UE. Con $M = 128$ antenas en la base, cada UE tendría que estimar 128 coeficientes de bajada y reportarlos todos por el canal de subida. El overhead crece con $M$ — con las antenas de la base, que es justo el número que Massive MIMO quiere hacer enorme. El costo escala con lo que se quiere agrandar: mala combinación.
+- En **TDD**, subida y bajada comparten frecuencia, y el canal es **recíproco**: el camino de ida es el mismo de vuelta. Entonces la jugada se invierte: los $K$ usuarios mandan pilotos hacia arriba, la base estima los canales ella misma, y reutiliza esa estimación para precodificar hacia abajo. El costo escala con $K$ (los usuarios, que son pocos), no con $M$ (las antenas, que son muchas). Cada UE manda un solo piloto sin importar si la base tiene 64 o 256 antenas.
+- Queda un problema que las antenas no arreglan: la **contaminación de pilotos**. En una red multicelda los pilotos se reutilizan — no hay secuencias ortogonales infinitas. Si un usuario de la celda vecina transmite el mismo piloto al mismo tiempo, la base recibe la suma de ambos canales y su estimación queda $\hat{\mathbf{h}} = \mathbf{h}_{\text{propio}} + \mathbf{h}_{\text{vecino}} + \text{ruido}$: el canal del vecino queda pegado a la estimación. Todo lo que la base haga con esa estimación — el beam, el nulo — apunta en parte hacia el vecino, permanentemente. Agregar antenas no limpia esto; afila por igual el haz bien apuntado y el mal apuntado.
 
 <figure markdown="span">
   ![Sobrecarga de CSI en FDD y TDD para Massive MIMO](figures/mimo-csi-overhead.png)
@@ -689,7 +697,7 @@ Todo lo anterior supone que la BS conoce el canal. Con $M$ grande, ese supuesto 
   </figcaption>
 </figure>
 
-Por eso Massive MIMO práctico está profundamente ligado a TDD, calibración de reciprocidad, diseño de pilotos y scheduler.
+Por eso Massive MIMO práctico está profundamente ligado a TDD, a la calibración de reciprocidad (los circuitos de transmisión y recepción no son idénticos y hay que compensarlos para que la reciprocidad del aire sirva de algo), al diseño de pilotos y al scheduler. La cadena causal completa, en una línea: muchas antenas → CSI caro → TDD con pilotos de subida → pilotos reutilizados entre celdas → contaminación como límite final. El cuello de botella de Massive MIMO no es el álgebra: es el conocimiento del canal.
 
 <figure markdown="span">
   ![Sum-rate MRT vs ZF vs óptimo para Massive MIMO](figures/mimo-sumrate.png)
@@ -700,9 +708,11 @@ Por eso Massive MIMO práctico está profundamente ligado a TDD, calibración de
 
 #### 7.2 FR1, FR2 y beamforming híbrido
 
-En FR1 sub-6 GHz, las configuraciones 32T32R, 64T64R o 128T128R permiten precoding digital amplio en estaciones base activas. En FR2/mmWave, una cadena RF por elemento es cara y consume demasiado. Por eso se usa **beamforming híbrido**: una etapa analógica forma haces gruesos con desfasadores, y una etapa digital de menor dimensión ajusta capas y usuarios.
+Falta una pieza de vocabulario para esta parte: la **cadena RF** (*RF chain*) es la electrónica que hay detrás de cada antena — conversores digital-analógico, mezcladores, amplificadores. Es lo que convierte números en ondas. Precoding **digital** significa una cadena RF por antena: cada antena recibe su propia señal calculada, control total.
 
-La consecuencia para diseño es concreta: en FR2 no basta "usar Massive MIMO"; también hay que entrenar beams, seguir bloqueo, gestionar movilidad angular y decidir cuántas cadenas RF justifican el throughput esperado.
+En FR1 (sub-6 GHz) eso es viable: las configuraciones comerciales 32T32R, 64T64R o 128T128R llevan precoding digital completo en estaciones base activas. En FR2 (ondas milimétricas) deja de serlo: a esas frecuencias cada cadena RF es cara y consume demasiada potencia, y poner 256 no se justifica. La solución de compromiso es el **beamforming híbrido**, en dos etapas: una etapa **analógica** forma haces gruesos usando solo desfasadores (componentes baratos que rotan la fase de la señal — suficiente para apuntar, no para precodificar fino), y una etapa **digital** pequeña — pocas cadenas RF, por ejemplo 4 para un array de 256 elementos — ajusta capas y usuarios dentro de los haces ya formados. El array completo aporta la ganancia de apuntado; las pocas cadenas digitales aportan la flexibilidad.
+
+La consecuencia para diseño es concreta: en FR2 no basta "usar Massive MIMO". Los haces analógicos no se calculan desde una H estimada — se **buscan**: la base y el UE prueban haces de un catálogo hasta encontrar el par que cierra el enlace (entrenamiento de haz), y deben repetir la búsqueda cuando el usuario se mueve o algo bloquea el camino — a estas frecuencias un cuerpo humano tapa el enlace. El presupuesto de diseño ya no se mide solo en antenas: se mide en cadenas RF, en tiempo de búsqueda de haces y en robustez ante bloqueo.
 
 ---
 
