@@ -263,7 +263,15 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     **Paso 4.** Las columnas de $\mathbf{U}$: $\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k$. Aquí da $\mathbf{u}_1 = \mathbf{v}_1$ y $\mathbf{u}_2 = \mathbf{v}_2$ — coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas.
 
-    **Verificación:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$; basta comprobar los cuatro productos. En la práctica este cálculo lo realiza `numpy.linalg.svd(H)`.
+    **Paso 5.** Ensamblar las tres matrices de la ecuación (3). Cada $\mathbf{v}_k$ es una columna de $\mathbf{V}$, cada $\mathbf{u}_k$ una columna de $\mathbf{U}$, y los $\sigma_k$ forman la diagonal de $\mathbf{\Sigma}$:
+
+    $$\mathbf{V} = \begin{pmatrix} | & | \\ \mathbf{v}_1 & \mathbf{v}_2 \\ | & | \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}, \qquad \mathbf{U} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}, \qquad \mathbf{\Sigma} = \begin{pmatrix} 1{,}5 & 0 \\ 0 & 0{,}5 \end{pmatrix}$$
+
+    El producto reconstruye el canal original:
+
+    $$\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}\begin{pmatrix} 1{,}5 & 0 \\ 0 & 0{,}5 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix} = \mathbf{H} \;\checkmark$$
+
+    **Verificación rápida sin ensamblar:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$; basta comprobar los cuatro productos. En la práctica este cálculo lo realiza `numpy.linalg.svd(H)`.
 
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
