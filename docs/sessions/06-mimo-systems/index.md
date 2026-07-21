@@ -299,6 +299,10 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     $$\mathbf{H}^{\mathsf{H}}\mathbf{H} - 4\mathbf{I} = \begin{pmatrix} 2{,}65 - 4 & 1{,}8 \\ 1{,}8 & 1{,}6 - 4 \end{pmatrix} = \begin{pmatrix} -1{,}35 & 1{,}8 \\ 1{,}8 & -2{,}4 \end{pmatrix}$$
 
+    El vector buscado es la incógnita: se escribe $\mathbf{v} = \binom{x}{y}$ y se ejecuta la multiplicación matriz-vector del sistema $(\mathbf{H}^{\mathsf{H}}\mathbf{H} - 4\mathbf{I})\mathbf{v} = \mathbf{0}$, fila por fila:
+
+    $$\begin{pmatrix} -1{,}35 & 1{,}8 \\ 1{,}8 & -2{,}4 \end{pmatrix}\begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \;\Rightarrow\; \begin{cases} -1{,}35\,x + 1{,}8\,y = 0 & \text{(fila 1)} \\ \;\;\,1{,}8\,x - 2{,}4\,y = 0 & \text{(fila 2)} \end{cases}$$
+
     La fila 1 da $-1{,}35\,x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x$: dirección $(4, 3)$, normalizada $\mathbf{v}_1 = \binom{0{,}8}{0{,}6}$. (La fila 2, $1{,}8\,x - 2{,}4\,y = 0$, da la misma recta — con $\lambda$ correcto las filas son proporcionales, así que basta una; si dieran rectas distintas, el eigenvalor está mal calculado.) Con $\lambda_2 = 0{,}25$, la fila 1 da $2{,}4\,x + 1{,}8\,y = 0 \Rightarrow$ $\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}$.
 
     *Paso 4:*
