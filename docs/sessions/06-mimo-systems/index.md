@@ -39,11 +39,17 @@ El objetivo de esta sesión es construir esa brújula. La matemática sigue esta
     Esta sesión usa álgebra lineal que **no se enseña aquí**:
 
     - multiplicación matriz-vector;
-    - **eigenvalores y eigenvectores** — la ecuación $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$: las direcciones que una matriz no rota, solo escala;
+    - **eigenvalores y eigenvectores** — la ecuación $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$: las direcciones que una matriz no rota, solo escala. En los textos en español el tema aparece como **valores y vectores propios** (o autovalores/autovectores) — buscar con esos nombres;
     - la conjugada transpuesta $\mathbf{A}^{\mathsf{H}}$ (transponer y conjugar cada entrada compleja);
     - la norma $\|\mathbf{v}\|$ de un vector y su cuadrado $\|\mathbf{v}\|^2$ como energía.
 
-    Si "eigenvector" no le dice nada, repáselo antes de llegar a §3: la SVD — el instrumento central de la sesión — se construye sobre ese concepto. La caja "Cálculo de la SVD de un canal 2×2" en §3.1 muestra el procedimiento completo paso a paso, incluida la relación $\sigma = \sqrt{\lambda}$.
+    Si "eigenvector" no le dice nada, repáselo antes de llegar a §3 con alguna de estas referencias:
+
+    - **3Blue1Brown**, *Essence of Linear Algebra*, capítulos 13–14 (intuición visual de valores y vectores propios; subtítulos en español) — la mejor inversión de 30 minutos para esta sesión;
+    - **Khan Academy** (en español), unidad *Valores y vectores propios*: ahí se practica exactamente el procedimiento $(\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$ que usa la receta de §3.1;
+    - cualquier texto de álgebra lineal, capítulo de valores propios (Grossman, Lay o Strang).
+
+    La caja "Cálculo de la SVD de un canal 2×2" en §3.1 muestra el procedimiento completo paso a paso, incluida la relación $\sigma = \sqrt{\lambda}$ — pero enseña a *aplicar* el concepto, no lo sustituye.
 
 ---
 
