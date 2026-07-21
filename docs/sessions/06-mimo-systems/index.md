@@ -32,11 +32,23 @@ Esa es la lectura implementativa de MIMO. Las antenas no son decoración ni una 
 
 La decisión correcta depende del canal, no de una regla fija. Si el canal tiene buen rank y SNR alta, subir capas aumenta throughput. Si el canal está mal condicionado, forzar muchas capas hace que el receptor o el precoder amplifique ruido. Si los usuarios tienen canales casi ortogonales, MU-MIMO funciona bien. Si los canales son paralelos, el scheduler debe separarlos en tiempo/frecuencia o el precoder pagará mucha potencia para cancelar interferencia.
 
-El objetivo de esta sesión es construir esa brújula. La matemática sigue estando: $\mathbf{H}$, SVD, DMT, MRT, ZF y Massive MIMO. Pero aquí aparecen como herramientas para tomar decisiones de red.
+El objetivo de esta sesión es construir esa brújula. La matemática sigue estando: $\mathbf{H}$, la SVD, el compromiso diversidad-multiplexación (DMT), y los precodificadores y detectores clásicos (MRT, ZF, MMSE). Pero aquí aparecen como herramientas para tomar decisiones de red; cada sigla se define en la sección donde se usa por primera vez.
 
 ---
 
 ## Teoría
+
+!!! note "Vocabulario de la sesión (léelo primero: evita el 80% de la confusión)"
+
+    - **Capa = stream = flujo**: son la misma cosa y este documento los usa como sinónimos. Es un chorro de datos independiente que se transmite al mismo tiempo que los demás. Los estándares dicen *layers*; los papers dicen *streams*.
+    - **Modo espacial** (o "tubo"): cada canal paralelo e independiente escondido dentro de $\mathbf{H}$; la SVD los revela. No es sinónimo de capa: la **capa** es *lo que mandas*, el **modo** es *por dónde pasa*. Idealmente cada capa viaja por su propio modo.
+    - **Grados de libertad espaciales**: cuántas "cosas distintas a la vez" permite hacer el arreglo de antenas. Se gastan en robustez, en throughput o en servir más usuarios — no en todo a la vez.
+    - **Cerrar el enlace**: lograr que la potencia que llega al receptor alcance el SNR mínimo que exige la tasa de error objetivo. Si el enlace "no cierra", ninguna otra optimización importa.
+    - **CSI / CSIT / CSIR**: *channel state information* — el conocimiento de $\mathbf{H}$. La T o R final indica quién lo tiene: el Transmisor o el Receptor.
+    - **BS / UE**: estación base / terminal del usuario.
+    - **TDD / FDD**: duplexación por tiempo (subida y bajada alternan sobre la **misma** frecuencia → el canal de ida y el de vuelta son el mismo: *reciprocidad*) / por frecuencia (subida y bajada en bandas **distintas** → canales distintos, la reciprocidad no aplica).
+    - **FR1 / FR2**: los dos rangos de frecuencia de 5G. FR1: sub-6 GHz. FR2: ondas milimétricas (24 GHz en adelante), donde la pérdida de propagación es tan alta que sin ganancia de haz el enlace no cierra.
+    - Los términos propios de Massive MIMO (*channel hardening*, *favorable propagation*, contaminación de pilotos) se definen en §7, donde se usan de verdad.
 
 ### 1. Primero el problema de red
 
@@ -126,7 +138,7 @@ Para un canal de banda estrecha:
 
 $$\boxed{\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}} \tag{1}$$
 
-donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \in \mathbb{C}^{N_r}$ el vector recibido, $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ la matriz de canal y $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$ el ruido. Cada entrada $h_{ji}$ responde: cuánto de la antena TX $i$ llega a la antena RX $j$, con qué amplitud y fase.
+donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \in \mathbb{C}^{N_r}$ el vector recibido, $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ la matriz de canal y $\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, N_0\mathbf{I})$ el ruido. La notación $\mathcal{CN}$ se lee "gaussiana compleja": cada antena receptora sufre un ruido con parte real e imaginaria gaussianas, de potencia total $N_0$, independiente del ruido de las demás antenas (eso dice la $\mathbf{I}$). Cada entrada $h_{ji}$ responde: cuánto de la antena TX $i$ llega a la antena RX $j$, con qué amplitud y fase.
 
 <figure markdown="span">
   ![Estructura de la matriz de canal MIMO](figures/mimo-channel-matrix.png)
@@ -139,7 +151,7 @@ El modelo pedagógico más limpio es Rayleigh i.i.d.:
 
 $$h_{ji} \sim \mathcal{CN}(0,1) \tag{2}$$
 
-Significa dos cosas. **Independientes**: saber un coeficiente no predice los demás. **Idénticamente distribuidos**: todos los pares TX-RX siguen la misma estadística. Es un buen laboratorio mental para entender MIMO, aunque una red real usa modelos correlacionados como CDL del TR 38.901, con geometría de array, clusters, retardos y ángulos.
+Significa dos cosas. **Independientes**: saber un coeficiente no predice los demás. **Idénticamente distribuidos**: todos los pares TX-RX siguen la misma estadística. Es un buen laboratorio mental para entender MIMO, aunque una red real usa modelos correlacionados como CDL (*Cluster Delay Line*) del TR 38.901 — el modelo de canal estándar de 3GPP, que en vez de coeficientes independientes describe grupos de trayectos físicos con sus retardos, ángulos de salida y llegada, y la geometría real del array.
 
 En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una sola matriz $\mathbf{H}$, sino una matriz $\mathbf{H}[k]$ por subportadora $k$. La Sesión 03 ya explicó cómo OFDM convierte un canal selectivo en frecuencia en muchos canales planos; aquí se decide qué hacer espacialmente en cada uno.
 
@@ -153,6 +165,8 @@ En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una s
 | Producto interno $\mathbf{h}_i^{\mathsf{H}}\mathbf{h}_j$ | Separabilidad entre usuarios | Si MU-MIMO simultáneo es razonable |
 | Norma $\|\mathbf{h}_k\|^2$ | Fuerza del canal de un usuario | Scheduling, beamforming y power control |
 | Tiempo de coherencia | Cuánto dura el CSI | Coste de pilotos y velocidad de adaptación |
+
+Regla rápida para leer el condicionamiento: $\kappa \approx 1$ significa modos parejos, canal dócil para multiplexar; $\kappa \gtrsim 10$ significa que el modo débil es frágil y separarlo costará ruido o potencia; $\kappa \to \infty$ significa rank deficiente — hay menos modos útiles que antenas (el caso extremo es el canal *keyhole*, donde todos los trayectos pasan por un mismo "agujero" y $\kappa$ diverge).
 
 La SVD aparece como herramienta de diagnóstico:
 
@@ -193,11 +207,16 @@ Ahora podemos formular la decisión central. Con grados de libertad espaciales, 
 | Beamforming | Señal alineada en fase hacia un usuario/dirección | Cobertura DL, FR2, UEs simples | Requiere CSI o búsqueda de haz |
 | Multiplexación espacial | Capas distintas simultáneas | Alto SNR y buen rank | BER alta si el canal está mal condicionado |
 
-La teoría clásica del Diversity-Multiplexing Tradeoff (DMT) formaliza esta tensión. Para $N_t \times N_r$ i.i.d. Rayleigh:
+Las tres filas de la tabla compiten por las mismas antenas: cada grado de libertad gastado en enviar una capa extra es un grado de libertad que ya no protege a las capas restantes. Esa es la tensión. La teoría clásica del *Diversity-Multiplexing Tradeoff* (DMT, compromiso diversidad-multiplexación) la vuelve medible con dos números:
+
+- $r$ = **ganancia de multiplexación**: cuántas capas simultáneas efectivas transporta el sistema — cómo escala el throughput cuando sube el SNR;
+- $d$ = **ganancia de diversidad**: cuántos caminos independientes protegen cada capa — qué tan rápido cae la probabilidad de error al subir el SNR (BER $\propto \text{SNR}^{-d}$: a mayor $d$, la curva de error cae más en picada).
+
+Para un canal $N_t \times N_r$ i.i.d. Rayleigh, el mejor par $(r, d)$ alcanzable es:
 
 $$d^*(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
 
-La lectura práctica no es memorizar el límite, sino entender la pendiente: gastar antenas en más capas reduce la diversidad que protege cada capa.
+La lectura práctica no es memorizar el límite, sino la pendiente del compromiso: cada capa adicional (sube $r$) resta caminos de protección (baja $d$). No se puede tener el máximo de ambos a la vez.
 
 | Si el sistema ve... | Acción razonable | Por qué |
 |---|---|---|
@@ -306,6 +325,8 @@ La capacidad MIMO sigue siendo el marco teórico que explica por qué subir capa
 
 $$C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}$$
 
+donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura lo dice todo: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un tubo con ganancia $\sigma_k^2$.
+
 Pero en implementación el sistema no calcula esta expresión para lucirse. La usa como intuición para rank adaptation:
 
 1. medir o estimar calidad del canal;
@@ -333,6 +354,8 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
     Si el transmisor conoce los valores singulares, puede repartir potencia con water-filling:
 
     $$P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+$$
+
+    donde $\mu$ es el "nivel del agua" — una constante que se ajusta hasta que las potencias asignadas suman la potencia total disponible — y $(x)^+ = \max(x, 0)$: un modo que queda "bajo el agua" recibe potencia cero, no potencia negativa.
 
     La idea implementativa es simple: un modo espacial muy débil no merece potencia. En un canal 3×3 con ganancias $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$, todos los modos son fuertes y water-filling gana poco frente a potencia uniforme. En cambio, si un modo cae cerca de cero, el sistema debe bajar rank o asignarle cero potencia.
 
