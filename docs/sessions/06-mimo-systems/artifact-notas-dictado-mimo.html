@@ -333,6 +333,20 @@
       </div>
     </section>
 
+    <section id="terminologia" class="band">
+      <h2>Terminologia pactada (usarla consistente al dictar)</h2>
+      <p>El material (<code>index.md</code>) abre con una caja de vocabulario y una de prerrequisitos con referencias de repaso (3Blue1Brown caps. 13-14, Khan Academy "valores y vectores propios"). Señalarlas en los primeros minutos: ahorran la mitad de las preguntas. Convenciones que el material usa y el dictado debe respetar:</p>
+      <ul>
+        <li><strong>Capa = stream = flujo</strong>: sinonimos, es lo que se transmite. <strong>Modo espacial = subcanal</strong>: por donde pasa (cada canal paralelo dentro de H). No decir "tubo" — el termino del material es subcanal.</li>
+        <li><strong>Grados de libertad espaciales</strong> = el presupuesto (cuantas cosas a la vez); los subcanales son los objetos que lo materializan. El presupuesto puede gastarse en robustez, capas o usuarios.</li>
+        <li><strong>Tiempo de simbolo</strong>, no "ranura" ni "slot": el slot de LTE/5G agrupa muchos simbolos (14 en NR) y Alamouti opera sobre 2 tiempos de simbolo.</li>
+        <li><strong>d<sup>opt</sup>(r)</strong> en el DMT: funcion de r (se elige r, devuelve la mejor diversidad), no producto. La literatura escribe <code>d*(r)</code>; avisar la colision: en Alamouti el asterisco significa <strong>conjugado complejo</strong>, otra cosa.</li>
+        <li><strong>Eigenvalores/eigenvectores</strong>: en los textos en español el tema se llama <strong>valores y vectores propios</strong> — decir ambos nombres una vez.</li>
+        <li><strong>Condicionamiento</strong>: sensibilidad a errores al invertir H (bien condicionado = errores chicos se quedan chicos). Umbrales de dictado: kappa ≈ 1 docil, ≳ 10 fragil, → ∞ keyhole/rank deficiente.</li>
+        <li><strong>CSI / CSIT / CSIR</strong>: conocimiento de H; la letra final dice quien lo tiene (Transmisor/Receptor). CSIR barato (pilotos de bajada), CSIT caro (feedback o reciprocidad TDD).</li>
+      </ul>
+    </section>
+
     <section id="ruta" class="band">
       <h2>Ruta sugerida de dictado</h2>
       <ol>
@@ -476,6 +490,18 @@
           </details>
         </div>
       </div>
+      <details>
+        <summary>Pizarra: como se estima H con pilotos (una division por casilla)</summary>
+        <div>
+          <p>El material tiene esta caja completa ("Como se estima H con pilotos"); en pizarra basta el esqueleto en tres ideas:</p>
+          <ol>
+            <li><strong>Un piloto es una pregunta con respuesta conocida.</strong> El TX manda un simbolo pactado <code>x_p</code>; el RX recibe <code>y_p = h&middot;x_p + n</code> y despeja <code>h_hat = y_p/x_p</code>. Es estimacion, no medicion: el ruido viene incluido — por eso pilotos con potencia generosa y promediado.</li>
+            <li><strong>Una antena habla, las demas callan.</strong> Una division llena UNA casilla y H tiene <code>Nr&times;Nt</code>. Instante 1: habla TX1, las Nr antenas RX dividen a la vez → columna 1 completa. Instante 2: habla TX2 → columna 2. Dictar el caso 2x2: "2 pilotos por 2 antenas receptoras = 4 divisiones = las 4 casillas".</li>
+            <li><strong>El contraste que justifica el diseño:</strong> en REs de piloto una TX habla y no hay mezcla (ahi se MIDE H); en REs de datos todas hablan a la vez y hay mezcla total (ahi se USA H). Cada RE de piloto es throughput sacrificado, y la medida caduca con el tiempo de coherencia — entre pilotos se interpola.</li>
+          </ol>
+          <p>Cierre que engancha con el bloque 7: "quien ejecuta la division y como viaja el resultado al otro extremo (feedback FDD o reciprocidad TDD) es lo que decide la arquitectura de Massive MIMO".</p>
+        </div>
+      </details>
       <figure>
         <img src="figures/mimo-svd-channels.png" alt="SVD del canal MIMO">
         <figcaption>La SVD se presenta como forma de ver cuantos canales paralelos realmente existen.</figcaption>
@@ -488,8 +514,8 @@
         <div>
           <ol>
             <li>Escribir <code>H = [[1, 0.5], [0.5, 1]]</code> y al lado <code>y = Hx + n</code>.</li>
-            <li>Probar las direcciones naturales sin calcular SVD completa: <code>v1 = (1,1)/&radic;2</code> y <code>v2 = (1,-1)/&radic;2</code>. De donde salen: <code>v1</code> = las dos antenas en fase — el camino cruzado SUMA al directo (<code>1 + 0.5 = 1.5</code>); <code>v2</code> = antenas en contrafase — el cruzado RESTA (<code>1 - 0.5 = 0.5</code>). No se derivan: se proponen por esa intuicion y se verifican multiplicando en vivo: <code>H&middot;v1 = 1.5&middot;v1</code>, <code>H&middot;v2 = 0.5&middot;v2</code> (4 numeros, irrefutable). Si preguntan por un canal no simetrico: "ahi numpy calcula la SVD; este ejemplo se eligio simetrico para verlo a mano una vez en la vida".</li>
-            <li>Contraste que le da sentido al test: probar un vector cualquiera, <code>H&middot;(1,0) = (1, 0.5)</code> — entro por una antena y salio regado por las dos: el canal lo MEZCLO. Ese es el comportamiento normal; <code>v1</code> y <code>v2</code> son las unicas direcciones que salen limpias (solo escaladas). Transmitir alineado con ellas convierte el 2x2 mezclador en dos tubos SISO independientes de ganancias 1.5 y 0.5 — eso es la SVD sin decir las palabras.</li>
+            <li>Probar las direcciones naturales sin calcular SVD completa: <code>v1 = (1,1)/&radic;2</code> y <code>v2 = (1,-1)/&radic;2</code>. De donde salen: <code>v1</code> = las dos antenas en fase — el camino cruzado SUMA al directo (<code>1 + 0.5 = 1.5</code>); <code>v2</code> = antenas en contrafase — el cruzado RESTA (<code>1 - 0.5 = 0.5</code>). No se derivan: se proponen por esa intuicion y se verifican multiplicando en vivo: <code>H&middot;v1 = 1.5&middot;v1</code>, <code>H&middot;v2 = 0.5&middot;v2</code> (4 numeros comprobables en pizarra). Si preguntan por un canal no simetrico o por el procedimiento general: el material tiene la receta completa de 5 pasos (via <code>H^H&middot;H</code>, con la relacion <code>sigma = &radic;lambda</code>: los eigenvalores son energias, sigma es amplitud) y un segundo ejemplo no simetrico donde <code>U &ne; V</code> — remitir ahi, no improvisarlo en pizarra.</li>
+            <li>Contraste que le da sentido al test: probar un vector cualquiera, <code>H&middot;(1,0) = (1, 0.5)</code> — entro por una antena y salio regado por las dos: el canal lo MEZCLO. Ese es el comportamiento normal; <code>v1</code> y <code>v2</code> son las unicas direcciones que salen limpias (solo escaladas). Transmitir alineado con ellas convierte el 2x2 mezclador en dos subcanales SISO independientes de ganancias 1.5 y 0.5 — eso es la SVD sin decir las palabras. Vocabulario en voz alta: "a estos canales paralelos el material los llama subcanales o modos espaciales; la capa es lo que mando, el subcanal es por donde pasa".</li>
             <li>Anotar ganancias: <code>sigma_1^2 = 2.25</code> contra <code>sigma_2^2 = 0.25</code>. La segunda capa es nueve veces mas debil.</li>
             <li>Chequeo de energia en la misma pizarra: <code>||H||_F^2 = 1 + 0.25 + 0.25 + 1 = 2.5 = 2.25 + 0.25</code>. La energia total se reparte entre modos.</li>
           </ol>
@@ -501,11 +527,11 @@
         <div>
           <p>No leer las 6 filas en orden. Dibujar <code>H</code> al centro y sacar tres flechas:</p>
           <ol>
-            <li><strong>¿Cuantas capas?</strong> (mirar DENTRO de una H): rank cuenta los tuneles, <code>sigma_k</code> mide el ancho de cada uno, <code>kappa</code> compara el mejor contra el peor. Propiedades de UN usuario; alimentan la decision de multiplexacion.</li>
+            <li><strong>¿Cuantas capas?</strong> (mirar DENTRO de una H): rank cuenta los subcanales, <code>sigma_k</code> mide el ancho de cada uno, <code>kappa</code> compara el mejor contra el peor. Propiedades de UN usuario; alimentan la decision de multiplexacion.</li>
             <li><strong>¿Que usuarios van juntos?</strong> (mirar ENTRE usuarios): el producto interno dice cuanto se parecen dos usuarios vistos desde la BS — esto ES la P2 del bloque 1: producto cerca de 1 = "se ven iguales". La norma dice quien llega fuerte y quien necesita ayuda. Alimentan scheduler y MU-MIMO.</li>
             <li><strong>¿Cuanto dura la foto?</strong> (mirar el RELOJ): el tiempo de coherencia no mide el canal — mide la fecha de caducidad de las otras cinco filas. De ahi el costo de pilotos y la velocidad de adaptacion.</li>
           </ol>
-          <p>Gancho con el 2x2 recien calculado: las tres primeras filas ya tienen numeros en la pizarra — rank 2, <code>sigma = 1.5 / 0.5</code>, y calcular en vivo <code>kappa = 1.5/0.5 = 3</code>. Anunciar: "recuerden este 3: es el desbalance que en el bloque 5 se traduce en el x2.22 de ruido que paga ZF".</p>
+          <p>Gancho con el 2x2 recien calculado: las tres primeras filas ya tienen numeros en la pizarra — rank 2, <code>sigma = 1.5 / 0.5</code>, y calcular en vivo <code>kappa = 1.5/0.5 = 3</code>. Anunciar: "recuerden este 3: es el desbalance que en el bloque 5 se traduce en el x2.22 de ruido que paga ZF". Al dictar kappa, dar el significado del termino (viene del analisis numerico): "condicionamiento = sensibilidad a errores; kappa dice cuantas veces se amplifican al invertir H". Escalada si la clase va bien — el canal B del material: subir el acoplamiento a 0.9 da <code>sigma = 1.9 / 0.1</code>, <code>kappa = 19</code>, y ZF pagaria x50. Mismo rank algebraico, destino opuesto; la frase del material: "el rank cuenta los modos; kappa dice si valen algo". Fisica en una linea: con 0.9 las dos antenas RX escuchan casi lo mismo — la segunda capa vive en la resta <code>1 - 0.9</code>, y el ruido entierra diferencias pequeñas.</p>
           <p>Metafora que continua el bloque 1: alla fueron sintomas externos (SNR, BLER); aqui llego el analisis de laboratorio (la H estimada con pilotos). Frase de dictado: <strong>"H no se mira, se interroga; estas son las seis preguntas"</strong>. Y como la tabla del bloque 1, esta tambien es indice: kappa → bloque 5 (detectores), sigma_k → bloque 6 (water-filling y rank), producto interno → bloque 5 (MU-MIMO), coherencia → bloque 7 (CSI y pilotos).</p>
         </div>
       </details>
@@ -531,19 +557,20 @@
       <details>
         <summary>Pizarra: Alamouti en cuatro lineas</summary>
         <div>
+          <p>Antes de la tabla, dos avisos de notacion en voz alta: el asterisco aqui es <strong>conjugado complejo</strong> (no el "optimo" del DMT — colision de simbolos), y las dos filas son <strong>tiempos de simbolo</strong> consecutivos, no slots (un slot NR son 14 simbolos).</p>
           <ol>
-            <li>Tabla 2 ranuras x 2 antenas: ranura 1 envia <code>s1, s2</code>; ranura 2 envia <code>-s2*, s1*</code>.</li>
-            <li>Recibido: <code>r1 = h1&middot;s1 + h2&middot;s2 + n1</code>, <code>r2 = -h1&middot;s2* + h2&middot;s1* + n2</code>.</li>
-            <li>Combinador: <code>s1_hat = h1*&middot;r1 + h2&middot;r2*</code>. Expandir en vivo y mostrar que los terminos cruzados se cancelan.</li>
-            <li>Resultado: <code>sk_hat = (|h1|^2 + |h2|^2)&middot;sk + ruido</code> — cada simbolo cobra ambos trayectos, sin CSIT.</li>
+            <li>Tabla 2 tiempos de simbolo x 2 antenas: tiempo 1 envia <code>s1, s2</code>; tiempo 2 envia <code>-s2*, s1*</code> (intercambiados, conjugados, un signo cambiado — el patron esta diseñado hacia atras desde la cancelacion del paso 3).</li>
+            <li>Recibido: <code>r1 = h1&middot;s1 + h2&middot;s2 + n1</code>, <code>r2 = -h1&middot;s2* + h2&middot;s1* + n2</code> (mismos h: dos tiempos de simbolo caben de sobra en el tiempo de coherencia).</li>
+            <li>Combinador: <code>s1_hat = h1*&middot;r1 + h2&middot;r2*</code>. De donde salen los pesos — regla del filtro adaptado, dictable en una frase: "cada copia de s1 se multiplica por el conjugado del coeficiente que la acompaña; <code>h*&middot;h&middot;s = |h|^2&middot;s</code> cancela la fase y alinea las copias para que sumen". Expandir en vivo y mostrar que los terminos cruzados se cancelan exacto.</li>
+            <li>Resultado: <code>sk_hat = (|h1|^2 + |h2|^2)&middot;sk + ruido</code> — cada simbolo cobra ambos trayectos, sin CSIT. La SNR final es la suma de las SNR de los dos caminos.</li>
           </ol>
-          <p>Caso numerico rapido si hay tiempo: <code>h1 = 1, h2 = j</code> da <code>s1_hat = 2&middot;s1</code>. Verificable en una linea.</p>
+          <p>Caso numerico rapido si hay tiempo: <code>h1 = 1, h2 = j</code> da <code>s1_hat = 2&middot;s1</code>. Verificable en una linea. Precio para cerrar: 2 simbolos en 2 tiempos = tasa 1, igual que una sola antena — Alamouti no multiplexa, gasta el presupuesto espacial completo en proteccion.</p>
         </div>
       </details>
       <details>
         <summary>Pizarra: DMT como dibujo, no como formula</summary>
         <div>
-          <p>Ejes: diversidad <code>d</code> contra multiplexacion <code>r</code>. Para 2x2 marcar solo tres puntos: <code>(r=0, d=4)</code>, <code>(r=1, d=1)</code>, <code>(r=2, d=0)</code>, y unirlos con recta quebrada. Leerlo en voz alta: "cada capa que agrego me quita proteccion". Es la Figura 5 hecha a mano, para que quede la pendiente y no la formula.</p>
+          <p>Definir los dos ejes antes de dibujar: <code>r</code> = ganancia de multiplexacion (cuantas capas efectivas); <code>d</code> = ganancia de diversidad (que tan rapido cae el error: BER &prop; SNR<sup>-d</sup>). La formula del material es <code>d_opt(r) = (Nt-r)(Nr-r)</code> — funcion de r, no producto: se elige r y la formula devuelve la mejor d alcanzable. Para 2x2 evaluar en vivo los tres puntos: <code>d_opt(0) = 2&middot;2 = 4</code>, <code>d_opt(1) = 1&middot;1 = 1</code>, <code>d_opt(2) = 0</code>, y unirlos con recta quebrada. Leerlo en voz alta: "cada capa que agrego me quita proteccion". Es la Figura 5 hecha a mano, para que quede la pendiente y no la formula. Ubicar Alamouti en el dibujo: vive en <code>r = 0</code>, proteccion maxima.</p>
         </div>
       </details>
     </section>
@@ -566,8 +593,9 @@
         <div>
           <ol>
             <li>Recuperar el canal 2x2 del bloque 3. Escribir <code>H^H&middot;H = [[1.25, 1], [1, 1.25]]</code>.</li>
-            <li>Invertir en vivo: determinante <code>0.5625</code>, diagonal de la inversa <code>1.25/0.5625 &asymp; 2.22</code>.</li>
+            <li>Invertir en vivo con la regla 2x2 (dictarla: "intercambio la diagonal, niego la antidiagonal, divido entre el determinante"): determinante <code>1.25^2 - 1 = 0.5625</code>, diagonal de la inversa <code>1.25/0.5625 &asymp; 2.22</code>.</li>
             <li>Conclusion en una frase: ZF elimina la interferencia pero multiplica el ruido de cada flujo por 2.22. MMSE existe para no pagar eso completo.</li>
+            <li>Escalada si el bloque 3 dicto el canal B (acoplamiento 0.9): la misma cuenta da diagonal <code>&asymp; 50</code> — el ruido x50. Ahi kappa se vuelve numero: paso de 3 a 19 y el precio de invertir paso de x2.22 a x50 (crece como <code>1/sigma_2^2</code>, el modo debil manda).</li>
           </ol>
         </div>
       </details>
@@ -623,7 +651,7 @@
       <details>
         <summary>Pizarra: water-filling como recipiente</summary>
         <div>
-          <p>Dibujar un recipiente con un escalon por modo espacial, de altura <code>N0/sigma_k^2</code>: el modo fuerte es un escalon bajo, el debil uno alto. Verter "agua" hasta el nivel <code>mu</code>; la potencia de cada modo es el agua que queda sobre su escalon. Con las ganancias del material (<code>sigma^2 = 52, 13, 4</code>) los tres escalones quedan bajo el agua y water-filling gana poco frente al reparto uniforme. El mensaje operativo: si un escalon sobresale del agua, ese modo recibe cero potencia — y apagar un modo ES bajar rank.</p>
+          <p>Dibujar un recipiente con un escalon por modo espacial, de altura <code>N0/sigma_k^2</code>: el modo fuerte es un escalon bajo, el debil uno alto. Verter "agua" hasta el nivel <code>mu</code> (definirlo al dictar: la constante que se ajusta hasta que las potencias suman el total disponible); la potencia de cada modo es el agua que queda sobre su escalon. Con las ganancias del material (<code>sigma^2 = 52, 13, 4</code>) los tres escalones quedan bajo el agua: reparto <code>(0.43, 0.37, 0.20)</code>, casi uniforme — water-filling gana poco. Segundo caso del material: hundir el tercer modo a <code>sigma_3^2 = 0.04</code> — su escalon (<code>N0/0.04 = 25</code>) sobresale de cualquier nivel de agua alcanzable y recibe <strong>cero</strong> potencia. El mensaje operativo: apagar un modo ES bajar rank — water-filling hace rank adaptation por si solo.</p>
         </div>
       </details>
     </section>
