@@ -275,25 +275,31 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     ---
 
-    **El mismo procedimiento con un canal no simétrico — donde U se construye de verdad.** En el ejemplo anterior $\mathbf{U} = \mathbf{V}$ y el Paso 4 pasa desapercibido. Considérese un canal cruzado:
+    **El mismo procedimiento con un canal no simétrico.** En el ejemplo anterior $\mathbf{U} = \mathbf{V}$ por la simetría de $\mathbf{H}$; ese es el caso excepcional. Un canal típico tiene los cuatro acoplamientos no nulos y los cruzados desiguales:
 
-    $$\mathbf{H} = \begin{pmatrix} 0 & -1 \\ 2 & 0 \end{pmatrix}$$
+    $$\mathbf{H} = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix}$$
 
-    (lo que sale de TX$_1$ llega solo a RX$_2$ con ganancia 2; lo de TX$_2$ llega solo a RX$_1$ invertido). Aquí $h_{12} \neq h_{21}$: no hay simetría.
+    Caminos directos comparables ($h_{11} = h_{22} = 1{,}2$) y acoplamientos cruzados distintos ($h_{12} = 0{,}4 \neq h_{21} = 1{,}1$): sin simetría.
 
-    *Paso 1:* $\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 4 & 0 \\ 0 & 1 \end{pmatrix}$ — sale diagonal, el caso más fácil.
+    *Paso 1:*
 
-    *Paso 2:* $\lambda_1 = 4$, $\lambda_2 = 1$ (ya están en la diagonal) $\Rightarrow$ $\sigma_1 = 2$, $\sigma_2 = 1$.
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}2^2 + 1{,}1^2 & 1{,}2 \cdot 0{,}4 + 1{,}1 \cdot 1{,}2 \\ 1{,}8 & 0{,}4^2 + 1{,}2^2 \end{pmatrix} = \begin{pmatrix} 2{,}65 & 1{,}8 \\ 1{,}8 & 1{,}6 \end{pmatrix}$$
 
-    *Paso 3:* los eigenvectores de una matriz diagonal son los ejes: $\mathbf{v}_1 = \binom{1}{0}$, $\mathbf{v}_2 = \binom{0}{1}$, es decir $\mathbf{V} = \mathbf{I}$: las mejores direcciones de entrada son las antenas mismas.
+    *Paso 2:* el polinomio característico es $\lambda^2 - 4{,}25\,\lambda + 1 = 0$ (traza $= 2{,}65 + 1{,}6 = 4{,}25$; determinante $= 2{,}65 \cdot 1{,}6 - 1{,}8^2 = 1$). El discriminante es $4{,}25^2 - 4 = 14{,}0625 = 3{,}75^2$:
 
-    *Paso 4 — aquí U trabaja:*
+    $$\lambda_1 = \frac{4{,}25 + 3{,}75}{2} = 4, \qquad \lambda_2 = \frac{4{,}25 - 3{,}75}{2} = 0{,}25 \;\Rightarrow\; \sigma_1 = 2, \; \sigma_2 = 0{,}5$$
 
-    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{2}\begin{pmatrix} 0 \\ 2 \end{pmatrix} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}, \qquad \mathbf{u}_2 = \frac{\mathbf{H}\mathbf{v}_2}{\sigma_2} = \begin{pmatrix} -1 \\ 0 \end{pmatrix} \;\Rightarrow\; \mathbf{U} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix} \neq \mathbf{V}$$
+    *Paso 3:* para $\lambda_1 = 4$: $(2{,}65 - 4)x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x$, dirección $(4, 3)$, normalizada $\mathbf{v}_1 = \binom{0{,}8}{0{,}6}$. Para $\lambda_2 = 0{,}25$: $2{,}4\,x + 1{,}8\,y = 0 \Rightarrow$ $\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}$.
 
-    *Paso 5:* $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}\mathbf{I} = \begin{pmatrix} 0 & -1 \\ 2 & 0 \end{pmatrix} = \mathbf{H} \;\checkmark$
+    *Paso 4:*
 
-    La lectura física: se inyecta $\mathbf{v}_1$ (solo la antena TX$_1$) y la señal aparece como $\mathbf{u}_1$ (solo la antena RX$_2$) — el canal **rotó** la dirección. Por eso la SVD necesita dos juegos de direcciones: $\mathbf{V}$ dice cómo entrar y $\mathbf{U}$ dice con qué patrón sale; el transmisor alinea con $\mathbf{v}_k$ y el receptor proyecta sobre $\mathbf{u}_k$. En el ejemplo simétrico no había rotación y ambos juegos coincidían. (Un canal real tiene entradas complejas aleatorias y produce $\mathbf{U} \neq \mathbf{V}$ con números menos redondos; este se eligió con ceros para que la aritmética se siga a mano.)
+    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{2}\begin{pmatrix} 1{,}2 \\ 1{,}6 \end{pmatrix} = \begin{pmatrix} 0{,}6 \\ 0{,}8 \end{pmatrix}, \qquad \mathbf{u}_2 = \frac{\mathbf{H}\mathbf{v}_2}{\sigma_2} = \frac{1}{0{,}5}\begin{pmatrix} -0{,}4 \\ 0{,}3 \end{pmatrix} = \begin{pmatrix} -0{,}8 \\ 0{,}6 \end{pmatrix}$$
+
+    $$\mathbf{U} = \begin{pmatrix} 0{,}6 & -0{,}8 \\ 0{,}8 & 0{,}6 \end{pmatrix} \neq \mathbf{V} = \begin{pmatrix} 0{,}8 & -0{,}6 \\ 0{,}6 & 0{,}8 \end{pmatrix}$$
+
+    *Paso 5:* $\mathbf{U}\mathbf{\Sigma} = \begin{pmatrix} 1{,}2 & -0{,}4 \\ 1{,}6 & 0{,}3 \end{pmatrix}$, y $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix} = \mathbf{H} \;\checkmark$ (también cuadra $\det \mathbf{H} = 1{,}44 - 0{,}44 = 1 = \sigma_1\sigma_2$).
+
+    La lectura: el mejor patrón de entrada es $\mathbf{v}_1 = (0{,}8;\, 0{,}6)$ — más peso en TX$_1$ — pero la señal llega al receptor como $\mathbf{u}_1 = (0{,}6;\, 0{,}8)$ — más peso en RX$_2$. El canal rotó la dirección al atravesarlo; por eso la SVD lleva dos juegos de direcciones: el transmisor alinea con $\mathbf{v}_k$ y el receptor proyecta sobre $\mathbf{u}_k$. Nota práctica: los eigenvectores están definidos salvo signo — `numpy` puede devolver $\mathbf{v}_2$ y $\mathbf{u}_2$ con ambos signos invertidos; el producto $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}$ no cambia.
 
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
