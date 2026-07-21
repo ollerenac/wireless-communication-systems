@@ -132,6 +132,8 @@ En un teléfono pequeño, dos antenas pueden estar tan correlacionadas que el se
 
 ### 3. El canal como diagnóstico operativo
 
+El título merece una línea: "diagnóstico operativo" significa que $\mathbf{H}$ funciona como el análisis de sangre del enlace. No se estima por curiosidad matemática — se estima porque cada decisión de operación se **lee** de ahí: quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Diagnóstico primero, tratamiento después; sin $\mathbf{H}$ medida, todas las decisiones de esta sesión serían a ciegas.
+
 La matriz de canal no es solo notación. En un sistema real, $\mathbf{H}$ es el objeto que se estima con pilotos y del que salen decisiones de scheduler, rank, beamforming, precoding y detección.
 
 Para un canal de banda estrecha:
@@ -146,6 +148,33 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
   <figcaption markdown="1">**Figura 3.** Matriz $\mathbf{H}$ para un sistema $4 \times 4$. Cada casilla contiene magnitud y fase del acoplamiento entre una antena transmisora y una receptora. Para implementación, esta matriz no es abstracta: es el insumo que estima el receptor o la estación base para decidir rank, precoder y detector.
   </figcaption>
 </figure>
+
+??? example "De dónde sale H: pilotos, silencio y una división por casilla"
+
+    $\mathbf{H}$ no se conoce por decreto: se mide. El mecanismo completo cabe en tres ideas.
+
+    **1. Un piloto es una pregunta cuya respuesta ya se conoce.** El transmisor envía un símbolo $x_p$ pactado de antemano — el receptor sabe exactamente qué se transmitió. Recibe $y_p = h\,x_p + n$ y despeja:
+
+    $$\hat{h} = \frac{y_p}{x_p} = h + \frac{n}{x_p}$$
+
+    Es una estimación, no una medición perfecta: el ruido viene incluido. Por eso los pilotos se transmiten con potencia generosa y se promedian varios.
+
+    **2. Para llenar una matriz: una antena habla, las demás callan.** Una división llena **una casilla**, y $\mathbf{H} \in \mathbb{C}^{N_r \times N_t}$ tiene $N_r N_t$ casillas. El protocolo:
+
+    - *Instante 1*: TX$_1$ transmite su piloto; TX$_2, \ldots,$ TX$_{N_t}$ guardan silencio. Cada antena receptora $j$ escucha su propia versión, $y_j = h_{j1}x_p + n_j$, y divide: $\hat{h}_{j1} = y_j/x_p$. Las $N_r$ divisiones simultáneas llenan la **columna 1**.
+    - *Instante 2*: habla TX$_2$ → columna 2. Y así hasta TX$_{N_t}$.
+
+    Un 2×2: 2 pilotos × 2 "oídos" = 4 divisiones = las 4 casillas. En el grid tiempo-frecuencia de OFDM, cada antena TX tiene reservados sus *resource elements* de piloto — separados en tiempo, en frecuencia o por códigos ortogonales — y en los REs de piloto de una antena, las demás transmiten cero.
+
+    **3. El contraste que le da sentido al diseño:**
+
+    | REs de piloto | REs de datos |
+    |---|---|
+    | una TX habla, el resto calla | todas hablan a la vez |
+    | sin mezcla → división directa | mezcla total → hace falta $\mathbf{H}$ |
+    | aquí se **mide** $\mathbf{H}$ | aquí se **usa** $\mathbf{H}$ |
+
+    Nada es gratis: cada RE gastado en piloto no lleva datos, y la medida caduca — vale durante el tiempo de coherencia y en las subportadoras vecinas dentro del ancho de banda de coherencia; entre pilotos se interpola. Quién ejecuta la división y cómo llega el resultado al otro extremo (feedback en FDD vía RI/PMI/CQI, o reciprocidad en TDD) es exactamente el cuello de botella que decide la arquitectura de Massive MIMO en §7.1.
 
 El modelo pedagógico más limpio es Rayleigh i.i.d.:
 
@@ -174,12 +203,48 @@ $$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} \tag{3}$$
 
 La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direcciones de transmisión; las columnas de $\mathbf{U}$ son combinaciones de recepción; los valores singulares $\sigma_k$ dicen cuán bueno es cada modo. Si el segundo valor singular es pequeño, el segundo stream existe en álgebra, pero será caro en BER.
 
+Una imagen sostiene el resto de la sesión. La SVD dice que dentro de cualquier $\mathbf{H}$ — por revuelto que se vea el canal antena a antena — viven canales paralelos que **no se mezclan entre sí**: los "tubos" (los modos espaciales del vocabulario inicial). Los tubos no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa imagen, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos tubos:
+
+| Decisión | Pregunta sobre los tubos | Dónde se desarrolla |
+|---|---|---|
+| Rank | ¿cuántos tubos vale la pena abrir? | §3.1 y §6 |
+| Beamforming | si abro uno solo, ¿toda la potencia por el más fuerte? | §4 |
+| Precoding | ¿cómo alineo cada capa con la boca de su tubo? | §5.2 |
+| Scheduler | ¿los tubos de **quién** están mejor en este instante? | §5.2 y §7 |
+| Detección | si el TX no pudo alinear (sin CSIT), ¿cómo deshace el RX la mezcla y a qué precio? | §5.1 |
+
+Precoding y detección son simétricos: el primero arregla la mezcla **antes** de transmitir (lado $\mathbf{V}$, exige CSIT); la segunda la arregla **después** de recibir (lado $\mathbf{U}$, basta CSIR). Mismo problema, dos extremos del cable.
+
 <figure markdown="span">
   ![SVD descompone H en canales paralelos](figures/mimo-svd-channels.png)
   <!-- generada por celda 5 de lab.ipynb -->
   <figcaption markdown="1">**Figura 4.** La SVD interpreta el canal MIMO como modos espaciales paralelos. En una lección implementativa, esto se usa como diagnóstico de rank y calidad de capas: no basta contar antenas; hay que mirar cuántos modos espaciales son fuertes.
   </figcaption>
 </figure>
+
+??? example "Receta: la SVD de un 2×2 a mano, una vez en la vida"
+
+    El ejemplo siguiente usa $\mathbf{v}_1$, $\mathbf{v}_2$, $\sigma_1$, $\sigma_2$ — esta caja muestra de dónde salen. Cuatro pasos que funcionan para cualquier matriz; aquí con $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$.
+
+    **Paso 1.** Formar $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (siempre sale simétrica):
+
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
+
+    **Paso 2.** Sus eigenvalores son los $\sigma^2$:
+
+    $$\det(\mathbf{H}^{\mathsf{H}}\mathbf{H} - \lambda\mathbf{I}) = (1{,}25-\lambda)^2 - 1 = 0 \;\Rightarrow\; \lambda_1 = 2{,}25, \; \lambda_2 = 0{,}25$$
+
+    $$\sigma_1 = \sqrt{2{,}25} = 1{,}5, \qquad \sigma_2 = \sqrt{0{,}25} = 0{,}5$$
+
+    **Paso 3.** Sus eigenvectores son las columnas de $\mathbf{V}$:
+
+    $$(\mathbf{H}^{\mathsf{H}}\mathbf{H} - 2{,}25\,\mathbf{I})\,\mathbf{v} = \begin{pmatrix} -1 & 1 \\ 1 & -1 \end{pmatrix}\mathbf{v} = \mathbf{0} \;\Rightarrow\; \mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}$$
+
+    y con $\lambda_2 = 0{,}25$ sale $\mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$.
+
+    **Paso 4.** Las columnas de $\mathbf{U}$: $\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k$. Aquí da $\mathbf{u}_1 = \mathbf{v}_1$ y $\mathbf{u}_2 = \mathbf{v}_2$ — coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas.
+
+    **Verificación en una línea:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$ — cuatro productos, irrefutable. En la práctica esto lo hace `numpy.linalg.svd(H)`; la cuenta a mano es la que convierte la ecuación (3) de jeroglífico en procedimiento.
 
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
