@@ -245,9 +245,9 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     Procedimiento para obtener los valores singulares ($\sigma_1$, $\sigma_2$) y las direcciones ($\mathbf{v}_1$, $\mathbf{v}_2$) de un canal — los mismos que el ejemplo posterior usa como datos. Son cuatro pasos válidos para cualquier matriz, aplicados aquí a $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$.
 
-    **Paso 1.** Formar $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (siempre sale simétrica):
+    **Paso 1.** Formar $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (siempre sale simétrica). Esta $\mathbf{H}$ es real y simétrica, así que $\mathbf{H}^{\mathsf{H}} = \mathbf{H}$:
 
-    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix} = \begin{pmatrix} 1 + 0{,}25 & 0{,}5 + 0{,}5 \\ 0{,}5 + 0{,}5 & 0{,}25 + 1 \end{pmatrix} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
 
     **Paso 2.** Sus eigenvalores son los $\sigma^2$:
 
@@ -267,7 +267,11 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     y con $\lambda_2 = 0{,}25$ sale $\mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$.
 
-    **Paso 4.** Las columnas de $\mathbf{U}$: $\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k$. Aquí da $\mathbf{u}_1 = \mathbf{v}_1$ y $\mathbf{u}_2 = \mathbf{v}_2$ — coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas.
+    **Paso 4.** Las columnas de $\mathbf{U}$: $\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k$. Con los números:
+
+    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{1{,}5} \cdot \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \cdot 1 + 0{,}5 \cdot 1 \\ 0{,}5 \cdot 1 + 1 \cdot 1 \end{pmatrix} = \frac{1}{1{,}5} \cdot \frac{1}{\sqrt{2}}\begin{pmatrix} 1{,}5 \\ 1{,}5 \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \mathbf{v}_1$$
+
+    y análogamente $\mathbf{u}_2 = \mathbf{H}\mathbf{v}_2/0{,}5 = \mathbf{v}_2$. Coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas (el segundo ejemplo de esta caja lo muestra).
 
     **Paso 5.** Ensamblar las tres matrices de la ecuación (3). Cada $\mathbf{v}_k$ es una columna de $\mathbf{V}$, cada $\mathbf{u}_k$ una columna de $\mathbf{U}$, y los $\sigma_k$ forman la diagonal de $\mathbf{\Sigma}$:
 
@@ -481,7 +485,11 @@ $$\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$$
 
     $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
 
-    y:
+    Para invertirla se usa la regla de la inversa 2×2 — intercambiar la diagonal, cambiar el signo de la antidiagonal y dividir todo entre el determinante:
+
+    $$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$$
+
+    Con $\det = 1{,}25^2 - 1^2 = 0{,}5625$:
 
     $$(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 & -1 \\ -1 & 1{,}25 \end{pmatrix}$$
 
