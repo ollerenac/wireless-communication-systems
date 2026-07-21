@@ -432,39 +432,63 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
 ??? example "Alamouti: diversidad plena sin CSIT"
 
-    El ejemplo clásico de diversidad es el código de Alamouti 2×1. Dos antenas TX, una RX, y dos tiempos de símbolo consecutivos (no confundir con el *slot* de LTE/5G, que agrupa muchos símbolos):
+    Primero el título, palabra por palabra. **Diversidad plena**: cada símbolo va a viajar por *todos* los caminos disponibles (aquí 2), el máximo posible — el enlace solo falla si todos los caminos fallan a la vez. **Sin CSIT**: el transmisor va a lograrlo sin conocer el canal — no hay feedback, no hay pilotos de regreso; solo el receptor conoce $h_1$ y $h_2$ (CSIR, que obtiene gratis de los pilotos de bajada).
 
-    | | Antena 1 | Antena 2 |
+    **Escenario y notación.** Dos antenas transmisoras, una receptora. $h_1$ es el canal de la antena TX 1 a la antena RX; $h_2$, el de la TX 2. Son números **complejos**: su magnitud dice cuánto se atenúa el camino y su fase cuánto se desfasa. Notación que aparece en todo el desarrollo:
+
+    - $s^*$ = **conjugado complejo** de $s$: mismo número con la fase invertida ($a + jb \mapsto a - jb$). Ojo: este asterisco no es el "óptimo" de la ecuación (4) — colisión de notación desafortunada pero universal en la literatura.
+    - $|h|^2 = h^*h$ = magnitud al cuadrado: la **ganancia de potencia** del camino. Siempre real y positiva — conjugar y multiplicar elimina la fase.
+    - $\hat{s}$ (con sombrero) = **estimación** de $s$: lo que el receptor reconstruye, distinto del $s$ verdadero porque lleva ruido.
+    - $n_1, n_2$ = ruido que la antena receptora suma en cada tiempo de símbolo.
+
+    **La estrategia.** Se quieren enviar dos símbolos de datos, $s_1$ y $s_2$, usando dos tiempos de símbolo consecutivos (no confundir con el *slot* de LTE/5G, que agrupa muchos símbolos). El código dicta qué transmite cada antena en cada tiempo:
+
+    | | Antena TX 1 | Antena TX 2 |
     |---|---|---|
     | Tiempo de símbolo 1 | $s_1$ | $s_2$ |
     | Tiempo de símbolo 2 | $-s_2^*$ | $s_1^*$ |
 
-    Con canales $h_1, h_2$ constantes durante los dos tiempos de símbolo:
+    En el tiempo 1 se transmiten los símbolos tal cual; en el tiempo 2 se retransmiten **intercambiados, conjugados y con un signo cambiado**. Ese patrón extraño es el corazón del código; al final del desarrollo se verá que está elegido a la medida de una cancelación.
 
-    $$r_1 = h_1s_1 + h_2s_2 + n_1, \qquad r_2 = -h_1s_2^* + h_2s_1^* + n_2$$
+    **Lo que llega al receptor.** El aire suma linealmente lo que ambas antenas emiten, cada una filtrada por su camino. En el tiempo de símbolo 1, la antena TX 1 emite $s_1$ (llega como $h_1 s_1$) y la TX 2 emite $s_2$ (llega como $h_2 s_2$); el receptor captura la suma más su ruido:
 
-    El receptor combina:
+    $$r_1 = h_1 s_1 + h_2 s_2 + n_1$$
 
-    $$\hat{s}_1 = h_1^*r_1 + h_2r_2^*, \qquad \hat{s}_2 = h_2^*r_1 - h_1r_2^*$$
+    En el tiempo de símbolo 2, la TX 1 emite $-s_2^*$ y la TX 2 emite $s_1^*$; con los **mismos** $h_1, h_2$ (el canal no cambió: dos tiempos de símbolo caben de sobra dentro del tiempo de coherencia):
 
-    Desarrollo término a término para $\hat{s}_1$. Primero se conjuga $r_2$:
+    $$r_2 = -h_1 s_2^* + h_2 s_1^* + n_2$$
 
-    $$r_2^* = -h_1^*s_2 + h_2^*s_1 + n_2^*$$
+    Hasta aquí el receptor tiene dos ecuaciones ($r_1$, $r_2$) y dos incógnitas ($s_1$, $s_2$) — un sistema mezclado, como cualquier canal MIMO.
 
-    Luego sustituir ambos ingredientes:
+    **La jugada del receptor.** Conoce $h_1$ y $h_2$. Con ellos construye dos combinaciones diseñadas para que, en cada una, sobreviva un solo símbolo:
 
-    $$h_1^*r_1 = |h_1|^2s_1 + \underline{h_1^*h_2\,s_2} + h_1^*n_1$$
+    $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^*, \qquad \hat{s}_2 = h_2^* r_1 - h_1 r_2^*$$
 
-    $$h_2r_2^* = \underline{-h_1^*h_2\,s_2} + |h_2|^2s_1 + h_2n_2^*$$
+    (De dónde salen estos pesos: son la parte del diseño que se ingenió junto con la tabla — el par tabla + pesos es el código. Verifiquemos que funcionan.)
 
-    Los términos subrayados son idénticos con signo opuesto — al sumar, $s_2$ desaparece **exactamente**, sin aproximación:
+    Desarrollo completo para $\hat{s}_1$. Se necesita $r_2^*$: conjugar una suma es conjugar cada término, conjugar un producto es conjugar cada factor, y $(s^*)^* = s$:
 
-    $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)s_1 + \tilde{n}_1$$
+    $$r_2^* = (-h_1 s_2^* + h_2 s_1^* + n_2)^* = -h_1^* s_2 + h_2^* s_1 + n_2^*$$
 
-    (y lo simétrico ocurre para $\hat{s}_2$). El patrón de la tabla no es arbitrario: el $-s_2^*$ y el $s_1^*$ del segundo tiempo de símbolo se eligen precisamente desde esta cancelación — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
+    Primer ingrediente — multiplicar $r_1$ por $h_1^*$, término a término (usando $h_1^* h_1 = |h_1|^2$):
 
-    Cada símbolo aprovecha ambos trayectos: la ganancia $|h_1|^2 + |h_2|^2$ es diversidad 2 — el enlace solo cae si **ambos** caminos caen a la vez. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
+    $$h_1^* r_1 = h_1^* h_1 s_1 + h_1^* h_2 s_2 + h_1^* n_1 = |h_1|^2 s_1 + \underline{h_1^* h_2\, s_2} + h_1^* n_1$$
 
+    Segundo ingrediente — multiplicar $r_2^*$ por $h_2$ (usando $h_2 h_2^* = |h_2|^2$):
+
+    $$h_2 r_2^* = -h_1^* h_2 s_2 + h_2 h_2^* s_1 + h_2 n_2^* = \underline{-h_1^* h_2\, s_2} + |h_2|^2 s_1 + h_2 n_2^*$$
+
+    Los términos subrayados son el mismo número con signo opuesto. Al sumar los dos ingredientes, $s_2$ desaparece **exactamente** — sin aproximación, para cualquier valor de $h_1$ y $h_2$:
+
+    $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)\, s_1 + \tilde{n}_1$$
+
+    donde $\tilde{n}_1 = h_1^* n_1 + h_2 n_2^*$ agrupa el ruido combinado (sigue siendo ruido: mezclar ruidos da ruido). El desarrollo simétrico con los pesos de $\hat{s}_2$ elimina $s_1$ y entrega $\hat{s}_2 = (|h_1|^2 + |h_2|^2)\, s_2 + \tilde{n}_2$.
+
+    **Por qué el patrón de la tabla es ese y no otro.** El $-s_2^*$ y el $s_1^*$ del segundo tiempo de símbolo se eligieron *hacia atrás*, desde la cancelación: son la única combinación de intercambio, conjugados y signos que hace que los términos cruzados salgan iguales y opuestos **sin que el transmisor conozca $h_1$ ni $h_2$**. Ahí está el "sin CSIT" del título: la cancelación la ejecuta el receptor con su conocimiento del canal; el transmisor solo sigue una plantilla fija.
+
+    **Lectura del resultado.** Cada símbolo llega escalado por $|h_1|^2 + |h_2|^2$: la suma de las ganancias de potencia de **ambos** caminos. Si un camino se desvanece ($h_1 \approx 0$), el otro sostiene el enlace — la detección solo falla si ambos caen a la vez. Eso es diversidad de orden 2, la máxima con 2 antenas TX y 1 RX: "plena".
+
+    **El precio.** Dos tiempos de símbolo para entregar dos símbolos: tasa 1 símbolo por tiempo, exactamente igual que una sola antena. Alamouti no multiplexa — gasta el grado de libertad espacial completo en protección ($r = 0$ en el lenguaje del DMT). Para un enlace crítico en borde de celda, esa robustez puede valer más que una capa adicional.
 <figure markdown="span">
   ![Curva DMT para sistemas 2×2, 4×4](figures/mimo-dmt.png)
   <!-- generada por celda 8 de lab.ipynb -->
