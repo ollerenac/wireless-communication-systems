@@ -183,19 +183,41 @@ La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direccion
 
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
-    Canal con acoplamiento cruzado moderado:
+    **Canal A — acoplamiento cruzado moderado:**
 
-    $$\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
+    $$\mathbf{H}_A = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$$
 
     Sus direcciones naturales son la señal en fase y en contrafase:
 
     $$\mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}$$
 
-    con valores singulares $\sigma_1 = 1{,}5$ y $\sigma_2 = 0{,}5$. La primera capa tiene ganancia $\sigma_1^2 = 2{,}25$; la segunda solo $\sigma_2^2 = 0{,}25$. El rank es 2, pero el canal ya avisa: la segunda capa será frágil y ZF pagará ruido para separarla.
+    En fase, el camino cruzado suma al directo: $\sigma_1 = 1 + 0{,}5 = 1{,}5$. En contrafase, resta: $\sigma_2 = 1 - 0{,}5 = 0{,}5$. Las ganancias por modo son $\sigma_1^2 = 2{,}25$ y $\sigma_2^2 = 0{,}25$, y el condicionamiento:
 
-    El chequeo de energía cuadra:
+    $$\kappa_A = \frac{\sigma_1}{\sigma_2} = \frac{1{,}5}{0{,}5} = 3$$
 
-    $$\|\mathbf{H}\|_F^2 = 1^2 + 0{,}5^2 + 0{,}5^2 + 1^2 = 2{,}5 = 2{,}25 + 0{,}25$$
+    Según la regla rápida de arriba: canal dócil. Rank 2 utilizable si el SNR acompaña.
+
+    **Canal B — acoplamiento cruzado fuerte (las antenas casi se copian):**
+
+    $$\mathbf{H}_B = \begin{pmatrix} 1 & 0{,}9 \\ 0{,}9 & 1 \end{pmatrix}$$
+
+    Mismas direcciones naturales (la matriz sigue siendo simétrica), pero ahora:
+
+    $$\sigma_1 = 1 + 0{,}9 = 1{,}9, \qquad \sigma_2 = 1 - 0{,}9 = 0{,}1, \qquad \kappa_B = \frac{1{,}9}{0{,}1} = 19$$
+
+    Ganancias por modo: $\sigma_1^2 = 3{,}61$ contra $\sigma_2^2 = 0{,}01$ — el segundo modo transporta **361 veces menos** energía que el primero.
+
+    **La moraleja que da nombre al ejemplo:** ambos canales tienen rank algebraico 2 (ningún determinante es cero), pero sus destinos son opuestos. El canal A multiplexa 2 capas con SNR razonable; el canal B tiene un segundo modo tan hundido que forzar 2 capas es pagar BER — en la práctica se opera con rank 1. **El rank cuenta los modos; κ dice si valen algo.**
+
+    El precio exacto de ignorar κ lo calcula el ejemplo de ZF en §5.1: separar las capas del canal A multiplica el ruido por 2,22; hacerlo con el canal B lo multiplica por 50.
+
+    Chequeo de energía para ambos (la norma de Frobenius siempre reparte entre modos):
+
+    $$\|\mathbf{H}_A\|_F^2 = 1 + 0{,}25 + 0{,}25 + 1 = 2{,}5 = 2{,}25 + 0{,}25 \;\checkmark$$
+
+    $$\|\mathbf{H}_B\|_F^2 = 1 + 0{,}81 + 0{,}81 + 1 = 3{,}62 = 3{,}61 + 0{,}01 \;\checkmark$$
+
+    Nótese que el canal B tiene **más** energía total que el A — y aun así es peor para multiplexar. Energía no es lo mismo que grados de libertad: en B casi toda la energía cae en un solo modo.
 
 ### 4. Diversidad, beamforming y multiplexación
 
@@ -217,6 +239,18 @@ Para un canal $N_t \times N_r$ i.i.d. Rayleigh, el mejor par $(r, d)$ alcanzable
 $$d^*(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
 
 La lectura práctica no es memorizar el límite, sino la pendiente del compromiso: cada capa adicional (sube $r$) resta caminos de protección (baja $d$). No se puede tener el máximo de ambos a la vez.
+
+??? example "DMT evaluada: el menú completo de un 2×2"
+
+    Con $N_t = N_r = 2$, la fórmula (4) da exactamente tres opciones:
+
+    | $r$ (capas) | $d^* = (2-r)(2-r)$ | Qué compraste |
+    |---|---|---|
+    | 0 | 4 | Cero throughput extra; las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$: robustez máxima (Alamouti vive aquí) |
+    | 1 | 1 | Una capa con protección modesta: BER cae como $\text{SNR}^{-1}$, igual que un SISO |
+    | 2 | 0 | Throughput máximo, protección extra nula: cada capa queda expuesta a su propio fading |
+
+    El menú es discreto y sin opción gratis: pasar de $r=0$ a $r=2$ cuesta **toda** la diversidad. La fila del medio explica una decisión real de red: transmitir 1 capa con beamforming no es "desperdiciar la segunda antena" — es haber convertido esa antena en protección o ganancia en lugar de throughput.
 
 | Si el sistema ve... | Acción razonable | Por qué |
 |---|---|---|
@@ -243,11 +277,23 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     $$\hat{s}_1 = h_1^*r_1 + h_2r_2^*, \qquad \hat{s}_2 = h_2^*r_1 - h_1r_2^*$$
 
-    y los términos cruzados se cancelan:
+    Veamos la cancelación con las manos, término a término para $\hat{s}_1$. Primero conjugar $r_2$:
 
-    $$\hat{s}_k = (|h_1|^2 + |h_2|^2)s_k + \tilde{n}_k$$
+    $$r_2^* = -h_1^*s_2 + h_2^*s_1 + n_2^*$$
 
-    Cada símbolo aprovecha ambos trayectos. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
+    Luego sustituir ambos ingredientes:
+
+    $$h_1^*r_1 = |h_1|^2s_1 + \underline{h_1^*h_2\,s_2} + h_1^*n_1$$
+
+    $$h_2r_2^* = \underline{-h_1^*h_2\,s_2} + |h_2|^2s_1 + h_2n_2^*$$
+
+    Los términos subrayados son idénticos con signo opuesto — al sumar, $s_2$ desaparece **exactamente**, sin aproximación:
+
+    $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)s_1 + \tilde{n}_1$$
+
+    (y lo simétrico ocurre para $\hat{s}_2$). Aquí se ve que el patrón de la tabla no es magia: el $-s_2^*$ y el $s_1^*$ de la ranura 2 están elegidos **al revés, desde la cancelación** — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
+
+    Cada símbolo aprovecha ambos trayectos: la ganancia $|h_1|^2 + |h_2|^2$ es diversidad 2 — el enlace solo cae si **ambos** caminos caen a la vez. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
 
 <figure markdown="span">
   ![Curva DMT para sistemas 2×2, 4×4](figures/mimo-dmt.png)
@@ -275,7 +321,7 @@ $$\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$$
 
 ??? example "Por qué ZF amplifica ruido"
 
-    En el canal 2×2 del §3.1:
+    En el canal A del ejemplo de §3.1 ($\kappa = 3$):
 
     $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 & 1 \\ 1 & 1{,}25 \end{pmatrix}$$
 
@@ -283,7 +329,13 @@ $$\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}$$
 
     $$(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 & -1 \\ -1 & 1{,}25 \end{pmatrix}$$
 
-    La diagonal vale $1{,}25/0{,}5625 \approx 2{,}22$. ZF elimina interferencia, pero multiplica el ruido de cada flujo por 2,22. Esa es la razón operativa para preferir MMSE cuando el SNR no es alto o el canal está mal condicionado.
+    La diagonal vale $1{,}25/0{,}5625 \approx 2{,}22$. ZF elimina interferencia, pero multiplica el ruido de cada flujo por 2,22.
+
+    Ahora el canal B del mismo ejemplo ($\kappa = 19$): la misma cuenta da
+
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}81 & 1{,}8 \\ 1{,}8 & 1{,}81 \end{pmatrix}, \qquad \det = 1{,}81^2 - 1{,}8^2 = 0{,}0361$$
+
+    y la diagonal de la inversa vale $1{,}81/0{,}0361 \approx 50$. **El ruido de cada flujo se multiplica por 50.** Ahí está el condicionamiento convertido en número: κ pasó de 3 a 19 y el precio de invertir pasó de ×2,22 a ×50 — crece como $1/\sigma_2^2$, el modo débil manda. Esa es la razón operativa para preferir MMSE cuando el SNR no es alto o el canal está mal condicionado.
 
 <figure markdown="span">
   ![BER de detectores ZF, MMSE y ML en canal 2×2](figures/mimo-detectors.png)
@@ -335,6 +387,28 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 4. reportar o usar indicadores como CQI, RI y PMI;
 5. verificar BLER objetivo después de la adaptación.
 
+??? example "Rank 1 o rank 2: la fórmula (7) decide, con los números de §3.1"
+
+    Canal A: $\sigma_1^2 = 2{,}25$, $\sigma_2^2 = 0{,}25$. Potencia total $P = 2$.
+
+    **SNR alta** ($N_0 = 0{,}1$):
+
+    $$C_{\text{rank 2}} = \log_2\!\left(1 + \frac{1 \cdot 2{,}25}{0{,}1}\right) + \log_2\!\left(1 + \frac{1 \cdot 0{,}25}{0{,}1}\right) = 4{,}55 + 1{,}81 \approx 6{,}4 \text{ bits/s/Hz}$$
+
+    $$C_{\text{rank 1}} = \log_2\!\left(1 + \frac{2 \cdot 2{,}25}{0{,}1}\right) = \log_2(46) \approx 5{,}5 \text{ bits/s/Hz}$$
+
+    Gana rank 2: hasta el modo débil aporta casi 2 bits.
+
+    **SNR baja** ($N_0 = 1$):
+
+    $$C_{\text{rank 2}} = \log_2(1 + 2{,}25) + \log_2(1 + 0{,}25) = 1{,}70 + 0{,}32 \approx 2{,}0 \text{ bits/s/Hz}$$
+
+    $$C_{\text{rank 1}} = \log_2(1 + 4{,}5) \approx 2{,}5 \text{ bits/s/Hz}$$
+
+    Gana rank 1: el modo débil ya no paga su renta (0,32 bits) frente a concentrar la potencia en el modo fuerte.
+
+    **Misma matriz, decisión opuesta según el SNR.** Eso — y no una fórmula elegante — es rank adaptation: el logaritmo premia repartir cuando hay SNR de sobra y castiga repartir cuando escasea.
+
 <figure markdown="span">
   ![Flujo de decisión para elegir rank, capas y precoder](figures/mimo-rank-precoder-flow.png)
   <!-- generada por generate_design_figures.py -->
@@ -357,7 +431,21 @@ Pero en implementación el sistema no calcula esta expresión para lucirse. La u
 
     donde $\mu$ es el "nivel del agua" — una constante que se ajusta hasta que las potencias asignadas suman la potencia total disponible — y $(x)^+ = \max(x, 0)$: un modo que queda "bajo el agua" recibe potencia cero, no potencia negativa.
 
-    La idea implementativa es simple: un modo espacial muy débil no merece potencia. En un canal 3×3 con ganancias $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$, todos los modos son fuertes y water-filling gana poco frente a potencia uniforme. En cambio, si un modo cae cerca de cero, el sistema debe bajar rank o asignarle cero potencia.
+    La idea implementativa es simple: un modo espacial muy débil no merece potencia. Hagamos la cuenta dos veces.
+
+    **Caso 1 — todos los modos fuertes.** Canal 3×3 con $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$; $N_0 = 1$, $P_{\text{total}} = 1$. Los "pisos" $N_0/\sigma_k^2$ valen $0{,}019$, $0{,}077$ y $0{,}25$. Con los tres modos activos, $\mu$ sale de exigir que las potencias sumen 1:
+
+    $$\mu = \frac{1 + 0{,}019 + 0{,}077 + 0{,}25}{3} = 0{,}449$$
+
+    $$P_1^* = 0{,}43, \qquad P_2^* = 0{,}37, \qquad P_3^* = 0{,}20$$
+
+    Compárese con el reparto uniforme $(0{,}33,\, 0{,}33,\, 0{,}33)$: casi lo mismo. Eso es "water-filling gana poco cuando todos los modos son fuertes" — ya no como frase, sino como número.
+
+    **Caso 2 — un modo hundido.** Mismo canal pero $\sigma_3^2 = 0{,}04$: su piso es $N_0/\sigma_3^2 = 25$, muchísimo más alto que cualquier nivel de agua alcanzable con $P_{\text{total}} = 1$. El $(\cdot)^+$ lo apaga: $P_3^* = 0$, y el agua se reparte entre los dos que quedan:
+
+    $$\mu = \frac{1 + 0{,}019 + 0{,}077}{2} = 0{,}548, \qquad P_1^* = 0{,}53, \qquad P_2^* = 0{,}47, \qquad P_3^* = 0$$
+
+    Water-filling acaba de hacer **rank adaptation por sí solo**: bajó de 3 capas a 2 sin que nadie se lo pidiera. Apagar un modo y bajar el rank son la misma decisión vista desde dos fórmulas.
 
 ### 7. Massive MIMO como problema de red
 
