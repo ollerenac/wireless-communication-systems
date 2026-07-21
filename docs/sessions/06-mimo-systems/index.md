@@ -320,7 +320,9 @@ Las tres filas de la tabla compiten por las mismas antenas: cada grado de libert
 
 Para un canal $N_t \times N_r$ i.i.d. Rayleigh, el mejor par $(r, d)$ alcanzable es:
 
-$$d^*(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
+$$d^{\text{ópt}}(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}$$
+
+Notación: $d^{\text{ópt}}(r)$ es una función, como $f(x)$ — se elige $r$ (cuántas capas) y la fórmula devuelve la mejor diversidad alcanzable con esa elección. En la literatura esta misma función se escribe $d^*(r)$, con el asterisco denotando "óptimo"; conviene reconocer ambas formas.
 
 La lectura práctica no es memorizar el límite, sino la pendiente del compromiso: cada capa adicional (sube $r$) resta caminos de protección (baja $d$). No se puede tener el máximo de ambos a la vez.
 
@@ -328,7 +330,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     Con $N_t = N_r = 2$, la fórmula (4) da exactamente tres opciones:
 
-    | $r$ (capas) | $d^* = (2-r)(2-r)$ | Interpretación |
+    | $r$ (capas) | $d^{\text{ópt}} = (2-r)(2-r)$ | Interpretación |
     |---|---|---|
     | 0 | 4 | Sin throughput extra; las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$: robustez máxima (el régimen de Alamouti, §4) |
     | 1 | 1 | Una capa con protección modesta: BER cae como $\text{SNR}^{-1}$, igual que un SISO |
