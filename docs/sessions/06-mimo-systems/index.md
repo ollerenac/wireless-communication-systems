@@ -432,14 +432,14 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
 ??? example "Alamouti: diversidad plena sin CSIT"
 
-    El ejemplo clásico de diversidad es el código de Alamouti 2×1. Dos antenas TX, una RX, dos ranuras temporales:
+    El ejemplo clásico de diversidad es el código de Alamouti 2×1. Dos antenas TX, una RX, y dos tiempos de símbolo consecutivos (no confundir con el *slot* de LTE/5G, que agrupa muchos símbolos):
 
     | | Antena 1 | Antena 2 |
     |---|---|---|
-    | Ranura 1 | $s_1$ | $s_2$ |
-    | Ranura 2 | $-s_2^*$ | $s_1^*$ |
+    | Tiempo de símbolo 1 | $s_1$ | $s_2$ |
+    | Tiempo de símbolo 2 | $-s_2^*$ | $s_1^*$ |
 
-    Con canales $h_1, h_2$ constantes durante las dos ranuras:
+    Con canales $h_1, h_2$ constantes durante los dos tiempos de símbolo:
 
     $$r_1 = h_1s_1 + h_2s_2 + n_1, \qquad r_2 = -h_1s_2^* + h_2s_1^* + n_2$$
 
@@ -461,7 +461,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)s_1 + \tilde{n}_1$$
 
-    (y lo simétrico ocurre para $\hat{s}_2$). El patrón de la tabla no es arbitrario: el $-s_2^*$ y el $s_1^*$ de la ranura 2 se eligen precisamente desde esta cancelación — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
+    (y lo simétrico ocurre para $\hat{s}_2$). El patrón de la tabla no es arbitrario: el $-s_2^*$ y el $s_1^*$ del segundo tiempo de símbolo se eligen precisamente desde esta cancelación — son la única combinación de conjugados y signos que hace que los términos cruzados salgan iguales y opuestos sin que el transmisor conozca $h_1$ ni $h_2$.
 
     Cada símbolo aprovecha ambos trayectos: la ganancia $|h_1|^2 + |h_2|^2$ es diversidad 2 — el enlace solo cae si **ambos** caminos caen a la vez. Para un enlace crítico, esta robustez puede valer más que una capa adicional.
 
