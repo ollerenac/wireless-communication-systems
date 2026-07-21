@@ -273,7 +273,11 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     y análogamente $\mathbf{u}_2 = \mathbf{H}\mathbf{v}_2/0{,}5 = \mathbf{v}_2$. Coinciden **solo porque esta $\mathbf{H}$ es simétrica**; en un canal general $\mathbf{U} \neq \mathbf{V}$: las direcciones buenas de entrada y de salida son distintas (el segundo ejemplo de esta caja lo muestra).
 
-    **Paso 5.** Ensamblar las tres matrices de la ecuación (3). Cada $\mathbf{v}_k$ es una columna de $\mathbf{V}$, cada $\mathbf{u}_k$ una columna de $\mathbf{U}$, y los $\sigma_k$ forman la diagonal de $\mathbf{\Sigma}$:
+    **Paso 5.** Ensamblar las tres matrices de la ecuación (3). Cada $\mathbf{v}_k$ es una columna de $\mathbf{V}$ y cada $\mathbf{u}_k$ una columna de $\mathbf{U}$. La matriz $\mathbf{\Sigma}$ se construye así: es una matriz con los valores singulares en la diagonal, **ordenados de mayor a menor** ($\sigma_1 \geq \sigma_2$, la convención universal), y ceros en todo lo demás:
+
+    $$\mathbf{\Sigma} = \begin{pmatrix} \sigma_1 & 0 \\ 0 & \sigma_2 \end{pmatrix}$$
+
+    Los ceros fuera de la diagonal no son relleno — son el mensaje central de la SVD: en las coordenadas de los subcanales **nada se mezcla con nada**; cada entrada $\sigma_k$ solo multiplica a su propio subcanal. El orden importa porque la posición define la pareja: $\sigma_1$ trabaja con la columna 1 de $\mathbf{U}$ y la columna 1 de $\mathbf{V}$ (el subcanal fuerte), $\sigma_2$ con las columnas 2 (el débil). Con los números:
 
     $$\mathbf{V} = \begin{pmatrix} | & | \\ \mathbf{v}_1 & \mathbf{v}_2 \\ | & | \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}, \qquad \mathbf{U} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}, \qquad \mathbf{\Sigma} = \begin{pmatrix} 1{,}5 & 0 \\ 0 & 0{,}5 \end{pmatrix}$$
 
