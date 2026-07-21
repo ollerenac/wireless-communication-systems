@@ -554,7 +554,11 @@ El usuario $k$ recibe:
 
 $$y_k = \mathbf{h}_k^{\mathsf{H}}\mathbf{w}_ks_k + \sum_{j\neq k}\mathbf{h}_k^{\mathsf{H}}\mathbf{w}_js_j + n_k \tag{6}$$
 
-La matriz $\mathbf{W}$ decide cuánta energía va al usuario deseado y cuánta interferencia cae sobre los demás.
+La matriz $\mathbf{W}$ decide cuánta energía va al usuario deseado y cuánta interferencia cae sobre los demás. Los tres precodificadores clásicos son tres respuestas distintas a ese dilema:
+
+- **MRT** (*Maximum Ratio Transmission*, transmisión de razón máxima): apunta toda la potencia alineada con el canal de cada usuario, ignorando a los demás. Es el filtro adaptado aplicado en el transmisor — la misma regla de alinear-y-sumar del combinador de Alamouti (§4), ahora del lado TX: pesos = conjugado del canal. Maximiza la señal deseada; no hace nada contra la interferencia.
+- **ZF** (*Zero Forcing*, forzado a cero): invierte el canal para que cada usuario reciba su señal con interferencia **exactamente cero** — pone un nulo espacial hacia cada usuario ajeno. Es la misma álgebra del detector ZF de §5.1, movida al transmisor; y paga el mismo precio: si los canales de los usuarios son casi paralelos, invertir cuesta potencia y amplifica errores.
+- **RZF/MMSE** (*Regularized ZF / Minimum Mean Square Error*): ZF con un término de regularización que suaviza la inversión — cancela interferencia solo hasta donde el ruido lo justifica. Interpola entre los dos extremos: a SNR baja se comporta como MRT (el ruido domina, no vale la pena forzar nulos), a SNR alta como ZF (la interferencia domina, los nulos pagan).
 
 | Precoder | Fórmula base | Cuándo usarlo | Costo |
 |---|---|---|---|
