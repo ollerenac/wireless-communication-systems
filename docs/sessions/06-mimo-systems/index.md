@@ -289,7 +289,11 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     $$\lambda_1 = \frac{4{,}25 + 3{,}75}{2} = 4, \qquad \lambda_2 = \frac{4{,}25 - 3{,}75}{2} = 0{,}25 \;\Rightarrow\; \sigma_1 = 2, \; \sigma_2 = 0{,}5$$
 
-    *Paso 3:* para $\lambda_1 = 4$: $(2{,}65 - 4)x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x$, dirección $(4, 3)$, normalizada $\mathbf{v}_1 = \binom{0{,}8}{0{,}6}$. Para $\lambda_2 = 0{,}25$: $2{,}4\,x + 1{,}8\,y = 0 \Rightarrow$ $\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}$.
+    *Paso 3:* se plantea $(\mathbf{H}^{\mathsf{H}}\mathbf{H} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}$ para cada eigenvalor. Con $\lambda_1 = 4$:
+
+    $$\mathbf{H}^{\mathsf{H}}\mathbf{H} - 4\mathbf{I} = \begin{pmatrix} 2{,}65 - 4 & 1{,}8 \\ 1{,}8 & 1{,}6 - 4 \end{pmatrix} = \begin{pmatrix} -1{,}35 & 1{,}8 \\ 1{,}8 & -2{,}4 \end{pmatrix}$$
+
+    La fila 1 da $-1{,}35\,x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x$: dirección $(4, 3)$, normalizada $\mathbf{v}_1 = \binom{0{,}8}{0{,}6}$. (La fila 2, $1{,}8\,x - 2{,}4\,y = 0$, da la misma recta — con $\lambda$ correcto las filas son proporcionales, así que basta una; si dieran rectas distintas, el eigenvalor está mal calculado.) Con $\lambda_2 = 0{,}25$, la fila 1 da $2{,}4\,x + 1{,}8\,y = 0 \Rightarrow$ $\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}$.
 
     *Paso 4:*
 
