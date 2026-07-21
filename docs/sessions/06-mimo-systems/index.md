@@ -214,6 +214,8 @@ En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una s
 | Norma $\|\mathbf{h}_k\|^2$ | Fuerza del canal de un usuario | Scheduling, beamforming y power control |
 | Tiempo de coherencia | Cuánto dura el CSI | Coste de pilotos y velocidad de adaptación |
 
+El nombre "condicionamiento" viene del análisis numérico: un problema está *bien condicionado* cuando errores pequeños en los datos producen errores pequeños en el resultado, y *mal condicionado* cuando los amplifican. $\kappa$ mide exactamente esa sensibilidad para el canal: al invertir $\mathbf{H}$ (lo que hará el detector ZF en §5.1), los errores relativos — ruido, CSI imperfecta — pueden amplificarse hasta $\kappa$ veces.
+
 Regla rápida para leer el condicionamiento: $\kappa \approx 1$ significa modos parejos, canal dócil para multiplexar; $\kappa \gtrsim 10$ significa que el modo débil es frágil y separarlo costará ruido o potencia; $\kappa \to \infty$ significa rank deficiente — hay menos modos útiles que antenas (el caso extremo es el canal *keyhole*, donde todos los trayectos pasan por un mismo "agujero" y $\kappa$ diverge).
 
 La SVD aparece como herramienta de diagnóstico:
@@ -368,6 +370,10 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
     $$\sigma_1 = 1 + 0{,}9 = 1{,}9, \qquad \sigma_2 = 1 - 0{,}9 = 0{,}1, \qquad \kappa_B = \frac{1{,}9}{0{,}1} = 19$$
 
     Ganancias por modo: $\sigma_1^2 = 3{,}61$ contra $\sigma_2^2 = 0{,}01$ — el segundo modo transporta **361 veces menos** energía que el primero.
+
+    La razón física del deterioro: con acoplamiento 0,9, las dos antenas receptoras escuchan **casi la misma mezcla** — la información que las distingue vive en la pequeña diferencia entre sus señales. Separar dos capas ahí obliga a restar cantidades casi iguales ($\sigma_2 = 1 - 0{,}9$ es literalmente esa resta), y una diferencia tan pequeña queda al nivel del ruido. Ese es el sentido operativo de "mal condicionado": la información de la segunda capa existe, pero llega escondida en una diferencia diminuta que cualquier error entierra.
+
+    La misma situación, vista geométricamente: las columnas de $\mathbf{H}_B$ son las firmas espaciales de cada antena transmisora, $\binom{1}{0{,}9}$ y $\binom{0{,}9}{1}$ — dos vectores **casi paralelos**. Casi paralelos significa casi linealmente dependientes: la matriz está a un paso de ser rank 1. En el canal A las columnas $\binom{1}{0{,}5}$ y $\binom{0{,}5}{1}$ se separan con un ángulo mucho mayor. Un canal bien condicionado es uno cuyas antenas transmisoras dejan huellas claramente distinguibles en el receptor; en $\mathbf{H}_B$ las dos huellas casi coinciden.
 
     **Lectura conjunta:** ambos canales tienen rank algebraico 2 (ningún determinante es cero), pero sus destinos son opuestos. El canal A multiplexa 2 capas con SNR razonable; el canal B tiene un segundo modo tan hundido que forzar 2 capas es pagar BER — en la práctica se opera con rank 1. **El rank cuenta los modos; κ dice si valen algo.**
 
