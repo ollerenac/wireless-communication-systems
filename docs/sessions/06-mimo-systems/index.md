@@ -54,13 +54,15 @@ El objetivo de esta sesión es construir esa brújula. La matemática sigue esta
 
 Antes de hablar de SVD conviene mirar el síntoma del sistema. El mismo array de antenas puede resolver problemas diferentes según cómo se use.
 
+Esta tabla es un mapa de la sesión completa: nombra estrategias y precodificadores que se definen recién en §5 y §7. Léela ahora como panorama — sin exigirte entender cada sigla — y vuelve a ella al final, cuando cada celda tenga contenido.
+
 | Escenario | Síntoma de red | Estrategia MIMO natural | Costo o riesgo principal |
 |---|---|---|---|
-| Borde de celda rural | SNR baja, enlace frágil | Beamforming o diversidad | Subir rank demasiado rompe la robustez |
-| Hotspot urbano | Muchos usuarios, interferencia alta | MU-MIMO con ZF/RZF y scheduler | CSI fresco y canales separables |
+| Borde de celda rural | SNR baja, enlace frágil | Beamforming o diversidad (→ §4) | Subir rank demasiado rompe la robustez |
+| Hotspot urbano | Muchos usuarios, interferencia alta | MU-MIMO con ZF/RZF (→ §5.2) y scheduler | CSI fresco y canales separables |
 | Indoor / small cell | Canal rico, distancias cortas | SU-MIMO rank 2/4 | Antenas muy juntas reducen rank efectivo |
-| Massive MIMO sub-6 GHz | Muchos UEs por celda | $M \gg K$, TDD, RZF/MRT | Pilotos, reciprocidad y contaminación |
-| FR2 / mmWave | Path loss alto, haces estrechos | Arrays grandes y beamforming híbrido | Bloqueo, alineamiento de beams y RF chains |
+| Massive MIMO sub-6 GHz | Muchos UEs por celda | $M \gg K$, TDD, RZF/MRT (→ §7) | Pilotos, reciprocidad y contaminación (→ §7.1) |
+| FR2 / mmWave | Path loss alto, haces estrechos | Arrays grandes y beamforming híbrido (→ §7.2) | Bloqueo, alineamiento de beams y RF chains (→ §7.2) |
 
 <figure markdown="span">
   ![Mapa de decisión de estrategias MIMO según problema de red](figures/mimo-design-map.png)
@@ -91,7 +93,7 @@ La dificultad real es que esas tres metas compiten por los mismos grados de libe
 
     ---
 
-    **R1.** Reforzaría beamforming/diversidad. Subir rank aumenta la carga espacial antes de cerrar el enlace.
+    **R1.** Reforzaría beamforming/diversidad. Subir rank significa repartir la misma potencia entre más capas — cada una llega más débil — justo cuando el enlace todavía no cierra. Primero energía suficiente; después capas.
 
     **R2.** No es ideal. Si los canales son casi paralelos, los dos usuarios "se ven iguales" desde la estación base: cualquier señal dirigida a uno llega casi idéntica al otro, y no hay geometría espacial que explotar. Separarlos espacialmente es posible pero caro (en §5 se verá cuánto cuesta); lo razonable es que el scheduler los sirva en tiempos o frecuencias distintas.
 
@@ -112,8 +114,8 @@ La Figura 2 muestra las configuraciones básicas. La lectura práctica no es "m�
 | MISO | BS con varias antenas, UE simple | Cobertura downlink | Array gain y beamforming | No multiplexa varios streams a un UE de una antena |
 | SU-MIMO | BS y UE multiantena | Throughput por usuario | Rank espacial y capas simultáneas | Exige canal bien condicionado |
 | MU-MIMO | BS multiantena, varios UEs | Capacidad de celda | Reutilización espacial | Exige CSI y scheduler |
-| Massive MIMO | $M$ mucho mayor que $K$ | Densidad y eficiencia energética | Hardening y canales casi ortogonales | Pilotos, TDD, correlación y contaminación |
-| Híbrido mmWave | Arrays grandes con pocas cadenas RF | FR2/sub-THz | Ganancia de haz viable en hardware | Bloqueo y entrenamiento de beams |
+| Massive MIMO | $M$ mucho mayor que $K$ | Densidad y eficiencia energética | Hardening (→ §7) y canales casi ortogonales | Pilotos, TDD, correlación y contaminación (→ §7.1) |
+| Híbrido mmWave | Arrays grandes con pocas cadenas RF (→ §7.2) | FR2/sub-THz | Ganancia de haz viable en hardware | Bloqueo y entrenamiento de beams |
 
 Un punto de implementación que se olvida fácilmente: **antenas físicas no equivalen automáticamente a grados de libertad independientes**. Para que MIMO entregue multiplexación, las firmas espaciales deben ser distinguibles. Importan:
 
