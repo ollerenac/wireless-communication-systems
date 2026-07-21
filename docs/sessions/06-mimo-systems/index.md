@@ -432,7 +432,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
 ??? example "Alamouti: diversidad plena sin CSIT"
 
-    Primero el título, palabra por palabra. **Diversidad plena**: cada símbolo va a viajar por *todos* los caminos disponibles (aquí 2), el máximo posible — el enlace solo falla si todos los caminos fallan a la vez. **Sin CSIT**: el transmisor va a lograrlo sin conocer el canal — no hay feedback, no hay pilotos de regreso; solo el receptor conoce $h_1$ y $h_2$ (CSIR, que obtiene gratis de los pilotos de bajada).
+    **Diversidad plena**: cada símbolo viaja por *todos* los caminos disponibles (aquí 2), el máximo posible — el enlace solo falla si todos los caminos fallan a la vez. **Sin CSIT**: el transmisor lo logra sin conocer el canal — no hay feedback ni pilotos de regreso; solo el receptor conoce $h_1$ y $h_2$ (CSIR, que obtiene de los pilotos de bajada).
 
     **Escenario y notación.** Dos antenas transmisoras, una receptora. $h_1$ es el canal de la antena TX 1 a la antena RX; $h_2$, el de la TX 2. Son números **complejos**: su magnitud dice cuánto se atenúa el camino y su fase cuánto se desfasa. Notación que aparece en todo el desarrollo:
 
@@ -448,7 +448,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
     | Tiempo de símbolo 1 | $s_1$ | $s_2$ |
     | Tiempo de símbolo 2 | $-s_2^*$ | $s_1^*$ |
 
-    En el tiempo 1 se transmiten los símbolos tal cual; en el tiempo 2 se retransmiten **intercambiados, conjugados y con un signo cambiado**. Ese patrón extraño es el corazón del código; al final del desarrollo se verá que está elegido a la medida de una cancelación.
+    En el tiempo 1 se transmiten los símbolos tal cual; en el tiempo 2 se retransmiten **intercambiados, conjugados y con un signo cambiado** — el patrón está elegido a la medida de una cancelación que el desarrollo siguiente muestra.
 
     **Lo que llega al receptor.** El aire suma linealmente lo que ambas antenas emiten, cada una filtrada por su camino. En el tiempo de símbolo 1, la antena TX 1 emite $s_1$ (llega como $h_1 s_1$) y la TX 2 emite $s_2$ (llega como $h_2 s_2$); el receptor captura la suma más su ruido:
 
@@ -460,11 +460,13 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     Hasta aquí el receptor tiene dos ecuaciones ($r_1$, $r_2$) y dos incógnitas ($s_1$, $s_2$) — un sistema mezclado, como cualquier canal MIMO.
 
-    **La jugada del receptor.** Conoce $h_1$ y $h_2$. Con ellos construye dos combinaciones diseñadas para que, en cada una, sobreviva un solo símbolo:
+    **Combinación en el receptor.** El receptor conoce $h_1$ y $h_2$ y quiere extraer $s_1$. La regla que genera los pesos es el **filtro adaptado** (*matched filter*): cada copia recibida de $s_1$ se multiplica por el **conjugado del coeficiente que la acompaña**. Multiplicar $h\,s_1$ por $h^*$ produce $|h|^2 s_1$ — un número real y positivo por $s_1$: la fase del camino queda cancelada y la copia queda alineada. Copias alineadas se suman constructivamente; sin alinear las fases, dos copias pueden llegar en contrafase y destruirse.
+
+    Aplicando la regla: en $r_1$, el símbolo $s_1$ viene acompañado de $h_1$ → peso $h_1^*$. En $r_2^*$ (se verá abajo), $s_1$ viene acompañado de $h_2^*$ → peso $(h_2^*)^* = h_2$. De ahí, y de la regla análoga para $s_2$:
 
     $$\hat{s}_1 = h_1^* r_1 + h_2 r_2^*, \qquad \hat{s}_2 = h_2^* r_1 - h_1 r_2^*$$
 
-    (De dónde salen estos pesos: son la parte del diseño que se ingenió junto con la tabla — el par tabla + pesos es el código. Verifiquemos que funcionan.)
+    Esta técnica de alinear-y-sumar es la combinación de razón máxima (MRC, *maximum ratio combining*), y reaparece en §5.2: el precoder MRT es la misma idea aplicada en el transmisor.
 
     Desarrollo completo para $\hat{s}_1$. Se necesita $r_2^*$: conjugar una suma es conjugar cada término, conjugar un producto es conjugar cada factor, y $(s^*)^* = s$:
 
@@ -482,7 +484,7 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
     $$\hat{s}_1 = (|h_1|^2 + |h_2|^2)\, s_1 + \tilde{n}_1$$
 
-    donde $\tilde{n}_1 = h_1^* n_1 + h_2 n_2^*$ agrupa el ruido combinado (sigue siendo ruido: mezclar ruidos da ruido). El desarrollo simétrico con los pesos de $\hat{s}_2$ elimina $s_1$ y entrega $\hat{s}_2 = (|h_1|^2 + |h_2|^2)\, s_2 + \tilde{n}_2$.
+    donde $\tilde{n}_1 = h_1^* n_1 + h_2 n_2^*$ agrupa el ruido combinado — una suma de gaussianas sigue siendo gaussiana, con potencia $(|h_1|^2 + |h_2|^2)N_0$: crece con la misma constante que multiplica a $s_1$, así que la relación señal-ruido resultante es la suma de las SNR de ambos caminos. El desarrollo simétrico con los pesos de $\hat{s}_2$ elimina $s_1$ y entrega $\hat{s}_2 = (|h_1|^2 + |h_2|^2)\, s_2 + \tilde{n}_2$.
 
     **Por qué el patrón de la tabla es ese y no otro.** El $-s_2^*$ y el $s_1^*$ del segundo tiempo de símbolo se eligieron *hacia atrás*, desde la cancelación: son la única combinación de intercambio, conjugados y signos que hace que los términos cruzados salgan iguales y opuestos **sin que el transmisor conozca $h_1$ ni $h_2$**. Ahí está el "sin CSIT" del título: la cancelación la ejecuta el receptor con su conocimiento del canal; el transmisor solo sigue una plantilla fija.
 
