@@ -328,13 +328,13 @@ La lectura práctica no es memorizar el límite, sino la pendiente del compromis
 
 ??? example "DMT evaluada para un canal 2×2"
 
-    Con $N_t = N_r = 2$, la fórmula (4) da exactamente tres opciones:
+    Con $N_t = N_r = 2$, la fórmula (4) da exactamente tres opciones. Se elige $r$ y se sustituye:
 
-    | $r$ (capas) | $d^{\text{opt}} = (2-r)(2-r)$ | Interpretación |
-    |---|---|---|
-    | 0 | 4 | Sin throughput extra; las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$: robustez máxima (el régimen de Alamouti, §4) |
-    | 1 | 1 | Una capa con protección modesta: BER cae como $\text{SNR}^{-1}$, igual que un SISO |
-    | 2 | 0 | Throughput máximo, protección extra nula: cada capa queda expuesta a su propio fading |
+    | Evaluación de la función | Interpretación |
+    |---|---|
+    | $d^{\text{opt}}(0) = (2-0)(2-0) = 4$ | Se eligen 0 capas extra → protección máxima: las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como $\text{SNR}^{-4}$ (el régimen de Alamouti, §4) |
+    | $d^{\text{opt}}(1) = (2-1)(2-1) = 1$ | Una capa → protección modesta: BER cae como $\text{SNR}^{-1}$, igual que un SISO |
+    | $d^{\text{opt}}(2) = (2-2)(2-2) = 0$ | Dos capas → protección agotada: throughput máximo, cada capa queda expuesta a su propio fading |
 
     Las opciones son discretas y no hay punto intermedio gratuito: pasar de $r=0$ a $r=2$ cuesta toda la diversidad. La fila intermedia describe una decisión real de red: transmitir 1 capa con beamforming no desperdicia la segunda antena — la convierte en protección o ganancia en lugar de throughput.
 
