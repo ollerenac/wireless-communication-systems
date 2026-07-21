@@ -145,7 +145,7 @@ En un teléfono pequeño, dos antenas pueden estar tan correlacionadas que el se
 
 ### 3. El canal como diagnóstico operativo
 
-"Diagnóstico operativo" significa que $\mathbf{H}$ funciona como el análisis de sangre del enlace. No se estima por curiosidad matemática — se estima porque cada decisión de operación se **lee** de ahí: quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Diagnóstico primero, tratamiento después; sin $\mathbf{H}$ medida, todas las decisiones de esta sesión serían a ciegas.
+"Diagnóstico operativo" significa que $\mathbf{H}$ cumple el mismo papel que un análisis clínico: se estima porque cada decisión de operación se **lee** de ahí — quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Sin $\mathbf{H}$ medida, todas las decisiones de esta sesión se tomarían a ciegas.
 
 La matriz de canal no es solo notación. En un sistema real, $\mathbf{H}$ es el objeto que se estima con pilotos y del que salen decisiones de scheduler, rank, beamforming, precoding y detección.
 
@@ -179,7 +179,7 @@ donde $\mathbf{x} \in \mathbb{C}^{N_t}$ es el vector transmitido, $\mathbf{y} \i
 
     Un 2×2: 2 pilotos × 2 antenas receptoras = 4 divisiones = las 4 casillas. En el grid tiempo-frecuencia de OFDM, cada antena TX tiene reservados sus *resource elements* de piloto — separados en tiempo, en frecuencia o por códigos ortogonales — y en los REs de piloto de una antena, las demás transmiten cero.
 
-    **3. El contraste que le da sentido al diseño:**
+    **3. Contraste entre REs de piloto y REs de datos:**
 
     | REs de piloto | REs de datos |
     |---|---|
@@ -216,7 +216,7 @@ $$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} \tag{3}$$
 
 La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direcciones de transmisión; las columnas de $\mathbf{U}$ son combinaciones de recepción; los valores singulares $\sigma_k$ dicen cuán bueno es cada modo. Si el segundo valor singular es pequeño, el segundo stream existe en álgebra, pero será caro en BER.
 
-Una imagen sostiene el resto de la sesión. La SVD dice que dentro de cualquier $\mathbf{H}$ — por mezclado que se vea el canal antena a antena — existen canales paralelos que **no se mezclan entre sí**: los subcanales (los modos espaciales del vocabulario inicial). Los subcanales no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa imagen, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos subcanales:
+Esta interpretación organiza el resto de la sesión. La SVD muestra que dentro de cualquier $\mathbf{H}$ — por mezclado que se vea el canal antena a antena — existen canales paralelos que **no se mezclan entre sí**: los subcanales (los modos espaciales del vocabulario inicial). Los subcanales no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa interpretación, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos subcanales:
 
 | Decisión | Pregunta sobre los subcanales | Dónde se desarrolla |
 |---|---|---|
@@ -313,7 +313,7 @@ Ahora podemos formular la decisión central. Con grados de libertad espaciales, 
 | Beamforming | Señal alineada en fase hacia un usuario/dirección | Cobertura DL, FR2, UEs simples | Requiere CSI o búsqueda de haz |
 | Multiplexación espacial | Capas distintas simultáneas | Alto SNR y buen rank | BER alta si el canal está mal condicionado |
 
-Las tres filas de la tabla compiten por las mismas antenas: cada grado de libertad gastado en enviar una capa extra es un grado de libertad que ya no protege a las capas restantes. Esa es la tensión. La teoría clásica del *Diversity-Multiplexing Tradeoff* (DMT, compromiso diversidad-multiplexación) la vuelve medible con dos números:
+Las tres filas de la tabla compiten por las mismas antenas: cada grado de libertad gastado en enviar una capa extra es un grado de libertad que ya no protege a las capas restantes. La teoría clásica del *Diversity-Multiplexing Tradeoff* (DMT, compromiso diversidad-multiplexación) cuantifica este conflicto con dos números:
 
 - $r$ = **ganancia de multiplexación**: cuántas capas simultáneas efectivas transporta el sistema — cómo escala el throughput cuando sube el SNR;
 - $d$ = **ganancia de diversidad**: cuántos caminos independientes protegen cada capa — qué tan rápido cae la probabilidad de error al subir el SNR (BER $\propto \text{SNR}^{-d}$: a mayor $d$, la curva de error cae más en picada).
@@ -461,7 +461,7 @@ La capacidad MIMO sigue siendo el marco teórico que explica por qué subir capa
 
 $$C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}$$
 
-donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura lo dice todo: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un subcanal con ganancia $\sigma_k^2$.
+donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura de la expresión refleja la descomposición en subcanales: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un subcanal con ganancia $\sigma_k^2$.
 
 En implementación esta expresión no se evalúa como fin en sí mismo: se usa como criterio para rank adaptation:
 
@@ -515,7 +515,7 @@ En implementación esta expresión no se evalúa como fin en sí mismo: se usa c
 
     donde $\mu$ es el "nivel del agua" — una constante que se ajusta hasta que las potencias asignadas suman la potencia total disponible — y $(x)^+ = \max(x, 0)$: un modo que queda "bajo el agua" recibe potencia cero, no potencia negativa.
 
-    La idea implementativa es simple: un modo espacial muy débil no merece potencia. La cuenta, en dos casos:
+    La idea implementativa es simple: un modo espacial muy débil no merece potencia. El cálculo se muestra en dos casos:
 
     **Caso 1 — todos los modos fuertes.** Canal 3×3 con $\sigma_1^2=52$, $\sigma_2^2=13$, $\sigma_3^2=4$; $N_0 = 1$, $P_{\text{total}} = 1$. Los "pisos" $N_0/\sigma_k^2$ valen $0{,}019$, $0{,}077$ y $0{,}25$. Con los tres modos activos, $\mu$ sale de exigir que las potencias sumen 1:
 
