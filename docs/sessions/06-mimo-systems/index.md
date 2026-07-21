@@ -319,7 +319,19 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     $$\mathbf{U} = \begin{pmatrix} 0{,}6 & -0{,}8 \\ 0{,}8 & 0{,}6 \end{pmatrix} \neq \mathbf{V} = \begin{pmatrix} 0{,}8 & -0{,}6 \\ 0{,}6 & 0{,}8 \end{pmatrix}$$
 
-    *Paso 5:* $\mathbf{U}\mathbf{\Sigma} = \begin{pmatrix} 1{,}2 & -0{,}4 \\ 1{,}6 & 0{,}3 \end{pmatrix}$, y $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix} = \mathbf{H} \;\checkmark$ (también cuadra $\det \mathbf{H} = 1{,}44 - 0{,}44 = 1 = \sigma_1\sigma_2$).
+    *Paso 5:* reconstruir $\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}$ multiplicando de izquierda a derecha. Primer producto, $\mathbf{U}\mathbf{\Sigma}$ — multiplicar por una matriz diagonal escala cada **columna**: la columna 1 de $\mathbf{U}$ por $\sigma_1 = 2$ y la columna 2 por $\sigma_2 = 0{,}5$:
+
+    $$\mathbf{U}\mathbf{\Sigma} = \begin{pmatrix} 0{,}6 & -0{,}8 \\ 0{,}8 & 0{,}6 \end{pmatrix}\begin{pmatrix} 2 & 0 \\ 0 & 0{,}5 \end{pmatrix} = \begin{pmatrix} 0{,}6 \cdot 2 & -0{,}8 \cdot 0{,}5 \\ 0{,}8 \cdot 2 & 0{,}6 \cdot 0{,}5 \end{pmatrix} = \begin{pmatrix} 1{,}2 & -0{,}4 \\ 1{,}6 & 0{,}3 \end{pmatrix}$$
+
+    Segundo ingrediente, $\mathbf{V}^{\mathsf{H}}$: como esta $\mathbf{V}$ es real, conjugar no hace nada y solo se transpone (filas ↔ columnas):
+
+    $$\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 0{,}8 & -0{,}6 \\ 0{,}6 & 0{,}8 \end{pmatrix}^{\mathsf{T}} = \begin{pmatrix} 0{,}8 & 0{,}6 \\ -0{,}6 & 0{,}8 \end{pmatrix}$$
+
+    Producto final, fila por columna con las sumas a la vista:
+
+    $$(\mathbf{U}\mathbf{\Sigma})\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 1{,}2 & -0{,}4 \\ 1{,}6 & 0{,}3 \end{pmatrix}\begin{pmatrix} 0{,}8 & 0{,}6 \\ -0{,}6 & 0{,}8 \end{pmatrix} = \begin{pmatrix} 0{,}96 + 0{,}24 & 0{,}72 - 0{,}32 \\ 1{,}28 - 0{,}18 & 0{,}96 + 0{,}24 \end{pmatrix} = \begin{pmatrix} 1{,}2 & 0{,}4 \\ 1{,}1 & 1{,}2 \end{pmatrix} = \mathbf{H} \;\checkmark$$
+
+    (También cuadra $\det \mathbf{H} = 1{,}44 - 0{,}44 = 1 = \sigma_1\sigma_2$.)
 
     La lectura: el mejor patrón de entrada es $\mathbf{v}_1 = (0{,}8;\, 0{,}6)$ — más peso en TX$_1$ — pero la señal llega al receptor como $\mathbf{u}_1 = (0{,}6;\, 0{,}8)$ — más peso en RX$_2$. El canal rotó la dirección al atravesarlo; por eso la SVD lleva dos juegos de direcciones: el transmisor alinea con $\mathbf{v}_k$ y el receptor proyecta sobre $\mathbf{u}_k$. Nota práctica: los eigenvectores están definidos salvo signo — `numpy` puede devolver $\mathbf{v}_2$ y $\mathbf{u}_2$ con ambos signos invertidos; el producto $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}$ no cambia.
 
