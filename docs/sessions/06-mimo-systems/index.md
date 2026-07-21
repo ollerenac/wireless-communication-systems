@@ -273,6 +273,28 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
     **Verificación rápida sin ensamblar:** $\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1$ y $\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2$; basta comprobar los cuatro productos. En la práctica este cálculo lo realiza `numpy.linalg.svd(H)`.
 
+    ---
+
+    **El mismo procedimiento con un canal no simétrico — donde U se construye de verdad.** En el ejemplo anterior $\mathbf{U} = \mathbf{V}$ y el Paso 4 pasa desapercibido. Considérese un canal cruzado:
+
+    $$\mathbf{H} = \begin{pmatrix} 0 & -1 \\ 2 & 0 \end{pmatrix}$$
+
+    (lo que sale de TX$_1$ llega solo a RX$_2$ con ganancia 2; lo de TX$_2$ llega solo a RX$_1$ invertido). Aquí $h_{12} \neq h_{21}$: no hay simetría.
+
+    *Paso 1:* $\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 4 & 0 \\ 0 & 1 \end{pmatrix}$ — sale diagonal, el caso más fácil.
+
+    *Paso 2:* $\lambda_1 = 4$, $\lambda_2 = 1$ (ya están en la diagonal) $\Rightarrow$ $\sigma_1 = 2$, $\sigma_2 = 1$.
+
+    *Paso 3:* los eigenvectores de una matriz diagonal son los ejes: $\mathbf{v}_1 = \binom{1}{0}$, $\mathbf{v}_2 = \binom{0}{1}$, es decir $\mathbf{V} = \mathbf{I}$: las mejores direcciones de entrada son las antenas mismas.
+
+    *Paso 4 — aquí U trabaja:*
+
+    $$\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{2}\begin{pmatrix} 0 \\ 2 \end{pmatrix} = \begin{pmatrix} 0 \\ 1 \end{pmatrix}, \qquad \mathbf{u}_2 = \frac{\mathbf{H}\mathbf{v}_2}{\sigma_2} = \begin{pmatrix} -1 \\ 0 \end{pmatrix} \;\Rightarrow\; \mathbf{U} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix} \neq \mathbf{V}$$
+
+    *Paso 5:* $\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}\begin{pmatrix} 2 & 0 \\ 0 & 1 \end{pmatrix}\mathbf{I} = \begin{pmatrix} 0 & -1 \\ 2 & 0 \end{pmatrix} = \mathbf{H} \;\checkmark$
+
+    La lectura física: se inyecta $\mathbf{v}_1$ (solo la antena TX$_1$) y la señal aparece como $\mathbf{u}_1$ (solo la antena RX$_2$) — el canal **rotó** la dirección. Por eso la SVD necesita dos juegos de direcciones: $\mathbf{V}$ dice cómo entrar y $\mathbf{U}$ dice con qué patrón sale; el transmisor alinea con $\mathbf{v}_k$ y el receptor proyecta sobre $\mathbf{u}_k$. En el ejemplo simétrico no había rotación y ambos juegos coincidían. (Un canal real tiene entradas complejas aleatorias y produce $\mathbf{U} \neq \mathbf{V}$ con números menos redondos; este se eligió con ceros para que la aritmética se siga a mano.)
+
 ??? example "Ejemplo mínimo: canal 2×2 bien y mal condicionado"
 
     **Canal A — acoplamiento cruzado moderado:**
