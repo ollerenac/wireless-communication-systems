@@ -237,7 +237,7 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
 
 ??? example "Cálculo de la SVD de un canal 2×2"
 
-    El ejemplo siguiente usa $\mathbf{v}_1$, $\mathbf{v}_2$, $\sigma_1$, $\sigma_2$ — esta caja muestra de dónde salen. Cuatro pasos que funcionan para cualquier matriz; aquí con $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$.
+    Procedimiento para obtener los valores singulares ($\sigma_1$, $\sigma_2$) y las direcciones ($\mathbf{v}_1$, $\mathbf{v}_2$) de un canal — los mismos que el ejemplo posterior usa como datos. Son cuatro pasos válidos para cualquier matriz, aplicados aquí a $\mathbf{H} = \begin{pmatrix} 1 & 0{,}5 \\ 0{,}5 & 1 \end{pmatrix}$.
 
     **Paso 1.** Formar $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ (siempre sale simétrica):
 
