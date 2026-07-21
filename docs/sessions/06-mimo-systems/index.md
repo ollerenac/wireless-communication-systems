@@ -41,7 +41,7 @@ El objetivo de esta sesión es construir esa brújula. La matemática sigue esta
 !!! note "Vocabulario de la sesión"
 
     - **Capa = stream = flujo**: son la misma cosa y este documento los usa como sinónimos. Es una secuencia de datos independiente que se transmite al mismo tiempo que las demás. Los estándares dicen *layers*; la literatura dice *streams*.
-    - **Modo espacial** (o "tubo"): cada canal paralelo e independiente escondido dentro de $\mathbf{H}$; la SVD los revela. No es sinónimo de capa: la **capa** es *lo que mandas*, el **modo** es *por dónde pasa*. Idealmente cada capa viaja por su propio modo.
+    - **Modo espacial = subcanal**: cada canal paralelo e independiente contenido dentro de $\mathbf{H}$; la SVD los revela. No es sinónimo de capa: la **capa** es *lo que se transmite*, el **subcanal** es *por dónde pasa*. Idealmente cada capa viaja por su propio subcanal.
     - **Grados de libertad espaciales**: cuántas señales independientes puede manejar simultáneamente el arreglo de antenas. Se gastan en robustez, en throughput o en servir más usuarios — no alcanzan para todo a la vez.
     - **Cerrar el enlace**: lograr que la potencia que llega al receptor alcance el SNR mínimo que exige la tasa de error objetivo. Si el enlace "no cierra", ninguna otra optimización importa.
     - **CSI / CSIT / CSIR**: *channel state information* — el conocimiento de $\mathbf{H}$. La T o R final indica quién lo tiene: el Transmisor o el Receptor.
@@ -205,14 +205,14 @@ $$\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} \tag{3}$$
 
 La lectura implementativa es directa. Las columnas de $\mathbf{V}$ son direcciones de transmisión; las columnas de $\mathbf{U}$ son combinaciones de recepción; los valores singulares $\sigma_k$ dicen cuán bueno es cada modo. Si el segundo valor singular es pequeño, el segundo stream existe en álgebra, pero será caro en BER.
 
-Una imagen sostiene el resto de la sesión. La SVD dice que dentro de cualquier $\mathbf{H}$ — por revuelto que se vea el canal antena a antena — viven canales paralelos que **no se mezclan entre sí**: los "tubos" (los modos espaciales del vocabulario inicial). Los tubos no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa imagen, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos tubos:
+Una imagen sostiene el resto de la sesión. La SVD dice que dentro de cualquier $\mathbf{H}$ — por mezclado que se vea el canal antena a antena — existen canales paralelos que **no se mezclan entre sí**: los subcanales (los modos espaciales del vocabulario inicial). Los subcanales no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa imagen, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos subcanales:
 
-| Decisión | Pregunta sobre los tubos | Dónde se desarrolla |
+| Decisión | Pregunta sobre los subcanales | Dónde se desarrolla |
 |---|---|---|
-| Rank | ¿cuántos tubos vale la pena abrir? | §3.1 y §6 |
+| Rank | ¿cuántos subcanales vale la pena activar? | §3.1 y §6 |
 | Beamforming | si abro uno solo, ¿toda la potencia por el más fuerte? | §4 |
-| Precoding | ¿cómo alineo cada capa con la boca de su tubo? | §5.2 |
-| Scheduler | ¿los tubos de **quién** están mejor en este instante? | §5.2 y §7 |
+| Precoding | ¿cómo alineo cada capa con la entrada de su subcanal? | §5.2 |
+| Scheduler | ¿los subcanales de **quién** están mejor en este instante? | §5.2 y §7 |
 | Detección | si el TX no pudo alinear (sin CSIT), ¿cómo deshace el RX la mezcla y a qué precio? | §5.1 |
 
 Precoding y detección son simétricos: el primero arregla la mezcla **antes** de transmitir (lado $\mathbf{V}$, exige CSIT); la segunda la arregla **después** de recibir (lado $\mathbf{U}$, basta CSIR). Mismo problema, dos extremos del cable.
@@ -444,7 +444,7 @@ La capacidad MIMO sigue siendo el marco teórico que explica por qué subir capa
 
 $$C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}$$
 
-donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura lo dice todo: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un tubo con ganancia $\sigma_k^2$.
+donde $P_k$ es la potencia asignada al modo espacial $k$ (sujeta a $\sum_k P_k = P_{\text{total}}$) y $r$ es el rank usado. La estructura lo dice todo: la capacidad total es la **suma de capacidades de canales SISO independientes**, uno por modo — cada término es la fórmula de Shannon de un subcanal con ganancia $\sigma_k^2$.
 
 En implementación esta expresión no se evalúa como fin en sí mismo: se usa como criterio para rank adaptation:
 
