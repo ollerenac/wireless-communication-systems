@@ -6,6 +6,9 @@ description: "Cómo elegir entre diversidad, beamforming, SU-MIMO, MU-MIMO y Mas
 
 # Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios
 
+- [Vídeo - Parte 1](https://youtu.be/GaMZSzmyoIs)
+
+
 ## Objetivos de Aprendizaje
 
 Al finalizar esta sesión, el estudiante será capaz de:
