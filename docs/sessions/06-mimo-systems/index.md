@@ -34,6 +34,17 @@ La decisión correcta depende del canal, no de una regla fija. Si el canal tiene
 
 El objetivo de esta sesión es construir esa brújula. La matemática sigue estando: $\mathbf{H}$, la SVD, el compromiso diversidad-multiplexación (DMT), y los precodificadores y detectores clásicos (MRT, ZF, MMSE). Pero aquí aparecen como herramientas para tomar decisiones de red; cada sigla se define en la sección donde se usa por primera vez.
 
+!!! warning "Antes de empezar: qué repasar"
+
+    Esta sesión usa álgebra lineal que **no se enseña aquí**:
+
+    - multiplicación matriz-vector;
+    - **eigenvalores y eigenvectores** — la ecuación $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$: las direcciones que una matriz no rota, solo escala;
+    - la conjugada transpuesta $\mathbf{A}^{\mathsf{H}}$ (transponer y conjugar cada entrada compleja);
+    - la norma $\|\mathbf{v}\|$ de un vector y su cuadrado $\|\mathbf{v}\|^2$ como energía.
+
+    Si "eigenvector" no le dice nada, repáselo antes de llegar a §3: la SVD — el instrumento central de la sesión — se construye sobre ese concepto. La caja "Cálculo de la SVD de un canal 2×2" en §3.1 muestra el procedimiento completo paso a paso, incluida la relación $\sigma = \sqrt{\lambda}$.
+
 ---
 
 ## Teoría
@@ -237,6 +248,12 @@ Precoding y detección son simétricos: el primero arregla la mezcla **antes** d
     $$\det(\mathbf{H}^{\mathsf{H}}\mathbf{H} - \lambda\mathbf{I}) = (1{,}25-\lambda)^2 - 1 = 0 \;\Rightarrow\; \lambda_1 = 2{,}25, \; \lambda_2 = 0{,}25$$
 
     $$\sigma_1 = \sqrt{2{,}25} = 1{,}5, \qquad \sigma_2 = \sqrt{0{,}25} = 0{,}5$$
+
+    ¿Por qué la raíz cuadrada? Porque los eigenvalores de $\mathbf{H}^{\mathsf{H}}\mathbf{H}$ son **energías** de salida: si $\mathbf{v}$ es un eigenvector unitario con eigenvalor $\lambda$, la energía que sale del canal al transmitir $\mathbf{v}$ es
+
+    $$\|\mathbf{H}\mathbf{v}\|^2 = \mathbf{v}^{\mathsf{H}}(\mathbf{H}^{\mathsf{H}}\mathbf{H})\mathbf{v} = \mathbf{v}^{\mathsf{H}}(\lambda\mathbf{v}) = \lambda$$
+
+    Es decir: $\lambda$ vive en el mundo de la potencia y $\sigma$ en el de la amplitud, y la conversión entre ambos es el cuadrado — la misma relación que entre voltaje y potencia. La amplitud de salida es $\|\mathbf{H}\mathbf{v}\| = \sqrt{\lambda} \equiv \sigma$. De paso, esto garantiza que la raíz siempre existe: $\lambda = \|\mathbf{H}\mathbf{v}\|^2 \geq 0$ por ser una norma al cuadrado.
 
     **Paso 3.** Sus eigenvectores son las columnas de $\mathbf{V}$:
 
