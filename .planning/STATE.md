@@ -96,6 +96,6 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-07-13
-Stopped at: Knowledge graph for Session 06 generated via /understand (local-only, gitignored); Jul 7 commits pushed to origin (were local-only for 6 days); paused back into study mode awaiting user questions on §4–§6.
-Resume file: `.planning/HANDOFF.json`, `.continue-here.md` (root; the `.planning/.continue-here.md` copy is stale from Jun 13)
+Last session: 2026-07-21
+Stopped at: Session resumed after the 4-pass readability triage of Session 06 `index.md` was completed (terminology pass `d96c9bf`; ~25 commits on 2026-07-21 covering worked examples — DMT evaluated, channel-B conditioning twin, Alamouti derivation, water-filling computed both cases —, bridge boxes — pilot estimation mechanics, SVD recipe with non-symmetric example, "diagnóstico operativo" opener —, and §5/§7 rewrites with dictation-notes sync `711fd9e`). NOTE: "tubo" metaphor was renamed to "subcanal" in `9975eba`. HEAD `90aed7b` was 1 commit ahead of origin/main at resume time (the documented unpushed-commits anti-pattern) — user was offered the push.
+Resume file: none (stale HANDOFF.json and .continue-here.md from 2026-07-13 deleted on resume; they predated the Jul 21 triage work)
