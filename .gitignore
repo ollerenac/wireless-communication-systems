@@ -45,3 +45,9 @@ exams/**/examen-parcial-soluciones/
 
 # understand-anything knowledge graph (local)
 .understand-anything/
+
+# Sesión 07 — descargas y artefactos regenerables de la escena Sionna
+docs/sessions/07-network-design/maps/
+docs/sessions/07-network-design/Miniforge3-Linux-x86_64.sh
+docs/sessions/07-network-design/*.png
+docs/sessions/07-network-design/blends/*.blend1
