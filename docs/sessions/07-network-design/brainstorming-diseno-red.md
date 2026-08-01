@@ -142,11 +142,15 @@ la Fase 6, y que el diseño es iterativo, no una fórmula cerrada.
 
 Decisiones pendientes de conversación — se van resolviendo y anotando aquí:
 
-- [ ] **Escenario ancla de la clase**: ¿operador urbano (San Isidro, lo
-  actual) o red privada/campus? ¿O el urbano como hilo y campus como tarea?
-- [ ] **Metas numéricas oficiales del ejercicio**: ¿95% SINR > 0 dB se queda?
-  ¿Agregamos meta de RSRP (cobertura de control) y de throughput de borde
-  (p5 > 50 Mbps)?
+- [x] **Escenario ancla de la clase**: RESUELTO (2026-08-01) — operador
+  urbano en San Isidro, escena actual. Campus/red privada podrá ser tarea.
+- [x] **Metodología de construcción**: RESUELTO (2026-08-01) — notebook nuevo
+  desde cero (`design.ipynb`) construido fase por fase junto con el
+  `index.md` del blog; `test_scene.ipynb` queda como esbozo/validación.
+- [ ] **Metas numéricas oficiales del ejercicio**: propuesta sobre la mesa
+  (ver tabla de requisitos en `index.md` §Fase 0): RSRP ≥ −110 dBm en 95%,
+  SINR ≥ 0 dB en 90%, p5 ≥ 50/5 Mbps DL/UL, ~600 Mbps/km², máx. 6 sitios,
+  100 MHz en n78. Falta confirmación/ajuste del instructor.
 - [ ] **Modelo de tráfico para la Fase 3**: ¿algo simple tipo N usuarios/km² ×
   demanda en hora cargada, con eficiencia espectral sacada del mapa SINR real
   (integrar Shannon sobre el mapa)? Eso conectaría capacidad con lo ya medido.
