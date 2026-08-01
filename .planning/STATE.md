@@ -16,14 +16,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-07)
 
 **Core value:** Help the instructor understand and teach MIMO concepts clearly, with mathematically correct Spanish course notes, labs, figures, and lecture guidance.
-**Current focus:** Session 06 MIMO study loop and clarity improvements.
+**Current focus:** Session 07 network design — 4G/5G architecture + design criteria over a Sionna RT ray-traced Lima scene.
 
 ## Current Position
 
 Phase: N/A of N/A (quick-task study workflow, no active milestone roadmap)
 Plan: N/A of N/A
-Status: Paused, Session 06 implementation-first rewrite, figures and instructor artifact complete
-Last activity: 2026-07-14 — Completed quick task 260714-8kp: verified dictation notes cover the full lesson and added 7 whiteboard (pizarra) guides to artifact-notas-dictado-mimo.html.
+Status: Session 07 lab backbone complete (commit `f986354`); index.md for the session not yet written
+Last activity: 2026-08-01 — Built and validated the full Sionna RT pipeline (Blender+Blosm OSM → Mitsuba scene → 8-part design notebook over San Isidro, Lima) with consolidated coverage/SINR/throughput/handover/densification/MIMO analyses.
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -53,6 +53,13 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Session 07: scope agreed in conversation (no formal AskUserQuestion round): 4G architecture as stepping stone → 5G evolution → procedures that a designer configures → design parameters for a small network. Sionna RT is the lab vehicle.
+- Session 07: Sionna framed as *evaluator, not planner* — students propose sites/tilt/power, the ray tracer shows consequences. This is the pedagogical core.
+- Session 07: OSM/Blosm scene (shareable, ITU materials) chosen over Google 3D Tiles (no material semantics, license forbids redistribution).
+- Session 07: exploration runs at 10^5 rays / reporting runs at 10^6 with diffuse reflection — "se explora barato, se reporta caro" is itself a lesson.
+- Env: `ran-design` conda env (python 3.12, sionna 2.0.1); `LD_LIBRARY_PATH=$CONDA_PREFIX/lib` persisted via `conda env config vars set` to fix system-libstdc++ conflict (CXXABI_1.3.15). Non-interactive shells still need manual export.
+- Sionna 2.x API differences vs 0.x tutorials: `PathSolver`/`RadioMapSolver` replace `compute_paths`/`coverage_map`; `paths.cir()` → numpy gets a leading [real, imag] axis; `mi.Point3f` rejects `np.float64` (cast to `float`); headless `render_to_file` needs an explicit `Camera`.
+
 - Session 06: Keep the 2x2 SVD example as the construction anchor; use the 3x3 example for water-filling.
 - Session 06: Keep the active focus on MIMO teaching readiness; admin and future-session work are deferred until explicitly requested.
 - Lab 06: `precoder_zf` and Marchenko-Pastur exercises were converted from student TODOs to instructor reference solutions.
@@ -63,12 +70,14 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Continue the study loop when the user returns with questions on Session 06, especially sections 4-6.
-- Optional: run the understand-anything pipeline on `docs/sessions/06-mimo-systems/` only.
+- **Session 07 next:** write `docs/sessions/07-network-design/index.md` wrapping the 8 notebook parts with the 4G/5G architecture + procedures theory (skeleton agreed: why architecture → minimal EPC → 5G evolution/NSA-SA → designer-facing procedures → small-network parameters → integrative case).
+- Session 07: sectorization step — 3×`tr38901` sectors with azimuth/tilt per BS (replaces the iso-element simplification in Part 2).
+- Session 07: decide final scene (current San Isidro test scene vs another Lima district / campus); fix OSM building heights by hand for key buildings in Blender if needed.
+- Session 07: `altura_en(x, y)` helper (vertical ray cast) so students can snap BS to rooftops.
+- Session 07: triage `catalogo_ejercicios.md` and `clase2_ej23_rediseno.ipynb` (instructor drafts committed as-is, not yet integrated).
+- Session 06 (dormant): study loop open for further questions; understand-anything graph incremental update pending.
 - Deferred admin: distribute Parcial 01 feedback after the instructor provides student email addresses.
-- Long-term backlog: Session 05 Polar BER N=64 Monte Carlo exercises 5-6.
-- Long-term backlog: Session 03 OFDM+LDPC integrator.
-- Long-term backlog: Session 07 Arquitectura 5G NR.
+- Long-term backlog: Session 05 Polar BER N=64 Monte Carlo exercises 5-6; Session 03 OFDM+LDPC integrator.
 
 ### Blockers/Concerns
 
@@ -96,6 +105,7 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-07-21
-Stopped at: Session resumed after the 4-pass readability triage of Session 06 `index.md` was completed (terminology pass `d96c9bf`; ~25 commits on 2026-07-21 covering worked examples — DMT evaluated, channel-B conditioning twin, Alamouti derivation, water-filling computed both cases —, bridge boxes — pilot estimation mechanics, SVD recipe with non-symmetric example, "diagnóstico operativo" opener —, and §5/§7 rewrites with dictation-notes sync `711fd9e`). NOTE: "tubo" metaphor was renamed to "subcanal" in `9975eba`. HEAD `90aed7b` was 1 commit ahead of origin/main at resume time (the documented unpushed-commits anti-pattern) — user was offered the push.
-Resume file: none (stale HANDOFF.json and .continue-here.md from 2026-07-13 deleted on resume; they predated the Jul 21 triage work)
+Last session: 2026-08-01
+Stopped at: Session 07 lab backbone committed (`f986354`). Full pipeline validated: Blender 4.2 LTS + Blosm (OSM, San Isidro ~1.3×0.8 km) + mitsuba-blender → `blends/test_scene/untitled.xml` (materials renamed to `itu_concrete`/`itu_metal` via sed) → `test_scene.ipynb` with 8 executed parts and all figures. Key numbers: 71.2% baseline coverage (3 BS, SINR>0 dB), 592/159 Mbps median/edge, LTE-vs-5G deficit 3.4 pts, 8→1 handovers with A3, densification 3→6 sites = 71→92% (95% target unreachable → repositioning lesson), MIMO κ>30 dB almost everywhere, delay spread 60 ns.
+On resume: next deliverable is Session 07 `index.md` (theory wrap); check unpushed commits (`git log origin/main..HEAD` — several pending at pause time, user asked for commits only, push not requested).
+Resume file: none
