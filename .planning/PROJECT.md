@@ -43,6 +43,8 @@ Help the instructor understand and teach MIMO concepts clearly, with mathematica
 
 ## Context (Session 07 tooling)
 
+- Dictation-notes artifact (guion del instructor, grows phase by phase): https://claude.ai/code/artifact/98209b61-23d1-425e-837b-89bf180242a8 — source HTML lives in the session scratchpad (ephemeral): in a fresh session, WebFetch the URL and republish with `url:` to update without minting a new link. Currently covers Fase 0.
+
 - Conda env `ran-design` (python 3.12, sionna 2.0.1, nbconvert). CRITICAL: `LD_LIBRARY_PATH=$CONDA_PREFIX/lib` required (persisted in env config; non-interactive shells must export manually) — otherwise `CXXABI_1.3.15 not found`.
 - Scene pipeline: Blender 4.2 LTS (`~/blender-4.2.9-linux-x64/`) + Blosm (OSM import; tokens configured; Google 3D Tiles key deliberately empty) + mitsuba-blender add-on (needs mitsuba 3.5.0 → Blender ≤4.2, python 3.11; Blender 5.x incompatible).
 - Material names in exported XML must be `itu_*` (e.g. `mat-itu_concrete`) or `load_scene` rejects them.
