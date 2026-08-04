@@ -185,12 +185,18 @@ Porque el alcance se paga en capacidad: en low-band hay poco espectro (10–20
 MHz por operador, y repartido); en mid-band hay bloques de 80–100 MHz. De ahí
 la arquitectura de **capas** que usa todo operador real:
 
-- **Capa de cobertura** (700/850/900 MHz): llega lejos y adentro; poco
-  ancho de banda → sostiene voz, IoT y el "siempre conectado".
-- **Capa de capacidad** (2.6/3.5 GHz): bloques anchos → sostiene el tráfico
-  eMBB; celdas chicas → más sitios.
-- **Capa de hotspot** (mmWave): enorme ancho de banda, alcance de cuadra;
-  solo donde la densidad lo justifica.
+- **Capa de cobertura** (700/850/900 MHz): llega lejos y adentro, pero la
+  banda entera de 700 MHz es 2×45 MHz (FDD) repartidos entre operadores —
+  en la subasta peruana de 2016 tocó **2×15 MHz por operador**, o sea
+  15 MHz de bajada → sostiene voz, IoT y el "siempre conectado", no el
+  tráfico masivo.
+- **Capa de capacidad** (2.6/3.5 GHz): bloques de **80–100 MHz** por
+  operador (nuestro encargo: 100 MHz en n78, R7) — unas **6–7×** la bajada
+  de la capa baja → sostiene el tráfico eMBB; celdas chicas → más sitios.
+- **Capa de hotspot** (mmWave): n258 (26 GHz) tiene 3.25 GHz de banda
+  total; se asigna en portadoras de **400 MHz** y un operador típicamente
+  agrega **800–1000 MHz** — otras **8–10×** lo de mid-band, pero con
+  alcance de cuadra; solo donde la densidad lo justifica.
 
 Nuestro encargo es deliberadamente **mono-capa** (solo n78): más simple para
 aprender, y realista para un despliegue 5G inicial. La comparación con una
