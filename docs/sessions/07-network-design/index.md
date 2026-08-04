@@ -405,7 +405,110 @@ volumen — coherente con lo visto en Fase 2.
     transmitiendo), que es el escenario de la hora cargada — la única que
     importa para capacidad.
 
-## Fase 4 — Plan nominal *(en construcción)*
+## Fase 4 — Plan nominal: el diseño aterriza en el mapa
+
+Las fases 2–3 dijeron **cuántos** sitios (3). Esta fase decide **dónde y
+cómo**: posiciones sobre azoteas reales, sectorización, azimuts y downtilt.
+Es la fase gráfica del diseño — aquí la aritmética se encuentra con la
+ciudad.
+
+### 4.1 Sectorización: tres celdas por el precio de un sitio
+
+Un sitio omnidireccional es una celda. El mismo sitio con **3 antenas
+sectoriales de 120°** son **tres celdas independientes**: cada una con su
+espectro completo, su scheduler y su PCI. La capacidad del sitio se
+triplica sin comprar terreno ni torre — por eso la sectorización 3×120° es
+el estándar universal de macro urbana.
+
+El truco está en el patrón de la antena: el elemento sectorial 3GPP tiene
+**65° de ancho de haz** (−3 dB), no 120°. Los tres pétalos no llenan el
+círculo: entre sectores quedan valles de ~10 dB donde el UE ve dos sectores
+parejos — ahí vive el handover intra-sitio.
+
+<!-- FIGURA PENDIENTE: figures/sectorizacion_3x120.svg -->
+
+### 4.2 Azimut: hacia dónde mira cada sector
+
+El azimut de cada sector es una perilla de diseño por sitio. Regla
+práctica: apuntar los sectores hacia la **demanda** (avenidas, edificios de
+oficinas) y **no** de frente contra el sector de un sitio vecino (dos
+sectores frente a frente = interferencia máxima en la franja intermedia).
+En el plan nominal usamos 0°/120°/240° uniformes como punto de partida; la
+optimización fina de azimuts es trabajo de la Fase 6.
+
+### 4.3 Downtilt: la perilla de interferencia
+
+La antena no se apunta al horizonte: se inclina hacia abajo. Geometría
+simple — con altura $h$ y tilt $\theta$, el haz principal toca el suelo a:
+
+$$d = \frac{h}{\tan\theta}$$
+
+Con $h = 30$ m y $\theta = 6°$: $d \approx 270$ m — justo el borde de
+nuestra celda de ~390 m considerando el ancho vertical del haz. La lección
+contraintuitiva: **inclinar la antena hacia abajo MEJORA la red**, porque
+la energía que iba al horizonte no servía a nadie propio — solo
+interfería a las celdas vecinas (*overshooting*). El tilt es además la
+perilla de optimización más barata que existe: el tilt eléctrico se ajusta
+por software, sin subir a la torre.
+
+- **Tilt 0°**: celda "infinita" — cobertura propia igual, interferencia
+  regada a todo el mapa.
+- **Tilt excesivo**: la celda se encoge más que su área asignada — huecos
+  entre sitios.
+- El óptimo es un compromiso, y depende de la geometría real → barrido en
+  `design.ipynb`.
+
+<!-- FIGURA PENDIENTE: figures/downtilt_geometria.svg -->
+
+### 4.4 El plan nominal de San Isidro — y lo que midió el trazador
+
+| Sitio | Posición (x, y) [m] | Altura | Azimuts | Tilt inicial |
+|---|---|---|---|---|
+| s1 | (−380, 200) | 30 m | 0°/120°/240° | 6° |
+| s2 | (350, 230) | 30 m | 0°/120°/240° | 6° |
+| s3 | (0, −260) | 30 m | 0°/120°/240° | 6° |
+
+Dos resultados del ray tracing que contradicen la intuición de libro — y
+por eso enseñan:
+
+**1. Sectorizar bajó el % de SINR** (49% con 9 celdas vs 71% del esbozo
+con 3 omnis). No es un error: pasar de 3 a 9 celdas co-canal multiplica
+los interferentes, y el mapa lo cobra. Lo que se compró con la
+sectorización no es SINR — es **capacidad** (×3 celdas, cada una con el
+espectro completo). La métrica correcta para juzgar la sectorización es
+Mbps agregados de la Fase 3, no el % del mapa. Cada decisión de diseño
+optimiza una métrica y factura en otra.
+
+**2. El barrido uniforme de tilt (0°/6°/12°) casi no movió el SINR**
+(±0.3 puntos). Verificamos que el tilt sí redistribuye potencia (+14 dB
+de RSS al suelo entre ±30°); lo que pasa es que al tiltear **todas** las
+celdas por igual, señal e interferencia suben juntas y el cociente no
+cambia. La regla de libro "tilt = control de interferencia" aplica al
+*overshooting* hacia sitios lejanos — macro abierta, haces verticales de
+~7°. En 1 km² denso, el tilt se usa **por celda** (asimétrico, para
+corregir una invasión concreta), no como perilla global. La Fase 6 lo
+usará así.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** Si sectorizar triplica la capacidad, ¿por qué no usar 6
+    sectores de 60° y sextuplicarla?
+
+    **P2.** Un sector tiene excelente SINR cerca del sitio pero su celda
+    "invade" el área del sitio vecino. ¿Primera perilla a tocar y por qué?
+
+    ---
+
+    **R1.** Rendimientos decrecientes con castigo: antenas de 60° reales
+    solapan más (el haz no es rectangular), el handover intra-sitio se
+    multiplica, y la interferencia entre sectores propios crece. 3×120°
+    con elementos de 65° es el equilibrio que la industria convergió.
+
+    **R2.** Downtilt (eléctrico si existe): reduce el alcance del sector
+    invasor sin tocar su cobertura cercana, es remoto y reversible.
+    Bajar potencia también encoge la celda pero degrada a TODOS sus
+    usuarios, incluidos los cercanos; el tilt redistribuye, la potencia
+    amputa.
 
 ## Fase 5 — Planificación detallada y procedimientos *(en construcción)*
 
