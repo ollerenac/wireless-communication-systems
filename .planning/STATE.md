@@ -105,6 +105,12 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
+Last session: 2026-08-04
+Stopped at: Session 07 phases 0-4 complete on all four fronts (index.md, design.ipynb executed, dictation artifact, reference notes). Paused via /gsd-pause-work before Fase 5 (procedures + PCI/RACH/TA). Resume files: `.planning/HANDOFF.json` + `.planning/.continue-here.md`. 13 commits unpushed at pause.
+Resume file: `.planning/HANDOFF.json`, `.planning/.continue-here.md`
+
+### Previous session continuity (2026-08-01)
+
 Last session: 2026-08-01
 Stopped at: Session 07 lab backbone committed (`f986354`). Full pipeline validated: Blender 4.2 LTS + Blosm (OSM, San Isidro ~1.3×0.8 km) + mitsuba-blender → `blends/test_scene/untitled.xml` (materials renamed to `itu_concrete`/`itu_metal` via sed) → `test_scene.ipynb` with 8 executed parts and all figures. Key numbers: 71.2% baseline coverage (3 BS, SINR>0 dB), 592/159 Mbps median/edge, LTE-vs-5G deficit 3.4 pts, 8→1 handovers with A3, densification 3→6 sites = 71→92% (95% target unreachable → repositioning lesson), MIMO κ>30 dB almost everywhere, delay spread 60 ns.
 On resume: next deliverable is Session 07 `index.md` (theory wrap); check unpushed commits (`git log origin/main..HEAD` — several pending at pause time, user asked for commits only, push not requested).
