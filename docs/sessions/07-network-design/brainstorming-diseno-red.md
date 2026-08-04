@@ -151,9 +151,12 @@ Decisiones pendientes de conversación — se van resolviendo y anotando aquí:
   (ver tabla de requisitos en `index.md` §Fase 0): RSRP ≥ −110 dBm en 95%,
   SINR ≥ 0 dB en 90%, p5 ≥ 50/5 Mbps DL/UL, ~600 Mbps/km², máx. 6 sitios,
   100 MHz en n78. Falta confirmación/ajuste del instructor.
-- [ ] **Modelo de tráfico para la Fase 3**: ¿algo simple tipo N usuarios/km² ×
-  demanda en hora cargada, con eficiencia espectral sacada del mapa SINR real
-  (integrar Shannon sobre el mapa)? Eso conectaría capacidad con lo ya medido.
+- [x] **Modelo de tráfico para la Fase 3**: RESUELTO (2026-08-04) — demanda =
+  personas/km² × market share × kbps de hora cargada (Fase 0); capacidad de
+  celda = SE_celda (hipótesis 2.0, declarada) × BW efectivo × (1−OH). La
+  integral del mapa SINR real reemplaza la hipótesis en Fase 6. Concepto
+  difícil documentado en `de-sinr-a-capacidad.md` (media aritmética vs
+  armónica según scheduler).
 - [ ] **Escena low-band**: ¿qué zona de 3×3 km? (San Isidro ampliado, u otro
   distrito con mejor cobertura OSM de alturas).
 - [ ] **Sectorización**: pasar de iso a 3×tr38901 con azimut/tilt por sitio —

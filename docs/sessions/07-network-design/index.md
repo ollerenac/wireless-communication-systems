@@ -329,7 +329,81 @@ crudo. La verificación numérica vive en `design.ipynb`.
     tracing punto a punto, pero al diseñar con un modelo estadístico, la
     incertidumbre espacial es irreducible y hay que presupuestarla.
 
-## Fase 3 — Dimensionamiento por capacidad *(en construcción)*
+## Fase 3 — Dimensionamiento por capacidad: la cuenta gemela
+
+La Fase 2 preguntó "¿cuántos sitios para que la señal *llegue*?". Esta
+pregunta es distinta: **¿cuántos sitios para que la red *aguante* la demanda
+de R5** (600 Mbps/km² en hora cargada)**?** Son dos cuentas independientes y
+el diseño final obedece a la peor:
+
+$$N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})$$
+
+### 3.1 La capacidad de una celda no es su pico
+
+El folleto promete "hasta 1 Gbps"; la celda real sirve usuarios repartidos
+por toda su área compartiendo los mismos PRBs. Su capacidad es un **promedio
+sobre la distribución espacial de SINR** — y qué promedio usar depende del
+scheduler: reparto equitativo de *tiempo* rinde la media aritmética de las
+eficiencias; reparto igualitario de *datos* colapsa hacia la media armónica
+(el usuario de borde consume el tiempo de todos). Este es el concepto
+difícil de la fase y tiene nota propia:
+[De la distribución de SINR a la capacidad de celda](de-sinr-a-capacidad.md).
+
+### 3.2 La cadena de la cuenta
+
+$$R_{\text{celda}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
+
+- $\text{SE}_{\text{celda}} = 2.0$ bit/s/Hz: hipótesis conservadora SISO de
+  industria — **declarada** para ser reemplazada en la Fase 6 por la
+  integral del mapa SINR ray-traced de San Isidro.
+- $B_{\text{DL,ef}} = 71$ MHz: herencia directa de la Fase 1 (patrón DDDSU).
+- $OH \approx 22\%$: SSB, PDCCH, DMRS — PRBs que no llevan datos de usuario.
+
+Un sitio trisectorial: $3 \times 111 \approx 330$ Mbps.
+
+### 3.3 El veredicto
+
+Demanda total: $600 \text{ Mbps/km}^2 \times 1.1 \text{ km}^2 = 660$ Mbps.
+
+$$N_{\text{capacidad}} = \lceil 660 / 330 \rceil = 2 \text{ sitios} \qquad
+N_{\text{sitios}} = \max(3, 2) = \mathbf{3}$$
+
+Hoy la red está **limitada por cobertura**: los 3 sitios de la Fase 2 traen
+capacidad de sobra (990 Mbps instalados vs 660 demandados — margen 1.5×).
+Pero el tráfico móvil crece ~25% anual: en ~2 años la desigualdad se
+invierte y la capacidad pasa a mandar. Ahí las salidas son (en orden de
+costo): exprimir SE con MU-MIMO/sectorización, agregar portadora, y solo al
+final agregar sitios — la curva de densificación del laboratorio mostró por
+qué es el último recurso.
+
+### 3.4 Nota sobre el uplink
+
+La misma cuenta con los 20 MHz efectivos de UL y SE menor (~1.2 bit/s/Hz,
+sin 256-QAM en subida de UEs comunes): ~19 Mbps por celda, ~56 por sitio.
+Contra una demanda de subida típica (~15% de la de bajada, ≈ 100 Mbps):
+también sobra hoy. El UL limita en *cobertura de servicios exigentes*, no en
+volumen — coherente con lo visto en Fase 2.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** Marketing pide "duplicar la velocidad de borde garantizada"
+    (R4: 50 → 100 Mbps). ¿Eso es un problema de capacidad o de cobertura?
+    ¿Qué fase se rehace?
+
+    **P2.** Un ingeniero propone dimensionar con la SE del mapa medido un
+    domingo a las 7 am. ¿Cuál es el error?
+
+    ---
+
+    **R1.** De cobertura/calidad (R4 es percentil 5 = borde), no de volumen
+    agregado. Se rehace la Fase 2 con un umbral de SINR de borde más alto →
+    MAPL menor → celdas más chicas → probablemente más sitios; la Fase 3
+    apenas cambia.
+
+    **R2.** Carga↔interferencia acopladas: en hora valle las vecinas callan
+    y el SINR es optimista. Se dimensiona full-buffer (todas las celdas
+    transmitiendo), que es el escenario de la hora cargada — la única que
+    importa para capacidad.
 
 ## Fase 4 — Plan nominal *(en construcción)*
 

@@ -78,5 +78,6 @@ nav:
           - "Lección": sessions/07-network-design/index.md
           - "Nota: RSRP, RSRQ y SINR": sessions/07-network-design/rsrp-rsrq-sinr.md
           - "Nota: CRS con dos celdas y PCI mod 3": sessions/07-network-design/crs-dos-celdas-pci-mod3.md
+          - "Nota: de SINR a capacidad de celda": sessions/07-network-design/de-sinr-a-capacidad.md
   - Evaluaciones:
       - "Parcial 01": exams/index.md
