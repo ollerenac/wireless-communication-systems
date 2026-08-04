@@ -105,9 +105,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-04
-Stopped at: Session 07 phases 0-4 complete on all four fronts (index.md, design.ipynb executed, dictation artifact, reference notes). Paused via /gsd-pause-work before Fase 5 (procedures + PCI/RACH/TA). Resume files: `.planning/HANDOFF.json` + `.planning/.continue-here.md`. 13 commits unpushed at pause.
-Resume file: `.planning/HANDOFF.json`, `.planning/.continue-here.md`
+Last session: 2026-08-04 (resumed ~11:50 AM)
+Stopped at: Session resumed via /gsd-resume-work; handoff consumed; proceeding to Fase 5 (arco del UE + PCI planning mod-3). 14 commits still unpushed.
+Resume file: none (HANDOFF.json consumed on resume)
 
 ### Previous session continuity (2026-08-01)
 

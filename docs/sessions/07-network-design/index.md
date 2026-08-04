@@ -121,6 +121,28 @@ negocio — cámbialos y cambia la red que hay que construir.
     típico en fronteras de celda. Se cura con coordinación/tilts, no con
     más potencia.
 
+    Ojo con la palabra *coordinación*: la intuición sugiere "que las celdas
+    se turnen" — desalinear los patrones TDD para que el DL de una no
+    coincida con el DL de la vecina. La figura muestra por qué eso es
+    exactamente lo prohibido:
+
+    ![Patrones TDD alineados vs desalineados y cross-link interference](figures/tdd_nr_sincronizacion_cross_link_interference.svg)
+
+    Si B se desplaza dos slots, aparecen slots donde A transmite DL
+    (~46 dBm, en azotea, casi línea de vista hacia la otra azotea)
+    mientras B intenta recibir UL de UEs que le llegan a ~−120 dBm: la
+    *cross-link interference* entre gNBs deja ciego al receptor en **toda**
+    la celda, no solo en el borde. Por eso todas las celdas co-canal usan
+    el **mismo patrón DDDSU sincronizado** — es requisito regulatorio en la
+    banda, no una opción de diseño.
+
+    La coordinación que sí cura el borde opera con la trama ya sincronizada,
+    en los ejes de frecuencia y scheduling (ICIC): las vecinas acuerdan
+    sub-bandas de borde disjuntas — A sirve a sus UEs de frontera en unos
+    PRBs, B en otros, y el centro reusa todo. El UE de borde recibe su señal
+    donde la vecina no transmite a plena potencia → baja I sin tocar la
+    potencia total. El tilt (Fase 4) ataca lo mismo por el eje espacial.
+
     **R2.** Cambia R5 (∝ abonados). La cobertura (Fase 2) no se toca; el
     dimensionamiento por capacidad (Fase 3) y quizá el plan nominal (más
     sectores/sitios) sí.
