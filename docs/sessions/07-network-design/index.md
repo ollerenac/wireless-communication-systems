@@ -55,6 +55,14 @@ con un mapa o un drive test y se puede firmar en un contrato.
 La pareja RSRP/SINR separa dos preguntas de diseño distintas: **cobertura**
 (Fase 2) y **calidad/capacidad** (Fase 3). Confundirlas es el error clásico.
 
+!!! info "Nota de profundización"
+
+    La mecánica completa de las tres métricas — dónde viven en la grilla
+    tiempo-frecuencia, el patrón de señales de referencia, EPRE, el techo
+    estructural del RSRQ y las trampas de medición — está en
+    [RSRP, RSRQ y SINR — nota de referencia](rsrp-rsrq-sinr.md). Aquí basta
+    el nivel conceptual; la Fase 2 recurre a esa nota para calcular.
+
 ### 0.2 Por qué las metas son probabilísticas
 
 La Sesión 01 mostró que la señal urbana es una variable aleatoria: el
@@ -218,7 +226,108 @@ esta clase.
     zona: patrones cruzados = interferencia DL→UL entre redes. Lo fija el
     regulador o el acuerdo inter-operador.
 
-## Fase 2 — Dimensionamiento por cobertura *(en construcción)*
+## Fase 2 — Dimensionamiento por cobertura: del presupuesto de dB al número de sitios
+
+La pregunta de esta fase: **¿cuántos sitios necesita R2** (RSRP ≥ −110 dBm en
+95% del área)**?** La herramienta es el *link budget*: una contabilidad en dB
+donde cada ganancia suma, cada pérdida resta, y lo que queda es cuánto camino
+puede recorrer la señal.
+
+### 2.1 El punto de partida no es la potencia del amplificador
+
+Error clásico: arrancar el presupuesto con "la BS transmite 44 dBm". Esos
+44 dBm se reparten entre **todas** las subportadoras del canal. Con 100 MHz a
+SCS 30 kHz hay 273 PRB × 12 = 3 276 subportadoras:
+
+$$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE}$$
+
+Como el RSRP se mide **por resource element** (ver la
+[nota de referencia](rsrp-rsrq-sinr.md)), el link budget de cobertura de
+control empieza en 8.8 dBm, no en 44. La red incluso difunde este número
+(`referenceSignalPower` en el SIB) para que el UE pueda despejar el path
+loss.
+
+### 2.2 El presupuesto término a término
+
+$$\text{RSRP}_{\text{borde}} = \underbrace{\text{EPRE}}_{8.8} + \underbrace{G_{tx}}_{+16} - \underbrace{\text{PL}}_{?} - \underbrace{M_{\text{shadow}}}_{9} \geq -110 \text{ dBm}$$
+
+| Término | Valor | De dónde sale |
+|---|---|---|
+| EPRE | 8.8 dBm | 44 dBm ÷ 3 276 subportadoras |
+| $G_{tx}$ | +16 dBi | antena sectorial macro típica |
+| $M_{\text{shadow}}$ | −9 dB | compra el 95% de área con shadowing log-normal $\sigma = 8$ dB |
+| $G_{rx}$, pérdidas de cuerpo/cable | 0 dB neto | UE: antena ~0 dBi; simplificación explícita |
+
+Despejando: la señal puede perder hasta
+
+$$\text{MAPL} = 8.8 + 16 + 110 - 9 \approx 126 \text{ dB}$$
+
+**MAPL** (*Maximum Allowable Path Loss*) es el número que resume toda la
+fase: el presupuesto de pérdida que el trayecto no debe superar.
+
+El margen de shadowing es donde la meta probabilística de la Fase 0 se
+vuelve un número: con $\sigma = 8$ dB, reservar ~9 dB garantiza que el ~95%
+del área (no solo el punto medio) quede sobre el umbral. Más probabilidad =
+más margen = menos radio: la certeza se paga en dB.
+
+### 2.3 De MAPL a radio: el modelo de propagación
+
+El MAPL se convierte en distancia invirtiendo un modelo. El estándar de la
+industria sin escena 3D es el **UMa NLOS de 3GPP TR 38.901**:
+
+$$\text{PL} = 13.54 + 39.08\log_{10}(d) + 20\log_{10}(f_c) \quad [\text{d en m, } f_c \text{ en GHz}]$$
+
+Con 126 dB y $f_c = 3.5$: $d \approx 390$ m — coherente con la tabla de la
+Fase 1 (n78: 200–500 m urbano).
+
+Cada sitio trisectorial cubre un hexágono de área $\approx 2.6\,r^2$:
+
+$$N_{\text{sitios}} = \frac{1.1 \text{ km}^2}{2.6 \times 0.39^2 \text{ km}^2} \approx 3 \text{ sitios por cobertura}$$
+
+**Tres sitios** — coherente con el esbozo (`test_scene.ipynb`) que con 3 BS
+logró ~71% de SINR > 0: la cobertura de control alcanza, la calidad todavía
+no. La fórmula da el *orden de magnitud*; el ray tracing sobre la escena
+real (Fase 6) da la verdad calle por calle. Ambos se necesitan: la fórmula
+para dimensionar sin escena, el trazador para validar con ella.
+
+### 2.4 El enlace de vuelta: uplink
+
+El mismo ejercicio con el UE como transmisor: 23 dBm sobre sus PRBs
+asignados (no per-RE de 100 MHz — el UE concentra su potencia en pocos PRB,
+su gran defensa), antena de 0 dBi, y la BS escuchando con NF de 5 dB. El
+enlace que soporte **menos** pérdida define el radio real de la celda: de
+nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta. La cuenta
+completa está en `design.ipynb`; el resultado con nuestros números: DL de
+control y UL de datos quedan sorprendentemente parejos (~126 vs ~130 dB) —
+precisamente porque el UE concentra y la BS reparte.
+
+### 2.5 RSS → RSRP: cerrar el círculo con Sionna
+
+Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
+verificar R2 hay que convertir: restar $10\log_{10}(N_{\text{RE}})$ del
+despliegue. Es la misma cuenta del EPRE vista del lado del receptor — y el
+motivo por el que la meta R2 no puede compararse directo contra el mapa
+crudo. La verificación numérica vive en `design.ipynb`.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** El operador propone duplicar el ancho de banda a 200 MHz "para
+    duplicar capacidad" manteniendo los 44 dBm. ¿Qué pasa con la cobertura?
+
+    **P2.** ¿Por qué el margen de shadowing no se puede eliminar "midiendo
+    mejor el canal"?
+
+    ---
+
+    **R1.** El EPRE cae 3 dB (misma potencia entre el doble de
+    subportadoras) → el RSRP cae 3 dB en todo punto → el MAPL pierde 3 dB →
+    el radio se encoge ~16% y hacen falta ~40% más sitios. La capacidad
+    también se paga en cobertura.
+
+    **R2.** Porque no es error de medición: es la variabilidad *física* del
+    entorno (qué edificios estorban en cada punto). Se puede mapear con ray
+    tracing punto a punto, pero al diseñar con un modelo estadístico, la
+    incertidumbre espacial es irreducible y hay que presupuestarla.
 
 ## Fase 3 — Dimensionamiento por capacidad *(en construcción)*
 
