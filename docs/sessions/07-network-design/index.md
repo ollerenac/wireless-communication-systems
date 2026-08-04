@@ -119,7 +119,104 @@ negocio — cámbialos y cambia la red que hay que construir.
 
 ---
 
-## Fase 1 — Estrategia de espectro *(en construcción)*
+## Fase 1 — Estrategia de espectro: la decisión que fija todas las demás
+
+Antes de colocar un solo sitio hay que decidir **en qué frecuencia vive la
+red**. Es la decisión más estructural del diseño: fija el radio de celda (y
+por tanto cuántos sitios costará la cobertura), la penetración en interiores
+y cuánta capacidad hay para vender. En nuestro encargo la licencia ya está
+dada (R7: 100 MHz en n78) — pero hay que entender qué compramos y qué no.
+
+### 1.1 La física: frecuencia contra alcance
+
+La pérdida de espacio libre crece con $20\log_{10}(f)$: subir de banda cuesta
+dB, y esos dB se pagan en radio de celda. Además, a mayor frecuencia peor
+difracción (las esquinas "doblan" menos la señal) y peor penetración de
+muros. Regla mental: **bajar una octava de frecuencia ≈ doblar el radio de
+celda**.
+
+Con el exponente de propagación urbano ($n \approx 3.8$), el delta de
+pérdida se convierte en factor de área — y el factor de área, en sitios:
+
+| Banda | $\Delta$ pérdida vs n78 | Radio relativo | Sitios para la misma área |
+|---|---|---|---|
+| 700 MHz (n28) | −14 dB | ×2.3 | ÷5.4 |
+| 2.1 GHz (B4/n1) | −4.4 dB | ×1.3 | ÷1.7 |
+| **3.5 GHz (n78)** | 0 (referencia) | ×1.0 | ×1.0 |
+| 26 GHz (n258) | +17.4 dB | ×0.35 | ×8 |
+
+Ya lo medimos sobre Lima real: mismos 3 sitios a 2.1 GHz cubren 74.6% del
+área; a 3.5 GHz, 71.2% (`test_scene.ipynb`, Parte 5) — y eso que 2.1→3.5 es
+el salto *chico* de la tabla.
+
+### 1.2 Por qué entonces no todo es 700 MHz: capas de espectro
+
+Porque el alcance se paga en capacidad: en low-band hay poco espectro (10–20
+MHz por operador, y repartido); en mid-band hay bloques de 80–100 MHz. De ahí
+la arquitectura de **capas** que usa todo operador real:
+
+- **Capa de cobertura** (700/850/900 MHz): llega lejos y adentro; poco
+  ancho de banda → sostiene voz, IoT y el "siempre conectado".
+- **Capa de capacidad** (2.6/3.5 GHz): bloques anchos → sostiene el tráfico
+  eMBB; celdas chicas → más sitios.
+- **Capa de hotspot** (mmWave): enorme ancho de banda, alcance de cuadra;
+  solo donde la densidad lo justifica.
+
+Nuestro encargo es deliberadamente **mono-capa** (solo n78): más simple para
+aprender, y realista para un despliegue 5G inicial. La comparación con una
+capa de 700 MHz queda como extensión (requiere escena de 3×3 km — una celda
+low-band tapa nuestra escena entera).
+
+### 1.3 TDD: los 100 MHz no son todos tuyos todo el tiempo
+
+n78 es TDD (Sesión 06: subida y bajada alternan sobre la misma frecuencia).
+El tiempo se reparte con un patrón de slots; el típico en n78 es **DDDSU**:
+de cada 5 slots, 3 son de bajada, 1 "especial" (mayormente bajada + guarda) y
+1 de subida. Consecuencia aritmética que golpea el diseño:
+
+- DL dispone de ≈ 71% del tiempo → **≈ 71 MHz "efectivos"** de los 100.
+- UL dispone de ≈ 20% → **≈ 20 MHz efectivos** — y el UE ya era el extremo
+  débil (23 dBm). El uplink pierde dos veces: en potencia y en tiempo.
+
+El patrón TDD además debe estar **sincronizado entre operadores vecinos** de
+la banda (lo coordina el regulador): si mi celda transmite DL mientras la
+tuya escucha UL, mi potencia entierra a tus usuarios.
+
+En FDD (las bandas bajas clásicas) esto no existe: DL y UL tienen cada uno su
+frecuencia dedicada, tiempo completo.
+
+### 1.4 Numerología: el detalle que conecta con OFDM
+
+En n78 se usa subportadora de 30 kHz (Sesión 03: numerología µ=1): slots de
+0.5 ms, CP de 2.3 µs — y ya verificamos sobre Lima que el delay spread urbano
+(mediana 60 ns) cabe holgado en ese CP (`test_scene.ipynb`, Parte 8). La
+numerología queda decidida por la banda y el estándar; no es una perilla de
+esta clase.
+
+### Decisión de la Fase 1 (lo que hereda el resto del diseño)
+
+> Banda **n78 (3.5 GHz)**, **100 MHz** TDD con patrón **DDDSU** (≈71/20% 
+> DL/UL), SCS 30 kHz. La Fase 2 dimensionará cobertura con la física de 3.5
+> GHz; la Fase 3 repartirá 71/20 MHz efectivos contra la demanda de R5.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** Un colega propone pedir al regulador cambiar la licencia a 20 MHz
+    en 700 MHz "porque cubre 5 veces más área con los mismos sitios". ¿Qué
+    requisito del encargo mata la propuesta?
+
+    **P2.** ¿Por qué el patrón TDD de tu red no es 100% decisión tuya?
+
+    ---
+
+    **R1.** R5/R4: con 20 MHz no hay capacidad ni throughput de borde — la
+    cobertura barata de low-band se paga en Mbps. (Cuenta rápida: 20 MHz ×
+    ~74% DL deja ~15 MHz efectivos; ni la mediana de 50 Mbps se sostiene con
+    carga.)
+
+    **R2.** Debe sincronizarse con los demás operadores de la banda en la
+    zona: patrones cruzados = interferencia DL→UL entre redes. Lo fija el
+    regulador o el acuerdo inter-operador.
 
 ## Fase 2 — Dimensionamiento por cobertura *(en construcción)*
 
