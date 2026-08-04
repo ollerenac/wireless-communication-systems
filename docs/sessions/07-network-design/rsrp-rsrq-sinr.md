@@ -64,13 +64,22 @@ frecuencia que depende únicamente del identificador de celda:
 v_shift = PCI mod 6
 ```
 
-Por eso celdas vecinas con PCI distinto módulo 6 no colisionan sus pilotos.
-
 Lo que **sí** cambia de slot a slot es el **valor** que va montado en esos REs: una
 secuencia pseudoaleatoria QPSK generada a partir del PCI, el número de slot y el
 número de símbolo.
 
 > **Posición estática, contenido variable.**
+
+**Cuidado con la conclusión apresurada** "PCI distinto módulo 6 ⇒ pilotos que no
+colisionan": vale solo con **1 puerto de antena**. Con 2 o 4 puertos, cada celda
+ocupa `{v_shift, v_shift+3, v_shift+6, v_shift+9}` — un patrón de **período 3** —
+y la regla de planificación real es **PCI mod 3**. El ejemplo completo con dos
+celdas vecinas (PCI 12 vs 13, y el contraejemplo PCI 12 vs 15 que colisiona
+puerto contra puerto), más el vínculo elegante con el índice del PSS, está en la
+nota [Patrón de CRS con dos celdas — PCI mod 3](crs-dos-celdas-pci-mod3.md).
+Cuando una colisión ocurre, el **RSRP se contamina**: la potencia de la vecina se
+promedia dentro de la medición — y como las CRS están siempre encendidas, el daño
+no depende de la carga.
 
 ### Cálculo: el enlace con el link budget
 
