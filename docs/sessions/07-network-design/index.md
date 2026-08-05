@@ -538,6 +538,170 @@ usará así.
     usuarios, incluidos los cercanos; el tilt redistribuye, la potencia
     amputa.
 
-## Fase 5 — Planificación detallada y procedimientos *(en construcción)*
+## Fase 5 — Planificación detallada: los números que hacen funcionar la red
+
+Las Fases 0–4 decidieron *dónde* y *cuánto*: 3 sitios, 9 celdas, azimuts y
+tilts. Pero una red con antenas perfectas y parámetros vacíos no da servicio:
+cada procedimiento que el UE ejecuta — encontrar la celda, pedir acceso,
+registrarse, moverse — **consume un parámetro que el diseñador tuvo que
+fijar antes**. La Fase 5 es esa lista de números. La regla mnemotécnica:
+*por cada flecha de un diagrama de secuencia, hay una fila en la hoja de
+parámetros*.
+
+### 5.1 El arco del UE: del encendido a los datos
+
+Lo que pasa entre "enciendo el teléfono" y "veo video" son cuatro
+procedimientos encadenados. Los nombres de los mensajes son los reales del
+estándar (3GPP TS 38.331 para RRC, TS 24.501 para NAS) — conviene
+reconocerlos porque son los que aparecen en cualquier traza de campo.
+
+**Acto 1 — Búsqueda de celda y acceso aleatorio (UE ↔ gNB):**
+
+```mermaid
+sequenceDiagram
+    participant UE
+    participant gNB
+    Note over UE,gNB: Búsqueda de celda (broadcast, sin diálogo)
+    gNB-)UE: SSB = PSS + SSS + PBCH/MIB (cada 20 ms)
+    Note over UE: PSS → NID2 (0,1,2) · SSS → NID1<br/>PCI = 3·NID1 + NID2 → sincronizado
+    gNB-)UE: SIB1 (configuración de acceso: recursos PRACH)
+    Note over UE,gNB: Acceso aleatorio (Msg1–Msg4)
+    UE->>gNB: Msg1 — preámbulo PRACH (raíz Zadoff–Chu)
+    gNB->>UE: Msg2 — Random Access Response (TA + grant)
+    UE->>gNB: Msg3 — RRCSetupRequest
+    gNB->>UE: Msg4 — RRCSetup (resolución de contención)
+    UE->>gNB: RRCSetupComplete → conexión RRC establecida
+```
+
+**Acto 2 — Registro y sesión de datos (UE ↔ núcleo):**
+
+```mermaid
+sequenceDiagram
+    participant UE
+    participant gNB
+    participant AMF
+    participant SMF_UPF as SMF/UPF
+    UE->>AMF: Registration Request (vía gNB, NAS)
+    AMF->>UE: Authentication / Security Mode
+    AMF->>UE: Registration Accept (lista de tracking areas)
+    UE->>SMF_UPF: PDU Session Establishment Request
+    SMF_UPF->>UE: PDU Session Establishment Accept (QoS, IP)
+    Note over UE,SMF_UPF: túnel de datos activo — recién AQUÍ fluye el video
+```
+
+Cada flecha consume un parámetro nuestro:
+
+| Flecha | Parámetro que consume | Quién lo fijó |
+|---|---|---|
+| PSS/SSS | **PCI** de la celda | Fase 5 (§5.2) |
+| Msg1 | **raíces ZC del PRACH** y su zona de contención | Fase 5 (§5.3) |
+| Msg2 (Timing Advance) | radio máximo de celda | Fase 2 (390 m) |
+| Registration Accept | **tracking areas** | Fase 5 (§5.4) |
+| (movilidad posterior) | **vecinas, A3, histéresis, TTT** | Fase 5 (§5.5) |
+
+### 5.2 PCI planning: la identidad se planifica, no se sortea
+
+El PCI (0–1007) es lo primero que el UE aprende de una celda, y se
+descompone en PCI = 3·N₁ + N₂: el **mod 3 viene de la PSS**. Tres reglas,
+en orden de gravedad:
+
+1. **Sin colisión**: dos celdas vecinas con el mismo PCI → el UE no puede
+   distinguirlas. Fatal.
+2. **Sin confusión**: dos vecinas *de una misma celda* con igual PCI → el
+   handover "hacia PCI 301" es ambiguo para la celda origen. Fatal para
+   movilidad.
+3. **Cuidar el mod 3**: vecinas con el mismo PCI mod 3 superponen sus
+   señales de referencia en las mismas subportadoras — interferencia
+   pilot-a-pilot justo donde se mide el canal. La nota
+   [CRS de dos celdas y PCI mod 3](crs-dos-celdas-pci-mod3.md) muestra el
+   mecanismo resource element por resource element.
+
+Con 9 celdas y solo 3 grupos mod-3, esto es un problema de **coloreo de
+grafos con 3 colores**: el grafo de vecindad sale del mapa best-server
+(dos celdas son vecinas si sus áreas se tocan), y no siempre es
+3-coloreable — en cuyo caso se sacrifican las fronteras más cortas. El
+notebook lo resuelve para San Isidro y verifica cuántos metros de frontera
+quedan en conflicto.
+
+Resultado medido: de los ~53 km de fronteras del best-server, **~3.3 km
+(6%) quedan entre vecinas del mismo grupo** — y el coloreo ponderado *no
+mejoró* al plan ingenuo de PCIs consecutivos por sitio. En una geometría
+compacta de 9 celdas, la numeración consecutiva ya cumple la regla
+co-sitio, y el residuo lo imponen los **vecindarios densos** del mapa: en
+cuanto una celda tiene cuatro o más vecinas mutuamente en contacto (nada
+raro con fronteras ray-traced que serpentean entre edificios), tres grupos
+no alcanzan para separar a todas de todas. El PCI planning gana valor con
+la escala: cientos de celdas, vecindarios irregulares, y celdas nuevas que
+heredan un plan viejo.
+
+### 5.3 RACH: la zona de contención debe cubrir la celda
+
+El preámbulo Msg1 es una secuencia Zadoff–Chu; celdas distintas usan
+raíces o desplazamientos cíclicos distintos. El desplazamiento mínimo
+N_CS debe absorber el retardo de ida y vuelta del UE más lejano — si la
+zona de contención es menor que el radio de celda, un UE legítimo del borde
+aparece como *otro preámbulo*: colisión fantasma.
+
+La cuenta (en el notebook): radio 390 m → ida y vuelta 2.6 µs → con la
+secuencia larga (839 chips, 800 µs) basta N_CS ≈ 13, que deja ~64
+preámbulos por raíz → **una sola raíz por celda**. La lección invertida:
+en celdas urbanas chicas el RACH es barato; una celda rural de 15 km
+devora raíces (y por eso el plan de raíces se hace junto al plan de PCI).
+
+### 5.4 Tracking areas: cuánto sabe la red de dónde estás
+
+Cuando el UE está en reposo (idle), la red no sabe en qué celda está —
+solo en qué **tracking area** (TA). El tamaño de la TA es un compromiso:
+
+- TA grande → el UE casi nunca reporta que se movió (poco *TAU*), pero
+  cada llamada entrante obliga a hacer **paging en todas las celdas** de
+  la TA.
+- TA chica → paging barato, pero el UE gasta batería y señalización
+  actualizando su posición a cada rato.
+
+Nuestra red es trivial — 9 celdas, 1.1 km² → **una sola TA** — pero la
+cuenta de diseño escala: un operador de Lima con 5 000 celdas y TAs de 50
+celdas paga 50 pagings por llamada entrante a cambio de TAUs solo al
+cruzar fronteras de TA (que se trazan donde la gente *no* cruza a diario:
+nunca partir una avenida llena de commuters por la mitad).
+
+### 5.5 Vecinas y A3: la movilidad ya la medimos
+
+El handover lo dispara el **evento A3**: "la vecina supera a la serving
+por `offset` dB durante `TTT` ms". Sin histéresis, el UE en la frontera
+rebota entre celdas a cada fluctuación de shadowing — el esbozo lo midió
+sobre San Isidro (Parte 4 de `test_scene.ipynb`): un recorrido con A3
+crudo dio **8 handovers; con offset + TTT razonables, 1**. Cada handover
+es señalización (y riesgo de caída): el ping-pong no es cosmético.
+
+Las **listas de vecinas** cierran el círculo: la celda solo puede mandar
+"mide a la vecina X" si X está en su lista. Completas pero sin basura —
+una vecina falsa (que ya no existe o no es alcanzable) produce handovers
+a ciegas. En redes modernas las llena ANR (*Automatic Neighbour
+Relations*), pero el diseñador las audita: es el primer lugar donde se ve
+un PCI confundido.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** Un drive test reporta que en una esquina el UE ve dos celdas
+    distintas con el mismo PCI. ¿Cuál de las tres reglas de §5.2 se violó,
+    y qué procedimiento del arco del UE falla primero?
+
+    **P2.** ¿Por qué la zona de contención RACH se dimensiona con el radio
+    de celda de la Fase 2 y no con el radio "real" que midió el ray tracer?
+
+    ---
+
+    **R1.** Colisión (regla 1). Falla primero la búsqueda de celda /
+    medición: el UE suma la energía de ambas como si fueran una sola
+    "celda" y reporta mediciones sin sentido; el handover hacia ese PCI es
+    ambiguo aun antes del Msg1.
+
+    **R2.** Porque el preámbulo debe funcionar para el UE *legal* más
+    lejano que la celda declara servir — el radio de diseño (MAPL) es el
+    contrato. Si el ray tracer muestra que la celda "llega" más lejos por
+    un cañón urbano, ese UE lejano igual debe poder acceder: overshooting
+    también estresa el RACH, otra razón para controlarlo con tilt por
+    celda.
 
 ## Fase 6 — Validación y optimización *(en construcción)*
