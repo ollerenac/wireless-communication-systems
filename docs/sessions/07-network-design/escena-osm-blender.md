@@ -1,6 +1,6 @@
 ---
 title: "Guía: crear tu escena OSM con Blender"
-description: "De OpenStreetMap a un XML de Mitsuba listo para Sionna RT: instalar Blender 4.2 en la VM Windows, descargar el mapa con Blosm, asignar materiales ITU y exportar con los ejes correctos."
+description: "De OpenStreetMap a un XML de Mitsuba listo para Sionna RT: instalar Blender 4.2 en Windows, descargar el mapa con Blosm, asignar materiales ITU y exportar con los ejes correctos."
 ---
 
 # Guía: crear tu escena de ciudad para el notebook
@@ -17,15 +17,11 @@ y aquí en pasos verificables.
 
 El entorno: **Sistemas basados en Windows**. 
 
-Los pasos de instalación detallados (con solución de problemas) están en la
-[guía extendida](borrador/blender-4.2-vm-windows.md).
-
 ## 1. Instalar Blender 4.2 LTS (una sola vez)
 
-1. Descarga **Blender 4.2 LTS** de [https://www.blender.org/download/lts/4-2/#versions](https://www.blender.org/download/lts/4-2/#versions) — versión **ZIP portable**, NO el instalador. No uses una versión más nueva: los add-ons son estables en las versiones LTS.
-2. Descomprime en una ruta corta sin espacios ni OneDrive. Ejemplos de rutas: `C:\blender42` o `C:\Users\<usuario>\Downloads`. En el tutorial de Youtube, descargamos Blender en la carpeta de Descargas/Downloads pero Ud. puede mover ese .zip a cualquier otra carpeta.
-3. **Parche OpenGL** (**REVISAR: solo ejecutar este paso si usa Windows en una VM o si al momento de iniciar Blender aparece un error relacionado con OpenGL**): baja el paquete **MSVC** (mesa3d-26.1.6-release-msvc.7z) de [https://github.com/pal1000/mesa-dist-win/releases](https://github.com/pal1000/mesa-dist-win/releases), descomprime y ejecuta **`perappdeploy.cmd`** apuntando a la ruta de la carpeta de Blender que contenga el ejecutable `blender.exe` (x64, Desktop OpenGL). Prestar atención en el vídeo para ejecutar los pasos con precisión.
-4. Lanza Blender **siempre desde PowerShell** y deja esa ventana abierta — ahí aparecen los errores reales:
+1. Descarga **Blender 4.2 LTS** de [https://www.blender.org/download/lts/4-2/#versions](https://www.blender.org/download/lts/4-2/#versions) — versión **ZIP portable**, NO el instalador. No uses una versión más nueva: los add-ons son estables en las versiones LTS. Descomprime en una ruta corta sin espacios ni OneDrive. Ejemplos de rutas: `C:\blender42` o `C:\Users\<usuario>\Downloads`. En el tutorial de Youtube, descargamos Blender en la carpeta de Descargas/Downloads pero puedes mover ese .zip a cualquier otra carpeta.
+2. **Parche OpenGL** (**ATENCIÓN: solo ejecuta este paso si usas Windows en una VM o si al iniciar Blender aparece el error** `A graphics card with support for OpenGL 4.3 is required`): baja el paquete **MSVC** (mesa3d-26.1.6-release-msvc.7z) de [https://github.com/pal1000/mesa-dist-win/releases](https://github.com/pal1000/mesa-dist-win/releases), descomprime y ejecuta **`perappdeploy.cmd`** apuntando a la ruta de la carpeta de Blender que contenga el ejecutable `blender.exe` (x64, Desktop OpenGL). Prestar atención en el vídeo para ejecutar los pasos con precisión.
+3. Una vez que el paso anterior crea los archivos parche dentro de la carpeta de Blender, proceder a lanzar Blender **siempre desde PowerShell** y deja esa ventana abierta — ahí aparecen los errores reales:
 
       ```powershell
       & "[ruta a la carpeta que contiene al blender]\blender.exe"
@@ -48,15 +44,12 @@ Necesitas exactamente dos, ambos en ZIP compatibles con Blender 4.2:
 
 Los ZIP son copias alojadas en el curso, con las versiones probadas contra
 Blender 4.2 (ambos add-ons son de licencia libre — GPL/BSD — así que la
-redistribución es legítima). Originales: Blosm en gumroad,
-mitsuba-blender en `github.com/mitsuba-renderer/mitsuba-blender`.
+redistribución es legítima). 
 
 Para cada uno: **Edit → Preferences → Add-ons → Install...** → seleccionar
 el ZIP → activar la casilla. Si el add-on muestra un botón **Install
 dependencies**, púlsalo y espera sin interrumpir (Blender parecerá
-congelado). Marca verde = listo. Si algo falla, la
-[guía extendida](borrador/blender-4.2-vm-windows.md) tiene la tabla de
-problemas frecuentes.
+congelado).
 
 ## 3. Descargar el área con Blosm
 
@@ -93,7 +86,7 @@ sabrá qué es y la física de reflexión/penetración saldrá mal sin avisar.
 
 Este es el error más caro de todo el flujo: si exportas con la convención
 por defecto de Mitsuba (Y-up), la ciudad queda **acostada** — y el
-notebook no truena: corre y devuelve resultados absurdos en silencio.
+notebook no detecta este error (porque no es un error en esencia sino una mala elección de la perspectiva del mapa): corre y devuelve resultados absurdos en silencio.
 Síntomas de una escena acostada:
 
 - el radio map sale como una **tira delgada** (una dimensión de ~10
@@ -101,11 +94,9 @@ Síntomas de una escena acostada:
 - cobertura "milagrosa" (SINR > 0 en ~99% del área),
 - casi no se encuentran trayectos (`trayectos: 1`).
 
-Exporta a una carpeta propia: `mi_escena/mi_escena.xml` (el export crea
-`meshes/` al lado; el XML referencia esas mallas con rutas relativas —
-mueve la carpeta completa, nunca el XML solo).
+Exporta a una carpeta propia como se sugiere en el vídeo o usando un criterio propio como por ejemplo: `mi_escena/mi_escena.xml` (el export crea `meshes/` al lado; el XML referencia esas mallas con rutas relativas — mueve la carpeta completa, nunca el XML solo).
 
-## 6. Verificar antes de trabajar (30 segundos)
+## 6. Verificar antes de trabajar (30 segundos) - OPCIONAL
 
 En el entorno `ran-design`:
 
