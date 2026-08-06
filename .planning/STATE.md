@@ -53,6 +53,8 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Voz editorial (2026-08-06): **tuteo** (segunda persona) es la voz oficial de todo el material del curso — lecciones, guías y notas. Decisión no retroactiva: lo ya escrito no se toca. La forma impersonal queda descartada como estándar.
+
 - Session 07: scope agreed in conversation (no formal AskUserQuestion round): 4G architecture as stepping stone → 5G evolution → procedures that a designer configures → design parameters for a small network. Sionna RT is the lab vehicle.
 - Session 07: Sionna framed as *evaluator, not planner* — students propose sites/tilt/power, the ray tracer shows consequences. This is the pedagogical core.
 - Session 07: OSM/Blosm scene (shareable, ITU materials) chosen over Google 3D Tiles (no material semantics, license forbids redistribution).
