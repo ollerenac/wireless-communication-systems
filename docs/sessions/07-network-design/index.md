@@ -31,6 +31,15 @@ publicitar y cumplir.
 
 Todo lo que sigue en esta sesión es resolver ese encargo con método.
 
+!!! note "La escena es tuya de fabricar"
+
+    El laboratorio corre sobre una escena 3D real de San Isidro construida
+    desde OpenStreetMap. Para el diseño final (o para trabajar sobre *tu*
+    distrito) vas a fabricar tu propia escena:
+    **[Guía: crear tu escena OSM con Blender](escena-osm-blender.md)** —
+    instalación en la VM, descarga del mapa, materiales ITU y export a
+    Mitsuba ([video del proceso](https://youtu.be/PIdn1R7FSrg?si=V8-HVuCvWGZG6v39)).
+
 ---
 
 ## Fase 0 — Requisitos: el diseño empieza en números, no en antenas
