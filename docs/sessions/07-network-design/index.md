@@ -428,7 +428,12 @@ más margen = menos radio: la certeza se paga en dB.
 ### 2.3 De MAPL a radio: el modelo de propagación
 
 El MAPL se convierte en distancia invirtiendo un modelo. El estándar de la
-industria sin escena 3D es el **UMa NLOS de 3GPP TR 38.901**:
+industria cuando aún no se tiene el modelo 3D de la ciudad (o no hace
+falta) es el **UMa NLOS de 3GPP TR 38.901** — un modelo *estadístico*:
+resume miles de mediciones de urbanos reales en una fórmula que solo pide
+frecuencia y distancia. No sabe nada de San Isidro; responde por el
+"urbano macro promedio". El modelo 3D (nuestra escena OSM) es el insumo de
+la otra familia — el ray tracing determinístico de las Fases 4 y 6:
 
 $$\text{PL} = 13.54 + 39.08\log_{10}(d) + 20\log_{10}(f_c) \quad [\text{d en m, } f_c \text{ en GHz}]$$
 
