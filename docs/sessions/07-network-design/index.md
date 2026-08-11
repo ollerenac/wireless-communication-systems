@@ -613,7 +613,7 @@ $$N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})$$
 
 ### 3.1 La capacidad de una celda no es su pico
 
-El folleto promete "hasta 1 Gbps"; la celda real sirve usuarios repartidos
+La publicidad promete "hasta 1 Gbps"; la celda real sirve usuarios repartidos
 por toda su área compartiendo los mismos PRBs. Su capacidad es un **promedio
 sobre la distribución espacial de SINR** — y qué promedio usar depende del
 scheduler: reparto equitativo de *tiempo* rinde la media aritmética de las
