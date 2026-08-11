@@ -19,6 +19,44 @@ Al finalizar esta sesión, el estudiante será capaz de:
 4. Configurar y defender los parámetros que consumen los procedimientos de red: PCI, RACH, tracking areas, vecindades y umbrales de handover.
 5. Validar un diseño con ray tracing (Sionna RT) sobre un escenario real y cerrar el lazo de optimización.
 
+??? note "Siglas y símbolos de la sesión (referencia rápida)"
+
+    Cada término se explica en su primer uso; esta tabla es el respaldo
+    para lectura no lineal.
+
+    | Sigla / símbolo | Significado |
+    |---|---|
+    | UE / BS, gNB | *User Equipment* (el teléfono) / estación base (en 5G: gNB) |
+    | DL / UL | *downlink* (bajada, BS→UE) / *uplink* (subida, UE→BS) |
+    | TDD / FDD | duplexación por división de tiempo / de frecuencia |
+    | SCS | *subcarrier spacing* — separación entre subportadoras OFDM (aquí 30 kHz) |
+    | CP | prefijo cíclico del símbolo OFDM (Sesión 03) |
+    | RE / PRB | *resource element* (1 subportadora × 1 símbolo) / *physical resource block* (12 subportadoras) |
+    | EPRE | *energy per resource element* — potencia por RE |
+    | RSRP / RSRQ / RSSI | potencia de la señal de referencia / su versión relativa / potencia total recibida |
+    | SNR / SINR | señal-a-ruido / señal-a-(interferencia+ruido) |
+    | NF | *noise figure* — figura de ruido: cuánto ruido agrega el propio receptor |
+    | MAPL | *maximum allowable path loss* — pérdida máxima admisible del trayecto |
+    | PL / UMa / NLOS | *path loss* / modelo urbano-macro del 3GPP / sin línea de vista |
+    | σ, n | desviación del shadowing (dB) / exponente de propagación |
+    | SE | eficiencia espectral (bit/s/Hz) |
+    | OH | *overhead* — fracción de espectro gastada en señalización |
+    | MCS | *modulation and coding scheme* — la pareja modulación+código que el scheduler elige según el SINR |
+    | SISO / MIMO | una antena por extremo / múltiples (Sesión 06) |
+    | dBi | ganancia de antena en dB respecto a la isotrópica |
+    | SSB, PSS/SSS, PBCH/MIB, SIB | bloque de sincronización y sus partes: señales de sincronía primaria/secundaria, canal broadcast con la información mínima/del sistema |
+    | PCI | *physical cell identity* (0–1007) |
+    | RACH / PRACH / ZC / N_CS | acceso aleatorio / su canal físico / secuencias Zadoff–Chu / separación mínima entre preámbulos |
+    | RRC / NAS | señalización de radio (UE↔gNB) / de red (UE↔núcleo) |
+    | AMF / SMF / UPF | nodos del núcleo 5G: movilidad y acceso / gestión de sesiones / plano de datos de usuario |
+    | TA | según contexto: *timing advance* (avance temporal, Msg2) o *tracking area* (§5.4) |
+    | A3 / TTT | evento de handover "la vecina supera a la serving" / *time-to-trigger*, su temporizador |
+    | ANR | *automatic neighbour relations* — llenado automático de listas de vecinas |
+    | ICIC | coordinación de interferencia entre celdas (§Fase 0, R1) |
+    | eMBB / VoNR | banda ancha móvil mejorada / voz sobre NR |
+    | SON | *self-organizing networks* — el lazo de optimización en operación continua |
+    | p5, p50 | percentiles 5 y 50 (mediana) de una distribución |
+
 ---
 
 ## El encargo
@@ -51,7 +89,9 @@ con un mapa o un drive test y se puede firmar en un contrato.
 ### 0.1 Las tres métricas que gobiernan los requisitos de radio
 
 - **RSRP** (*Reference Signal Received Power*): potencia recibida de la señal
-  de referencia de la celda (en 5G, del SSB). Mide **cobertura de control**:
+  de referencia de la celda — en 5G, del **SSB**, el bloque de
+  sincronización que la celda difunde periódicamente haya o no datos. Mide
+  **cobertura de control**:
   ¿el UE encuentra la red y puede engancharse a ella? No dice nada de
   interferencia.
 - **SINR**: señal sobre interferencia más ruido. Mide **calidad de datos**:
@@ -110,6 +150,12 @@ individuales.
 | R6 | Servicios | eMBB + VoNR, latencia de usuario < 20 ms | arquitectura/QoS |
 | R7 | Espectro | 100 MHz TDD en n78 (3.5 GHz) | licencia (MTC) |
 | R8 | Despliegue | solo azoteas existentes, máximo 6 sitios | plan nominal |
+
+Notación de R4: **p5 = percentil 5** de la distribución de throughput
+sobre el área — el valor que el 95% de los puntos supera. Es la forma
+estadística de decir "throughput de borde garantizado": el borde de celda
+*es* la cola baja de la distribución. Mismo espíritu probabilístico que
+el 95% de R2 y el 90% de R3.
 
 La cuenta detrás de R5: 25 000 personas/km² presentes en hora cargada
 (distrito financiero) × 30% de participación de mercado × 75 kbps por
@@ -276,8 +322,10 @@ puede recorrer la señal.
 ### 2.1 El punto de partida no es la potencia del amplificador
 
 Error clásico: arrancar el presupuesto con "la BS transmite 44 dBm". Esos
-44 dBm se reparten entre **todas** las subportadoras del canal. Con 100 MHz a
-SCS 30 kHz hay 273 PRB × 12 = 3 276 subportadoras:
+44 dBm se reparten entre **todas** las subportadoras del canal. Con 100 MHz
+a separación de subportadora (SCS) de 30 kHz caben 273 *resource blocks*
+(PRB, bloques de 12 subportadoras) — es decir 273 × 12 = 3 276
+subportadoras:
 
 $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE}$$
 
@@ -457,7 +505,8 @@ para dimensionar sin escena, el trazador para validar con ella.
 
 El mismo ejercicio con el UE como transmisor: 23 dBm sobre sus PRBs
 asignados (no per-RE de 100 MHz — el UE concentra su potencia en pocos PRB,
-su gran defensa), antena de 0 dBi, y la BS escuchando con NF de 5 dB. El
+su gran defensa), antena de 0 dBi, y la BS escuchando con figura de ruido
+(NF) de 5 dB. El
 enlace que soporte **menos** pérdida define el radio real de la celda: de
 nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta.
 
@@ -630,11 +679,17 @@ sus usuarios — el número que se puede vender. Se arma en tres factores:
 
 $$R_{\text{celda}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
 
-- $\text{SE}_{\text{celda}} = 2.0$ bit/s/Hz: hipótesis conservadora SISO de
-  industria — **declarada** para ser reemplazada en la Fase 6 por la
+- $\text{SE}_{\text{celda}}$ — **eficiencia espectral** media de la celda
+  (bits por segundo por cada Hz de espectro): usamos 2.0 bit/s/Hz,
+  hipótesis conservadora de industria para SISO (una antena por extremo,
+  sin MIMO) — **declarada** para ser reemplazada en la Fase 6 por la
   integral del mapa SINR ray-traced de San Isidro.
-- $B_{\text{DL,ef}} = 71$ MHz: herencia directa de la Fase 1 (patrón DDDSU).
-- $OH \approx 22\%$: SSB, PDCCH, DMRS — PRBs que no llevan datos de usuario.
+- $B_{\text{DL,ef}} = 71$ MHz — el ancho de banda **efectivo** de bajada:
+  herencia directa de la Fase 1 (patrón TDD DDDSU).
+- $OH$ — el ***overhead*** (sobrecarga): la fracción del espectro que se
+  gasta en señalización — SSB, canales de control (PDCCH), pilotos de
+  demodulación (DMRS) — y por tanto no transporta datos de usuario.
+  Típico en NR: ~22%, de ahí el factor $(1-OH) = 0.78$.
 
 Un sitio trisectorial: $3 \times 111 \approx 334$ Mbps.
 
@@ -823,7 +878,10 @@ sequenceDiagram
     UE->>gNB: RRCSetupComplete → conexión RRC establecida
 ```
 
-**Acto 2 — Registro y sesión de datos (UE ↔ núcleo):**
+**Acto 2 — Registro y sesión de datos (UE ↔ núcleo).** Los actores del
+núcleo 5G: **AMF** (gestión de acceso y movilidad — el que te registra),
+**SMF** (gestión de sesiones — el que autoriza tu sesión de datos) y
+**UPF** (plano de usuario — por donde fluyen los datos de verdad):
 
 ```mermaid
 sequenceDiagram
@@ -918,7 +976,8 @@ nunca partir una avenida llena de commuters por la mitad).
 ### 5.5 Vecinas y A3: la movilidad ya la medimos
 
 El handover lo dispara el **evento A3**: "la vecina supera a la serving
-por `offset` dB durante `TTT` ms". Sin histéresis, el UE en la frontera
+por `offset` dB durante `TTT` ms (*time-to-trigger*, el temporizador que
+filtra fluctuaciones)". Sin histéresis, el UE en la frontera
 rebota entre celdas a cada fluctuación de shadowing — el esbozo lo midió
 sobre San Isidro (Parte 4 de `test_scene.ipynb`): un recorrido con A3
 crudo dio **8 handovers; con offset + TTT razonables, 1**. Cada handover
