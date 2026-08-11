@@ -513,6 +513,33 @@ más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
     PRBs a potencia máxima; UE cercano → muchos PRBs). El dimensionamiento
     congela el caso de borde porque es el que firma R4.
 
+    **¿Y por qué SNR_min = 0 dB y no otro punto?** Ningún requisito fija
+    los 5 MHz: R4 solo fija el producto $BW \times SE(SNR_{min}) = 5$
+    Mbps. Un grado de libertad — y estos son los otros repartos del mismo
+    requisito, con los mismos 23 dBm del UE (fijos en los tres casos: el
+    UE de borde ya está a máxima potencia; la moneda del trade-off no es
+    potencia, es **alcance**):
+
+    | Elección | BW necesario | Sensibilidad BS | MAPL_UL |
+    |---|---|---|---|
+    | SNR_min = +10 dB | 1.45 MHz | −97.4 dBm | 127.4 dB (**−4.6**) |
+    | **SNR_min = 0 dB** | **5 MHz** | **−102 dBm** | **132 dB** |
+    | SNR_min = −10 dB | 36.4 MHz | −103.4 dBm | 133.4 dB (+1.4) |
+
+    La explicación en versión subibaja: en el presupuesto **restan dos
+    términos atados** — el ruido que entra por la ventana
+    ($10\log_{10} BW$) y lo que exiges sobre el ruido ($SNR_{min}$); la
+    promesa de 5 Mbps hace que bajar uno suba el otro. Por **debajo** de
+    0 dB, cada dB de SNR que perdonas se devuelve casi exacto en ruido
+    extra (el BW crece rápido): empate — por eso −10 dB solo gana 1.4 dB,
+    y a cambio secuestra 36 MHz de PRBs para *un* usuario y exige MCS que
+    apenas existen. Por **encima** de 0 dB, cada dB que exiges no se
+    compensa con el poco BW que ahorras (la SE crece solo
+    logarítmicamente): pérdida neta — +10 dB cuesta 4.6 dB de alcance.
+    **0 dB es el codo de la curva**: capturas el plateau sin pagar los
+    extremos. Ese es el "por experiencia de diseño" de la industria,
+    puesto en números.
+
     Letra chica declarada: $SE = 1$ a 0 dB es Shannon puro; con MCS reales
     es ~0.8–0.9, así que 5 MHz queda un pelo optimista — tolerable porque
     el UE de borde rara vez sostiene los 5 Mbps continuos.
