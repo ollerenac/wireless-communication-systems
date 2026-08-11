@@ -7,7 +7,7 @@ description: "El flujo profesional de diseño de RAN — requisitos, espectro, c
 # Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real
 
 > **Página en construcción** — se escribe fase por fase junto con el
-> notebook `design.ipynb`. Documento de trabajo: `brainstorming-diseno-red.md`.
+> notebook `design.ipynb` (Fases 0–5 listas; falta la Fase 6 y el cierre).
 
 ## Objetivos de Aprendizaje
 
@@ -171,8 +171,11 @@ dada (R7: 100 MHz en n78) — pero hay que entender qué compramos y qué no.
 La pérdida de espacio libre crece con $20\log_{10}(f)$: subir de banda cuesta
 dB, y esos dB se pagan en radio de celda. Además, a mayor frecuencia peor
 difracción (las esquinas "doblan" menos la señal) y peor penetración de
-muros. Regla mental: **bajar una octava de frecuencia ≈ doblar el radio de
-celda**.
+muros. Regla mental honesta: en espacio libre ($n=2$) bajar una octava
+dobla el radio; en urbano denso ($n \approx 3.8$) la misma octava rinde
+solo **×1.4** — el exponente alto "amortigua" la ventaja de bajar de banda
+(la tabla siguiente usa el $n$ urbano: por eso 700↔3500, que son 2.3
+octavas, da ×2.3 y no ×5).
 
 Con el exponente de propagación urbano ($n \approx 3.8$), el delta de
 pérdida se convierte en factor de área — y el factor de área, en sitios:
@@ -520,7 +523,8 @@ Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
 verificar R2 hay que convertir: restar $10\log_{10}(N_{\text{RE}})$ del
 despliegue. Es la misma cuenta del EPRE vista del lado del receptor — y el
 motivo por el que la meta R2 no puede compararse directo contra el mapa
-crudo. La verificación numérica vive en `design.ipynb`.
+crudo. La verificación numérica se ejecuta en la Fase 6, sobre el mapa
+consolidado.
 
 !!! question "Comprueba tu comprensión"
 
@@ -572,17 +576,17 @@ $$R_{\text{celda}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}
 - $B_{\text{DL,ef}} = 71$ MHz: herencia directa de la Fase 1 (patrón DDDSU).
 - $OH \approx 22\%$: SSB, PDCCH, DMRS — PRBs que no llevan datos de usuario.
 
-Un sitio trisectorial: $3 \times 111 \approx 330$ Mbps.
+Un sitio trisectorial: $3 \times 111 \approx 334$ Mbps.
 
 ### 3.3 El veredicto
 
 Demanda total: $600 \text{ Mbps/km}^2 \times 1.1 \text{ km}^2 = 660$ Mbps.
 
-$$N_{\text{capacidad}} = \lceil 660 / 330 \rceil = 2 \text{ sitios} \qquad
+$$N_{\text{capacidad}} = \lceil 660 / 334 \rceil = 2 \text{ sitios} \qquad
 N_{\text{sitios}} = \max(3, 2) = \mathbf{3}$$
 
 Hoy la red está **limitada por cobertura**: los 3 sitios de la Fase 2 traen
-capacidad de sobra (990 Mbps instalados vs 660 demandados — margen 1.5×).
+capacidad de sobra (~1 000 Mbps instalados vs 660 demandados — margen 1.5×).
 Pero el tráfico móvil crece ~25% anual: en ~2 años la desigualdad se
 invierte y la capacidad pasa a mandar. Ahí las salidas son (en orden de
 costo): exprimir SE con MU-MIMO/sectorización, agregar portadora, y solo al
@@ -656,7 +660,8 @@ simple — con altura $h$ y tilt $\theta$, el haz principal toca el suelo a:
 
 $$d = \frac{h}{\tan\theta}$$
 
-Con $h = 30$ m y $\theta = 6°$: $d \approx 270$ m — justo el borde de
+Con azotea de 30 m ($h = 28.5$ m efectivos sobre la antena del UE, a
+1.5 m) y $\theta = 6°$: $d \approx 270$ m — justo el borde de
 nuestra celda de ~390 m considerando el ancho vertical del haz. La lección
 contraintuitiva: **inclinar la antena hacia abajo MEJORA la red**, porque
 la energía que iba al horizonte no servía a nadie propio — solo
