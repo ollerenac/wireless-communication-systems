@@ -107,8 +107,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-04 (~6:10 PM)
-Stopped at: Fase 5 de Sesión 07 completa en los 4 frentes (index.md con arco del UE + diagramas mermaid 3GPP, design.ipynb con PCI mod-3/RACH/DETALLE ejecutado, guion republicado, build strict OK). Todo pusheado. Siguiente: Fase 6 (validación: mapa consolidado 10⁶, RSS→RSRP vs R2, SE medida, tilt por-celda) + figuras SVG pendientes del instructor + cierre.
+Last session: 2026-08-10 (resumed; previous work sessions 2026-08-04 and 2026-08-06)
+Stopped at: Sesión 07 con Fases 0-5 completas y publicadas. El 6-ago además: guía del alumno escena-osm-blender.md (en nav, con zips de add-ons hosteados en el sitio), reorganización de la carpeta 07 (escenas/, resultados/, notas-instructor/ fuera de docs/), diagnóstico de escena lima01 acostada (export Y-up; re-export Z-up PENDIENTE del instructor), workflow_dispatch en deploy.yml, y rescate del deploy durante outage de GitHub — sitio verificado en vivo con todo.
+Siguiente: Fase 6 (validación: mapa consolidado 10⁶ sectorizado, RSS→RSRP vs R2, SE medida vs hipótesis 2.0, tilt por-celda) + cierre de la lección + 4 figuras SVG pendientes del instructor.
 Resume file: none
 
 ### Previous session continuity (2026-08-01)
