@@ -680,6 +680,17 @@ $R_{\text{celda,UL}}$, se verifica en §3.4.) Se arma en tres factores:
 
 $$R_{\text{celda,DL}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
 
+La forma fácil de leer el producto — una planilla de trabajadores: **B**
+es cuántos trabajadores tienes (cada Hz de espectro es un trabajador que
+produce bits), **SE** es la productividad de cada uno (cuántos bit/s
+exprime cada Hz — la fija el SINR: con buen SINR producen a 256-QAM, con
+malo a QPSK), y **(1−OH)** es la fracción del turno que producen de
+verdad — el resto se va en papeleo (señalización) necesario pero que no
+es producto. Capacidad = trabajadores × productividad × fracción
+productiva. Cada fase tocó su perilla: la Fase 1 entregó los trabajadores
+(espectro y reparto TDD), el SINR del área fija la productividad (la
+Fase 6 la medirá), y el overhead lo fija el estándar.
+
 - $\text{SE}_{\text{celda}}$ — **eficiencia espectral** media de la celda
   (bits por segundo por cada Hz de espectro): usamos 2.0 bit/s/Hz,
   hipótesis conservadora de industria para SISO (una antena por extremo,
