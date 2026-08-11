@@ -381,22 +381,49 @@ más margen = menos radio: la certeza se paga en dB.
     menor que la del borde, o sea margen de sobra. Al integrar la
     probabilidad de cobertura sobre toda la celda (la integral clásica de
     Jakes, 1974), con $\sigma = 8$ y exponente de propagación $n \approx
-    3.8$, basta que el **borde** quede cubierto ~87% del tiempo para que
+    3.8$, basta que el **borde** quede cubierto ~86% del tiempo para que
     el **área** quede cubierta 95%:
 
-    $$M = z_{0.87} \cdot \sigma \approx 1.13 \times 8 \approx 9 \text{ dB}$$
+    $$M = z_{0.86} \cdot \sigma \approx 1.06 \times 8 \approx 8.5 \approx 9 \text{ dB}$$
 
-    Los 4 dB de diferencia entre 13.2 y 9 no son un tecnicismo: en el
+    Los ~4.7 dB de diferencia entre 13.2 y 8.5 no son un tecnicismo: en el
     modelo UMa equivalen a ~27% más de radio, que al cuadrado es ~60% menos
     sitios por km². Leer bien la letra chica del requisito (¿95% *de qué*?)
     es dinero.
 
-    **La perilla es empinada.** El margen crece con la cola de la
-    gaussiana: exigir 99% de área empuja el margen hacia ~19 dB y el radio
-    se derrumba — la razón por la que ningún operador firma 100%. Y $\sigma
-    = 8$ es una hipótesis declarada más: el drive test (Fase 6) la mide de
-    verdad para *esta* ciudad; si San Isidro resulta ser $\sigma = 10$, el
-    9 ya no compra el 95%.
+    **La receta para tus propios diseños.** Dos tablas y dos pasos:
+
+    1. Toma la σ del **escenario** (misma tabla del 38.901 que el path
+       loss, 7.4.1-1) — o mídela con drive test:
+
+        | Escenario | σ_SF |
+        |---|---|
+        | UMa LOS | 4 dB |
+        | UMa NLOS | 6 dB |
+        | UMi NLOS | 7.8 dB |
+        | RMa NLOS | 8 dB |
+        | urbano denso (tradición Okumura/COST-231, nuestro caso) | 8–10 dB |
+
+    2. Convierte la meta **de área** a probabilidad **de borde** (integral
+       de Jakes — el notebook la resuelve numéricamente en 6 líneas) y
+       multiplica: $M = z_{\text{borde}} \cdot \sigma$. Para σ = 8,
+       n ≈ 3.8, ya resuelto:
+
+        | Meta de área | Borde equivalente | z | M |
+        |---|---|---|---|
+        | 90% | 74% | 0.65 | **5.2 dB** |
+        | 95% | 86% | 1.06 | **8.5 ≈ 9 dB** |
+        | 99% | 96.5% | 1.81 | **14.5 dB** |
+
+    El error a evitar: entrar a la tabla de z directamente con la meta de
+    área ($z_{0.95} = 1.645 \to 13.2$ dB) — ese margen responde "95% *del
+    borde*", una promesa más cara que la que firma el contrato.
+
+    **La perilla es empinada.** 99% de área ya cuesta ~14.5 dB (y 18.6 si
+    alguien lo exige en el propio borde) — la razón por la que ningún
+    operador firma 100%. Y $\sigma = 8$ es una hipótesis declarada más: el
+    drive test (Fase 6) la mide de verdad para *esta* ciudad; si San
+    Isidro resulta ser $\sigma = 10$, el 9 ya no compra el 95%.
 
 ### 2.3 De MAPL a radio: el modelo de propagación
 
