@@ -108,10 +108,10 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-11
-Stopped at: **Fase 6 completa** — Sesión 07 dictable de punta a punta (Fases 0-6 en lección + notebook ejecutado + guion republicado). Resultados medidos de la validación: 10⁵ vs 10⁶ = 49% vs 79% (lección de calidad de muestreo), R2 REPRUEBA (74% vs 95%; σ medida 14 dB vs 8 declarada, n medido 2.9), SE medida 4.7 vs hipótesis 2.0 (R5 cumple de sobra), R4-DL cumple (p5 64 Mbps), tilt bisturí INEFECTIVO (tercer anti-libro: interferencia = scattering, no overshoot), veredicto 5✓/2✗/1—. También hoy: 3 desplegables didácticos en Fase 2 (guardas/273+SCS, M_shadow con receta z·σ y Jakes, 5 MHz UL), sensibilidad UL formalizada, auditoría de coherencia lección↔notebook (6 correcciones).
-Siguiente: cierre de la lección (objetivos↔contenido, resumen, ejercicios de asimilación) + 4 figuras SVG del instructor + re-export lima01 con Z-up (instructor).
-Resume file: none
+Last session: 2026-08-11 (pausa via gsd-pause-work, contexto al limite)
+Stopped at: Sesion 07 dictable de punta a punta (Fases 0-6). Hoy ademas: ronda didactica completa (desplegables, glosario, simbolos nombrados), registro lexico aplicado, sistema de mapas Colab (perilla ESCENA, zips en el sitio, sin git clone), mapa san-isidro-01 publicado (Z-up verificado). Todo pusheado (7fc0cb7).
+Pendiente: cierre de la leccion, 4 figuras SVG, smoke test Colab (usuario), opcional parametrizar Fases 4-6 para mapas nuevos.
+Resume file: `.planning/HANDOFF.json` + `.planning/.continue-here.md`
 
 ### Previous session continuity (2026-08-01)
 

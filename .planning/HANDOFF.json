@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-08-11T22:05:00Z",
+  "phase": null,
+  "phase_name": "Sesión 07 network design — Fases 0-6 completas + sistema de mapas Colab (quick-task mode)",
+  "phase_dir": ".planning",
+  "status": "paused",
+  "completed_tasks": [
+    {"id": 1, "name": "Fases 0-6 completas en 4 frentes (leccion + notebook ejecutado + guion + notas)", "commit": "2fbe936"},
+    {"id": 2, "name": "Fase 6 validada: R2 74% y R3 78.6% REPRUEBAN, sigma medida 14.4, SE medida 4.75, bisturi inefectivo, veredicto R1-R8", "commit": "2fbe936"},
+    {"id": 3, "name": "Ronda didactica: desplegables (273/SCS, M_shadow+Jakes, 5MHz+SNR codo, bordes DL/UL con figura), glosario ~35 siglas, simbolos nombrados en primer uso", "commit": "0190cef"},
+    {"id": 4, "name": "Registro lexico: calculo (no cuenta), la publicidad (no folleto) — barrido en leccion/notebook/guion; R_celda,DL/UL simetricos; redondeo unico 18.7->56->168", "commit": "61e708d..6f3bddb"},
+    {"id": 5, "name": "Sistema de mapas del curso: perilla ESCENA, zip por mapa servido por el sitio, celda Colab (sionna-rt, sin clone), test_scene->san_isidro/san_isidro.xml", "commit": "569c3ea"},
+    {"id": 6, "name": "Convencion zip consistente (carpeta en raiz, unzip -d escenas) + guia §7 instructor", "commit": "9803860"},
+    {"id": 7, "name": "Mapa san-isidro-01 publicado (Z-up verificado 1215x1062x48, materiales itu_* ok, 579K zip)", "commit": "7fc0cb7"}
+  ],
+  "remaining_tasks": [
+    {"id": 8, "name": "Cierre de la leccion: objetivos vs contenido, resumen, ejercicios de asimilacion", "status": "not_started"},
+    {"id": 9, "name": "4 figuras SVG del instructor: escalera link budget, margen shadowing, sectorizacion 3x120, downtilt (placeholders en index.md §4.1/§4.3)", "status": "not_started"},
+    {"id": 10, "name": "Smoke test Colab final con runtime limpio (celda [1], wget del zip, ejecutar todo con T4)", "status": "in_progress_user"},
+    {"id": 11, "name": "OPCIONAL: parametrizar REQ[area_km2] y SITIOS del PLAN si san-isidro-01 sera escenario de Fases 4-6 (hoy solo sirve Fases 0-3 sin cambios)", "status": "not_started"}
+  ],
+  "blockers": [],
+  "human_actions_pending": [
+    {"action": "Smoke test Colab: Administrar sesiones -> terminar todas, abrir link en incognito, GPU T4, Ejecutar todo; esperar celda [1] y 'mapa san_isidro descargado'", "blocking": false},
+    {"action": "4 figuras SVG (specs en conversaciones previas)", "blocking": false}
+  ],
+  "decisions": [
+    {"decision": "El curso proporciona los mapas; los alumnos NO fabrican escenas para el ejercicio", "rationale": "flujo Blender confuso para alumnos; guia queda como herramienta del instructor/extension"},
+    {"decision": "Convencion de mapa: escenas/<nombre>/<nombre>.xml + meshes/, zip de la carpeta en su raiz, celda descomprime -d escenas", "rationale": "una unidad de intercambio, una perilla ESCENA"},
+    {"decision": "Colab = via oficial del alumno (sionna-rt sin TF, wget zip ~0.5MB, sin git clone)", "rationale": "clone exponia drafts y 60MB; zip trae solo el mapa"},
+    {"decision": "Lectura del veredicto F6 generada de los datos (bool() por numpy.bool_ is False)", "rationale": "el texto no puede contradecir la medicion"}
+  ],
+  "uncommitted_files": [],
+  "next_action": "Cierre de la leccion (tarea 8) o lo que el instructor priorice; verificar resultado del smoke test Colab del usuario",
+  "context_notes": "Metodo por fase intacto. Guion de dictado: fuente en scratchpad de sesion (notas-dictado-s07.html) — EN SESION NUEVA: WebFetch de https://claude.ai/code/artifact/98209b61-23d1-425e-837b-89bf180242a8 y republicar con url:. Guion sincronizado hasta: planilla SE*B*(1-OH), figura bordes DL/UL, barrido calculo/publicidad, Fases 0-6. Reglas editoriales en STATE.md: tuteo, calculo/publicidad, ningun simbolo sin nombre + glosario. Anti-patrones vigentes: float() a Sionna, comparar mapas solo misma calidad, push tras cada sesion (hoy: todo pusheado). Colab cachea por-URL y la VM persiste: smoke tests en incognito + Administrar sesiones."
+}
