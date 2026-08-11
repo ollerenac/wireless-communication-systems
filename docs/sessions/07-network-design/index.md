@@ -456,10 +456,32 @@ El mismo ejercicio con el UE como transmisor: 23 dBm sobre sus PRBs
 asignados (no per-RE de 100 MHz — el UE concentra su potencia en pocos PRB,
 su gran defensa), antena de 0 dBi, y la BS escuchando con NF de 5 dB. El
 enlace que soporte **menos** pérdida define el radio real de la celda: de
-nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta. La cuenta
-completa está en `design.ipynb`; el resultado con nuestros números: DL de
-control y UL de datos quedan sorprendentemente parejos (~126 vs ~130 dB) —
-precisamente porque el UE concentra y la BS reparte.
+nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta.
+
+El lado nuevo de la cuenta es la **sensibilidad del receptor** — el mínimo
+que la BS necesita recibir para demodular:
+
+$$S_{BS} = \underbrace{-174}_{kT\ [\text{dBm/Hz}]} + 10\log_{10}(BW) + NF + SNR_{min}$$
+
+Término a término: −174 dBm/Hz es el piso térmico universal ($kT$ a 290 K
+— nadie escucha por debajo de eso); $10\log_{10}(BW)$ es cuánto ruido
+entra por la ventana que se escucha; $NF$ la suciedad que el propio
+receptor agrega; $SNR_{min}$ lo que el demodulador exige sobre el ruido.
+Con la asignación de 5 MHz y una meta modesta ($SNR_{min} = 0$ dB):
+
+$$S_{BS} = -174 + 10\log_{10}(5\times10^6) + 5 + 0 = -102 \text{ dBm}$$
+
+$$\text{MAPL}_{UL} = \underbrace{23}_{P_{UE}} + \underbrace{16}_{G_{BS}} - (-102) - \underbrace{9}_{M_{shadow}} = 132 \text{ dB}$$
+
+Aquí está la física de la "gran defensa": la sensibilidad mejora con
+$10\log_{10}$ del ancho escuchado. Transmitir en 5 MHz en vez de 100 baja
+el piso de ruido de la BS en $10\log_{10}(20) = 13$ dB — la concentración
+de PRBs no es un truco de potencia, es un truco de **ruido**. Resultado
+con nuestros números: 132 dB de UL contra 126 del DL de control — el
+enlace limitante aquí es el DL, al revés del folclor "el uplink siempre
+limita" (que sí aplica cuando se piden muchos Mbps de subida: más PRBs →
+más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
+`design.ipynb`.
 
 ### 2.5 RSS → RSRP: cerrar el círculo con Sionna
 
