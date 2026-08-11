@@ -107,9 +107,9 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-10 (resumed; previous work sessions 2026-08-04 and 2026-08-06)
-Stopped at: Sesión 07 con Fases 0-5 completas y publicadas. El 6-ago además: guía del alumno escena-osm-blender.md (en nav, con zips de add-ons hosteados en el sitio), reorganización de la carpeta 07 (escenas/, resultados/, notas-instructor/ fuera de docs/), diagnóstico de escena lima01 acostada (export Y-up; re-export Z-up PENDIENTE del instructor), workflow_dispatch en deploy.yml, y rescate del deploy durante outage de GitHub — sitio verificado en vivo con todo.
-Siguiente: Fase 6 (validación: mapa consolidado 10⁶ sectorizado, RSS→RSRP vs R2, SE medida vs hipótesis 2.0, tilt por-celda) + cierre de la lección + 4 figuras SVG pendientes del instructor.
+Last session: 2026-08-11
+Stopped at: **Fase 6 completa** — Sesión 07 dictable de punta a punta (Fases 0-6 en lección + notebook ejecutado + guion republicado). Resultados medidos de la validación: 10⁵ vs 10⁶ = 49% vs 79% (lección de calidad de muestreo), R2 REPRUEBA (74% vs 95%; σ medida 14 dB vs 8 declarada, n medido 2.9), SE medida 4.7 vs hipótesis 2.0 (R5 cumple de sobra), R4-DL cumple (p5 64 Mbps), tilt bisturí INEFECTIVO (tercer anti-libro: interferencia = scattering, no overshoot), veredicto 5✓/2✗/1—. También hoy: 3 desplegables didácticos en Fase 2 (guardas/273+SCS, M_shadow con receta z·σ y Jakes, 5 MHz UL), sensibilidad UL formalizada, auditoría de coherencia lección↔notebook (6 correcciones).
+Siguiente: cierre de la lección (objetivos↔contenido, resumen, ejercicios de asimilación) + 4 figuras SVG del instructor + re-export lima01 con Z-up (instructor).
 Resume file: none
 
 ### Previous session continuity (2026-08-01)
