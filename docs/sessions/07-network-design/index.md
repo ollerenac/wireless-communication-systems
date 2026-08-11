@@ -7,7 +7,18 @@ description: "El flujo profesional de diseño de RAN — requisitos, espectro, c
 # Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real
 
 > **Página en construcción** — se escribe fase por fase junto con el
-> notebook `design.ipynb` (Fases 0–5 listas; falta la Fase 6 y el cierre).
+> notebook `design.ipynb` (Fases 0–6 listas; falta el cierre).
+
+!!! tip "Cómo correr el notebook del ejercicio"
+
+    La vía sin instalación es **Google Colab**:
+    [abrir design.ipynb en Colab](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/07-network-design/design.ipynb)
+    — la primera celda instala Sionna RT y descarga la escena sola. Activa
+    el runtime con **GPU** (Entorno de ejecución → Cambiar tipo de entorno
+    → T4): el mapa consolidado de la Fase 6 en CPU tarda muchísimo más.
+    Alternativa local: entorno con `sionna-rt`, `numpy` y `matplotlib`, y
+    ejecutar desde la carpeta de la sesión (la escena se carga con ruta
+    relativa).
 
 ## Objetivos de Aprendizaje
 
