@@ -354,6 +354,50 @@ vuelve un número: con $\sigma = 8$ dB, reservar ~9 dB garantiza que el ~95%
 del área (no solo el punto medio) quede sobre el umbral. Más probabilidad =
 más margen = menos radio: la certeza se paga en dB.
 
+??? note "¿De dónde salen los 9 dB de $M_{\text{shadow}}$? (la cuenta ingenua da 13.2)"
+
+    **Qué es el shadowing.** El modelo de propagación (UMa) predice la
+    pérdida *mediana* a cada distancia. Pero dos esquinas a la misma
+    distancia difieren según qué edificios estorben el trayecto: esa
+    variación alrededor de la mediana es el *shadowing*, y medido en dB se
+    comporta como una gaussiana de media 0 y desviación $\sigma$
+    (log-normal en potencia). En urbano denso, $\sigma \approx 6\text{–}10$
+    dB; usamos 8, el valor de libro. (No confundir con el *fast fading*
+    multitrayecto, que varía en centímetros y lo absorben HARQ y el
+    scheduler — el shadowing varía en decenas de metros y se paga en link
+    budget.)
+
+    **La cuenta ingenua.** Si quiero que un punto del **borde** de celda
+    esté sobre el umbral el 95% de las veces, necesito cubrir el percentil
+    95 de la gaussiana:
+
+    $$M = z_{0.95} \cdot \sigma = 1.645 \times 8 \approx 13.2 \text{ dB}$$
+
+    ¿Por qué la industria usa ~9? Porque 13.2 dB responde la pregunta
+    equivocada.
+
+    **La pregunta correcta es de área.** R2 pide 95% del **área**, y el
+    borde es el peor lugar de la celda: todo el interior tiene pérdida
+    menor que la del borde, o sea margen de sobra. Al integrar la
+    probabilidad de cobertura sobre toda la celda (la integral clásica de
+    Jakes, 1974), con $\sigma = 8$ y exponente de propagación $n \approx
+    3.8$, basta que el **borde** quede cubierto ~87% del tiempo para que
+    el **área** quede cubierta 95%:
+
+    $$M = z_{0.87} \cdot \sigma \approx 1.13 \times 8 \approx 9 \text{ dB}$$
+
+    Los 4 dB de diferencia entre 13.2 y 9 no son un tecnicismo: en el
+    modelo UMa equivalen a ~27% más de radio, que al cuadrado es ~60% menos
+    sitios por km². Leer bien la letra chica del requisito (¿95% *de qué*?)
+    es dinero.
+
+    **La perilla es empinada.** El margen crece con la cola de la
+    gaussiana: exigir 99% de área empuja el margen hacia ~19 dB y el radio
+    se derrumba — la razón por la que ningún operador firma 100%. Y $\sigma
+    = 8$ es una hipótesis declarada más: el drive test (Fase 6) la mide de
+    verdad para *esta* ciudad; si San Isidro resulta ser $\sigma = 10$, el
+    9 ya no compra el 95%.
+
 ### 2.3 De MAPL a radio: el modelo de propagación
 
 El MAPL se convierte en distancia invirtiendo un modelo. El estándar de la
