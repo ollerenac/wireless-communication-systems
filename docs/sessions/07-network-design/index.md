@@ -717,9 +717,9 @@ subida — si no aguantara, el uplink mandaría sobre el número de sitios y
 habría que rehacer el veredicto. El mismo cálculo de §3.2, con los
 insumos de subida:
 
-$$R_{\text{celda,UL}} = \underbrace{\text{SE}_{\text{UL}}}_{1.2 \text{ bit/s/Hz}} \times \underbrace{B_{\text{UL,ef}}}_{20 \text{ MHz}} \times \underbrace{(1-OH)}_{0.78} \approx 19 \text{ Mbps por celda}$$
+$$R_{\text{celda,UL}} = \underbrace{\text{SE}_{\text{UL}}}_{1.2 \text{ bit/s/Hz}} \times \underbrace{B_{\text{UL,ef}}}_{20 \text{ MHz}} \times \underbrace{(1-OH)}_{0.78} = 18.7 \text{ Mbps por celda}$$
 
-→ 3 sectores ≈ **56 Mbps por sitio** → 3 sitios ≈ **170 Mbps instalados**
+→ 3 sectores ≈ **56 Mbps por sitio** → 3 sitios ≈ **168 Mbps instalados**
 en subida.
 
 - $\text{SE}_{\text{UL}} = 1.2$ bit/s/Hz es el **promedio de celda en
@@ -731,10 +731,10 @@ en subida.
   menos potencia (peor distribución de SINR) y los equipos comunes no
   soportan 256-QAM en subida.
 - La demanda de subida típica es ~15% de la de bajada (se sube poco, se
-  baja mucho): 0.15 × 660 ≈ **100 Mbps** — contra 170 instalados: sobra.
+  baja mucho): 0.15 × 660 ≈ **100 Mbps** — contra 168 instalados: sobra.
 
 Conclusión de la fase completa: el uplink no limita ni en cobertura
-(Fase 2: 132 > 126 dB) ni en volumen agregado (100 < 170 Mbps). Cuando el
+(Fase 2: 132 > 126 dB) ni en volumen agregado (100 < 168 Mbps). Cuando el
 UL limita una red real, suele ser en la *cobertura de servicios de subida
 exigentes* (video en vivo, cámaras) — otro servicio, otro cálculo.
 
