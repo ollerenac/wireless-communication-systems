@@ -278,6 +278,39 @@ SCS 30 kHz hay 273 PRB × 12 = 3 276 subportadoras:
 
 $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE}$$
 
+??? note "¿De dónde salen los 273 PRB? — y por qué SCS 30 kHz"
+
+    La cuenta ingenua da otra cosa: 1 PRB = 12 × 30 kHz = 360 kHz, y
+    100 MHz / 360 kHz ≈ 277.7 PRB. El dato que falta: **los 100 MHz son el
+    ancho del canal, no el ancho transmisible**. El estándar (3GPP TS
+    38.101-1) reserva una **banda de guarda** en cada borde:
+
+    $$\text{BW}_{tx} = 100 - 2 \times 0.845 = 98.31 \text{ MHz}
+    \quad\Rightarrow\quad \left\lfloor \frac{98.31}{0.36} \right\rfloor = 273 \text{ PRB}$$
+
+    (273 × 360 kHz = 98.28 MHz ocupados → guarda real de 860 kHz por
+    lado.) La guarda existe porque el espectro OFDM no termina en seco: los
+    lóbulos laterales decaen lento y el transmisor debe cumplir la máscara
+    de emisión en el borde del canal. Con 277 PRB quedarían ~140 kHz de
+    margen — ningún filtro real cae decenas de dB en eso. Mejora silenciosa
+    de NR: utilización del 98.3%, contra el 90% fijo de LTE (20 MHz → 100
+    PRB = 18 MHz útiles).
+
+    ¿Y el SCS de 30 kHz es elección libre? No — dado n78 + 100 MHz es el
+    forzado práctico de la familia de numerologías de NR (SCS = 15·2^µ kHz):
+
+    | SCS | Máx PRB en 100 MHz | Veredicto |
+    |---|---|---|
+    | 15 kHz (µ=0) | tope de 270 PRB = 48.6 MHz | **no llena el canal** |
+    | **30 kHz (µ=1)** | **273 PRB = 98.28 MHz** | el estándar de mid-band |
+    | 60 kHz (µ=2) | 135 PRB = 97.2 MHz | CP a la mitad (~1.2 µs), sin ganancia a cambio |
+
+    Con 15 kHz necesitarías dos portadoras agregadas; 60 kHz recorta el
+    prefijo cíclico sin dar nada útil en FR1. 30 kHz llena el canal con CP
+    de 2.3 µs — factor ~40 sobre los 60 ns de delay spread que medimos en
+    San Isidro. Por eso la §1.4 lo despacha: la numerología la fijan banda
+    y estándar, no el diseñador.
+
 Como el RSRP se mide **por resource element** (ver la
 [nota de referencia](rsrp-rsrq-sinr.md)), el link budget de cobertura de
 control empieza en 8.8 dBm, no en 44. La red incluso difunde este número
