@@ -673,11 +673,12 @@ difícil de la fase y tiene nota propia:
 
 ### 3.2 El cálculo de la capacidad de celda
 
-$R_{\text{celda}}$ es la **capacidad de la celda**: la tasa de datos
-agregada de bajada (bit/s) que la celda entrega, repartida entre todos
-sus usuarios — el número que se puede vender. Se arma en tres factores:
+$R_{\text{celda,DL}}$ es la **capacidad de bajada de la celda**: la tasa
+de datos agregada (bit/s) que la celda entrega en DL, repartida entre
+todos sus usuarios — el número que se puede vender. (Su gemela de subida,
+$R_{\text{celda,UL}}$, se verifica en §3.4.) Se arma en tres factores:
 
-$$R_{\text{celda}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
+$$R_{\text{celda,DL}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
 
 - $\text{SE}_{\text{celda}}$ — **eficiencia espectral** media de la celda
   (bits por segundo por cada Hz de espectro): usamos 2.0 bit/s/Hz,
