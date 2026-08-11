@@ -11,14 +11,14 @@ description: "El flujo profesional de diseño de RAN — requisitos, espectro, c
 
 !!! tip "Cómo correr el notebook del ejercicio"
 
-    La vía sin instalación es **Google Colab**:
-    [abrir design.ipynb en Colab](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/07-network-design/design.ipynb)
-    — la primera celda instala Sionna RT y descarga la escena sola. Activa
-    el runtime con **GPU** (Entorno de ejecución → Cambiar tipo de entorno
-    → T4): el mapa consolidado de la Fase 6 en CPU tarda muchísimo más.
-    Alternativa local: entorno con `sionna-rt`, `numpy` y `matplotlib`, y
-    ejecutar desde la carpeta de la sesión (la escena se carga con ruta
-    relativa).
+    1. [Abrir design.ipynb en Colab](https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/07-network-design/design.ipynb).
+    2. Activar GPU: *Entorno de ejecución → Cambiar tipo de entorno → T4 GPU*.
+    3. *Ejecutar todo*. La primera celda instala Sionna RT y descarga el
+       mapa del curso sola.
+
+    **Si te asignaron otro mapa** (p. ej. `miraflores`): en la primera
+    celda cambia la única perilla — `ESCENA = "miraflores"` — y ejecuta
+    todo; el mapa se descarga automáticamente del sitio del curso.
 
 ## Objetivos de Aprendizaje
 
@@ -80,14 +80,14 @@ publicitar y cumplir.
 
 Todo lo que sigue en esta sesión es resolver ese encargo con método.
 
-!!! note "La escena es tuya de fabricar"
+!!! note "Los mapas los proporciona el curso"
 
-    El laboratorio corre sobre una escena 3D real de San Isidro construida
-    desde OpenStreetMap. Para el diseño final (o para trabajar sobre *tu*
-    distrito) vas a fabricar tu propia escena:
-    **[Guía: crear tu escena OSM con Blender](escena-osm-blender.md)** —
-    instalación en la VM, descarga del mapa, materiales ITU y export a
-    Mitsuba ([video del proceso](https://youtu.be/PIdn1R7FSrg?si=V8-HVuCvWGZG6v39)).
+    El laboratorio corre sobre mapas 3D reales construidos desde
+    OpenStreetMap (el del encargo: San Isidro). El curso los publica
+    listos — no necesitas fabricar nada para el ejercicio. Si te interesa
+    cómo se fabrican (o quieres crear el de *tu* distrito como extensión):
+    **[Guía: crear tu escena OSM con Blender](escena-osm-blender.md)**
+    ([video del proceso](https://youtu.be/PIdn1R7FSrg?si=V8-HVuCvWGZG6v39)).
 
 ---
 

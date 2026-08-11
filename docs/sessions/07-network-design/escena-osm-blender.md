@@ -114,3 +114,19 @@ y las dos grandes (cientos de metros) en X e Y. Si la chica está en Y:
 la escena está acostada — vuelve al paso 5.
 
 Con eso verificado, apunta el notebook a tu escena y a diseñar.
+
+## 7. Publicar el mapa para los alumnos (instructor)
+
+Convención: **una carpeta autocontenida por mapa**, con el XML del mismo
+nombre y sus mallas adentro — `nombre/nombre.xml` + `nombre/meshes/`.
+Para publicarlo:
+
+1. Renombra la carpeta y el XML al nombre del mapa (p. ej.
+   `miraflores/miraflores.xml`).
+2. Comprime la carpeta: `zip -r miraflores.zip miraflores/` (el zip debe
+   contener la carpeta, no los archivos sueltos).
+3. Copia carpeta y zip a `docs/sessions/07-network-design/escenas/` del
+   repo, commit y push.
+
+El sitio publica el zip automáticamente y el notebook lo encuentra: el
+alumno solo cambia la perilla `ESCENA = "miraflores"` en la primera celda.
