@@ -622,7 +622,11 @@ eficiencias; reparto igualitario de *datos* colapsa hacia la media armónica
 difícil de la fase y tiene nota propia:
 [De la distribución de SINR a la capacidad de celda](de-sinr-a-capacidad.md).
 
-### 3.2 La cadena de la cuenta
+### 3.2 El cálculo de la capacidad de celda
+
+$R_{\text{celda}}$ es la **capacidad de la celda**: la tasa de datos
+agregada de bajada (bit/s) que la celda entrega, repartida entre todos
+sus usuarios — el número que se puede vender. Se arma en tres factores:
 
 $$R_{\text{celda}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}$$
 
