@@ -563,7 +563,7 @@ más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
     donde cada servicio prometido se cumple — el radio de diseño es el del
     anillo del contrato.
 
-La imagen que resume los dos enlaces y sus umbrales sin más teoría:
+La imagen que resume los dos enlaces y sus umbrales:
 
 ![Márgenes DL y UL sobre sus umbrales vs distancia: el DL cruza cero en 393 m y define el borde; el UL cruzaría en 566 m y llega al borde real con 6 dB de holgura](figures/bordes_dl_ul.png)
 
