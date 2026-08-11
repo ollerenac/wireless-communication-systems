@@ -483,6 +483,37 @@ limita" (que sí aplica cuando se piden muchos Mbps de subida: más PRBs →
 más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
 `design.ipynb`.
 
+??? note "¿Por qué justo 5 MHz asignados al UE? (y por qué no darle más)"
+
+    El 5 MHz no es un valor arbitrario: **sale del requisito R4-UL**. La
+    promesa de borde es 5 Mbps de subida, y a $SNR_{min} = 0$ dB la
+    eficiencia espectral es $SE = \log_2(1+1) \approx 1$ bit/s/Hz:
+
+    $$BW_{UL} = \frac{R_{\text{borde}}}{SE(SNR_{min})} = \frac{5 \text{ Mbps}}{1 \text{ bit/s/Hz}} = 5 \text{ MHz} \approx 14 \text{ PRB}$$
+
+    ¿Y por qué no darle más PRBs al pobre UE de borde? Porque su potencia
+    es **fija** (23 dBm): cada PRB extra diluye la densidad espectral
+    transmitida, mientras el ruido que la BS escucha crece con
+    $10\log_{10}(BW)$. Duplicar el ancho regala +3 dB de capacidad
+    potencial y cobra −3 dB de SNR — que en el borde, pegado al mínimo, no
+    tienes. Es un óptimo con joroba:
+
+    - **Menos de 5 MHz** → SNR sobrado, pero el techo $BW \times SE$ no
+      llega a los 5 Mbps prometidos.
+    - **Más de 5 MHz** → el SNR de borde cae bajo 0 dB, la SE se desploma,
+      y pierdes por el otro lado.
+
+    El par (5 MHz, 0 dB) es el punto **autoconsistente**: el ancho mínimo
+    que cumple la meta, evaluado al SNR que ese mismo ancho sostiene a
+    132 dB de pérdida. En la red real esto no se congela: el *scheduler* y
+    el *power control* lo negocian por milisegundo (UE de borde → pocos
+    PRBs a potencia máxima; UE cercano → muchos PRBs). El dimensionamiento
+    congela el caso de borde porque es el que firma R4.
+
+    Letra chica declarada: $SE = 1$ a 0 dB es Shannon puro; con MCS reales
+    es ~0.8–0.9, así que 5 MHz queda un pelo optimista — tolerable porque
+    el UE de borde rara vez sostiene los 5 Mbps continuos.
+
 ### 2.5 RSS → RSRP: cerrar el círculo con Sionna
 
 Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
