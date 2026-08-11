@@ -157,7 +157,7 @@ estadística de decir "throughput de borde garantizado": el borde de celda
 *es* la cola baja de la distribución. Mismo espíritu probabilístico que
 el 95% de R2 y el 90% de R3.
 
-La cuenta detrás de R5: 25 000 personas/km² presentes en hora cargada
+El cálculo detrás de R5: 25 000 personas/km² presentes en hora cargada
 (distrito financiero) × 30% de participación de mercado × 75 kbps por
 abonado ≈ 560 Mbps/km², redondeado a 600. Cada factor es una hipótesis de
 negocio — cámbialos y cambia la red que hay que construir.
@@ -304,7 +304,7 @@ esta clase.
     ---
 
     **R1.** R5/R4: con 20 MHz no hay capacidad ni throughput de borde — la
-    cobertura barata de low-band se paga en Mbps. (Cuenta rápida: 20 MHz ×
+    cobertura barata de low-band se paga en Mbps. (Cálculo rápido: 20 MHz ×
     ~74% DL deja ~15 MHz efectivos; ni la mediana de 50 Mbps se sostiene con
     carga.)
 
@@ -331,7 +331,7 @@ $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE
 
 ??? note "¿De dónde salen los 273 PRB? — y por qué SCS 30 kHz"
 
-    La cuenta ingenua da otra cosa: 1 PRB = 12 × 30 kHz = 360 kHz, y
+    El cálculo ingenuo da otra cosa: 1 PRB = 12 × 30 kHz = 360 kHz, y
     100 MHz / 360 kHz ≈ 277.7 PRB. El dato que falta: **los 100 MHz son el
     ancho del canal, no el ancho transmisible**. El estándar (3GPP TS
     38.101-1) reserva una **banda de guarda** en cada borde:
@@ -405,7 +405,7 @@ vuelve un número: con $\sigma = 8$ dB, reservar ~9 dB garantiza que el ~95%
 del área (no solo el punto medio) quede sobre el umbral. Más probabilidad =
 más margen = menos radio: la certeza se paga en dB.
 
-??? note "¿De dónde salen los 9 dB de $M_{\text{shadow}}$? (la cuenta ingenua da 13.2)"
+??? note "¿De dónde salen los 9 dB de $M_{\text{shadow}}$? (el cálculo ingenuo da 13.2)"
 
     **Qué es el shadowing.** El modelo de propagación (UMa) predice la
     pérdida *mediana* a cada distancia. Pero dos esquinas a la misma
@@ -418,7 +418,7 @@ más margen = menos radio: la certeza se paga en dB.
     scheduler — el shadowing varía en decenas de metros y se paga en link
     budget.)
 
-    **La cuenta ingenua.** Si quiero que un punto del **borde** de celda
+    **El cálculo ingenuo.** Si quiero que un punto del **borde** de celda
     esté sobre el umbral el 95% de las veces, necesito cubrir el percentil
     95 de la gaussiana:
 
@@ -510,7 +510,7 @@ su gran defensa), antena de 0 dBi, y la BS escuchando con figura de ruido
 enlace que soporte **menos** pérdida define el radio real de la celda: de
 nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta.
 
-El lado nuevo de la cuenta es la **sensibilidad del receptor** — el mínimo
+El término nuevo del cálculo es la **sensibilidad del receptor** — el mínimo
 que la BS necesita recibir para demodular:
 
 $$S_{BS} = \underbrace{-174}_{kT\ [\text{dBm/Hz}]} + 10\log_{10}(BW) + NF + SNR_{min}$$
@@ -532,7 +532,7 @@ de PRBs no es un truco de potencia, es un truco de **ruido**. Resultado
 con nuestros números: 132 dB de UL contra 126 del DL de control — el
 enlace limitante aquí es el DL, al revés del folclor "el uplink siempre
 limita" (que sí aplica cuando se piden muchos Mbps de subida: más PRBs →
-más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
+más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
 `design.ipynb`.
 
 ??? note "¿Por qué justo 5 MHz asignados al UE? (y por qué no darle más)"
@@ -626,7 +626,7 @@ exigió.
 
 Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
 verificar R2 hay que convertir: restar $10\log_{10}(N_{\text{RE}})$ del
-despliegue. Es la misma cuenta del EPRE vista del lado del receptor — y el
+despliegue. Es el mismo cálculo del EPRE visto del lado del receptor — y el
 motivo por el que la meta R2 no puede compararse directo contra el mapa
 crudo. La verificación numérica se ejecuta en la Fase 6, sobre el mapa
 consolidado.
@@ -651,11 +651,11 @@ consolidado.
     tracing punto a punto, pero al diseñar con un modelo estadístico, la
     incertidumbre espacial es irreducible y hay que presupuestarla.
 
-## Fase 3 — Dimensionamiento por capacidad: la cuenta gemela
+## Fase 3 — Dimensionamiento por capacidad: el cálculo gemelo
 
 La Fase 2 preguntó "¿cuántos sitios para que la señal *llegue*?". Esta
 pregunta es distinta: **¿cuántos sitios para que la red *aguante* la demanda
-de R5** (600 Mbps/km² en hora cargada)**?** Son dos cuentas independientes y
+de R5** (600 Mbps/km² en hora cargada)**?** Son dos cálculos independientes y
 el diseño final obedece a la peor:
 
 $$N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})$$
@@ -710,7 +710,7 @@ qué es el último recurso.
 
 ### 3.4 Nota sobre el uplink
 
-La misma cuenta con los 20 MHz efectivos de UL y SE menor (~1.2 bit/s/Hz,
+El mismo cálculo con los 20 MHz efectivos de UL y SE menor (~1.2 bit/s/Hz,
 sin 256-QAM en subida de UEs comunes): ~19 Mbps por celda, ~56 por sitio.
 Contra una demanda de subida típica (~15% de la de bajada, ≈ 100 Mbps):
 también sobra hoy. El UL limita en *cobertura de servicios exigentes*, no en
@@ -950,7 +950,7 @@ N_CS debe absorber el retardo de ida y vuelta del UE más lejano — si la
 zona de contención es menor que el radio de celda, un UE legítimo del borde
 aparece como *otro preámbulo*: colisión fantasma.
 
-La cuenta (en el notebook): radio 390 m → ida y vuelta 2.6 µs → con la
+El cálculo (en el notebook): radio 390 m → ida y vuelta 2.6 µs → con la
 secuencia larga (839 chips, 800 µs) basta N_CS ≈ 13, que deja ~64
 preámbulos por raíz → **una sola raíz por celda**. La lección invertida:
 en celdas urbanas chicas el RACH es barato; una celda rural de 15 km
@@ -968,7 +968,7 @@ solo en qué **tracking area** (TA). El tamaño de la TA es un compromiso:
   actualizando su posición a cada rato.
 
 Nuestra red es trivial — 9 celdas, 1.1 km² → **una sola TA** — pero la
-cuenta de diseño escala: un operador de Lima con 5 000 celdas y TAs de 50
+criterio de diseño escala: un operador de Lima con 5 000 celdas y TAs de 50
 celdas paga 50 pagings por llamada entrante a cambio de TAUs solo al
 cruzar fronteras de TA (que se trazan donde la gente *no* cruza a diario:
 nunca partir una avenida llena de commuters por la mitad).
@@ -1034,7 +1034,7 @@ falsas.
 
 ### 6.2 R2 bajo el trazador: la fórmula era optimista
 
-La cuenta prometida en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
+El cálculo prometido en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
 array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
 Resultado sobre el consolidado: **RSRP ≥ −110 dBm en ~74% del área — R2
 reprueba** (meta: 95%). La mediana es cómoda (−78 dBm); la cola no: p5 ≈
@@ -1083,7 +1083,7 @@ sitios.
 | R1 | área de servicio | escena cubre el polígono | ✅ |
 | R2 | RSRP ≥ −110 en 95% | **~74%** | ❌ |
 | R3 | SINR ≥ 0 en 90% | **~79%** | ❌ |
-| R4 | p5 ≥ 50/5 Mbps | DL p5 ≈ 64 ✓; UL por cuenta (132>126 dB) | ✅ |
+| R4 | p5 ≥ 50/5 Mbps | DL p5 ≈ 64 ✓; UL por cálculo (132>126 dB) | ✅ |
 | R5 | ≥ 600 Mbps/km² | SE 4.7 → ~790 Mbps/sitio | ✅ |
 | R6 | eMBB+VoNR, <20 ms | por arquitectura/QoS | — |
 | R7 | 100 MHz n78 | licencia | ✅ |
