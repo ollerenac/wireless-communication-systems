@@ -122,11 +122,13 @@ nombre y sus mallas adentro — `nombre/nombre.xml` + `nombre/meshes/`.
 Para publicarlo:
 
 1. Renombra la carpeta y el XML al nombre del mapa (p. ej.
-   `miraflores/miraflores.xml`).
-2. Comprime la carpeta: `zip -r miraflores.zip miraflores/` (el zip debe
-   contener la carpeta, no los archivos sueltos).
-3. Copia carpeta y zip a `docs/sessions/07-network-design/escenas/` del
-   repo, commit y push.
+   `miraflores/miraflores.xml`); verifica los ejes con el chequeo del
+   paso 6 antes de publicar.
+2. Copia la carpeta a `docs/sessions/07-network-design/escenas/` del repo.
+3. Desde `escenas/`, comprime: `zip -r miraflores.zip miraflores` (el zip
+   contiene la carpeta del mapa en su raíz — no los archivos sueltos ni
+   rutas más largas).
+4. Commit y push de carpeta y zip.
 
 El sitio publica el zip automáticamente y el notebook lo encuentra: el
 alumno solo cambia la perilla `ESCENA = "miraflores"` en la primera celda.
