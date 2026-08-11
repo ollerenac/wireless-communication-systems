@@ -708,13 +708,34 @@ costo): exprimir SE con MU-MIMO/sectorización, agregar portadora, y solo al
 final agregar sitios — la curva de densificación del laboratorio mostró por
 qué es el último recurso.
 
-### 3.4 Nota sobre el uplink
+### 3.4 La misma verificación, ahora en subida
 
-El mismo cálculo con los 20 MHz efectivos de UL y SE menor (~1.2 bit/s/Hz,
-sin 256-QAM en subida de UEs comunes): ~19 Mbps por celda, ~56 por sitio.
-Contra una demanda de subida típica (~15% de la de bajada, ≈ 100 Mbps):
-también sobra hoy. El UL limita en *cobertura de servicios exigentes*, no en
-volumen — coherente con lo visto en Fase 2.
+El veredicto de §3.3 se calculó solo con el DL. Falta verificar que la
+capacidad de **subida** de esos mismos 3 sitios aguanta la demanda de
+subida — si no aguantara, el uplink mandaría sobre el número de sitios y
+habría que rehacer el veredicto. El mismo cálculo de §3.2, con los
+insumos de subida:
+
+$$R_{\text{celda,UL}} = \underbrace{\text{SE}_{\text{UL}}}_{1.2 \text{ bit/s/Hz}} \times \underbrace{B_{\text{UL,ef}}}_{20 \text{ MHz}} \times \underbrace{(1-OH)}_{0.78} \approx 19 \text{ Mbps por celda}$$
+
+→ 3 sectores ≈ **56 Mbps por sitio** → 3 sitios ≈ **170 Mbps instalados**
+en subida.
+
+- $\text{SE}_{\text{UL}} = 1.2$ bit/s/Hz es el **promedio de celda en
+  subida** — el análogo del 2.0 que usamos en DL (§3.2), y como aquel, una
+  hipótesis declarada de industria. **No confundirlo con el 1.0 de §2.4**:
+  aquel era la SE del *punto de borde* (el peor lugar de la celda, un solo
+  UE a máxima pérdida); este es el promedio de *todos* los usuarios
+  repartidos. Es menor que el 2.0 del DL porque los UEs transmiten con
+  menos potencia (peor distribución de SINR) y los equipos comunes no
+  soportan 256-QAM en subida.
+- La demanda de subida típica es ~15% de la de bajada (se sube poco, se
+  baja mucho): 0.15 × 660 ≈ **100 Mbps** — contra 170 instalados: sobra.
+
+Conclusión de la fase completa: el uplink no limita ni en cobertura
+(Fase 2: 132 > 126 dB) ni en volumen agregado (100 < 170 Mbps). Cuando el
+UL limita una red real, suele ser en la *cobertura de servicios de subida
+exigentes* (video en vivo, cámaras) — otro servicio, otro cálculo.
 
 !!! question "Comprueba tu comprensión"
 
