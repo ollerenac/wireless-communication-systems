@@ -517,6 +517,25 @@ más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
     es ~0.8–0.9, así que 5 MHz queda un pelo optimista — tolerable porque
     el UE de borde rara vez sostiene los 5 Mbps continuos.
 
+    **¿Mínimo, promedio o peor caso?** Ninguna de las dos primeras: el
+    mínimo asignable es 1 PRB (360 kHz — y con él el enlace cierra aún más
+    lejos, pero no salen 5 Mbps), y no hay promedio de nada. Es el **peor
+    caso del servicio prometido**: peor ubicación (el borde, a MAPL) × el
+    contrato (R4-UL). El presupuesto responde "¿hasta dónde cumplo la
+    promesa completa?", no "¿hasta dónde hay señal?".
+
+    ¿Y el canal de control, no habría que garantizarlo con el peor caso?
+    Ya está garantizado dos veces: el control de **subida** (PUCCH) ocupa
+    ~1 PRB — concentración máxima, MAPL mejor que los 132 dB de datos; si
+    los datos cierran, el control UL cierra con margen. Y el control de
+    **bajada** (SSB/RSRP, R2) es el presupuesto de 126 dB — que resultó el
+    limitante de toda la red. Jerarquía completa:
+    $\text{MAPL}_{ctrl,UL} > \text{MAPL}_{datos,UL} (132) >
+    \text{MAPL}_{ctrl,DL} (126)$. La cobertura es una cebolla: el anillo
+    exterior donde apenas "hay red" (1 PRB, kbps), y anillos interiores
+    donde cada servicio prometido se cumple — el radio de diseño es el del
+    anillo del contrato.
+
 ### 2.5 RSS → RSRP: cerrar el círculo con Sionna
 
 Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
