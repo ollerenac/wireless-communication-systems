@@ -563,6 +563,16 @@ más BW → sensibilidad peor → MAPL cae). La cuenta ejecutable está en
     donde cada servicio prometido se cumple — el radio de diseño es el del
     anillo del contrato.
 
+La imagen que resume los dos enlaces y sus umbrales sin más teoría:
+
+![Márgenes DL y UL sobre sus umbrales vs distancia: el DL cruza cero en 393 m y define el borde; el UL cruzaría en 566 m y llega al borde real con 6 dB de holgura](figures/bordes_dl_ul.png)
+
+Lectura en una regla: **cada enlace muere donde su curva cruza su propio
+umbral, medido en su receptor** (DL: RSRP en el UE; UL: SNR en la BS). El
+primero que cruza define el borde de la celda; el otro llega con holgura
+— aquí el DL muere primero (393 m) y al UL le sobran 6 dB que nadie
+exigió.
+
 ### 2.5 RSS → RSRP: cerrar el círculo con Sionna
 
 Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
