@@ -894,4 +894,123 @@ un PCI confundido.
     también estresa el RACH, otra razón para controlarlo con tilt por
     celda.
 
-## Fase 6 — Validación y optimización *(en construcción)*
+## Fase 6 — Validación y optimización: cobrar las promesas
+
+Cada fase dejó hipótesis declaradas esperando esta hora: la SE de 2.0, la
+σ de 8, el "3 sitios alcanzan" de la fórmula, el "tilt como bisturí". La
+Fase 6 las cobra todas contra el **mapa consolidado**: 10⁶ rayos con
+reflexión difusa — el mapa "de reporte", 10× más caro que los
+exploratorios ("se explora barato, se reporta caro").
+
+### 6.1 Primera lección: la calidad del muestreo ES parte del resultado
+
+El mismo plan nominal que a 10⁵ rayos daba SINR > 0 en el **49%** del
+área, a 10⁶ da **~79%**. Treinta puntos de diferencia sin tocar la red:
+con pocos rayos, las zonas que solo se alcanzan por rebotes difusos
+quedan mudas y el mapa las declara muertas. De ahí la regla que este
+curso repite: los mapas solo se comparan **entre la misma calidad** — el
+barrido exploratorio contra su línea base exploratoria, el veredicto
+contra el consolidado. Mezclarlas produce conclusiones espectacularmente
+falsas.
+
+### 6.2 R2 bajo el trazador: la fórmula era optimista
+
+La cuenta prometida en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
+array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
+Resultado sobre el consolidado: **RSRP ≥ −110 dBm en ~74% del área — R2
+reprueba** (meta: 95%). La mediana es cómoda (−78 dBm); la cola no: p5 ≈
+−116 dBm. Las calles en sombra profunda de edificios que la fórmula UMa
+"promedia" existen de verdad en San Isidro.
+
+El **drive test virtual** explica el porqué: ajustando pérdida vs
+log₁₀(distancia) sobre el propio mapa salen **n ≈ 2.9** (declaramos 3.8 —
+los cañones urbanos guían más de lo que el modelo castiga) y **σ ≈ 14 dB**
+(declaramos 8 — con el caveat de que el patrón de antena contamina el
+residuo). La moraleja conecta con el desplegable de §2.2: con σ real de
+dos dígitos, los 9 dB de margen compran mucho menos del 95% — **el margen
+de shadowing es tan bueno como la σ que lo alimenta**, y la σ se mide, no
+se recita.
+
+### 6.3 La SE medida: la hipótesis era un colchón enorme
+
+La integral del mapa SINR (media aritmética espacial por celda, techo
+256-QAM) da **SE ≈ 4.7 bit/s/Hz** contra la hipótesis 2.0 de la Fase 3:
+la capacidad por sitio salta de 334 a ~790 Mbps y la red queda limitada
+por capacidad con **1 solo sitio**. ¿Estaba "mal" la hipótesis? Está
+*sesgada en la dirección opuesta al mapa*: el full-buffer Shannon del
+trazador ignora fast fading, MCS reales, retransmisiones y carga
+desigual; el 2.0 de industria los incluye. La verdad operativa vive entre
+ambos — y el diseño con 2.0 era la opción *conservadora correcta* para
+dimensionar. **R4-DL de paso cumple**: throughput p5 ≈ 64 Mbps ≥ 50.
+
+### 6.4 El bisturí que no cortó: tercer resultado anti-libro
+
+El plan era corregir al "invasor" (la celda cuyo best-server llega más
+lejos: s3c1, p90 = 356 m) con tilt individual 6°→12°. Resultado, a la
+misma calidad que su línea base: **delta global −0.0 pp, delta local
+0.0 dB** — y la pista estaba en el diagnóstico: la "zona invadida" tenía
+SINR medio de **+26 dB**. No era una zona con problema: era una celda
+sirviendo lejos *y bien*. En esta escena chica y densa la interferencia
+no es *overshooting* geométrico que un tilt recorte — es scattering
+urbano entre vecinas inmediatas. El tilt (uniforme en Fase 4, quirúrgico
+aquí) queda **medido dos veces como inefectivo para este layout**: las
+perillas que siguen son azimuts, ICIC en las fronteras del best-server, o
+sitios.
+
+### 6.5 El veredicto R1–R8
+
+| Req | Meta | Medido | Veredicto |
+|---|---|---|---|
+| R1 | área de servicio | escena cubre el polígono | ✅ |
+| R2 | RSRP ≥ −110 en 95% | **~74%** | ❌ |
+| R3 | SINR ≥ 0 en 90% | **~79%** | ❌ |
+| R4 | p5 ≥ 50/5 Mbps | DL p5 ≈ 64 ✓; UL por cuenta (132>126 dB) | ✅ |
+| R5 | ≥ 600 Mbps/km² | SE 4.7 → ~790 Mbps/sitio | ✅ |
+| R6 | eMBB+VoNR, <20 ms | por arquitectura/QoS | — |
+| R7 | 100 MHz n78 | licencia | ✅ |
+| R8 | ≤ 6 sitios, azoteas | 3 sitios | ✅ |
+
+La red dimensionada por fórmula entrega capacidad y throughput de sobra,
+y **reprueba las dos metas de radio** (R2, R3). Ese no es un final
+fallido: es el estado normal de un diseño al salir de la validación — el
+plan nominal nunca es el plan final. Las salidas, en orden de costo:
+
+1. **Re-posicionar/azimutar** los 3 sitios mirando el mapa de sombras
+   (gratis en papel, el trazador re-evalúa en minutos).
+2. **ICIC** entre los pares de fronteras que el best-server ya
+   identificó (Fase 5 dejó el grafo listo).
+3. **El 4º sitio** en la zona de sombra dominante — R8 autoriza hasta 6;
+   la curva de densificación del esbozo (3→6 sitios: 71→92% a calidad
+   exploratoria) sugiere que con 4–5 se alcanza R3.
+4. **Renegociar**: si el cliente acepta 90% de R2 en vez de 95, el diseño
+   actual casi cierra — leer §0.2: el último 5% es el caro.
+
+El cierre conceptual de la sesión: **predicción → medición → ajuste →
+repetir**. En operación continua ese lazo tiene nombre propio — *SON,
+Self-Organizing Networks* — y nunca termina. El diseño no es una fórmula
+que se resuelve: es un proceso que se converge.
+
+!!! question "Comprueba tu comprensión"
+
+    **P1.** R2 reprueba (74%) pero R4-DL cumple (p5 = 64 Mbps). ¿Cómo
+    puede el throughput de borde estar bien si la cobertura de control
+    está mal?
+
+    **P2.** La σ medida (14 dB) casi duplica la declarada (8 dB). Si se
+    rehiciera la Fase 2 con σ = 14, ¿qué pasaría con el radio, los sitios
+    y el presupuesto R8 — y qué dice eso del orden fórmula→trazador?
+
+    ---
+
+    **R1.** Miden poblaciones distintas: R4 se evalúa sobre los píxeles
+    *cubiertos* (donde llegó algún rayo), R2 sobre el área *total* —
+    incluidas las sombras donde no llega nada. Una red puede servir
+    excelente donde llega y a la vez no llegar a suficiente área. Por eso
+    R2 y R4 son requisitos separados, igual que R2 y R3 en la Fase 0.
+
+    **R2.** Margen para 95% de área con σ=14 (por Jakes) ≈ 15 dB → MAPL
+    cae ~6 dB → el radio se encoge ~30% → los sitios por cobertura casi se
+    duplican (5–6, rozando R8). Lección: la fórmula con σ de libro
+    dimensiona el *arranque*; el número final de sitios siempre lo dicta
+    la validación sobre el terreno (o su gemelo ray-traced) — exactamente
+    el orden que siguió esta sesión.
