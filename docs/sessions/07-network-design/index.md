@@ -311,6 +311,20 @@ $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE
     San Isidro. Por eso la §1.4 lo despacha: la numerología la fijan banda
     y estándar, no el diseñador.
 
+    Y para fijar el vocabulario de franjas que usa toda la sesión (las
+    "capas" de la §1.2) junto al corte técnico del 3GPP:
+
+    | Franja | Rango | Ejemplos | En 3GPP |
+    |---|---|---|---|
+    | **Low-band** | < 1 GHz | 700 MHz (n28), 850, 900 | FR1 |
+    | **Mid-band** | 1–7 GHz | 1.9 GHz, AWS, 2.6, **3.5 GHz (n78)** | FR1 |
+    | **High-band** (mmWave) | 24–52 GHz | **26 GHz (n258)**, 28 | FR2 |
+
+    **FR1** agrupa low + mid (hasta 7.125 GHz); **FR2** es el mundo
+    milimétrico. "C-band" que verás en la prensa técnica es el nombre
+    histórico satelital de 3.3–4.2 GHz — el pedazo de mid-band donde vive
+    n78. Nuestro encargo es mid-band puro: la capa de capacidad.
+
 Como el RSRP se mide **por resource element** (ver la
 [nota de referencia](rsrp-rsrq-sinr.md)), el link budget de cobertura de
 control empieza en 8.8 dBm, no en 44. La red incluso difunde este número
