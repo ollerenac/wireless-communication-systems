@@ -297,6 +297,11 @@ $1/24 \approx 4\%$ del tráfico; y la medición real del
 crecimiento. (El marco formal para *medir* la hora cargada es la
 recomendación [ITU-T E.500](https://www.itu.int/rec/T-REC-E.500).)
 
+![Tráfico horario como fracción del tráfico de 24 h — denso urbano pica ~7% al mediodía, rural ~6.5% de noche](figures/ericsson-emr-jun2023-fig24-trafico-horario.png)
+
+*Figura: tráfico por hora dividido entre el tráfico de 24 h, Europa
+Occidental. Fuente: [Ericsson Mobility Report, jun. 2023, Fig. 24](https://www.ericsson.com/en/reports-and-papers/mobility-report/articles/traffic-patterns-drive-network-evolution).*
+
 Ejemplo con números de Perú urbano: 10 GB/mes ≈ $2.7$ Gbit/día; con
 $f_{BH} = 10\%$ → **~74 kbps sostenidos por abonado** (Tabla 0.4). Parece poco — esa es
 la magia de la multiplexión estadística: miles de usuarios que navegan a
