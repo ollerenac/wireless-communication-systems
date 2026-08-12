@@ -1004,14 +1004,14 @@ exigentes* (video en vivo, cámaras) — otro servicio, otro cálculo.
     transmitiendo), que es el escenario de la hora cargada — la única que
     importa para capacidad.
 
-## Fase 4 — Plan nominal: el diseño aterriza en el mapa
+## Fase 4 — Plan nominal
 
 Las fases 2–3 dijeron **cuántos** sitios (3). Esta fase decide **dónde y
 cómo**: posiciones sobre azoteas reales, sectorización, azimuts y downtilt.
 Es la fase gráfica del diseño — aquí la aritmética se encuentra con la
 ciudad.
 
-### 4.1 Sectorización: tres celdas por el precio de un sitio
+### 4.1 Sectorización 3×120°
 
 Un sitio omnidireccional es una celda. El mismo sitio con **3 antenas
 sectoriales de 120°** son **tres celdas independientes**: cada una con su
@@ -1026,7 +1026,7 @@ parejos — ahí vive el handover intra-sitio.
 
 <!-- FIGURA PENDIENTE: figures/sectorizacion_3x120.svg -->
 
-### 4.2 Azimut: hacia dónde mira cada sector
+### 4.2 Azimut de los sectores
 
 El azimut de cada sector es un parámetro de diseño por sitio. Regla
 práctica: apuntar los sectores hacia la **demanda** (avenidas, edificios de
@@ -1035,7 +1035,7 @@ sectores frente a frente = interferencia máxima en la franja intermedia).
 En el plan nominal usamos 0°/120°/240° uniformes como punto de partida; la
 optimización fina de azimuts es trabajo de la Fase 6.
 
-### 4.3 Downtilt: el parámetro que controla la interferencia
+### 4.3 Downtilt
 
 La antena no se apunta al horizonte: se inclina hacia abajo. Geometría
 simple — con altura $h$ y tilt $\theta$, el haz principal toca el suelo a:
@@ -1060,7 +1060,9 @@ por software, sin subir a la torre.
 
 <!-- FIGURA PENDIENTE: figures/downtilt_geometria.svg -->
 
-### 4.4 El plan nominal de San Isidro — y lo que midió el trazador
+### 4.4 Plan nominal de San Isidro y resultados del trazador
+
+**Tabla 4.1 — Plan nominal de San Isidro: posiciones y configuración inicial**
 
 | Sitio | Posición (x, y) [m] | Altura | Azimuts | Tilt inicial |
 |---|---|---|---|---|
