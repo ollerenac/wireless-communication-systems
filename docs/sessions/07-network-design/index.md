@@ -214,38 +214,29 @@ típicos de planificación:
 | Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
 | FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
 
-#### Cómo fijar R4 (throughput de borde) con esta tabla
+#### El target de borde (R4) y esta tabla
 
-**La tabla no te da el R4 de bajada: te dice si la referencia de la
-industria alcanza para lo que ofreciste — y cuando no alcanza, el piso
-manda.** El procedimiento, general para cualquier publicidad:
+En nuestro proyecto el target viene dado por la guía de planificación
+del operador: **DL = 50 Mbps** — la referencia
+[NGMN](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
+(§4.1.2) *"50 Mbps everywhere"*, exigible en al menos el 95% de las
+ubicaciones incluido el borde de celda — y **UL = 5 Mbps**: el mayor
+valor de la **columna UL** entre los servicios ofrecidos (videollamada,
+2–4 Mbps) más margen, porque no existe referencia publicada de UL "en
+todas partes".
 
-1. **Identifica los servicios que TU publicidad ofrece** y búscalos en
-   la Tabla 0.3.
-2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
-   servicios; lo mismo con la **columna UL**. Con menos que el piso, la
-   oferta muere hasta en una celda vacía.
-3. **Referencia de la industria**: el
-   [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
-   (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
-   exigible *"en al menos el 95% de las ubicaciones, incluido el borde
-   de celda"* — la misma convención de percentil que usan nuestros
-   requisitos; el reporte
-   [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
-   (§4.3) pide **100 DL / 50 UL** en urbano denso (aspiracional).
-4. **Adopta y declara** el DL: la referencia si cubre tu piso (oferta
-   liviana — video, oficina), o el piso si lo supera (oferta pesada —
-   FWA exige 50–100 y la referencia NGMN se queda corta: ahí el número
-   sale de la tabla).
+El papel de esta tabla es **verificar que el target cubre lo ofrecido**:
+el mayor DL entre los servicios de la publicidad queda muy por debajo de
+50 ✓. Si la oferta fuera pesada — FWA pide 50–100 Mbps — la referencia
+NGMN quedaría corta y el piso de la tabla mandaría el target. (El
+aspiracional de largo plazo es
+[ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
+§4.3: 100 DL / 50 UL en urbano denso.)
 
-**El UL es distinto**: no existe una referencia publicada de "UL en
-todas partes" — se fija directo de la **columna UL** (el mayor entre
-los servicios ofrecidos) **más un margen declarado**.
-
-¿Por qué no hay fórmula para R4? Porque necesitarías cuántos sitios y
-celdas tendrá la red — y eso es el **resultado** del diseño (Fases
-2–4), no un dato de la Fase 0. Regla práctica: **la calidad por usuario
-(R4) se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
+¿Y por qué el target no se calcula de la demanda? Porque necesitarías
+cuántos sitios y celdas tendrá la red — el **resultado** del diseño
+(Fases 2–4), no un dato de la Fase 0. **R4 se recibe/adopta; R5 se
+calcula de los TdR (§0.4).**
 
 !!! note "En la práctica: ¿quién fija este número?"
 
@@ -273,13 +264,6 @@ celdas tendrá la red — y eso es el **resultado** del diseño (Fases
     - El [MTC propone](https://mobiletime.la/noticias/03/08/2026/peru-cobertura-movil-carreteras/)
       medir la cobertura 4G en carreteras con el criterio **RSRP ≥ −110
       dBm** — el mismo umbral de control de la Tabla 0.1 y de R2.
-
-Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
-en la nube"): servicios ofrecidos = videollamada HD (2–4 / 2–4) y
-web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
-(referencia NGMN, cubre el piso con margen amplio); UL = **5** (piso 4
-+ margen — la referencia ITU de 50 UL sería sobredimensionar un
-proyecto de 6 sitios).
 
 #### La latencia no la mide el trazador
 
