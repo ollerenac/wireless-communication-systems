@@ -255,9 +255,12 @@ calcula de los TdR (§0.4).**
       (vigente desde dic. 2022) obliga a garantizar al menos el **70% de
       la velocidad contratada, en bajada y en subida**;
       [OSIPTEL la monitorea](https://www.osiptel.gob.pe/portal-del-usuario/noticias/osiptel-adecua-reglamento-de-calidad-para-garantizar-el-70-de-velocidad-minima-en-servicio-de-internet-de-banda-ancha/)
-      mediante el registro RENAMV. Traducir la publicidad a números
-      verificables — la Fase 0 entera — es una obligación legal, no un
-      ejercicio de aula.
+      mediante el registro RENAMV. Ojo con la lectura: la ley **no fija
+      un valor absoluto** (no dice "50 Mbps") — fija un porcentaje de
+      **lo que tú ofreciste**. Qué ofrecer sigue siendo decisión del
+      operador, y por eso traducir la publicidad a números verificables
+      — la Fase 0 entera — es una obligación legal, no un ejercicio de
+      aula.
     - La [subasta de la banda 3.5 GHz](https://www.gob.pe/institucion/mtc/noticias/1249724-peru-avanza-hacia-la-era-del-5g-mtc-oficializa-resultados-de-la-subasta-de-espectro-en-la-banda-3-5-ghz)
       — la banda de este proyecto, en bloques de 100 MHz — se adjudicó
       con compromisos de despliegue en sedes concretas (estadios,
