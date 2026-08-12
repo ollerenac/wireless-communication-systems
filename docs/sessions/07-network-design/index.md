@@ -884,7 +884,7 @@ consolidado.
     tracing punto a punto, pero al diseñar con un modelo estadístico, la
     incertidumbre espacial es irreducible y hay que presupuestarla.
 
-## Fase 3 — Dimensionamiento por capacidad: el cálculo gemelo
+## Fase 3 — Dimensionamiento por capacidad
 
 La Fase 2 preguntó "¿cuántos sitios para que la señal *llegue*?". Esta
 pregunta es distinta: **¿cuántos sitios para que la red *aguante* la demanda
@@ -893,7 +893,7 @@ el diseño final obedece a la peor:
 
 $$N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})$$
 
-### 3.1 La capacidad de una celda no es su pico
+### 3.1 Capacidad de celda: promedio sobre la distribución de SINR
 
 La publicidad ofrece "hasta 1 Gbps"; la celda real sirve usuarios repartidos
 por toda su área compartiendo los mismos PRBs. Su capacidad es un **promedio
@@ -904,7 +904,7 @@ eficiencias; reparto igualitario de *datos* colapsa hacia la media armónica
 difícil de la fase y tiene nota propia:
 [De la distribución de SINR a la capacidad de celda](de-sinr-a-capacidad.md).
 
-### 3.2 El cálculo de la capacidad de celda
+### 3.2 Cálculo de la capacidad de celda
 
 $R_{\text{celda,DL}}$ es la **capacidad de bajada de la celda**: la tasa
 de datos agregada (bit/s) que la celda entrega en DL, repartida entre
@@ -938,22 +938,22 @@ Fase 6 la medirá), y el overhead lo fija el estándar.
 
 Un sitio trisectorial: $3 \times 111 \approx 334$ Mbps.
 
-### 3.3 El veredicto
+### 3.3 Sitios por capacidad y veredicto del dimensionamiento
 
-Demanda total: $600 \text{ Mbps/km}^2 \times 1.1 \text{ km}^2 = 660$ Mbps.
+Demanda total: $600 \text{ Mbps/km}^2 \times 1.096 \text{ km}^2 \approx 657$ Mbps.
 
-$$N_{\text{capacidad}} = \lceil 660 / 334 \rceil = 2 \text{ sitios} \qquad
+$$N_{\text{capacidad}} = \lceil 657 / 334 \rceil = 2 \text{ sitios} \qquad
 N_{\text{sitios}} = \max(3, 2) = \mathbf{3}$$
 
 Hoy la red está **limitada por cobertura**: los 3 sitios de la Fase 2 traen
-capacidad de sobra (~1 000 Mbps instalados vs 660 demandados — margen 1.5×).
+capacidad de sobra (~1 000 Mbps instalados vs 657 demandados — margen 1.52×).
 Pero el tráfico móvil crece ~25% anual: en ~2 años la desigualdad se
 invierte y la capacidad pasa a mandar. Ahí las salidas son (en orden de
 costo): exprimir SE con MU-MIMO/sectorización, agregar portadora, y solo al
 final agregar sitios — la curva de densificación del laboratorio mostró por
 qué es el último recurso.
 
-### 3.4 La misma verificación, ahora en subida
+### 3.4 Verificación de la capacidad de subida
 
 El veredicto de §3.3 se calculó solo con el DL. Falta verificar que la
 capacidad de **subida** de esos mismos 3 sitios aguanta la demanda de
@@ -974,8 +974,9 @@ en subida.
   repartidos. Es menor que el 2.0 del DL porque los UEs transmiten con
   menos potencia (peor distribución de SINR) y los equipos comunes no
   soportan 256-QAM en subida.
-- La demanda de subida típica es ~15% de la de bajada (se sube poco, se
-  baja mucho): 0.15 × 660 ≈ **100 Mbps** — contra 168 instalados: sobra.
+- La demanda de subida se toma como **15% de la de bajada** — hipótesis
+  declarada (el tráfico móvil real sube entre el 10 y el 20% de lo que
+  baja): 0.15 × 657 ≈ **99 Mbps** — contra 168 instalados: sobra.
 
 Conclusión de la fase completa: el uplink no limita ni en cobertura
 (Fase 2: 132 > 126 dB) ni en volumen agregado (100 < 168 Mbps). Cuando el
