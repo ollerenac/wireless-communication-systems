@@ -70,20 +70,21 @@ Al finalizar esta sesión, el estudiante será capaz de:
 
 ---
 
-## El encargo
+## El proyecto
 
 Un operador móvil te contrata para diseñar su red de acceso 5G en un
 polígono de **San Isidro, Lima** — 1.32 × 0.83 km del distrito financiero.
 Tienes licencia de 100 MHz en la banda n78 (3.5 GHz), azoteas disponibles
-y un presupuesto limitado de sitios. La empresa quiere promesas que pueda
+y un presupuesto limitado de sitios — todo fijado en los **términos de
+referencia** del contrato. La empresa quiere promesas que pueda
 publicitar y cumplir.
 
-Todo lo que sigue en esta sesión es resolver ese encargo con método.
+Todo lo que sigue en esta sesión es resolver ese proyecto con método.
 
 !!! note "Los mapas los proporciona el curso"
 
     El laboratorio corre sobre mapas 3D reales construidos desde
-    OpenStreetMap (el del encargo: San Isidro). El curso los publica
+    OpenStreetMap (el del proyecto: San Isidro). El curso los publica
     listos — no necesitas fabricar nada para el ejercicio. Si te interesa
     cómo se fabrican (o quieres crear el de *tu* distrito como extensión):
     **[Guía: crear tu escena OSM con Blender](escena-osm-blender.md)**
@@ -152,7 +153,7 @@ link budget como **margen de shadowing** (Fase 2).
     [RSRP, RSRQ y SINR — nota de referencia](rsrp-rsrq-sinr.md). Aquí basta
     el nivel conceptual; la Fase 2 recurre a esa nota para calcular.
 
-### 0.2 Cuánto SINR necesitan los datos
+### 0.2 Umbral de SINR para servicios de datos
 
 La Tabla 0.1 respondió "¿hay red?"; falta "¿la señal sirve?". El puente
 entre SINR y bits es la **eficiencia espectral** — cuántos bits por segundo
@@ -162,7 +163,7 @@ $$SE = \log_2(1 + \text{SINR}_{\text{lineal}}) \quad \text{[bit/s/Hz]}$$
 
 El punto de referencia que hay que memorizar: **SINR = 0 dB (señal igual a
 interferencia más ruido) da SE ≈ 1 bit/s/Hz**. Con una tajada modesta del
-canal — digamos 10 MHz de los 80 — eso ya son ~10 Mbps: suficiente para un
+canal — digamos 10 de los 100 MHz — eso ya son ~10 Mbps: suficiente para un
 stream HD. Por debajo de 0 dB la eficiencia colapsa exponencialmente y
 aparecen los "cortes". La clasificación de planificación:
 
@@ -192,39 +193,7 @@ la probabilidad de control no baja de la de datos. La traducción exacta
 promesa → (umbral, probabilidad) es una **decisión del diseñador** — lo
 defendible no es el número, es el razonamiento.
 
-### 0.3 De promesas a números: qué exige cada servicio
-
-Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
-nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
-típicos de planificación:
-
-**Tabla 0.3 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
-
-| Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
-|---|---|---|---|---|
-| VoNR (voz sobre NR) | ~0.1 Mbps | ~0.1 Mbps | < 100 ms | latencia y pérdida, no bitrate |
-| Video streaming SD (480p) | 1–2 Mbps | — | tolerante (buffer) | bitrate DL |
-| Video streaming HD (1080p) | 5–8 Mbps | — | tolerante (buffer) | bitrate DL |
-| Video streaming 4K | 15–25 Mbps | — | tolerante (buffer) | bitrate DL |
-| Videollamada HD | 2–4 Mbps | 2–4 Mbps | < 150 ms | **UL simétrico** + latencia |
-| Web / redes sociales | 1–5 Mbps (ráfagas) | < 1 Mbps | < 300 ms | percepción de carga |
-| Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
-| FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
-
-Dos lecturas de diseño:
-
-- **El throughput de borde (R4) no es el bitrate de un stream.** "Video HD
-  sin cortes" pide 5–8 Mbps *por usuario*; el requisito de borde se fija
-  varias veces más arriba (50 Mbps en este encargo) porque el borde de una
-  celda cargada se **comparte** entre los usuarios que caen ahí y porque el
-  percentil 5 debe aguantar la hora cargada, no la madrugada.
-- **La columna de latencia es la que el trazador no mide.** Bitrates y
-  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
-  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
-  eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
-  no hay mapa que lo verifique.
-
-### 0.4 De GB por mes a Mbps de hora cargada
+### 0.3 De GB por mes a Mbps de hora cargada
 
 La capacidad no se dimensiona para el promedio del día sino para la **hora
 cargada** (*busy hour*). La conversión estándar:
@@ -240,9 +209,82 @@ la magia de la multiplexión estadística: miles de usuarios que navegan a
 ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
 individuales.
 
-### 0.5 Requisitos del encargo
+La fórmula, tabulada para volúmenes típicos y el rango usual de $f_{BH}$
+(todas las celdas salen de la ecuación de arriba):
 
-**Tabla 0.4 — Requisitos del encargo (R1–R8): meta y método de verificación**
+**Tabla 0.3 — Tasa media por abonado en hora cargada, $R_{usuario}$ en kbps (calculada de la fórmula de esta sección)**
+
+| $V_{mes}$ | $f_{BH}=8\%$ | $f_{BH}=10\%$ | $f_{BH}=12\%$ |
+|---|---|---|---|
+| 5 GB/mes | 29.6 | 37.0 | 44.4 |
+| 10 GB/mes | 59.3 | 74.1 | 88.9 |
+| 12 GB/mes | 71.1 | 88.9 | 106.7 |
+| 20 GB/mes | 118.5 | 148.1 | 177.8 |
+| 30 GB/mes | 177.8 | 222.2 | 266.7 |
+
+### 0.4 Requisitos de bitrate y latencia por servicio
+
+Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
+nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
+típicos de planificación:
+
+**Tabla 0.4 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
+
+| Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
+|---|---|---|---|---|
+| VoNR (voz sobre NR) | ~0.1 Mbps | ~0.1 Mbps | < 100 ms | latencia y pérdida, no bitrate |
+| Video streaming SD (480p) | 1–2 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming HD (1080p) | 5–8 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming 4K | 15–25 Mbps | — | tolerante (buffer) | bitrate DL |
+| Videollamada HD | 2–4 Mbps | 2–4 Mbps | < 150 ms | **UL simétrico** + latencia |
+| Web / redes sociales | 1–5 Mbps (ráfagas) | < 1 Mbps | < 300 ms | percepción de carga |
+| Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
+| FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
+
+Dos lecturas de diseño:
+
+- **El throughput de borde (R4) no se calcula desde la demanda — se
+  adopta como objetivo de servicio.** Cualquier intento de derivarlo
+  fracasa por dos razones estructurales: (i) necesitaría el número real
+  de sitios y celdas — que es el **resultado** de las Fases 2–4, no un
+  dato de la Fase 0: un requisito no puede depender del diseño que
+  restringe — y (ii) definiría un requisito "bajo carga" que la
+  verificación no mide: el mapa de throughput de la Fase 6 es
+  **mono-usuario**. Por eso la industria publica **valores objetivo**,
+  no fórmulas. El planteamiento correcto tiene tres pasos:
+
+    1. **Piso técnico** — el bitrate del servicio prometido (esta tabla).
+       Promesa HD → menos de 8 Mbps hace la promesa imposible incluso
+       con la celda vacía.
+    2. **Ancla publicada** — el NGMN 5G White Paper fija **"50 Mbps
+       everywhere"** (tasa mínima experimentada por el usuario,
+       consistente hasta el borde de celda); el reporte ITU-R M.2410
+       define la *user experienced data rate* — exactamente el percentil
+       5 — en **100 Mbps DL / 50 UL** para urbano denso (valor
+       aspiracional). Estos números ya incorporan el juicio consolidado
+       de la industria sobre compartición bajo carga — por eso están muy
+       por encima del piso.
+    3. **Adopción declarada** — el proyecto elige su objetivo citando el
+       ancla, y la Fase 6 lo cobra como percentil 5 del mapa
+       (mono-usuario, coherente con la definición del objetivo).
+
+    El proyecto de San Isidro adopta el ancla NGMN: borde DL = **50
+    Mbps**. El UL se fija con la **columna UL** de esta tabla sobre los
+    servicios prometidos: videollamada (2–4 Mbps) con margen → **5
+    Mbps**. Nota la división del trabajo: **R4 fija la calidad por
+    usuario (objetivo adoptado); R5 fija la cantidad total (derivada de
+    los TdR en §0.3)** — la carga de la celda vive en R5, no en R4, y
+    cada requisito tiene su propia verificación.
+
+- **La columna de latencia es la que el trazador no mide.** Bitrates y
+  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
+  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
+  eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
+  no hay mapa que lo verifique.
+
+### 0.5 Requisitos del proyecto
+
+**Tabla 0.5 — Requisitos del proyecto (R1–R8): meta y método de verificación**
 
 | # | Requisito | Meta | Se verifica con |
 |---|---|---|---|
@@ -263,7 +305,8 @@ el 95% de R2 y el 90% de R3.
 
 El cálculo detrás de R5: 25 000 personas/km² presentes en hora cargada
 (distrito financiero) × 30% de participación de mercado × 75 kbps por
-abonado ≈ 560 Mbps/km², redondeado a 600. Cada factor es una hipótesis de
+abonado (Tabla 0.3: fila 10 GB/mes, $f_{BH}=10\%$) ≈ 560 Mbps/km²,
+redondeado a 600. Cada factor es una hipótesis de
 negocio — cámbialos y cambia la red que hay que construir.
 
 !!! question "Comprueba tu comprensión"
@@ -313,7 +356,7 @@ negocio — cámbialos y cambia la red que hay que construir.
 Antes de colocar un solo sitio hay que decidir **en qué frecuencia vive la
 red**. Es la decisión más estructural del diseño: fija el radio de celda (y
 por tanto cuántos sitios costará la cobertura), la penetración en interiores
-y cuánta capacidad hay para vender. En nuestro encargo la licencia ya está
+y cuánta capacidad hay para vender. En nuestro proyecto la licencia ya está
 dada (R7: 100 MHz en n78) — pero hay que entender qué compramos y qué no.
 
 ### 1.1 La física: frecuencia contra alcance
@@ -353,14 +396,14 @@ la arquitectura de **capas** que usa todo operador real:
   15 MHz de bajada → sostiene voz, IoT y el "siempre conectado", no el
   tráfico masivo.
 - **Capa de capacidad** (2.6/3.5 GHz): bloques de **80–100 MHz** por
-  operador (nuestro encargo: 100 MHz en n78, R7) — unas **6–7×** la bajada
+  operador (nuestro proyecto: 100 MHz en n78, R7) — unas **6–7×** la bajada
   de la capa baja → sostiene el tráfico eMBB; celdas chicas → más sitios.
 - **Capa de hotspot** (mmWave): n258 (26 GHz) tiene 3.25 GHz de banda
   total; se asigna en portadoras de **400 MHz** y un operador típicamente
   agrega **800–1000 MHz** — otras **8–10×** lo de mid-band, pero con
   alcance de cuadra; solo donde la densidad lo justifica.
 
-Nuestro encargo es deliberadamente **mono-capa** (solo n78): más simple para
+Nuestro proyecto es deliberadamente **mono-capa** (solo n78): más simple para
 aprender, y realista para un despliegue 5G inicial. La comparación con una
 capa de 700 MHz queda como extensión (requiere escena de 3×3 km — una celda
 low-band tapa nuestra escena entera).
@@ -401,7 +444,7 @@ el diseñador pueda ajustar.
 
     **P1.** Un colega propone pedir al regulador cambiar la licencia a 20 MHz
     en 700 MHz "porque cubre 5 veces más área con los mismos sitios". ¿Qué
-    requisito del encargo mata la propuesta?
+    requisito del proyecto mata la propuesta?
 
     **P2.** ¿Por qué el patrón TDD de tu red no es 100% decisión tuya?
 
@@ -478,7 +521,7 @@ $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE
     **FR1** agrupa low + mid (hasta 7.125 GHz); **FR2** es el mundo
     milimétrico. "C-band" que verás en la prensa técnica es el nombre
     histórico satelital de 3.3–4.2 GHz — el pedazo de mid-band donde vive
-    n78. Nuestro encargo es mid-band puro: la capa de capacidad.
+    n78. Nuestro proyecto es mid-band puro: la capa de capacidad.
 
 Como el RSRP se mide **por resource element** (ver la
 [nota de referencia](rsrp-rsrq-sinr.md)), el link budget de cobertura de
