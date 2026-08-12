@@ -115,10 +115,10 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-11 (pausa via gsd-pause-work, contexto al limite)
-Stopped at: Sesion 07 dictable de punta a punta (Fases 0-6). Hoy ademas: ronda didactica completa (desplegables, glosario, simbolos nombrados), registro lexico aplicado, sistema de mapas Colab (perilla ESCENA, zips en el sitio, sin git clone), mapa san-isidro-01 publicado (Z-up verificado). Todo pusheado (7fc0cb7).
-Pendiente: cierre de la leccion, 4 figuras SVG, smoke test Colab (usuario), opcional parametrizar Fases 4-6 para mapas nuevos.
-Resume file: `.planning/HANDOFF.json` + `.planning/.continue-here.md`
+Last session: 2026-08-12 (pausa via gsd-pause-work, contexto ~68%)
+Stopped at: Examen de diseño S07 — Fases 0-4 completas y auditadas (examen-alumno + examen-solucion sobre jesus-maria-01, dinamica 4 bloques, verificadores, respuestas modelo). Leccion F0-F4 saneada en paralelo (titulos sobrios, Tablas 0.1-4.1, formulas explicitas, fuentes verificadas: NGMN/ITU-R/Ericsson/Ley 31207/MTC). Plan F4 final: 7 sitios hexagonales sobre techos reales (altura_en), proxies 73.0/75.7. Mapa jesus-maria-01 publicado; drafts de escenas borrados.
+Pendiente: DECISION BLOQUEANTE push (~50 commits; examen-solucion quedaria publico), Fases 5-6 del examen, cierre de leccion, 4 figuras SVG, guion desincronizado, encargos B-E, re-export cercado-lima-01.
+Resume file: `.planning/HANDOFF.json` + `.planning/.continue-here.md` (protocolo por fase consolidado ahi)
 
 ### Previous session continuity (2026-08-01)
 
