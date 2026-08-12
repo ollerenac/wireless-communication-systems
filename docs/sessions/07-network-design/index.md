@@ -718,12 +718,13 @@ la otra familia — el ray tracing determinístico de las Fases 4 y 6:
 
 $$\text{PL} = 13.54 + 39.08\log_{10}(d) + 20\log_{10}(f_c) \quad [\text{d en m, } f_c \text{ en GHz}]$$
 
-Con 126 dB y $f_c = 3.5$: $d \approx 390$ m — coherente con la tabla de la
-Fase 1 (n78: 200–500 m urbano).
+Con el MAPL exacto (125.8 dB) y $f_c = 3.5$: $d \approx 394$ m — el orden
+de cientos de metros esperado para una macro de mid-band en urbano denso
+(la figura de §2.4 lo muestra cruzando su umbral en ~393 m).
 
 Cada sitio trisectorial cubre un hexágono de área $\approx 2.6\,r^2$:
 
-$$N_{\text{sitios}} = \frac{1.1 \text{ km}^2}{2.6 \times 0.39^2 \text{ km}^2} \approx 3 \text{ sitios por cobertura}$$
+$$N_{\text{sitios}} = \frac{1.1 \text{ km}^2}{2.6 \times 0.394^2 \text{ km}^2} \approx 3 \text{ sitios por cobertura}$$
 
 **Tres sitios** — coherente con el esbozo (`test_scene.ipynb`) que con 3 BS
 logró ~71% de SINR > 0: la cobertura de control alcanza, la calidad todavía
