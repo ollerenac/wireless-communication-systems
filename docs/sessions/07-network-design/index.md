@@ -399,7 +399,7 @@ negocio — cámbialos y cambia la red que hay que construir.
 
 ---
 
-## Fase 1 — Estrategia de espectro: la decisión que fija todas las demás
+## Fase 1 — Estrategia de espectro
 
 Antes de colocar un solo sitio hay que decidir **en qué frecuencia vive la
 red**. Es la decisión más estructural del diseño: fija el radio de celda (y
@@ -407,7 +407,7 @@ por tanto cuántos sitios costará la cobertura), la penetración en interiores
 y cuánta capacidad hay para vender. En nuestro proyecto la licencia ya está
 dada (R7: 100 MHz en n78) — pero hay que entender qué compramos y qué no.
 
-### 1.1 La física: frecuencia contra alcance
+### 1.1 Frecuencia y alcance: efecto en el radio de celda
 
 La pérdida de espacio libre crece con $20\log_{10}(f)$: subir de banda cuesta
 dB, y esos dB se pagan en radio de celda. Además, a mayor frecuencia peor
@@ -449,7 +449,7 @@ Ya lo medimos sobre Lima real: mismos 3 sitios a 2.1 GHz cubren 74.6% del
 área; a 3.5 GHz, 71.2% (`test_scene.ipynb`, Parte 5) — y eso que 2.1→3.5 es
 el salto *chico* de la tabla.
 
-### 1.2 Por qué entonces no todo es 700 MHz: capas de espectro
+### 1.2 Bandas de 5G y capas de espectro
 
 Porque el alcance se paga en capacidad: en low-band hay poco espectro (10–20
 MHz por operador, y repartido); en mid-band hay bloques de 80–100 MHz. De ahí
@@ -473,7 +473,7 @@ aprender, y realista para un despliegue 5G inicial. La comparación con una
 capa de 700 MHz queda como extensión (requiere escena de 3×3 km — una celda
 low-band tapa nuestra escena entera).
 
-### 1.3 TDD: los 100 MHz no son todos tuyos todo el tiempo
+### 1.3 Reparto TDD del canal
 
 n78 es TDD (Sesión 06: subida y bajada alternan sobre la misma frecuencia).
 El tiempo se reparte con un patrón de slots; el típico en n78 es **DDDSU**:
