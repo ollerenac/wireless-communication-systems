@@ -336,6 +336,15 @@ La fórmula, tabulada para volúmenes típicos y el rango usual de $f_{BH}$
 | R7 | Espectro | 100 MHz TDD en n78 (3.5 GHz) | licencia (MTC) |
 | R8 | Despliegue | solo azoteas existentes, máximo 6 sitios | plan nominal |
 
+Los ocho nacen aquí — son el contrato — pero se trabajan distinto. **R2 a
+R5** se calculan o fijan en esta fase con las secciones 0.1–0.4, y las
+fases de diseño los satisfacen y verifican. **R1, R7 y R8** son datos del
+contrato que se registran tal cual: la Fase 1 desarrolla las
+consecuencias de R7 (TDD, numerología, PRBs) y las Fases 2 y 4 respetan
+R8 (potencia en el link budget, sitios en el plan). **R6** se declara y
+se hereda: lo garantiza la arquitectura/QoS, no un mapa de radio — por
+eso es el único que no entra al diccionario `REQ` del notebook.
+
 Notación de R4: **p5 = percentil 5** de la distribución de throughput
 sobre el área — el valor que el 95% de los puntos supera. Es la forma
 estadística de decir "throughput de borde garantizado": el borde de celda
