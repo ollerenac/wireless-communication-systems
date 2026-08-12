@@ -224,7 +224,7 @@ Dos lecturas de diseño:
     2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
        servicios; lo mismo con la **columna UL**. Con menos que el piso,
        la promesa muere hasta en una celda vacía.
-    3. **Ancla publicada**: el
+    3. **Referencia de la industria**: el
        [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
        (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
        exigible *"en al menos el 95% de las ubicaciones, incluido el
@@ -234,9 +234,9 @@ Dos lecturas de diseño:
        (§4.3) pide **100 DL / 50 UL** en urbano denso (aspiracional).
        Están muy por encima de los pisos típicos a propósito: ese margen
        cubre la celda compartida en hora cargada.
-    4. **Adopta y declara** un valor ≥ piso citando el ancla — o
+    4. **Adopta y declara** un valor ≥ piso citando la referencia — o
        justifica por qué te apartas: un proyecto FWA (piso 50–100) puede
-       necesitar más que el ancla; uno austero puede quedarse cerca del
+       necesitar más que la referencia; uno austero puede quedarse cerca del
        piso y prometer menos.
 
     ¿Por qué no hay fórmula? Porque necesitarías cuántos sitios y celdas
@@ -247,8 +247,8 @@ Dos lecturas de diseño:
     Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
     en la nube"): servicios prometidos = videollamada HD (2–4 / 2–4) y
     web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
-    (ancla NGMN, cubre el piso con margen amplio); UL = **5** (piso 4 +
-    margen — el ancla ITU de 50 UL sería sobredimensionar un proyecto de
+    (referencia NGMN, cubre el piso con margen amplio); UL = **5** (piso 4 +
+    margen — la referencia ITU de 50 UL sería sobredimensionar un proyecto de
     6 sitios).
 
 - **La columna de latencia es la que el trazador no mide.** Bitrates y
