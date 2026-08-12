@@ -193,7 +193,56 @@ la probabilidad de control no baja de la de datos. La traducción exacta
 promesa → (umbral, probabilidad) es una **decisión del diseñador** — lo
 defendible no es el número, es el razonamiento.
 
-### 0.3 De GB por mes a Mbps de hora cargada
+### 0.3 Requisitos de bitrate y latencia por servicio
+
+Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
+nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
+típicos de planificación:
+
+**Tabla 0.3 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
+
+| Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
+|---|---|---|---|---|
+| VoNR (voz sobre NR) | ~0.1 Mbps | ~0.1 Mbps | < 100 ms | latencia y pérdida, no bitrate |
+| Video streaming SD (480p) | 1–2 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming HD (1080p) | 5–8 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming 4K | 15–25 Mbps | — | tolerante (buffer) | bitrate DL |
+| Videollamada HD | 2–4 Mbps | 2–4 Mbps | < 150 ms | **UL simétrico** + latencia |
+| Web / redes sociales | 1–5 Mbps (ráfagas) | < 1 Mbps | < 300 ms | percepción de carga |
+| Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
+| FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
+
+Dos lecturas de diseño:
+
+- **El throughput de borde (R4): elígelo como se hace en la práctica.**
+
+    1. **Mira qué prometiste** (esta tabla): HD = 8 Mbps por usuario. Ese
+       es el piso — con menos, la promesa muere hasta en una celda vacía.
+    2. **Mira el número de la industria**: NGMN pide **"50 Mbps
+       everywhere"** — el mínimo experimentado en cualquier punto del
+       área que los operadores 5G usan como referencia (ITU-R M.2410
+       pide 100 en urbano denso, aspiracional). Está muy por encima del
+       piso a propósito: ese margen es el que cubre la celda compartida
+       en hora cargada.
+    3. **Adopta y declara**: "borde DL = 50 Mbps (NGMN)". Listo — la
+       Fase 6 lo cobra en el percentil 5 del mapa.
+
+    ¿Por qué no hay fórmula? Porque necesitarías saber cuántos sitios y
+    celdas tendrá la red — y eso es el **resultado** del diseño (Fases
+    2–4), no un dato de la Fase 0. Regla práctica: **la calidad por
+    usuario (R4) se adopta de un benchmark; la cantidad total (R5) se
+    calcula de los TdR (§0.4)**.
+
+    El UL, mismo juego con la **columna UL**: el servicio de subida más
+    exigente prometido (videollamada, 2–4 Mbps) con margen → 5 Mbps.
+
+- **La columna de latencia es la que el trazador no mide.** Bitrates y
+  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
+  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
+  eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
+  no hay mapa que lo verifique.
+
+### 0.4 De GB por mes a Mbps de hora cargada
 
 La capacidad no se dimensiona para el promedio del día sino para la **hora
 cargada** (*busy hour*). La conversión estándar:
@@ -212,7 +261,7 @@ individuales.
 La fórmula, tabulada para volúmenes típicos y el rango usual de $f_{BH}$
 (todas las celdas salen de la ecuación de arriba):
 
-**Tabla 0.3 — Tasa media por abonado en hora cargada, $R_{usuario}$ en kbps (calculada de la fórmula de esta sección)**
+**Tabla 0.4 — Tasa media por abonado en hora cargada, $R_{usuario}$ en kbps (calculada de la fórmula de esta sección)**
 
 | $V_{mes}$ | $f_{BH}=8\%$ | $f_{BH}=10\%$ | $f_{BH}=12\%$ |
 |---|---|---|---|
@@ -221,66 +270,6 @@ La fórmula, tabulada para volúmenes típicos y el rango usual de $f_{BH}$
 | 12 GB/mes | 71.1 | 88.9 | 106.7 |
 | 20 GB/mes | 118.5 | 148.1 | 177.8 |
 | 30 GB/mes | 177.8 | 222.2 | 266.7 |
-
-### 0.4 Requisitos de bitrate y latencia por servicio
-
-Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
-nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
-típicos de planificación:
-
-**Tabla 0.4 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
-
-| Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
-|---|---|---|---|---|
-| VoNR (voz sobre NR) | ~0.1 Mbps | ~0.1 Mbps | < 100 ms | latencia y pérdida, no bitrate |
-| Video streaming SD (480p) | 1–2 Mbps | — | tolerante (buffer) | bitrate DL |
-| Video streaming HD (1080p) | 5–8 Mbps | — | tolerante (buffer) | bitrate DL |
-| Video streaming 4K | 15–25 Mbps | — | tolerante (buffer) | bitrate DL |
-| Videollamada HD | 2–4 Mbps | 2–4 Mbps | < 150 ms | **UL simétrico** + latencia |
-| Web / redes sociales | 1–5 Mbps (ráfagas) | < 1 Mbps | < 300 ms | percepción de carga |
-| Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
-| FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
-
-Dos lecturas de diseño:
-
-- **El throughput de borde (R4) no se calcula desde la demanda — se
-  adopta como objetivo de servicio.** Cualquier intento de derivarlo
-  fracasa por dos razones estructurales: (i) necesitaría el número real
-  de sitios y celdas — que es el **resultado** de las Fases 2–4, no un
-  dato de la Fase 0: un requisito no puede depender del diseño que
-  restringe — y (ii) definiría un requisito "bajo carga" que la
-  verificación no mide: el mapa de throughput de la Fase 6 es
-  **mono-usuario**. Por eso la industria publica **valores objetivo**,
-  no fórmulas. El planteamiento correcto tiene tres pasos:
-
-    1. **Piso técnico** — el bitrate del servicio prometido (esta tabla).
-       Promesa HD → menos de 8 Mbps hace la promesa imposible incluso
-       con la celda vacía.
-    2. **Ancla publicada** — el NGMN 5G White Paper fija **"50 Mbps
-       everywhere"** (tasa mínima experimentada por el usuario,
-       consistente hasta el borde de celda); el reporte ITU-R M.2410
-       define la *user experienced data rate* — exactamente el percentil
-       5 — en **100 Mbps DL / 50 UL** para urbano denso (valor
-       aspiracional). Estos números ya incorporan el juicio consolidado
-       de la industria sobre compartición bajo carga — por eso están muy
-       por encima del piso.
-    3. **Adopción declarada** — el proyecto elige su objetivo citando el
-       ancla, y la Fase 6 lo cobra como percentil 5 del mapa
-       (mono-usuario, coherente con la definición del objetivo).
-
-    El proyecto de San Isidro adopta el ancla NGMN: borde DL = **50
-    Mbps**. El UL se fija con la **columna UL** de esta tabla sobre los
-    servicios prometidos: videollamada (2–4 Mbps) con margen → **5
-    Mbps**. Nota la división del trabajo: **R4 fija la calidad por
-    usuario (objetivo adoptado); R5 fija la cantidad total (derivada de
-    los TdR en §0.3)** — la carga de la celda vive en R5, no en R4, y
-    cada requisito tiene su propia verificación.
-
-- **La columna de latencia es la que el trazador no mide.** Bitrates y
-  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
-  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
-  eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
-  no hay mapa que lo verifique.
 
 ### 0.5 Requisitos del proyecto
 
@@ -305,7 +294,7 @@ el 95% de R2 y el 90% de R3.
 
 El cálculo detrás de R5: 25 000 personas/km² presentes en hora cargada
 (distrito financiero) × 30% de participación de mercado × 75 kbps por
-abonado (Tabla 0.3: fila 10 GB/mes, $f_{BH}=10\%$) ≈ 560 Mbps/km²,
+abonado (Tabla 0.4: fila 10 GB/mes, $f_{BH}=10\%$) ≈ 560 Mbps/km²,
 redondeado a 600. Cada factor es una hipótesis de
 negocio — cámbialos y cambia la red que hay que construir.
 
