@@ -1042,9 +1042,11 @@ simple — con altura $h$ y tilt $\theta$, el haz principal toca el suelo a:
 
 $$d = \frac{h}{\tan\theta}$$
 
-Con azotea de 30 m ($h = 28.5$ m efectivos sobre la antena del UE, a
-1.5 m) y $\theta = 6°$: $d \approx 270$ m — justo el borde de
-nuestra celda de ~394 m considerando el ancho vertical del haz. La lección
+El criterio del plan: que el haz toque suelo a ~0.7 × el radio de diseño
+(~276 m para nuestra celda de 394 m — el interior de la celda,
+considerando el ancho vertical del haz). Despejando $\theta$ con la
+altura real de cada azotea: una antena a 23 m pide ~4.5°, una a 36 m
+pide ~7.1° — **antena más alta, más tilt**. La lección
 contraintuitiva: **inclinar la antena hacia abajo MEJORA la red**, porque
 la energía que iba al horizonte no servía a nadie propio — solo
 interfería a las celdas vecinas (*overshooting*). El tilt es además la
@@ -1064,25 +1066,30 @@ por software, sin subir a la torre.
 
 **Tabla 4.1 — Plan nominal de San Isidro: posiciones y configuración inicial**
 
-| Sitio | Posición (x, y) [m] | Altura | Azimuts | Tilt inicial |
+| Sitio | Posición (x, y) [m] | Antena (techo real + 3 m) | Azimuts | Tilt inicial |
 |---|---|---|---|---|
-| s1 | (−380, 200) | 30 m | 0°/120°/240° | 6° |
-| s2 | (350, 230) | 30 m | 0°/120°/240° | 6° |
-| s3 | (0, −260) | 30 m | 0°/120°/240° | 6° |
+| s1 | (−420, 180) | 23.2 m | 0°/120°/240° | 4.5° |
+| s2 | (450, 230) | 35.6 m | 0°/120°/240° | 7.1° |
+| s3 | (80, −260) | 22.6 m | 0°/120°/240° | 4.4° |
+
+Las posiciones nominales se mudan al **mejor techo en ±100 m**
+(`altura_en`, ray cast vertical): la antena no flota a una altura de
+libro — se posa en una azotea que existe.
 
 Dos resultados del ray tracing que contradicen la intuición de libro — y
 por eso enseñan:
 
-**1. Sectorizar bajó el % de SINR** (49% con 9 celdas vs 71% del esbozo
-con 3 omnis). No es un error: pasar de 3 a 9 celdas co-canal multiplica
-los interferentes, y el mapa lo cobra. Lo que se compró con la
+**1. Sectorizar bajó el % de SINR** (41% con 9 celdas en azoteas reales
+de 20–33 m vs 71% del esbozo con 3 omnis a 30 m uniformes). No es un
+error: pasar de 3 a 9 celdas co-canal multiplica los interferentes — y
+las azoteas reales, más bajas que los 30 m de libro, recortan alcance. Lo que se compró con la
 sectorización no es SINR — es **capacidad** (×3 celdas, cada una con el
 espectro completo). La métrica correcta para juzgar la sectorización es
 Mbps agregados de la Fase 3, no el % del mapa. Cada decisión de diseño
 optimiza una métrica y factura en otra.
 
 **2. El barrido uniforme de tilt (0°/6°/12°) casi no movió el SINR**
-(±0.3 puntos). Verificamos que el tilt sí redistribuye potencia (+14 dB
+(±0.2 puntos). Verificamos que el tilt sí redistribuye potencia (+14 dB
 de RSS al suelo entre ±30°); lo que pasa es que al tiltear **todas** las
 celdas por igual, señal e interferencia suben juntas y el cociente no
 cambia. La regla de libro "tilt = control de interferencia" aplica al
@@ -1202,9 +1209,10 @@ grafos con 3 colores**: el grafo de vecindad sale del mapa best-server
 notebook lo resuelve para San Isidro y verifica cuántos metros de frontera
 quedan en conflicto.
 
-Resultado medido: de los ~53 km de fronteras del best-server, **~3.3 km
-(6%) quedan entre vecinas del mismo grupo** — y el coloreo ponderado *no
-mejoró* al plan ingenuo de PCIs consecutivos por sitio. En una geometría
+Resultado medido: de los ~48 km de fronteras del best-server, **~2 km
+(4%) quedan entre vecinas del mismo grupo** — y el coloreo ponderado *no
+mejoró* al plan ingenuo de PCIs consecutivos por sitio (quedó incluso
+~150 m peor). En una geometría
 compacta de 9 celdas, la numeración consecutiva ya cumple la regla
 co-sitio, y el residuo lo imponen los **vecindarios densos** del mapa: en
 cuanto una celda tiene cuatro o más vecinas mutuamente en contacto (nada
@@ -1295,8 +1303,8 @@ exploratorios ("se explora barato, se reporta caro").
 
 ### 6.1 Calidad del muestreo y comparación de mapas
 
-El mismo plan nominal que a 10⁵ rayos daba SINR > 0 en el **49%** del
-área, a 10⁶ da **~79%**. Treinta puntos de diferencia sin tocar la red:
+El mismo plan nominal que a 10⁵ rayos daba SINR > 0 en el **41%** del
+área, a 10⁶ da **~74%**. Treinta y tres puntos de diferencia sin tocar la red:
 con pocos rayos, las zonas que solo se alcanzan por rebotes difusos
 quedan mudas y el mapa las declara muertas. De ahí la regla que este
 curso repite: los mapas solo se comparan **entre la misma calidad** — el
@@ -1308,16 +1316,17 @@ falsas.
 
 El cálculo anunciado en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
 array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
-Resultado sobre el consolidado: **RSRP ≥ −110 dBm en ~74% del área — R2
-reprueba** (meta: 95%). La mediana es cómoda (−78 dBm); la cola no: p5 ≈
-−116 dBm. Las calles en sombra profunda de edificios que la fórmula UMa
+Resultado sobre el consolidado: **RSRP ≥ −110 dBm en ~68% del área — R2
+reprueba** (meta: 95%). La mediana es cómoda (−81 dBm); la cola no: p5 ≈
+−117 dBm. Las calles en sombra profunda de edificios que la fórmula UMa
 "promedia" existen de verdad en San Isidro.
 
 El **drive test virtual** explica el porqué: ajustando pérdida vs
-log₁₀(distancia) sobre el propio mapa salen **n ≈ 2.9** (declaramos 3.8 —
-los cañones urbanos guían más de lo que el modelo castiga) y **σ ≈ 14 dB**
-(declaramos 8 — con el caveat de que el patrón de antena contamina el
-residuo). La moraleja conecta con el desplegable de §2.2: con σ real de
+log₁₀(distancia) sobre el propio mapa salen **n ≈ 1.8** (declaramos 3.8 —
+los cañones urbanos guían, y el best-server mete sesgo de selección: te
+sirve el más fuerte, así que los píxeles lejanos que quedan servidos son
+anómalamente buenos) y **σ ≈ 15 dB** (declaramos 8 — con el caveat de que
+el patrón de antena contamina el residuo). La moraleja conecta con el desplegable de §2.2: con σ real de
 dos dígitos, los 9 dB de margen compran mucho menos del 95% — **el margen
 de shadowing es tan bueno como la σ que lo alimenta**, y la σ se mide, no
 se recita.
@@ -1325,22 +1334,22 @@ se recita.
 ### 6.3 Eficiencia espectral medida y re-veredicto de capacidad
 
 La integral del mapa SINR (media aritmética espacial por celda, techo
-256-QAM) da **SE ≈ 4.7 bit/s/Hz** contra la hipótesis 2.0 de la Fase 3:
-la capacidad por sitio salta de 334 a ~790 Mbps y la red queda limitada
+256-QAM) da **SE ≈ 4.9 bit/s/Hz** contra la hipótesis 2.0 de la Fase 3:
+la capacidad por sitio salta de 334 a ~810 Mbps y la red queda limitada
 por capacidad con **1 solo sitio**. ¿Estaba "mal" la hipótesis? Está
 *sesgada en la dirección opuesta al mapa*: el full-buffer Shannon del
 trazador ignora fast fading, MCS reales, retransmisiones y carga
 desigual; el 2.0 de industria los incluye. La verdad operativa vive entre
 ambos — y el diseño con 2.0 era la opción *conservadora correcta* para
-dimensionar. **R4-DL de paso cumple**: throughput p5 ≈ 64 Mbps ≥ 50.
+dimensionar. **R4-DL de paso cumple**: throughput p5 ≈ 66 Mbps ≥ 50.
 
 ### 6.4 Tilt por celda: el ajuste fino, medido
 
 El plan era corregir al "invasor" (la celda cuyo best-server llega más
-lejos: s3c1, p90 = 356 m) con tilt individual 6°→12°. Resultado, a la
-misma calidad que su línea base: **delta global −0.0 pp, delta local
-0.0 dB** — y la pista estaba en el diagnóstico: la "zona invadida" tenía
-SINR medio de **+26 dB**. No era una zona con problema: era una celda
+lejos: s2c2, p90 = 399 m) con tilt individual +6° sobre el de su sitio
+(7.1° → 13.1°). Resultado, a la misma calidad que su línea base: **delta
+global −0.0 pp, delta local −0.1 dB** — y la pista estaba en el
+diagnóstico: la "zona invadida" tenía SINR medio de **+29 dB**. No era una zona con problema: era una celda
 sirviendo lejos *y bien*. En esta escena chica y densa la interferencia
 no es *overshooting* geométrico que un tilt recorte — es scattering
 urbano entre vecinas inmediatas. El tilt (uniforme en Fase 4, quirúrgico
@@ -1355,10 +1364,10 @@ sitios.
 | Req | Meta | Medido | Veredicto |
 |---|---|---|---|
 | R1 | área de servicio | escena cubre el polígono | ✅ |
-| R2 | RSRP ≥ −110 en 95% | **~74%** | ❌ |
-| R3 | SINR ≥ 0 en 90% | **~79%** | ❌ |
-| R4 | p5 ≥ 50/5 Mbps | DL p5 ≈ 64 ✓; UL por cálculo (132>126 dB) | ✅ |
-| R5 | ≥ 600 Mbps/km² | SE 4.7 → ~790 Mbps/sitio | ✅ |
+| R2 | RSRP ≥ −110 en 95% | **~68%** | ❌ |
+| R3 | SINR ≥ 0 en 90% | **~74%** | ❌ |
+| R4 | p5 ≥ 50/5 Mbps | DL p5 ≈ 66 ✓; UL por cálculo (132>126 dB) | ✅ |
+| R5 | ≥ 600 Mbps/km² | SE 4.9 → ~810 Mbps/sitio | ✅ |
 | R6 | eMBB+VoNR, <20 ms | por arquitectura/QoS | — |
 | R7 | 100 MHz n78 | licencia | ✅ |
 | R8 | ≤ 6 sitios, azoteas | 3 sitios | ✅ |
@@ -1385,12 +1394,12 @@ que se resuelve: es un proceso que se converge.
 
 !!! question "Comprueba tu comprensión"
 
-    **P1.** R2 reprueba (74%) pero R4-DL cumple (p5 = 64 Mbps). ¿Cómo
+    **P1.** R2 reprueba (68%) pero R4-DL cumple (p5 = 66 Mbps). ¿Cómo
     puede el throughput de borde estar bien si la cobertura de control
     está mal?
 
-    **P2.** La σ medida (14 dB) casi duplica la declarada (8 dB). Si se
-    rehiciera la Fase 2 con σ = 14, ¿qué pasaría con el radio, los sitios
+    **P2.** La σ medida (15 dB) casi duplica la declarada (8 dB). Si se
+    rehiciera la Fase 2 con σ = 15, ¿qué pasaría con el radio, los sitios
     y el presupuesto R8 — y qué dice eso del orden fórmula→trazador?
 
     ---
@@ -1401,9 +1410,10 @@ que se resuelve: es un proceso que se converge.
     excelente donde llega y a la vez no llegar a suficiente área. Por eso
     R2 y R4 son requisitos separados, igual que R2 y R3 en la Fase 0.
 
-    **R2.** Margen para 95% de área con σ=14 (por Jakes) ≈ 15 dB → MAPL
-    cae ~6 dB → el radio se encoge ~30% → los sitios por cobertura casi se
-    duplican (5–6, rozando R8). Lección: la fórmula con σ de libro
+    **R2.** Margen para 95% de área con σ=15 (por Jakes) ≈ 20 dB → MAPL
+    cae ~11 dB → el radio se encoge a la mitad → los sitios por cobertura
+    se triplican (~10, muy por encima del R8 de 6 — con el caveat de que
+    la σ aparente es cota superior). Lección: la fórmula con σ de libro
     dimensiona el *arranque*; el número final de sitios siempre lo dicta
     la validación sobre el terreno (o su gemelo ray-traced) — exactamente
     el orden que siguió esta sesión.
