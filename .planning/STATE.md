@@ -55,6 +55,8 @@ Recent decisions affecting current work:
 
 - Voz editorial (2026-08-06): **tuteo** (segunda persona) es la voz oficial de todo el material del curso — lecciones, guías y notas. Decisión no retroactiva: lo ya escrito no se toca. La forma impersonal queda descartada como estándar.
 - Registro léxico (2026-08-11): **"cálculo"**, nunca "cuenta" (no natural en español peruano); **"la publicidad"**, nunca "folleto". Barrido retroactivo aplicado a Sesión 07 (lección, notebook, guion). Regla didáctica: ningún símbolo entra a una fórmula sin nombrarse en palabras en su primer uso; glosario de siglas como respaldo.
+- Registro léxico (2026-08-11b): **"perilla" prohibida** (anglicismo de *knob*, nadie la usa). Usar **"variable"** para `ESCENA` (lo que el alumno cambia) y **"parámetro"** para ajustes de diseño (tilt, azimut). Barrido aplicado a lección, guía y ambos notebooks.
+- Tablas numeradas (2026-08-11): toda tabla de la lección S07 lleva **`Tabla <fase>.<n> — descripción`** en negrita antes de la tabla. Se aplica fase por fase conforme se modifican (Fase 0 hecha: 0.1 RSRP, 0.2 servicios, 0.3 requisitos). El examen referencia tablas por número como pista ("verifica la Tabla 0.2").
 
 - Session 07: scope agreed in conversation (no formal AskUserQuestion round): 4G architecture as stepping stone → 5G evolution → procedures that a designer configures → design parameters for a small network. Sionna RT is the lab vehicle.
 - Session 07: Sionna framed as *evaluator, not planner* — students propose sites/tilt/power, the ray tracer shows consequences. This is the pedagogical core.

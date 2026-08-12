@@ -17,7 +17,7 @@ description: "El flujo profesional de diseño de RAN — requisitos, espectro, c
        mapa del curso sola.
 
     **Si te asignaron otro mapa** (p. ej. `miraflores`): en la primera
-    celda cambia la única perilla — `ESCENA = "miraflores"` — y ejecuta
+    celda cambia la única variable — `ESCENA = "miraflores"` — y ejecuta
     todo; el mapa se descarga automáticamente del sitio del curso.
 
 ## Objetivos de Aprendizaje
@@ -115,6 +115,26 @@ con un mapa o un drive test y se puede firmar en un contrato.
 La pareja RSRP/SINR separa dos preguntas de diseño distintas: **cobertura**
 (Fase 2) y **calidad/capacidad** (Fase 3). Confundirlas es el error clásico.
 
+¿Y cuánto RSRP es "suficiente"? La convención de la industria (la misma que
+usa un *drive test*) clasifica así:
+
+**Tabla 0.1 — Rangos de RSRP y calidad de servicio esperada (convención de drive test)**
+
+| RSRP (SSB) | Calidad | Qué esperas en ese punto |
+|---|---|---|
+| ≥ −80 dBm | Excelente | modulación máxima, throughput pico |
+| −80 a −90 dBm | Buena | servicio pleno sin restricciones |
+| −90 a −100 dBm | Regular | el servicio funciona, el throughput empieza a caer |
+| −100 a −110 dBm | Débil | borde de servicio: handovers frecuentes, datos lentos |
+| < −110 dBm | Sin servicio confiable | el UE pierde sincronización y el acceso falla |
+
+El umbral de **−110 dBm** que usan los requisitos no es arbitrario: por
+debajo, los canales de control (los que el UE necesita para engancharse y
+mantenerse en la red) dejan de decodificarse con fiabilidad — está unos dB
+sobre la sensibilidad del receptor, como margen. Por eso R2 se llama
+*cobertura de control*: garantiza que la red **existe** para el UE, no que
+sea rápida. La rapidez la gobiernan SINR y throughput (R3, R4).
+
 !!! info "Nota de profundización"
 
     La mecánica completa de las tres métricas — dónde viven en la grilla
@@ -149,7 +169,41 @@ la magia de la multiplexión estadística: miles de usuarios que navegan a
 ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
 individuales.
 
-### 0.4 Requisitos del encargo
+### 0.4 De promesas a números: qué exige cada servicio
+
+Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
+nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
+típicos de planificación:
+
+**Tabla 0.2 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
+
+| Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
+|---|---|---|---|---|
+| VoNR (voz sobre NR) | ~0.1 Mbps | ~0.1 Mbps | < 100 ms | latencia y pérdida, no bitrate |
+| Video streaming SD (480p) | 1–2 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming HD (1080p) | 5–8 Mbps | — | tolerante (buffer) | bitrate DL |
+| Video streaming 4K | 15–25 Mbps | — | tolerante (buffer) | bitrate DL |
+| Videollamada HD | 2–4 Mbps | 2–4 Mbps | < 150 ms | **UL simétrico** + latencia |
+| Web / redes sociales | 1–5 Mbps (ráfagas) | < 1 Mbps | < 300 ms | percepción de carga |
+| Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
+| FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
+
+Dos lecturas de diseño:
+
+- **El throughput de borde (R4) no es el bitrate de un stream.** "Video HD
+  sin cortes" pide 5–8 Mbps *por usuario*; el requisito de borde se fija
+  varias veces más arriba (50 Mbps en este encargo) porque el borde de una
+  celda cargada se **comparte** entre los usuarios que caen ahí y porque el
+  percentil 5 debe aguantar la hora cargada, no la madrugada.
+- **La columna de latencia es la que el trazador no mide.** Bitrates y
+  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
+  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
+  eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
+  no hay mapa que lo verifique.
+
+### 0.5 Requisitos del encargo
+
+**Tabla 0.3 — Requisitos del encargo (R1–R8): meta y método de verificación**
 
 | # | Requisito | Meta | Se verifica con |
 |---|---|---|---|
@@ -295,8 +349,8 @@ frecuencia dedicada, tiempo completo.
 En n78 se usa subportadora de 30 kHz (Sesión 03: numerología µ=1): slots de
 0.5 ms, CP de 2.3 µs — y ya verificamos sobre Lima que el delay spread urbano
 (mediana 60 ns) cabe holgado en ese CP (`test_scene.ipynb`, Parte 8). La
-numerología queda decidida por la banda y el estándar; no es una perilla de
-esta clase.
+numerología queda decidida por la banda y el estándar; no es un parámetro que
+el diseñador pueda ajustar.
 
 ### Decisión de la Fase 1 (lo que hereda el resto del diseño)
 
@@ -481,7 +535,7 @@ más margen = menos radio: la certeza se paga en dB.
     área ($z_{0.95} = 1.645 \to 13.2$ dB) — ese margen responde "95% *del
     borde*", una promesa más cara que la que firma el contrato.
 
-    **La perilla es empinada.** 99% de área ya cuesta ~14.5 dB (y 18.6 si
+    **El precio sube empinado.** 99% de área ya cuesta ~14.5 dB (y 18.6 si
     alguien lo exige en el propio borde) — la razón por la que ningún
     operador firma 100%. Y $\sigma = 8$ es una hipótesis declarada más: el
     drive test (Fase 6) la mide de verdad para *esta* ciudad; si San
@@ -698,7 +752,7 @@ exprime cada Hz — la fija el SINR: con buen SINR producen a 256-QAM, con
 malo a QPSK), y **(1−OH)** es la fracción del turno que producen de
 verdad — el resto se va en papeleo (señalización) necesario pero que no
 es producto. Capacidad = trabajadores × productividad × fracción
-productiva. Cada fase tocó su perilla: la Fase 1 entregó los trabajadores
+productiva. Cada fase movió su propio parámetro: la Fase 1 entregó los trabajadores
 (espectro y reparto TDD), el SINR del área fija la productividad (la
 Fase 6 la medirá), y el overhead lo fija el estándar.
 
@@ -805,14 +859,14 @@ parejos — ahí vive el handover intra-sitio.
 
 ### 4.2 Azimut: hacia dónde mira cada sector
 
-El azimut de cada sector es una perilla de diseño por sitio. Regla
+El azimut de cada sector es un parámetro de diseño por sitio. Regla
 práctica: apuntar los sectores hacia la **demanda** (avenidas, edificios de
 oficinas) y **no** de frente contra el sector de un sitio vecino (dos
 sectores frente a frente = interferencia máxima en la franja intermedia).
 En el plan nominal usamos 0°/120°/240° uniformes como punto de partida; la
 optimización fina de azimuts es trabajo de la Fase 6.
 
-### 4.3 Downtilt: la perilla de interferencia
+### 4.3 Downtilt: el parámetro que controla la interferencia
 
 La antena no se apunta al horizonte: se inclina hacia abajo. Geometría
 simple — con altura $h$ y tilt $\theta$, el haz principal toca el suelo a:
@@ -825,7 +879,7 @@ nuestra celda de ~390 m considerando el ancho vertical del haz. La lección
 contraintuitiva: **inclinar la antena hacia abajo MEJORA la red**, porque
 la energía que iba al horizonte no servía a nadie propio — solo
 interfería a las celdas vecinas (*overshooting*). El tilt es además la
-perilla de optimización más barata que existe: el tilt eléctrico se ajusta
+herramienta de optimización más barata que existe: el tilt eléctrico se ajusta
 por software, sin subir a la torre.
 
 - **Tilt 0°**: celda "infinita" — cobertura propia igual, interferencia
@@ -863,7 +917,7 @@ celdas por igual, señal e interferencia suben juntas y el cociente no
 cambia. La regla de libro "tilt = control de interferencia" aplica al
 *overshooting* hacia sitios lejanos — macro abierta, haces verticales de
 ~7°. En 1 km² denso, el tilt se usa **por celda** (asimétrico, para
-corregir una invasión concreta), no como perilla global. La Fase 6 lo
+corregir una invasión concreta), no como ajuste global. La Fase 6 lo
 usará así.
 
 !!! question "Comprueba tu comprensión"
@@ -872,7 +926,7 @@ usará así.
     sectores de 60° y sextuplicarla?
 
     **P2.** Un sector tiene excelente SINR cerca del sitio pero su celda
-    "invade" el área del sitio vecino. ¿Primera perilla a tocar y por qué?
+    "invade" el área del sitio vecino. ¿Primer parámetro a tocar y por qué?
 
     ---
 
@@ -1116,8 +1170,8 @@ SINR medio de **+26 dB**. No era una zona con problema: era una celda
 sirviendo lejos *y bien*. En esta escena chica y densa la interferencia
 no es *overshooting* geométrico que un tilt recorte — es scattering
 urbano entre vecinas inmediatas. El tilt (uniforme en Fase 4, quirúrgico
-aquí) queda **medido dos veces como inefectivo para este layout**: las
-perillas que siguen son azimuts, ICIC en las fronteras del best-server, o
+aquí) queda **medido dos veces como inefectivo para este layout**: los
+parámetros que siguen son azimuts, ICIC en las fronteras del best-server, o
 sitios.
 
 ### 6.5 El veredicto R1–R8

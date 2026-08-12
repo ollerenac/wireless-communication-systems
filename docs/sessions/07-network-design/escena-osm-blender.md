@@ -131,4 +131,4 @@ Para publicarlo:
 4. Commit y push de carpeta y zip.
 
 El sitio publica el zip automáticamente y el notebook lo encuentra: el
-alumno solo cambia la perilla `ESCENA = "miraflores"` en la primera celda.
+alumno solo cambia la variable `ESCENA = "miraflores"` en la primera celda.
