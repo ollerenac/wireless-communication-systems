@@ -247,6 +247,33 @@ celdas tendrá la red — y eso es el **resultado** del diseño (Fases
 2–4), no un dato de la Fase 0. Regla práctica: **la calidad por usuario
 (R4) se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
 
+!!! note "En la práctica: ¿quién fija este número?"
+
+    El planificador de radio casi nunca lo fija — **lo recibe**, en este
+    orden de fuerza: obligaciones del regulador → definición de producto
+    del operador → guía interna de planificación (los perfiles de
+    servicio que traen herramientas como Atoll o Planet). Este
+    procedimiento de §0.3 es el que ejecuta la oficina técnica del
+    operador **una vez**, al escribir esa guía — en el curso te toca
+    ese rol porque no hay nadie que te la herede.
+
+    Y en el Perú la oferta comercial no es solo marketing — es exigible:
+
+    - La [Ley N° 31207](https://lpderecho.pe/ley-internet-70-velocidad-minima/)
+      (vigente desde dic. 2022) obliga a garantizar al menos el **70% de
+      la velocidad contratada, en bajada y en subida**;
+      [OSIPTEL la monitorea](https://www.osiptel.gob.pe/portal-del-usuario/noticias/osiptel-adecua-reglamento-de-calidad-para-garantizar-el-70-de-velocidad-minima-en-servicio-de-internet-de-banda-ancha/)
+      mediante el registro RENAMV. Traducir la publicidad a números
+      verificables — la Fase 0 entera — es una obligación legal, no un
+      ejercicio de aula.
+    - La [subasta de la banda 3.5 GHz](https://www.gob.pe/institucion/mtc/noticias/1249724-peru-avanza-hacia-la-era-del-5g-mtc-oficializa-resultados-de-la-subasta-de-espectro-en-la-banda-3-5-ghz)
+      — la banda de este proyecto, en bloques de 100 MHz — se adjudicó
+      con compromisos de despliegue en sedes concretas (estadios,
+      universidades, centros de salud).
+    - El [MTC propone](https://mobiletime.la/noticias/03/08/2026/peru-cobertura-movil-carreteras/)
+      medir la cobertura 4G en carreteras con el criterio **RSRP ≥ −110
+      dBm** — el mismo umbral de control de la Tabla 0.1 y de R2.
+
 Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
 en la nube"): servicios ofrecidos = videollamada HD (2–4 / 2–4) y
 web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
