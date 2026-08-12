@@ -1044,7 +1044,7 @@ $$d = \frac{h}{\tan\theta}$$
 
 Con azotea de 30 m ($h = 28.5$ m efectivos sobre la antena del UE, a
 1.5 m) y $\theta = 6°$: $d \approx 270$ m — justo el borde de
-nuestra celda de ~390 m considerando el ancho vertical del haz. La lección
+nuestra celda de ~394 m considerando el ancho vertical del haz. La lección
 contraintuitiva: **inclinar la antena hacia abajo MEJORA la red**, porque
 la energía que iba al horizonte no servía a nadie propio — solo
 interfería a las celdas vecinas (*overshooting*). El tilt es además la
@@ -1172,7 +1172,7 @@ Cada flecha consume un parámetro nuestro:
 |---|---|---|
 | PSS/SSS | **PCI** de la celda | Fase 5 (§5.2) |
 | Msg1 | **raíces ZC del PRACH** y su zona de contención | Fase 5 (§5.3) |
-| Msg2 (Timing Advance) | radio máximo de celda | Fase 2 (390 m) |
+| Msg2 (Timing Advance) | radio máximo de celda | Fase 2 (394 m) |
 | Registration Accept | **tracking areas** | Fase 5 (§5.4) |
 | (movilidad posterior) | **vecinas, A3, histéresis, TTT** | Fase 5 (§5.5) |
 
@@ -1219,7 +1219,7 @@ N_CS debe absorber el retardo de ida y vuelta del UE más lejano — si la
 zona de contención es menor que el radio de celda, un UE legítimo del borde
 aparece como *otro preámbulo*: colisión fantasma.
 
-El cálculo (en el notebook): radio 390 m → ida y vuelta 2.6 µs → con la
+El cálculo (en el notebook): radio 394 m → ida y vuelta 2.6 µs → con la
 secuencia larga (839 chips, 800 µs) basta N_CS ≈ 13, que deja ~64
 preámbulos por raíz → **una sola raíz por celda**. La lección invertida:
 en celdas urbanas chicas el RACH es barato; una celda rural de 15 km
