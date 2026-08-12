@@ -227,8 +227,9 @@ todas partes".
 
 El papel de esta tabla es **verificar que el target cubre lo ofrecido**:
 el mayor DL entre los servicios de la publicidad queda muy por debajo de
-50 ✓. Si la oferta fuera pesada — FWA pide 50–100 Mbps — la referencia
-NGMN quedaría corta y el piso de la tabla mandaría el target. (El
+50 ✓. Si la oferta fuera pesada — FWA pide 50–100 Mbps DL y 10–20 UL —
+la referencia NGMN quedaría corta y el piso de la tabla mandaría el
+target en **ambas** columnas (p. ej. 100 DL / 20–25 UL). (El
 aspiracional de largo plazo es
 [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
 §4.3: 100 DL / 50 UL en urbano denso.)
