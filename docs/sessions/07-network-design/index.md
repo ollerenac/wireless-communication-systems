@@ -1285,7 +1285,7 @@ un PCI confundido.
     también estresa el RACH, otra razón para controlarlo con tilt por
     celda.
 
-## Fase 6 — Validación y optimización: cobrar lo ofrecido
+## Fase 6 — Validación y optimización del diseño
 
 Cada fase dejó hipótesis declaradas esperando esta hora: la SE de 2.0, la
 σ de 8, el "3 sitios alcanzan" de la fórmula, el "tilt como bisturí". La
@@ -1293,7 +1293,7 @@ Fase 6 las cobra todas contra el **mapa consolidado**: 10⁶ rayos con
 reflexión difusa — el mapa "de reporte", 10× más caro que los
 exploratorios ("se explora barato, se reporta caro").
 
-### 6.1 Primera lección: la calidad del muestreo ES parte del resultado
+### 6.1 Calidad del muestreo y comparación de mapas
 
 El mismo plan nominal que a 10⁵ rayos daba SINR > 0 en el **49%** del
 área, a 10⁶ da **~79%**. Treinta puntos de diferencia sin tocar la red:
@@ -1304,7 +1304,7 @@ barrido exploratorio contra su línea base exploratoria, el veredicto
 contra el consolidado. Mezclarlas produce conclusiones espectacularmente
 falsas.
 
-### 6.2 R2 bajo el trazador: la fórmula era optimista
+### 6.2 Verificación de R2 y el drive test virtual
 
 El cálculo anunciado en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
 array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
@@ -1322,7 +1322,7 @@ dos dígitos, los 9 dB de margen compran mucho menos del 95% — **el margen
 de shadowing es tan bueno como la σ que lo alimenta**, y la σ se mide, no
 se recita.
 
-### 6.3 La SE medida: la hipótesis era un colchón enorme
+### 6.3 Eficiencia espectral medida y re-veredicto de capacidad
 
 La integral del mapa SINR (media aritmética espacial por celda, techo
 256-QAM) da **SE ≈ 4.7 bit/s/Hz** contra la hipótesis 2.0 de la Fase 3:
@@ -1334,7 +1334,7 @@ desigual; el 2.0 de industria los incluye. La verdad operativa vive entre
 ambos — y el diseño con 2.0 era la opción *conservadora correcta* para
 dimensionar. **R4-DL de paso cumple**: throughput p5 ≈ 64 Mbps ≥ 50.
 
-### 6.4 El bisturí que no cortó: tercer resultado anti-libro
+### 6.4 Tilt por celda: el ajuste fino, medido
 
 El plan era corregir al "invasor" (la celda cuyo best-server llega más
 lejos: s3c1, p90 = 356 m) con tilt individual 6°→12°. Resultado, a la
@@ -1349,6 +1349,8 @@ parámetros que siguen son azimuts, ICIC en las fronteras del best-server, o
 sitios.
 
 ### 6.5 El veredicto R1–R8
+
+**Tabla 6.1 — Veredicto R1–R8 sobre el mapa consolidado**
 
 | Req | Meta | Medido | Veredicto |
 |---|---|---|---|
