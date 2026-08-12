@@ -286,11 +286,15 @@ $$R_{\text{usuario}} = \frac{V_{\text{mes}} \cdot f_{BH}}{30 \cdot 3600}$$
 
 donde $V_{\text{mes}}$ es el volumen mensual por abonado (bits) y $f_{BH}$
 la fracción del tráfico diario que cae en la hora cargada. Para $f_{BH}$
-no hay valor normado — es una **hipótesis que el diseñador declara**. El
-razonamiento que la acota: si el día fuera uniforme, una hora llevaría
-$1/24 \approx 4\%$ del tráfico; en redes reales la hora cargada concentra
-el doble o más, por lo que la hipótesis usual de planificación es
-**8–12%**. (El marco formal para *medir* la hora cargada es la
+no hay valor normado — es una **hipótesis que el diseñador declara**,
+pero está bien acotada: si el día fuera uniforme, una hora llevaría
+$1/24 \approx 4\%$ del tráfico; y la medición real del
+[Ericsson Mobility Report](https://www.ericsson.com/en/reports-and-papers/mobility-report/articles/traffic-patterns-drive-network-evolution)
+(jun. 2023, Fig. 24, Europa Occidental) muestra la hora pico llevando
+**~7% del tráfico diario** en denso urbano (mediodía) y ~6% en rural
+(noche, empujada por FWA). La hipótesis usual de planificación,
+**8–12%**, queda deliberadamente por encima de lo medido: es colchón de
+crecimiento. (El marco formal para *medir* la hora cargada es la
 recomendación [ITU-T E.500](https://www.itu.int/rec/T-REC-E.500).)
 
 Ejemplo con números de Perú urbano: 10 GB/mes ≈ $2.7$ Gbit/día; con
