@@ -468,6 +468,18 @@ la arquitectura de **capas** que usa todo operador real:
   agrega **800–1000 MHz** — otras **8–10×** lo de mid-band, pero con
   alcance de cuadra; solo donde la densidad lo justifica.
 
+**Tabla 1.2 — Franjas de espectro y rangos de frecuencia 3GPP**
+
+| Franja | Rango | Ejemplos | En 3GPP |
+|---|---|---|---|
+| **Low-band** | < 1 GHz | 700 MHz (n28), 850, 900 | FR1 |
+| **Mid-band** | 1–7 GHz | 1.9 GHz, AWS, 2.6, **3.5 GHz (n78)** | FR1 |
+| **High-band** (mmWave) | 24–52 GHz | **26 GHz (n258)**, 28 | FR2 |
+
+**FR1** agrupa low + mid (hasta 7.125 GHz); **FR2** es el mundo
+milimétrico. La "C-band" de la prensa técnica es el nombre histórico
+satelital de 3.3–4.2 GHz — el pedazo de mid-band donde vive n78.
+
 Nuestro proyecto es deliberadamente **mono-capa** (solo n78): más simple para
 aprender, y realista para un despliegue 5G inicial. La comparación con una
 capa de 700 MHz queda como extensión (requiere escena de 3×3 km — una celda
@@ -509,7 +521,7 @@ Las numerologías de NR son una familia cerrada: $SCS = 15 \cdot 2^{\mu}$
 kHz. En FR1 las opciones son tres, y la pareja banda + ancho de canal
 decide sola:
 
-**Tabla 1.2 — Numerologías FR1 frente a un canal ancho de n78 (TS 38.101-1, Tabla 5.3.2-1)**
+**Tabla 1.3 — Numerologías FR1 frente a un canal ancho de n78 (TS 38.101-1, Tabla 5.3.2-1)**
 
 | SCS | Canal máximo del estándar | Veredicto para mid-band |
 |---|---|---|
@@ -564,14 +576,14 @@ obligatorio del cálculo.
     zona: patrones cruzados = interferencia DL→UL entre redes. Lo fija el
     regulador o el acuerdo inter-operador.
 
-## Fase 2 — Dimensionamiento por cobertura: del presupuesto de dB al número de sitios
+## Fase 2 — Dimensionamiento por cobertura
 
 La pregunta de esta fase: **¿cuántos sitios necesita R2** (RSRP ≥ −110 dBm en
 95% del área)**?** La herramienta es el *link budget*: una contabilidad en dB
 donde cada ganancia suma, cada pérdida resta, y lo que queda es cuánto camino
 puede recorrer la señal.
 
-### 2.1 El punto de partida no es la potencia del amplificador
+### 2.1 Potencia por elemento de recurso: EPRE
 
 Error clásico: arrancar el presupuesto con "la BS transmite 44 dBm". Esos
 44 dBm se reparten entre **todas** las subportadoras del canal. Con 100 MHz
@@ -581,52 +593,12 @@ subportadoras:
 
 $$\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE}$$
 
-??? note "¿De dónde salen los 273 PRB? — y por qué SCS 30 kHz"
+!!! note "¿De dónde salen los 273 PRB?"
 
-    El cálculo ingenuo da otra cosa: 1 PRB = 12 × 30 kHz = 360 kHz, y
-    100 MHz / 360 kHz ≈ 277.7 PRB. El dato que falta: **los 100 MHz son el
-    ancho del canal, no el ancho transmisible**. El estándar (3GPP TS
-    38.101-1) reserva una **banda de guarda** en cada borde:
-
-    $$\text{BW}_{tx} = 100 - 2 \times 0.845 = 98.31 \text{ MHz}
-    \quad\Rightarrow\quad \left\lfloor \frac{98.31}{0.36} \right\rfloor = 273 \text{ PRB}$$
-
-    (273 × 360 kHz = 98.28 MHz ocupados → guarda real de 860 kHz por
-    lado.) La guarda existe porque el espectro OFDM no termina en seco: los
-    lóbulos laterales decaen lento y el transmisor debe cumplir la máscara
-    de emisión en el borde del canal. Con 277 PRB quedarían ~140 kHz de
-    margen — ningún filtro real cae decenas de dB en eso. Mejora silenciosa
-    de NR: utilización del 98.3%, contra el 90% fijo de LTE (20 MHz → 100
-    PRB = 18 MHz útiles).
-
-    ¿Y el SCS de 30 kHz es elección libre? No — dado n78 + 100 MHz es el
-    forzado práctico de la familia de numerologías de NR (SCS = 15·2^µ kHz):
-
-    | SCS | Máx PRB en 100 MHz | Veredicto |
-    |---|---|---|
-    | 15 kHz (µ=0) | tope de 270 PRB = 48.6 MHz | **no llena el canal** |
-    | **30 kHz (µ=1)** | **273 PRB = 98.28 MHz** | el estándar de mid-band |
-    | 60 kHz (µ=2) | 135 PRB = 97.2 MHz | CP a la mitad (~1.2 µs), sin ganancia a cambio |
-
-    Con 15 kHz necesitarías dos portadoras agregadas; 60 kHz recorta el
-    prefijo cíclico sin dar nada útil en FR1. 30 kHz llena el canal con CP
-    de 2.3 µs — factor ~40 sobre los 60 ns de delay spread que medimos en
-    San Isidro. Por eso la §1.4 lo despacha: la numerología la fijan banda
-    y estándar, no el diseñador.
-
-    Y para fijar el vocabulario de franjas que usa toda la sesión (las
-    "capas" de la §1.2) junto al corte técnico del 3GPP:
-
-    | Franja | Rango | Ejemplos | En 3GPP |
-    |---|---|---|---|
-    | **Low-band** | < 1 GHz | 700 MHz (n28), 850, 900 | FR1 |
-    | **Mid-band** | 1–7 GHz | 1.9 GHz, AWS, 2.6, **3.5 GHz (n78)** | FR1 |
-    | **High-band** (mmWave) | 24–52 GHz | **26 GHz (n258)**, 28 | FR2 |
-
-    **FR1** agrupa low + mid (hasta 7.125 GHz); **FR2** es el mundo
-    milimétrico. "C-band" que verás en la prensa técnica es el nombre
-    histórico satelital de 3.3–4.2 GHz — el pedazo de mid-band donde vive
-    n78. Nuestro proyecto es mid-band puro: la capa de capacidad.
+    Del método de §1.4: guardas de la Tabla 5.3.3-1 del estándar →
+    $BW_{tx} = 98.31$ MHz → 273 bloques de 360 kHz (utilización 98.3%,
+    contra el ~90% fijo de LTE). Ahí están también la familia de
+    numerologías (Tabla 1.3) y por qué el SCS de 30 kHz viene forzado.
 
 Como el RSRP se mide **por resource element** (ver la
 [nota de referencia](rsrp-rsrq-sinr.md)), el link budget de cobertura de
@@ -634,9 +606,11 @@ control empieza en 8.8 dBm, no en 44. La red incluso difunde este número
 (`referenceSignalPower` en el SIB) para que el UE pueda despejar el path
 loss.
 
-### 2.2 El presupuesto término a término
+### 2.2 Presupuesto del enlace de bajada
 
 $$\text{RSRP}_{\text{borde}} = \underbrace{\text{EPRE}}_{8.8} + \underbrace{G_{tx}}_{+16} - \underbrace{\text{PL}}_{?} - \underbrace{M_{\text{shadow}}}_{9} \geq -110 \text{ dBm}$$
+
+**Tabla 2.1 — Términos del presupuesto de bajada y su origen**
 
 | Término | Valor | De dónde sale |
 |---|---|---|
@@ -699,6 +673,8 @@ más margen = menos radio: la certeza se paga en dB.
     1. Toma la σ del **escenario** (misma tabla del 38.901 que el path
        loss, 7.4.1-1) — o mídela con drive test:
 
+        **Tabla 2.2 — Desviación del shadowing por escenario (TR 38.901, Tabla 7.4.1-1, y tradición Okumura/COST-231)**
+
         | Escenario | σ_SF |
         |---|---|
         | UMa LOS | 4 dB |
@@ -711,6 +687,8 @@ más margen = menos radio: la certeza se paga en dB.
        de Jakes — el notebook la resuelve numéricamente en 6 líneas) y
        multiplica: $M = z_{\text{borde}} \cdot \sigma$. Para σ = 8,
        n ≈ 3.8, ya resuelto:
+
+        **Tabla 2.3 — Margen de shadowing según la meta de área (σ = 8 dB, n = 3.8, integral de Jakes)**
 
         | Meta de área | Borde equivalente | z | M |
         |---|---|---|---|
@@ -753,7 +731,7 @@ no. La fórmula da el *orden de magnitud*; el ray tracing sobre la escena
 real (Fase 6) da la verdad calle por calle. Ambos se necesitan: la fórmula
 para dimensionar sin escena, el trazador para validar con ella.
 
-### 2.4 El enlace de vuelta: uplink
+### 2.4 Presupuesto del enlace de subida
 
 El mismo ejercicio con el UE como transmisor: 23 dBm sobre sus PRBs
 asignados (no per-RE de 100 MHz — el UE concentra su potencia en pocos PRB,
@@ -821,6 +799,8 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
     UE de borde ya está a máxima potencia; la moneda del trade-off no es
     potencia, es **alcance**):
 
+    **Tabla 2.4 — El mismo requisito R4-UL con tres repartos BW/SNR (P_UE fija)**
+
     | Elección | BW necesario | Sensibilidad BS | MAPL_UL |
     |---|---|---|---|
     | SNR_min = +10 dB | 1.45 MHz | −97.4 dBm | 127.4 dB (**−4.6**) |
@@ -874,7 +854,7 @@ primero que cruza define el borde de la celda; el otro llega con holgura
 — aquí el DL muere primero (393 m) y al UL le sobran 6 dB que nadie
 exigió.
 
-### 2.5 RSS → RSRP: cerrar el círculo con Sionna
+### 2.5 De RSS a RSRP: verificación con Sionna
 
 Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
 verificar R2 hay que convertir: restar $10\log_{10}(N_{\text{RE}})$ del
