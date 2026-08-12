@@ -76,8 +76,10 @@ Un operador móvil te contrata para diseñar su red de acceso 5G en un
 polígono de **San Isidro, Lima** — 1.32 × 0.83 km del distrito financiero.
 Tienes licencia de 100 MHz en la banda n78 (3.5 GHz), azoteas disponibles
 y un presupuesto limitado de sitios — todo fijado en los **términos de
-referencia** del contrato. La empresa quiere promesas que pueda
-publicitar y cumplir.
+referencia** del contrato. La publicidad que la empresa quiere poder
+cumplir:
+
+> *"Videollamadas nítidas y tu oficina en la nube, en todo San Isidro."*
 
 Todo lo que sigue en esta sesión es resolver ese proyecto con método.
 
@@ -215,26 +217,34 @@ típicos de planificación:
 Dos lecturas de diseño:
 
 - **El throughput de borde (R4): elígelo como se hace en la práctica.**
+  El método es general — funciona con cualquier publicidad:
 
-    1. **Mira qué prometiste** (esta tabla): HD = 8 Mbps por usuario. Ese
-       es el piso — con menos, la promesa muere hasta en una celda vacía.
-    2. **Mira el número de la industria**: NGMN pide **"50 Mbps
-       everywhere"** — el mínimo experimentado en cualquier punto del
-       área que los operadores 5G usan como referencia (ITU-R M.2410
-       pide 100 en urbano denso, aspiracional). Está muy por encima del
-       piso a propósito: ese margen es el que cubre la celda compartida
-       en hora cargada.
-    3. **Adopta y declara**: "borde DL = 50 Mbps (NGMN)". Listo — la
-       Fase 6 lo cobra en el percentil 5 del mapa.
+    1. **Identifica los servicios que TU publicidad promete** y búscalos
+       en esta tabla.
+    2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
+       servicios; lo mismo con la **columna UL**. Con menos que el piso,
+       la promesa muere hasta en una celda vacía.
+    3. **Ancla publicada**: NGMN pide **"50 Mbps everywhere"** (mínimo
+       experimentado en cualquier punto del área); ITU-R M.2410 pide
+       **100 DL / 50 UL** en urbano denso (aspiracional). Están muy por
+       encima de los pisos típicos a propósito: ese margen cubre la
+       celda compartida en hora cargada.
+    4. **Adopta y declara** un valor ≥ piso citando el ancla — o
+       justifica por qué te apartas: un proyecto FWA (piso 50–100) puede
+       necesitar más que el ancla; uno austero puede quedarse cerca del
+       piso y prometer menos.
 
-    ¿Por qué no hay fórmula? Porque necesitarías saber cuántos sitios y
-    celdas tendrá la red — y eso es el **resultado** del diseño (Fases
-    2–4), no un dato de la Fase 0. Regla práctica: **la calidad por
-    usuario (R4) se adopta de un benchmark; la cantidad total (R5) se
-    calcula de los TdR (§0.4)**.
+    ¿Por qué no hay fórmula? Porque necesitarías cuántos sitios y celdas
+    tendrá la red — y eso es el **resultado** del diseño (Fases 2–4), no
+    un dato de la Fase 0. Regla práctica: **la calidad por usuario (R4)
+    se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
 
-    El UL, mismo juego con la **columna UL**: el servicio de subida más
-    exigente prometido (videollamada, 2–4 Mbps) con margen → 5 Mbps.
+    Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
+    en la nube"): servicios prometidos = videollamada HD (2–4 / 2–4) y
+    web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
+    (ancla NGMN, cubre el piso con margen amplio); UL = **5** (piso 4 +
+    margen — el ancla ITU de 50 UL sería sobredimensionar un proyecto de
+    6 sitios).
 
 - **La columna de latencia es la que el trazador no mide.** Bitrates y
   SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
