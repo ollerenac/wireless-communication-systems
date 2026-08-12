@@ -1112,7 +1112,7 @@ usará así.
     usuarios, incluidos los cercanos; el tilt redistribuye, la potencia
     amputa.
 
-## Fase 5 — Planificación detallada: los números que hacen funcionar la red
+## Fase 5 — Planificación detallada: PCI, RACH y tracking areas
 
 Las Fases 0–4 decidieron *dónde* y *cuánto*: 3 sitios, 9 celdas, azimuts y
 tilts. Pero una red con antenas perfectas y parámetros vacíos no da servicio:
@@ -1122,7 +1122,7 @@ fijar antes**. La Fase 5 es esa lista de números. La regla mnemotécnica:
 *por cada flecha de un diagrama de secuencia, hay una fila en la hoja de
 parámetros*.
 
-### 5.1 El arco del UE: del encendido a los datos
+### 5.1 Procedimientos del UE: del encendido a los datos
 
 Lo que pasa entre "enciendo el teléfono" y "veo video" son cuatro
 procedimientos encadenados. Los nombres de los mensajes son los reales del
@@ -1168,6 +1168,8 @@ sequenceDiagram
 
 Cada flecha consume un parámetro nuestro:
 
+**Tabla 5.1 — Parámetros de diseño que consume cada procedimiento del UE**
+
 | Flecha | Parámetro que consume | Quién lo fijó |
 |---|---|---|
 | PSS/SSS | **PCI** de la celda | Fase 5 (§5.2) |
@@ -1176,7 +1178,7 @@ Cada flecha consume un parámetro nuestro:
 | Registration Accept | **tracking areas** | Fase 5 (§5.4) |
 | (movilidad posterior) | **vecinas, A3, histéresis, TTT** | Fase 5 (§5.5) |
 
-### 5.2 PCI planning: la identidad se planifica, no se sortea
+### 5.2 Planificación de PCI
 
 El PCI (0–1007) es lo primero que el UE aprende de una celda, y se
 descompone en PCI = 3·N₁ + N₂: el **mod 3 viene de la PSS**. Tres reglas,
@@ -1207,11 +1209,11 @@ compacta de 9 celdas, la numeración consecutiva ya cumple la regla
 co-sitio, y el residuo lo imponen los **vecindarios densos** del mapa: en
 cuanto una celda tiene cuatro o más vecinas mutuamente en contacto (nada
 raro con fronteras ray-traced que serpentean entre edificios), tres grupos
-no alcanzan para separar a todas de todas. El PCI planning gana valor con
-la escala: cientos de celdas, vecindarios irregulares, y celdas nuevas que
-heredan un plan viejo.
+no alcanzan para separar a todas de todas. La planificación de PCI gana
+valor con la escala: cientos de celdas, vecindarios irregulares, y celdas
+nuevas que heredan un plan viejo.
 
-### 5.3 RACH: la zona de contención debe cubrir la celda
+### 5.3 Zona de contención del PRACH
 
 El preámbulo Msg1 es una secuencia Zadoff–Chu; celdas distintas usan
 raíces o desplazamientos cíclicos distintos. El desplazamiento mínimo
@@ -1225,7 +1227,7 @@ preámbulos por raíz → **una sola raíz por celda**. La lección invertida:
 en celdas urbanas chicas el RACH es barato; una celda rural de 15 km
 devora raíces (y por eso el plan de raíces se hace junto al plan de PCI).
 
-### 5.4 Tracking areas: cuánto sabe la red de dónde estás
+### 5.4 Dimensionamiento de las tracking areas
 
 Cuando el UE está en reposo (idle), la red no sabe en qué celda está —
 solo en qué **tracking area** (TA). El tamaño de la TA es un compromiso:
@@ -1236,13 +1238,13 @@ solo en qué **tracking area** (TA). El tamaño de la TA es un compromiso:
 - TA chica → paging barato, pero el UE gasta batería y señalización
   actualizando su posición a cada rato.
 
-Nuestra red es trivial — 9 celdas, 1.1 km² → **una sola TA** — pero la
+Nuestra red es trivial — 9 celdas, 1.1 km² → **una sola TA** — pero el
 criterio de diseño escala: un operador de Lima con 5 000 celdas y TAs de 50
 celdas paga 50 pagings por llamada entrante a cambio de TAUs solo al
 cruzar fronteras de TA (que se trazan donde la gente *no* cruza a diario:
 nunca partir una avenida llena de commuters por la mitad).
 
-### 5.5 Vecinas y A3: la movilidad ya la medimos
+### 5.5 Listas de vecinas y evento A3
 
 El handover lo dispara el **evento A3**: "la vecina supera a la serving
 por `offset` dB durante `TTT` ms (*time-to-trigger*, el temporizador que
@@ -1263,7 +1265,7 @@ un PCI confundido.
 
     **P1.** Un drive test reporta que en una esquina el UE ve dos celdas
     distintas con el mismo PCI. ¿Cuál de las tres reglas de §5.2 se violó,
-    y qué procedimiento del arco del UE falla primero?
+    y qué procedimiento de §5.1 falla primero?
 
     **P2.** ¿Por qué la zona de contención RACH se dimensiona con el radio
     de celda de la Fase 2 y no con el radio "real" que midió el ray tracer?
