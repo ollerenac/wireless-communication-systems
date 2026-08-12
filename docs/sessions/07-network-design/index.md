@@ -224,11 +224,16 @@ Dos lecturas de diseño:
     2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
        servicios; lo mismo con la **columna UL**. Con menos que el piso,
        la promesa muere hasta en una celda vacía.
-    3. **Ancla publicada**: NGMN pide **"50 Mbps everywhere"** (mínimo
-       experimentado en cualquier punto del área); ITU-R M.2410 pide
-       **100 DL / 50 UL** en urbano denso (aspiracional). Están muy por
-       encima de los pisos típicos a propósito: ese margen cubre la
-       celda compartida en hora cargada.
+    3. **Ancla publicada**: el
+       [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
+       (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
+       exigible *"en al menos el 95% de las ubicaciones, incluido el
+       borde de celda"* — la misma convención de percentil que usan
+       nuestros requisitos; el reporte
+       [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
+       (§4.3) pide **100 DL / 50 UL** en urbano denso (aspiracional).
+       Están muy por encima de los pisos típicos a propósito: ese margen
+       cubre la celda compartida en hora cargada.
     4. **Adopta y declara** un valor ≥ piso citando el ancla — o
        justifica por qué te apartas: un proyecto FWA (piso 50–100) puede
        necesitar más que el ancla; uno austero puede quedarse cerca del
