@@ -228,7 +228,7 @@ todas partes".
 El papel de esta tabla es **verificar que el target cubre lo ofrecido**:
 el mayor DL entre los servicios de la publicidad queda muy por debajo de
 50 ✓. Si la oferta fuera pesada — FWA pide 50–100 Mbps DL y 10–20 UL —
-la referencia NGMN quedaría corta y el piso de la tabla mandaría el
+la referencia NGMN quedaría corta y el mínimo de la tabla mandaría el
 target en **ambas** columnas (p. ej. 100 DL / 20–25 UL). (El
 aspiracional de largo plazo es
 [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
@@ -710,7 +710,7 @@ que la BS necesita recibir para demodular:
 
 $$S_{BS} = \underbrace{-174}_{kT\ [\text{dBm/Hz}]} + 10\log_{10}(BW) + NF + SNR_{min}$$
 
-Término a término: −174 dBm/Hz es el piso térmico universal ($kT$ a 290 K
+Término a término: −174 dBm/Hz es el mínimo técnico térmico universal ($kT$ a 290 K
 — nadie escucha por debajo de eso); $10\log_{10}(BW)$ es cuánto ruido
 entra por la ventana que se escucha; $NF$ la suciedad que el propio
 receptor agrega; $SNR_{min}$ lo que el demodulador exige sobre el ruido.
@@ -722,7 +722,7 @@ $$\text{MAPL}_{UL} = \underbrace{23}_{P_{UE}} + \underbrace{16}_{G_{BS}} - (-102
 
 Aquí está la física de la "gran defensa": la sensibilidad mejora con
 $10\log_{10}$ del ancho escuchado. Transmitir en 5 MHz en vez de 100 baja
-el piso de ruido de la BS en $10\log_{10}(20) = 13$ dB — la concentración
+el mínimo técnico de ruido de la BS en $10\log_{10}(20) = 13$ dB — la concentración
 de PRBs no es un truco de potencia, es un truco de **ruido**. Resultado
 con nuestros números: 132 dB de UL contra 126 del DL de control — el
 enlace limitante aquí es el DL, al revés del folclor "el uplink siempre
