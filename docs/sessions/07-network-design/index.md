@@ -419,7 +419,24 @@ solo **×1.4** — el exponente alto "amortigua" la ventaja de bajar de banda
 octavas, da ×2.3 y no ×5).
 
 Con el exponente de propagación urbano ($n \approx 3.8$), el delta de
-pérdida se convierte en factor de área — y el factor de área, en sitios:
+pérdida se convierte en radio de celda — y el radio, en sitios. Las tres
+fórmulas de la cadena:
+
+$$\Delta = 20\log_{10}\!\left(\frac{f}{f_{ref}}\right) \qquad\quad
+r_{rel} = 10^{-\Delta/(10\,n)} \qquad\quad
+\text{sitios}_{rel} = \frac{1}{r_{rel}^{2}}$$
+
+donde $f$ es la frecuencia de la banda candidata y $f_{ref}$ la de
+referencia. La primera es el término de frecuencia de la pérdida de
+propagación: a distancia igual, subir de banda cuesta $\Delta$ dB. La
+segunda sale de mantener fijo el presupuesto del enlace (MAPL): los dB
+que la banda regala (o cobra) los absorbe el término de distancia
+$10\,n\log_{10}(r)$, así el radio crece o se encoge. La tercera es
+geometría: para tapar la misma área con celdas de radio $r_{rel}$
+relativo hacen falta $1/r_{rel}^2$ sitios — el área de cada celda escala
+con el cuadrado del radio.
+
+**Tabla 1.1 — Bandas candidatas frente a n78: pérdida, radio y sitios relativos ($n = 3.8$)**
 
 | Banda | $\Delta$ pérdida vs n78 | Radio relativo | Sitios para la misma área |
 |---|---|---|---|
@@ -467,6 +484,18 @@ de cada 5 slots, 3 son de bajada, 1 "especial" (mayormente bajada + guarda) y
 - UL dispone de ≈ 20% → **≈ 20 MHz efectivos** — y el UE ya era el extremo
   débil (23 dBm). El uplink pierde dos veces: en potencia y en tiempo.
 
+¿De dónde salen el 71% y el 20%? De **contar símbolos**. Cada slot tiene
+14 símbolos OFDM. En DDDSU hay 3 slots D (42 símbolos de bajada), 1 slot
+U (14 de subida) y 1 slot S cuya partición interna es configurable — este
+curso la declara **8 símbolos DL + 6 de guarda** (la guarda le da tiempo
+al UE para conmutar de recibir a transmitir):
+
+$$f_{DL} = \frac{3 \times 14 + 8}{5 \times 14} = \frac{50}{70} \approx 71\%
+\qquad\quad
+f_{UL} = \frac{14}{70} = 20\%$$
+
+Con otra partición de S salen otras fracciones — por eso se declara.
+
 El patrón TDD además debe estar **sincronizado entre operadores vecinos** de
 la banda (lo coordina el regulador): si mi celda transmite DL mientras la
 tuya escucha UL, mi potencia entierra a tus usuarios.
@@ -474,13 +503,41 @@ tuya escucha UL, mi potencia entierra a tus usuarios.
 En FDD (las bandas bajas clásicas) esto no existe: DL y UL tienen cada uno su
 frecuencia dedicada, tiempo completo.
 
-### 1.4 Numerología: el detalle que conecta con OFDM
+### 1.4 Numerología y bloques de recursos del canal
 
-En n78 se usa subportadora de 30 kHz (Sesión 03: numerología µ=1): slots de
-0.5 ms, CP de 2.3 µs — y ya verificamos sobre Lima que el delay spread urbano
-(mediana 60 ns) cabe holgado en ese CP (`test_scene.ipynb`, Parte 8). La
-numerología queda decidida por la banda y el estándar; no es un parámetro que
-el diseñador pueda ajustar.
+Las numerologías de NR son una familia cerrada: $SCS = 15 \cdot 2^{\mu}$
+kHz. En FR1 las opciones son tres, y la pareja banda + ancho de canal
+decide sola:
+
+**Tabla 1.2 — Numerologías FR1 frente a un canal ancho de n78 (TS 38.101-1, Tabla 5.3.2-1)**
+
+| SCS | Canal máximo del estándar | Veredicto para mid-band |
+|---|---|---|
+| 15 kHz (µ=0) | 50 MHz (270 PRB) | un canal de 80–100 MHz **ni existe** — exigiría dos portadoras agregadas |
+| **30 kHz (µ=1)** | **100 MHz (273 PRB)** | el estándar de mid-band: llena el canal con CP de 2.3 µs |
+| 60 kHz (µ=2) | 100 MHz (135 PRB) | CP a la mitad (~1.2 µs) sin ganancia a cambio en FR1 |
+
+En n78 queda 30 kHz (Sesión 03: µ=1): slots de 0.5 ms, CP de 2.3 µs — y ya
+verificamos sobre Lima que el delay spread urbano (mediana 60 ns) cabe
+holgado en ese CP (`test_scene.ipynb`, Parte 8). La numerología la fijan
+banda y estándar; no es un parámetro que el diseñador pueda ajustar.
+
+**De los MHz del canal a los PRB.** El ancho licenciado no se transmite
+completo: el estándar reserva una **banda de guarda** a cada borde del
+canal (para cumplir la máscara de emisión — los lóbulos OFDM no caen en
+seco), tabulada en
+[TS 38.101-1](https://www.etsi.org/deliver/etsi_ts/138100_138199/13810101/),
+Tabla 5.3.3-1, según ancho y SCS. El método, válido para cualquier canal:
+
+$$BW_{tx} = BW_{canal} - 2 \cdot g
+\qquad\quad
+N_{PRB} = \left\lfloor \frac{BW_{tx}}{12 \cdot SCS} \right\rfloor$$
+
+donde $g$ es la guarda de la tabla y $12 \cdot SCS$ el ancho de un PRB
+(con 30 kHz: 360 kHz). Para nuestro canal de 100 MHz, $g = 0.845$ MHz →
+$BW_{tx} = 98.31$ MHz → **273 PRB** (utilización 98.3%). El resultado
+coincide con la Tabla 5.3.2-1 del estándar — que es el contraste
+obligatorio del cálculo.
 
 ### Decisión de la Fase 1 (lo que hereda el resto del diseño)
 
