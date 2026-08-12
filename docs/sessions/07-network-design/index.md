@@ -1217,7 +1217,8 @@ nuevas que heredan un plan viejo.
 
 El preámbulo Msg1 es una secuencia Zadoff–Chu; celdas distintas usan
 raíces o desplazamientos cíclicos distintos. El desplazamiento mínimo
-N_CS debe absorber el retardo de ida y vuelta del UE más lejano — si la
+N_CS debe absorber el retardo de ida y vuelta del UE más lejano (más el
+delay spread del canal, que también corre la llegada) — si la
 zona de contención es menor que el radio de celda, un UE legítimo del borde
 aparece como *otro preámbulo*: colisión fantasma.
 
