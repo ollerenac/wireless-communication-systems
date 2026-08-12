@@ -115,10 +115,10 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-12 (resumed via gsd-resume-work; HANDOFF.json consumed)
-Stopped at: Examen de diseño S07 — Fase 5 agregada y auditada (commit 9e2bfee): celdas PCI/RACH/TA analíticas sobre el mapa rm de la F4, verificador (PCI únicos, regla co-sitio mod-3 dura, cadena N_CS, 1 TA), respuestas modelo con números ejecutados (21 PCIs, conflicto 22.9/163.7 km, N_CS=13 -> 1 raíz). Lección F5 saneada (títulos 5.1-5.5, Tabla 5.1, typo). 6 caminos de alumno probados con mocks.
-Pendiente: DECISION BLOQUEANTE push (~50 commits; examen-solucion quedaría público), Fase 6 del examen (última), cierre de lección, 4 figuras SVG, guion desincronizado, encargos B-E, re-export cercado-lima-01, menores F0.
-Resume file: none (HANDOFF.json y .continue-here.md consumidos en el resume)
+Last session: 2026-08-12
+Stopped at: S07 COMPLETO Y PUBLICADO — examen Fases 0-6 (alumno en GitHub; examen-solucion.ipynb purgado del historial sin push, gitignored, SOLO LOCAL), lección F0-F6 saneada, design.ipynb (San Isidro) alineado a la metodología del examen (techos reales altura_en, tilt por sitio 0.7·radio, proxies R2/R3) y re-ejecutado; lección barrida con los números re-medidos (F4 41%, F6 74.1/68.5, n 1.8, sigma 15.5, SE 4.9, invasor s2c2). Push fast-forward c4dc327..527591a (decisión de push RESUELTA).
+Pendiente: cierre de lección (objetivos/resumen/ejercicios), 4 figuras SVG (placeholders 4.1/4.3), guion desincronizado (artifact 98209b61), encargos B-E (cercado-lima-01 requiere re-export Blender, lado usuario), menores F0.
+Resume file: none
 
 ### Previous session continuity (2026-08-01)
 
