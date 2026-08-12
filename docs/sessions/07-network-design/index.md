@@ -214,44 +214,49 @@ típicos de planificación:
 | Gaming en línea | 1–5 Mbps | 0.5–1 Mbps | < 50 ms | latencia, no bitrate |
 | FWA (internet fijo por 5G) | 50–100 Mbps | 10–20 Mbps | tolerante | bitrate sostenido |
 
-Dos lecturas de diseño:
+#### Cómo fijar R4 (throughput de borde) con esta tabla
 
-- **El throughput de borde (R4): elígelo como se hace en la práctica.**
-  El método es general — funciona con cualquier publicidad:
+**La tabla no te da el R4 de bajada: te dice si la referencia de la
+industria alcanza para lo que ofreciste — y cuando no alcanza, el piso
+manda.** El procedimiento, general para cualquier publicidad:
 
-    1. **Identifica los servicios que TU publicidad ofrece** y búscalos
-       en esta tabla.
-    2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
-       servicios; lo mismo con la **columna UL**. Con menos que el piso,
-       la oferta muere hasta en una celda vacía.
-    3. **Referencia de la industria**: el
-       [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
-       (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
-       exigible *"en al menos el 95% de las ubicaciones, incluido el
-       borde de celda"* — la misma convención de percentil que usan
-       nuestros requisitos; el reporte
-       [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
-       (§4.3) pide **100 DL / 50 UL** en urbano denso (aspiracional).
-       Están muy por encima de los pisos típicos a propósito: ese margen
-       cubre la celda compartida en hora cargada.
-    4. **Adopta y declara** un valor ≥ piso citando la referencia — o
-       justifica por qué te apartas: un proyecto FWA (piso 50–100) puede
-       necesitar más que la referencia; uno austero puede quedarse cerca del
-       piso y ofrecer menos.
+1. **Identifica los servicios que TU publicidad ofrece** y búscalos en
+   la Tabla 0.3.
+2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
+   servicios; lo mismo con la **columna UL**. Con menos que el piso, la
+   oferta muere hasta en una celda vacía.
+3. **Referencia de la industria**: el
+   [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
+   (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
+   exigible *"en al menos el 95% de las ubicaciones, incluido el borde
+   de celda"* — la misma convención de percentil que usan nuestros
+   requisitos; el reporte
+   [ITU-R M.2410](https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf)
+   (§4.3) pide **100 DL / 50 UL** en urbano denso (aspiracional).
+4. **Adopta y declara** el DL: la referencia si cubre tu piso (oferta
+   liviana — video, oficina), o el piso si lo supera (oferta pesada —
+   FWA exige 50–100 y la referencia NGMN se queda corta: ahí el número
+   sale de la tabla).
 
-    ¿Por qué no hay fórmula? Porque necesitarías cuántos sitios y celdas
-    tendrá la red — y eso es el **resultado** del diseño (Fases 2–4), no
-    un dato de la Fase 0. Regla práctica: **la calidad por usuario (R4)
-    se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
+**El UL es distinto**: no existe una referencia publicada de "UL en
+todas partes" — se fija directo de la **columna UL** (el mayor entre
+los servicios ofrecidos) **más un margen declarado**.
 
-    Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
-    en la nube"): servicios ofrecidos = videollamada HD (2–4 / 2–4) y
-    web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
-    (referencia NGMN, cubre el piso con margen amplio); UL = **5** (piso 4 +
-    margen — la referencia ITU de 50 UL sería sobredimensionar un proyecto de
-    6 sitios).
+¿Por qué no hay fórmula para R4? Porque necesitarías cuántos sitios y
+celdas tendrá la red — y eso es el **resultado** del diseño (Fases
+2–4), no un dato de la Fase 0. Regla práctica: **la calidad por usuario
+(R4) se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
 
-- **La columna de latencia es la que el trazador no mide.** Bitrates y
+Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
+en la nube"): servicios ofrecidos = videollamada HD (2–4 / 2–4) y
+web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
+(referencia NGMN, cubre el piso con margen amplio); UL = **5** (piso 4
++ margen — la referencia ITU de 50 UL sería sobredimensionar un
+proyecto de 6 sitios).
+
+#### La latencia no la mide el trazador
+
+Bitrates y
   SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
   se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
   eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
