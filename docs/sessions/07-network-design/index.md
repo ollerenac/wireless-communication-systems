@@ -192,12 +192,12 @@ breves — mientras que quedarse sin red (§0.1) no tiene disimulo. Los
 valores exactos los negocia cada contrato (90–95% es el rango urbano
 usual), pero la práctica consistente de la industria mantiene el orden:
 la probabilidad de control no baja de la de datos. La traducción exacta
-promesa → (umbral, probabilidad) es una **decisión del diseñador** — lo
+oferta → (umbral, probabilidad) es una **decisión del diseñador** — lo
 defendible no es el número, es el razonamiento.
 
 ### 0.3 Requisitos de bitrate y latencia por servicio
 
-Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
+La oferta comercial habla de servicios ("video sin cortes", "llamadas
 nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
 típicos de planificación:
 
@@ -219,11 +219,11 @@ Dos lecturas de diseño:
 - **El throughput de borde (R4): elígelo como se hace en la práctica.**
   El método es general — funciona con cualquier publicidad:
 
-    1. **Identifica los servicios que TU publicidad promete** y búscalos
+    1. **Identifica los servicios que TU publicidad ofrece** y búscalos
        en esta tabla.
     2. **Piso técnico**: el mayor valor de la **columna DL** entre esos
        servicios; lo mismo con la **columna UL**. Con menos que el piso,
-       la promesa muere hasta en una celda vacía.
+       la oferta muere hasta en una celda vacía.
     3. **Referencia de la industria**: el
        [NGMN 5G White Paper](https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf)
        (§4.1.2) pide **"al menos 50 Mbps disponibles en todas partes"**,
@@ -237,7 +237,7 @@ Dos lecturas de diseño:
     4. **Adopta y declara** un valor ≥ piso citando la referencia — o
        justifica por qué te apartas: un proyecto FWA (piso 50–100) puede
        necesitar más que la referencia; uno austero puede quedarse cerca del
-       piso y prometer menos.
+       piso y ofrecer menos.
 
     ¿Por qué no hay fórmula? Porque necesitarías cuántos sitios y celdas
     tendrá la red — y eso es el **resultado** del diseño (Fases 2–4), no
@@ -245,7 +245,7 @@ Dos lecturas de diseño:
     se adopta; la cantidad total (R5) se calcula de los TdR (§0.4)**.
 
     Con la publicidad de San Isidro ("videollamadas nítidas y tu oficina
-    en la nube"): servicios prometidos = videollamada HD (2–4 / 2–4) y
+    en la nube"): servicios ofrecidos = videollamada HD (2–4 / 2–4) y
     web/nube (1–5 / <1) → piso DL = 5, piso UL = 4. Adopción: DL = **50**
     (referencia NGMN, cubre el piso con margen amplio); UL = **5** (piso 4 +
     margen — la referencia ITU de 50 UL sería sobredimensionar un proyecto de
@@ -619,7 +619,7 @@ más margen = menos radio: la certeza se paga en dB.
 
     El error a evitar: entrar a la tabla de z directamente con la meta de
     área ($z_{0.95} = 1.645 \to 13.2$ dB) — ese margen responde "95% *del
-    borde*", una promesa más cara que la que firma el contrato.
+    borde*", una oferta más cara que la que firma el contrato.
 
     **El precio sube empinado.** 99% de área ya cuesta ~14.5 dB (y 18.6 si
     alguien lo exige en el propio borde) — la razón por la que ningún
@@ -689,7 +689,7 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
 ??? note "¿Por qué justo 5 MHz asignados al UE? (y por qué no darle más)"
 
     El 5 MHz no es un valor arbitrario: **sale del requisito R4-UL**. La
-    promesa de borde es 5 Mbps de subida, y a $SNR_{min} = 0$ dB la
+    oferta de borde es 5 Mbps de subida, y a $SNR_{min} = 0$ dB la
     eficiencia espectral es $SE = \log_2(1+1) \approx 1$ bit/s/Hz:
 
     $$BW_{UL} = \frac{R_{\text{borde}}}{SE(SNR_{min})} = \frac{5 \text{ Mbps}}{1 \text{ bit/s/Hz}} = 5 \text{ MHz} \approx 14 \text{ PRB}$$
@@ -702,7 +702,7 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
     tienes. Es un óptimo con joroba:
 
     - **Menos de 5 MHz** → SNR sobrado, pero el techo $BW \times SE$ no
-      llega a los 5 Mbps prometidos.
+      llega a los 5 Mbps ofrecidos.
     - **Más de 5 MHz** → el SNR de borde cae bajo 0 dB, la SE se desploma,
       y pierdes por el otro lado.
 
@@ -729,7 +729,7 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
     La explicación en versión subibaja: en el presupuesto **restan dos
     términos atados** — el ruido que entra por la ventana
     ($10\log_{10} BW$) y lo que exiges sobre el ruido ($SNR_{min}$); la
-    promesa de 5 Mbps hace que bajar uno suba el otro. Por **debajo** de
+    oferta de 5 Mbps hace que bajar uno suba el otro. Por **debajo** de
     0 dB, cada dB de SNR que perdonas se devuelve casi exacto en ruido
     extra (el BW crece rápido): empate — por eso −10 dB solo gana 1.4 dB,
     y a cambio secuestra 36 MHz de PRBs para *un* usuario y exige MCS que
@@ -747,9 +747,9 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
     **¿Mínimo, promedio o peor caso?** Ninguna de las dos primeras: el
     mínimo asignable es 1 PRB (360 kHz — y con él el enlace cierra aún más
     lejos, pero no salen 5 Mbps), y no hay promedio de nada. Es el **peor
-    caso del servicio prometido**: peor ubicación (el borde, a MAPL) × el
+    caso del servicio ofrecido**: peor ubicación (el borde, a MAPL) × el
     contrato (R4-UL). El presupuesto responde "¿hasta dónde cumplo la
-    promesa completa?", no "¿hasta dónde hay señal?".
+    oferta completa?", no "¿hasta dónde hay señal?".
 
     ¿Y el canal de control, no habría que garantizarlo con el peor caso?
     Ya está garantizado dos veces: el control de **subida** (PUCCH) ocupa
@@ -760,7 +760,7 @@ más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
     $\text{MAPL}_{ctrl,UL} > \text{MAPL}_{datos,UL} (132) >
     \text{MAPL}_{ctrl,DL} (126)$. La cobertura es una cebolla: el anillo
     exterior donde apenas "hay red" (1 PRB, kbps), y anillos interiores
-    donde cada servicio prometido se cumple — el radio de diseño es el del
+    donde cada servicio ofrecido se cumple — el radio de diseño es el del
     anillo del contrato.
 
 La imagen que resume los dos enlaces y sus umbrales:
@@ -813,7 +813,7 @@ $$N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})$$
 
 ### 3.1 La capacidad de una celda no es su pico
 
-La publicidad promete "hasta 1 Gbps"; la celda real sirve usuarios repartidos
+La publicidad ofrece "hasta 1 Gbps"; la celda real sirve usuarios repartidos
 por toda su área compartiendo los mismos PRBs. Su capacidad es un **promedio
 sobre la distribución espacial de SINR** — y qué promedio usar depende del
 scheduler: reparto equitativo de *tiempo* rinde la media aritmética de las
@@ -1197,7 +1197,7 @@ un PCI confundido.
     también estresa el RACH, otra razón para controlarlo con tilt por
     celda.
 
-## Fase 6 — Validación y optimización: cobrar las promesas
+## Fase 6 — Validación y optimización: cobrar lo ofrecido
 
 Cada fase dejó hipótesis declaradas esperando esta hora: la SE de 2.0, la
 σ de 8, el "3 sitios alcanzan" de la fórmula, el "tilt como bisturí". La
@@ -1218,7 +1218,7 @@ falsas.
 
 ### 6.2 R2 bajo el trazador: la fórmula era optimista
 
-El cálculo prometido en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
+El cálculo anunciado en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
 array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
 Resultado sobre el consolidado: **RSRP ≥ −110 dBm en ~74% del área — R2
 reprueba** (meta: 95%). La mediana es cómoda (−78 dBm); la cola no: p5 ≈
