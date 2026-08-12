@@ -135,6 +135,15 @@ sobre la sensibilidad del receptor, como margen. Por eso R2 se llama
 *cobertura de control*: garantiza que la red **existe** para el UE, no que
 sea rápida. La rapidez la gobiernan SINR y throughput (R3, R4).
 
+¿Y con qué **probabilidad** se exige ese umbral? Al 100% del área, nunca:
+la Sesión 01 mostró que la señal urbana es una variable aleatoria — el
+shadowing log-normal hace que dos esquinas a la misma distancia de la BS
+difieran 10–20 dB — y cada punto porcentual final cuesta más que todos los
+anteriores. Por eso la industria diseña a probabilidad, y para el control
+la exige **alta — típicamente 95% del área** — porque quedarse sin red es
+la falla más grave que existe para el usuario. El precio se paga en el
+link budget como **margen de shadowing** (Fase 2).
+
 !!! info "Nota de profundización"
 
     La mecánica completa de las tres métricas — dónde viven en la grilla
@@ -143,39 +152,53 @@ sea rápida. La rapidez la gobiernan SINR y throughput (R3, R4).
     [RSRP, RSRQ y SINR — nota de referencia](rsrp-rsrq-sinr.md). Aquí basta
     el nivel conceptual; la Fase 2 recurre a esa nota para calcular.
 
-### 0.2 Por qué las metas son probabilísticas
+### 0.2 Cuánto SINR necesitan los datos
 
-La Sesión 01 mostró que la señal urbana es una variable aleatoria: el
-shadowing log-normal hace que dos esquinas a la misma distancia de la BS
-difieran 10–20 dB. Garantizar cobertura en el 100% del área exigiría
-potencia/sitios infinitos — cada punto porcentual final cuesta más que todos
-los anteriores. Por eso la industria diseña a probabilidad: **95% del área**
-(o del borde de celda) con la métrica sobre el umbral, y un **margen de
-shadowing** en el link budget que compra esa probabilidad.
+La Tabla 0.1 respondió "¿hay red?"; falta "¿la señal sirve?". El puente
+entre SINR y bits es la **eficiencia espectral** — cuántos bits por segundo
+transporta cada hertz de espectro — cuyo techo da Shannon:
 
-### 0.3 De GB por mes a Mbps de hora cargada
+$$SE = \log_2(1 + \text{SINR}_{\text{lineal}}) \quad \text{[bit/s/Hz]}$$
 
-La capacidad no se dimensiona para el promedio del día sino para la **hora
-cargada** (*busy hour*). La conversión estándar:
+El punto de referencia que hay que memorizar: **SINR = 0 dB (señal igual a
+interferencia más ruido) da SE ≈ 1 bit/s/Hz**. Con una tajada modesta del
+canal — digamos 10 MHz de los 80 — eso ya son ~10 Mbps: suficiente para un
+stream HD. Por debajo de 0 dB la eficiencia colapsa exponencialmente y
+aparecen los "cortes". La clasificación de planificación:
 
-$$R_{\text{usuario}} = \frac{V_{\text{mes}} \cdot f_{BH}}{30 \cdot 3600}$$
+**Tabla 0.2 — Rangos de SINR y calidad de datos esperada (valores de planificación)**
 
-donde $V_{\text{mes}}$ es el volumen mensual por abonado (bits) y $f_{BH}$
-la fracción del tráfico diario que cae en la hora cargada (típico 8–12%).
+| SINR | Calidad | Qué esperas en ese punto |
+|---|---|---|
+| ≥ 20 dB | Excelente | modulaciones altas (256-QAM), SE ≈ 6–8 bit/s/Hz, throughput pico |
+| 13 a 20 dB | Buena | throughput alto sostenido, SE ≈ 4–6 |
+| 0 a 13 dB | Regular | el servicio funciona, SE ≈ 1–4 |
+| −5 a 0 dB | Borde de datos | los streams empiezan a cortarse, SE < 1 |
+| < −5 dB | Inutilizable para datos | el control aún engancha (R2), los datos no fluyen |
 
-Ejemplo con números de Perú urbano: 10 GB/mes ≈ $2.7$ Gbit/día; con
-$f_{BH} = 10\%$ → **~75 kbps sostenidos por abonado**. Parece poco — esa es
-la magia de la multiplexión estadística: miles de usuarios que navegan a
-ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
-individuales.
+Por eso el umbral convencional de "datos utilizables" en los requisitos es
+**SINR ≥ 0 dB**: es la frontera donde la eficiencia espectral todavía
+sostiene un servicio real. La cadena completa SINR → SE → Mbps por celda
+se cobra en la Fase 3; la mecánica fina está en
+[De SINR a capacidad — nota de referencia](de-sinr-a-capacidad.md).
 
-### 0.4 De promesas a números: qué exige cada servicio
+La probabilidad que acompaña a este umbral es **menor que la del control —
+típicamente 90% del área contra 95%**. La razón: datos degradados son una
+falla *elástica* — el buffer del video y el scheduler disimulan huecos
+breves — mientras que quedarse sin red (§0.1) no tiene disimulo. Los
+valores exactos los negocia cada contrato (90–95% es el rango urbano
+usual), pero la práctica consistente de la industria mantiene el orden:
+la probabilidad de control no baja de la de datos. La traducción exacta
+promesa → (umbral, probabilidad) es una **decisión del diseñador** — lo
+defendible no es el número, es el razonamiento.
+
+### 0.3 De promesas a números: qué exige cada servicio
 
 Las promesas comerciales hablan de servicios ("video sin cortes", "llamadas
 nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
 típicos de planificación:
 
-**Tabla 0.2 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
+**Tabla 0.3 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)**
 
 | Servicio / aplicación | DL por usuario | UL por usuario | Latencia | Lo que manda |
 |---|---|---|---|---|
@@ -201,9 +224,25 @@ Dos lecturas de diseño:
   eso R6 existe como requisito pero no aparece en el `REQ` del notebook —
   no hay mapa que lo verifique.
 
+### 0.4 De GB por mes a Mbps de hora cargada
+
+La capacidad no se dimensiona para el promedio del día sino para la **hora
+cargada** (*busy hour*). La conversión estándar:
+
+$$R_{\text{usuario}} = \frac{V_{\text{mes}} \cdot f_{BH}}{30 \cdot 3600}$$
+
+donde $V_{\text{mes}}$ es el volumen mensual por abonado (bits) y $f_{BH}$
+la fracción del tráfico diario que cae en la hora cargada (típico 8–12%).
+
+Ejemplo con números de Perú urbano: 10 GB/mes ≈ $2.7$ Gbit/día; con
+$f_{BH} = 10\%$ → **~75 kbps sostenidos por abonado**. Parece poco — esa es
+la magia de la multiplexión estadística: miles de usuarios que navegan a
+ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
+individuales.
+
 ### 0.5 Requisitos del encargo
 
-**Tabla 0.3 — Requisitos del encargo (R1–R8): meta y método de verificación**
+**Tabla 0.4 — Requisitos del encargo (R1–R8): meta y método de verificación**
 
 | # | Requisito | Meta | Se verifica con |
 |---|---|---|---|
@@ -1200,7 +1239,7 @@ plan nominal nunca es el plan final. Las salidas, en orden de costo:
    la curva de densificación del esbozo (3→6 sitios: 71→92% a calidad
    exploratoria) sugiere que con 4–5 se alcanza R3.
 4. **Renegociar**: si el cliente acepta 90% de R2 en vez de 95, el diseño
-   actual casi cierra — leer §0.2: el último 5% es el caro.
+   actual casi cierra — leer §0.1: el último 5% es el caro.
 
 El cierre conceptual de la sesión: **predicción → medición → ajuste →
 repetir**. En operación continua ese lazo tiene nombre propio — *SON,
