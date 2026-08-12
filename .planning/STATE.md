@@ -115,10 +115,10 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-12 (pausa via gsd-pause-work, contexto ~68%)
-Stopped at: Examen de diseño S07 — Fases 0-4 completas y auditadas (examen-alumno + examen-solucion sobre jesus-maria-01, dinamica 4 bloques, verificadores, respuestas modelo). Leccion F0-F4 saneada en paralelo (titulos sobrios, Tablas 0.1-4.1, formulas explicitas, fuentes verificadas: NGMN/ITU-R/Ericsson/Ley 31207/MTC). Plan F4 final: 7 sitios hexagonales sobre techos reales (altura_en), proxies 73.0/75.7. Mapa jesus-maria-01 publicado; drafts de escenas borrados.
-Pendiente: DECISION BLOQUEANTE push (~50 commits; examen-solucion quedaria publico), Fases 5-6 del examen, cierre de leccion, 4 figuras SVG, guion desincronizado, encargos B-E, re-export cercado-lima-01.
-Resume file: `.planning/HANDOFF.json` + `.planning/.continue-here.md` (protocolo por fase consolidado ahi)
+Last session: 2026-08-12 (resumed via gsd-resume-work; HANDOFF.json consumed)
+Stopped at: Examen de diseño S07 — Fase 5 agregada y auditada (commit 9e2bfee): celdas PCI/RACH/TA analíticas sobre el mapa rm de la F4, verificador (PCI únicos, regla co-sitio mod-3 dura, cadena N_CS, 1 TA), respuestas modelo con números ejecutados (21 PCIs, conflicto 22.9/163.7 km, N_CS=13 -> 1 raíz). Lección F5 saneada (títulos 5.1-5.5, Tabla 5.1, typo). 6 caminos de alumno probados con mocks.
+Pendiente: DECISION BLOQUEANTE push (~50 commits; examen-solucion quedaría público), Fase 6 del examen (última), cierre de lección, 4 figuras SVG, guion desincronizado, encargos B-E, re-export cercado-lima-01, menores F0.
+Resume file: none (HANDOFF.json y .continue-here.md consumidos en el resume)
 
 ### Previous session continuity (2026-08-01)
 
