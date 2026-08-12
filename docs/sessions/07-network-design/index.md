@@ -285,10 +285,16 @@ cargada** (*busy hour*). La conversión estándar:
 $$R_{\text{usuario}} = \frac{V_{\text{mes}} \cdot f_{BH}}{30 \cdot 3600}$$
 
 donde $V_{\text{mes}}$ es el volumen mensual por abonado (bits) y $f_{BH}$
-la fracción del tráfico diario que cae en la hora cargada (típico 8–12%).
+la fracción del tráfico diario que cae en la hora cargada. Para $f_{BH}$
+no hay valor normado — es una **hipótesis que el diseñador declara**. El
+razonamiento que la acota: si el día fuera uniforme, una hora llevaría
+$1/24 \approx 4\%$ del tráfico; en redes reales la hora cargada concentra
+el doble o más, por lo que la hipótesis usual de planificación es
+**8–12%**. (El marco formal para *medir* la hora cargada es la
+recomendación [ITU-T E.500](https://www.itu.int/rec/T-REC-E.500).)
 
 Ejemplo con números de Perú urbano: 10 GB/mes ≈ $2.7$ Gbit/día; con
-$f_{BH} = 10\%$ → **~75 kbps sostenidos por abonado**. Parece poco — esa es
+$f_{BH} = 10\%$ → **~74 kbps sostenidos por abonado** (Tabla 0.4). Parece poco — esa es
 la magia de la multiplexión estadística: miles de usuarios que navegan a
 ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
 individuales.
@@ -328,9 +334,9 @@ estadística de decir "throughput de borde garantizado": el borde de celda
 el 95% de R2 y el 90% de R3.
 
 El cálculo detrás de R5: 25 000 personas/km² presentes en hora cargada
-(distrito financiero) × 30% de participación de mercado × 75 kbps por
-abonado (Tabla 0.4: fila 10 GB/mes, $f_{BH}=10\%$) ≈ 560 Mbps/km²,
-redondeado a 600. Cada factor es una hipótesis de
+(distrito financiero) × 30% de participación de mercado × 74.1 kbps por
+abonado (Tabla 0.4: fila 10 GB/mes, $f_{BH}=10\%$) ≈ 556 Mbps/km²,
+redondeado al centenar superior → 600. Cada factor es una hipótesis de
 negocio — cámbialos y cambia la red que hay que construir.
 
 !!! question "Comprueba tu comprensión"
