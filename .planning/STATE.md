@@ -115,10 +115,10 @@ Recent decisions affecting current work:
 
 ## Session Continuity
 
-Last session: 2026-08-12
-Stopped at: S07 COMPLETO Y PUBLICADO — examen Fases 0-6 (alumno en GitHub; examen-solucion.ipynb purgado del historial sin push, gitignored, SOLO LOCAL), lección F0-F6 saneada, design.ipynb (San Isidro) alineado a la metodología del examen (techos reales altura_en, tilt por sitio 0.7·radio, proxies R2/R3) y re-ejecutado; lección barrida con los números re-medidos (F4 41%, F6 74.1/68.5, n 1.8, sigma 15.5, SE 4.9, invasor s2c2). Push fast-forward c4dc327..527591a (decisión de push RESUELTA).
-Pendiente: cierre de lección (objetivos/resumen/ejercicios), 4 figuras SVG (placeholders 4.1/4.3), guion desincronizado (artifact 98209b61), encargos B-E (cercado-lima-01 requiere re-export Blender, lado usuario), menores F0.
-Resume file: none
+Last session: 2026-08-13
+Stopped at: S07 y examen publicados. El examen está en el blog y `examen-alumno.ipynb` permite elegir `jesus-maria-01` o `san-isidro-01` con TdR/verificadores coherentes. CI instala Sionna RT, extrae y carga ambas escenas antes de cada despliegue. La lección incluye enlaces a los videos Parte 1 y Parte 2. `main` limpio y sincronizado en `108e48ea` antes del commit de pausa.
+Pendiente: cierre editorial de la lección, dos SVG explícitos de Fase 4, sincronizar el guion externo, encargos B-E (`cercado-lima-01` requiere re-export Blender) y refrescar secciones antiguas de PROJECT.md/STATE.md.
+Resume file: `.planning/.continue-here.md` (structured source: `.planning/HANDOFF.json`)
 
 ### Previous session continuity (2026-08-01)
 

@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-08-13T05:17:43.316Z",
+  "phase": null,
+  "phase_name": "Session 07 publication and exam",
+  "phase_dir": null,
+  "plan": null,
+  "task": 4,
+  "total_tasks": 4,
+  "status": "paused",
+  "completed_tasks": [
+    {
+      "id": 1,
+      "name": "Publish the 5G network-design exam in the course blog",
+      "status": "done",
+      "commit": "e3fc4e59"
+    },
+    {
+      "id": 2,
+      "name": "Make examen-alumno.ipynb selectable and coherent for Jesús María and San Isidro",
+      "status": "done",
+      "commit": "aa76284b"
+    },
+    {
+      "id": 3,
+      "name": "Add both Session 07 lecture-video links and place them below the page title",
+      "status": "done",
+      "commit": "df874ca7"
+    },
+    {
+      "id": 4,
+      "name": "Persist missing notebook cell identifiers",
+      "status": "done",
+      "commit": "108e48ea"
+    }
+  ],
+  "remaining_tasks": [
+    {
+      "id": 5,
+      "name": "Finish the Session 07 lesson closing material and remove the construction notice",
+      "status": "not_started"
+    },
+    {
+      "id": 6,
+      "name": "Create the two explicit Phase 4 SVG placeholders: sectorizacion_3x120.svg and downtilt_geometria.svg",
+      "status": "not_started"
+    },
+    {
+      "id": 7,
+      "name": "Synchronize the external instructor script artifact with the completed lesson",
+      "status": "not_started"
+    },
+    {
+      "id": 8,
+      "name": "Refresh stale active-work sections in PROJECT.md and earlier sections of STATE.md",
+      "status": "not_started"
+    }
+  ],
+  "blockers": [],
+  "async_jobs": [],
+  "background_processes": [],
+  "human_actions_pending": [
+    {
+      "action": "Re-export cercado-lima-01 from Blender before offering it as an exam scene",
+      "context": "The scene remains in preparation and is explicitly unavailable on the published exam page.",
+      "blocking": false
+    },
+    {
+      "action": "Provide student email addresses before distributing Parcial 01 feedback",
+      "context": "Deferred administrative task; outside the current Session 07 workstream.",
+      "blocking": false
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "The student exam notebook supports exactly jesus-maria-01 and san-isidro-01 through the Colab ESCENA selector.",
+      "rationale": "Changing only the XML path was insufficient: each map also needs coherent TdR, bandwidth, site limits, PRB verification, and placement guidance.",
+      "phase": null
+    },
+    {
+      "decision": "Every GitHub Pages deployment installs Sionna RT and runs scripts/verify-exam-colab.py --with-sionna before the strict MkDocs build.",
+      "rationale": "Publication must fail if either ZIP cannot be extracted or either scene cannot be loaded by Sionna.",
+      "phase": null
+    },
+    {
+      "decision": "examen-solucion.ipynb remains local-only and ignored; only the student notebook is public.",
+      "rationale": "Avoid publishing the solution with the assessment.",
+      "phase": null
+    }
+  ],
+  "blocking_constraints": [
+    {
+      "name": "Multi-map consistency",
+      "severity": "advisory",
+      "description": "Do not treat an ESCENA URL switch as complete multi-map support; scenario-specific wording, TdR, verifiers, dimensions, and Sionna loading must stay aligned.",
+      "prevention": "Run python scripts/verify-exam-colab.py --with-sionna and mkdocs build --strict before publication."
+    }
+  ],
+  "uncommitted_files": [],
+  "next_action": "Resume by choosing a Session 07 closing task; recommended first action is to finish the lesson closing material and the two explicit Phase 4 SVG placeholders, then refresh PROJECT.md/STATE.md.",
+  "context_notes": "No formal roadmap or phase is active. main is clean and synchronized with origin/main at 108e48ea. The exam page is live at /exams/examen-diseno-red/, the Colab notebook exposes two maps, and the deployment gate loads both scenes with Sionna. PROJECT.md and older STATE.md position/todo sections predate the completed Session 07 work; trust this handoff and the latest git history first."
+}
