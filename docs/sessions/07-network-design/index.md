@@ -4,11 +4,12 @@ session: 7
 description: "El flujo profesional de diseño de RAN — requisitos, espectro, cobertura, capacidad, plan nominal, parámetros y validación — ejecutado sobre una escena ray-traced de San Isidro, Lima."
 ---
 
+# Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real
+
 - [Vídeo - Parte 1](https://youtu.be/8icS5ytCRE0?si=_KFLc8OG0f721oz5) Fecha: Agosto 04
 - [Vídeo - Parte 2](https://youtu.be/E50KJ3e77UI) Fecha: Agosto 12
 
 
-# Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real
 
 > **Página en construcción** — se escribe fase por fase junto con el
 > notebook `design.ipynb` (Fases 0–6 listas; falta el cierre).
