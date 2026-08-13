@@ -82,3 +82,4 @@ nav:
           - "Guía: escena OSM con Blender": sessions/07-network-design/escena-osm-blender.md
   - Evaluaciones:
       - "Parcial 01": exams/index.md
+      - "Examen — Diseño de red 5G": exams/examen-diseno-red.md
