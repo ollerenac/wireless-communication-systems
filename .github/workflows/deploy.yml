@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: 3.x
+          python-version: "3.12"
 
       - name: Cache de dependencias
         run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
@@ -35,10 +35,10 @@ jobs:
             mkdocs-material-
 
       - name: Instalar dependencias
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt sionna-rt
 
       - name: Verificar examen de diseño y mapas de Colab
-        run: python scripts/verify-exam-colab.py
+        run: python scripts/verify-exam-colab.py --with-sionna
 
       - name: Verificar construcción estricta del sitio
         run: mkdocs build --strict
