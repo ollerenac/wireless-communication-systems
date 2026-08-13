@@ -27,7 +27,7 @@ la lección, sobre **tu propio mapa**:
 | 1 | Estrategia de espectro: *physical resource blocks* (PRB, bloques de recursos físicos), reparto *time-division duplexing* (TDD, duplexación por división de tiempo), anchos efectivos |
 | 2 | *Link budget* (presupuesto de enlace) en *downlink* (DL, bajada) y *uplink* (UL, subida) → radio de celda → sitios por cobertura |
 | 3 | Capacidad por sitio → sitios por demanda → veredicto del dimensionamiento |
-| 4 | Plan nominal sobre el trazador: posiciones en azoteas reales, iterado con los proxies R2/R3 |
+| 4 | Plan nominal sobre el trazador: posiciones en azoteas reales, iterado con los *proxies* (métricas sustitutas) R2/R3 |
 | 5 | Planificación detallada: *physical cell identity* (PCI, identidad física de celda), zona de contención del *physical random access channel* (PRACH, canal físico de acceso aleatorio), *tracking areas* (áreas de seguimiento) |
 | 6 | Validación contra el mapa consolidado: veredicto R1–R8 |
 
