@@ -37,5 +37,11 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
+      - name: Verificar examen de diseño y mapas de Colab
+        run: python scripts/verify-exam-colab.py
+
+      - name: Verificar construcción estricta del sitio
+        run: mkdocs build --strict
+
       - name: Construir y publicar sitio
         run: mkdocs gh-deploy --force
