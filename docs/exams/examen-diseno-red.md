@@ -24,11 +24,11 @@ la lección, sobre **tu propio mapa**:
 | Fase | Entregable |
 |---|---|
 | 0 | Requisitos R1–R8 a partir de la publicidad y los TdR |
-| 1 | Estrategia de espectro: PRB, reparto TDD, anchos efectivos |
-| 2 | Presupuesto de enlace DL/UL → radio de celda → sitios por cobertura |
+| 1 | Estrategia de espectro: *physical resource blocks* (PRB, bloques de recursos físicos), reparto *time-division duplexing* (TDD, duplexación por división de tiempo), anchos efectivos |
+| 2 | *Link budget* (presupuesto de enlace) en *downlink* (DL, bajada) y *uplink* (UL, subida) → radio de celda → sitios por cobertura |
 | 3 | Capacidad por sitio → sitios por demanda → veredicto del dimensionamiento |
 | 4 | Plan nominal sobre el trazador: posiciones en azoteas reales, iterado con los proxies R2/R3 |
-| 5 | Planificación detallada: PCI, zona de contención PRACH, tracking areas |
+| 5 | Planificación detallada: *physical cell identity* (PCI, identidad física de celda), zona de contención del *physical random access channel* (PRACH, canal físico de acceso aleatorio), *tracking areas* (áreas de seguimiento) |
 | 6 | Validación contra el mapa consolidado: veredicto R1–R8 |
 
 ## Abre el notebook
@@ -88,7 +88,7 @@ Términos de referencia:
 - Potencia máxima por sector: **43 dBm**.
 - Mercado: ~**30 000 hab/km²**, participación objetivo **25%**,
   consumo típico **12 GB/mes** por abonado.
-- Target de borde según la guía de planificación del operador:
+- *Throughput* (tasa útil) mínimo en el borde según la guía de planificación del operador:
   **50 Mbps DL / 5 Mbps UL** en el percentil 5 (ref. NGMN
   *"50 Mbps everywhere"*).
 
@@ -109,7 +109,7 @@ Términos de referencia:
 - Mercado: ~**25 000 personas presentes/km²** en hora cargada (distrito
   financiero: población flotante), participación objetivo **30%**,
   consumo típico **10 GB/mes** por abonado.
-- Target de borde según la guía de planificación del operador:
+- *Throughput* mínimo en el borde según la guía de planificación del operador:
   **50 Mbps DL / 5 Mbps UL** en el percentil 5 (ref. NGMN
   *"50 Mbps everywhere"*).
 
