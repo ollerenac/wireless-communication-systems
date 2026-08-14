@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Examen final — Diseño de red 5G (jesus-maria-01)</title>
+<style>
+  :root {
+    --fondo: #ffffff; --texto: #1f2328; --tenue: #59636e;
+    --borde: #d1d9e0; --acento: #1c6bba; --suave: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0d1117; --texto: #e6edf3; --tenue: #9198a1;
+      --borde: #30363d; --acento: #6cb0ff; --suave: #161b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 5rem;
+    background: var(--fondo); color: var(--texto);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  .aviso {
+    border: 1px solid var(--borde); border-left: 3px solid var(--acento);
+    background: var(--suave); padding: .7rem .9rem; border-radius: 5px;
+    font-size: .87rem; color: var(--tenue); margin-bottom: 2.5rem;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 1.2rem; }
+  h2 {
+    font-size: 1.18rem; margin: 2.4rem 0 .8rem;
+    padding-bottom: .3rem; border-bottom: 1px solid var(--borde);
+  }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .6rem; }
+  p, li { margin: 0 0 .85rem; }
+  code {
+    background: var(--suave); border: 1px solid var(--borde);
+    border-radius: 4px; padding: .1em .35em; font-size: .875em;
+  }
+  .tabla { overflow-x: auto; margin: 1.2rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { border: 1px solid var(--borde); padding: .45rem .7rem; text-align: left; }
+  th { background: var(--suave); font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--borde); margin: 2.5rem 0; }
+  blockquote {
+    margin: 1.2rem 0; padding-left: 1rem;
+    border-left: 3px solid var(--borde); color: var(--tenue);
+  }
+  footer {
+    margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--borde);
+    font-size: .82rem; color: var(--tenue);
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="aviso">
+  Página personal y no listada. Su dirección es única para ti — no aparece en el
+  menú ni en el buscador del curso. Evita reenviarla.
+</div>
+<h1>Examen final — Diseño de red 5G (jesus-maria-01)</h1>
+<p><strong>Nota: 18.6 / 20</strong></p>
+<p>Hiciste un examen muy sólido: los siete verificadores pasan, cada número de tu cadena F0→F6 tiene origen declarado, y varias de tus justificaciones traen aritmética propia en vez de prosa genérica. Lo que te separa del puntaje perfecto no es el cálculo — es la lectura de tus propios mapas: el trazador te estaba diciendo desde la Fase 4 que 4 sitios no alcanzaban, y el diseño llegó a la Fase 6 sin reaccionar a esa evidencia.</p>
+<h2>Fase 0 — Requisitos (2.0 / 2.0)</h2>
+<p>Impecable. Tradujiste la oferta comercial a números con origen: −110 dBm de la fila de borde de servicio de la Tabla 0.1, el 95% como percentil estándar (no el 100% físicamente incobrable), y 50/5 Mbps adoptados del TdR verificando que cubren los mínimos técnicos de la Tabla 0.3 (8/4 Mbps). Tu demanda de 667 Mbps/km² con f_bh = 0.10 declarado y R5 = 800 con margen ~20% explícito es exactamente el método del curso. Y tu respuesta 3 hace la pregunta incómoda bien: con participación al 35% la demanda sube a ≈933 Mbps/km² y tu R5 ya no alcanza — lo viste antes de que la Fase 3 te lo cobrara.</p>
+<h2>Fase 1 — Espectro (2.9 / 3.0)</h2>
+<p>La física está bien: n258 cuesta ×8.26 sitios, n28 regala cobertura pero no tiene 80 MHz contiguos, y tus 217 PRB con cita a TS 38.101-1 son correctos, igual que los 59.4/18.3 MHz efectivos de DDDSU. Dos detalles en justificación: en la P2 la aritmética que demuestra el punto es tuya y no la mostraste (78.15 MHz transmisibles / 0.36 = 217 — eso es lo que explica por qué no sale 80/0.36 ≈ 222); y en la P4 la respuesta sobre el SCS quedó genérica: la razón concreta es que la numerología NR es una familia cerrada y la pareja banda+ancho la fuerza (con 15 kHz no existe un canal de 80 MHz; 60 kHz recorta el prefijo cíclico sin ganar nada en FR1).</p>
+<h2>Fase 2 — Cobertura (3.0 / 3.0)</h2>
+<p>EPRE 8.8 dBm, MAPL DL 125.8 / UL 132 dB, radio 394 m, 4 sitios por cobertura — todo correcto y con la aritmética mostrada. Identificaste bien que aquí limita el DL de control y por qué el dicho "el uplink siempre limita" no aplica (el UE concentra sus 23 dBm en 5 MHz y la sensibilidad de la BS mejora con la ventana angosta). Tu respuesta 3 es de las mejores del examen: margen 14.5 dB para 99% → radio ≈285 m → 7 sitios, exactamente el tope municipal, y notaste lo que eso significa para el proyecto.</p>
+<h2>Fase 3 — Capacidad (3.0 / 3.0)</h2>
+<p>Planilla correcta: celda 93 Mbps, demanda 1087 Mbps, veredicto max(4, 4) = 4 sitios. Y las justificaciones con números propios: el margen 1.20 se consume en ln(1.20)/ln(1.25) ≈ 0.82 años — tu red nace con la ampliación en el calendario del primer año, y lo dijiste. El escenario de participación al 35% (1268 Mbps → 5 sitios por capacidad) también está bien resuelto. La distinción borde-vs-promedio en la P2 es correcta.</p>
+<h2>Fase 4 — Despliegue (2.4 / 3.0)</h2>
+<p>Aquí está el punto de inflexión del examen. Lo numérico está bien hecho: 4 sitios sobre azoteas reales (19.6 a 33 m), tilts escalados a la altura de cada antena, proxies calculados correctamente, verificador en verde, y el conteo es coherente con el veredicto de la Fase 3. Nada que objetar ahí.</p>
+<p>Pero mira tus proxies: R2 44.1% contra meta 95%, R3 47.8% contra 90%. Es cierto — y lo dijiste bien en la P2 — que el mapa exploratorio es conservador (elemento de ~8 dBi, 10⁵ muestras). Pero esos dos efectos no explican un déficit de 50 puntos: explican una parte, y el resto es geometría — huecos reales entre tus 4 sitios, separados hasta ~670 m con un radio de diseño de 394 m sobre un mapa que el trazador ya te estaba mostrando. La propia celda te lo decía: <em>"si tu mapa muestra huecos reales, puedes AGREGAR sitios (hasta 7)"</em>. El veredicto de la Fase 3 es el mínimo analítico; el trazador manda sobre la geometría. Además, tu P1 dice que "la decisión final se itera con los proxies" — pero en el notebook no hay ninguna iteración: las posiciones son la distribución inicial propuesta y la búsqueda de azoteas quedó comentada. En un informe de ingeniería, describir una iteración que no ocurrió es peor que declarar que no se hizo.</p>
+<h2>Fase 5 — Identidad y acceso (2.9 / 3.0)</h2>
+<p>Plan correcto: 12 PCIs únicos, regla co-sitio dura cumplida, RACH bien derivado (t_guard 2.73 µs → N_CS = 13 → 64 preámbulos/raíz → 1 raíz) con el contraste rural de 15 km bien razonado, y 1 tracking area bien defendida para 1.36 km². Un detalle de lectura crítica: tu propia salida imprime que el plan quedó con <strong>más</strong> frontera en conflicto mod-3 que el ingenuo (3 975 m contra 3 645 m). El coloreo era código dado — no es error tuyo — pero la P4 era el lugar para notarlo: con pocas celdas y fronteras ray-traced que serpentean, el greedy ponderado no garantiza ganarle al plan consecutivo, y un diseñador que reporta "optimicé" debe mirar si el número optimizado de verdad bajó.</p>
+<h2>Fase 6 — Veredicto y diagnóstico (2.4 / 3.0)</h2>
+<p>Lo numérico, completo y correcto: R2 77.6%, R3 83.5%, p5 = 55 Mbps (R4 cumple), SE medida 4.78, n = 2.95, σ = 14.6 dB. Y hay aciertos reales en la justificación: la regla de no comparar mapas de distinta calidad, la SE medida como calibración y no como verdad, y sobre todo el cierre de la P4 — σ = 14.6 dB &gt; 8 dB declarada implica que el margen de 9 dB de la Fase 2 fue optimista. Ese es el lazo predicción→medición→ajuste que la sesión enseña.</p>
+<p>Donde el diagnóstico se queda corto es en conectar sus propias mediciones con la acción. Tu escalera de salidas es la de la lección en abstracto: tilt/azimut primero, luego recolocar, luego agregar sitios. Pero tu propio bisturí midió <strong>+0.0 pp</strong> — el tilt no es la herramienta para este déficit, y tu tabla lo estaba diciendo. R2 falla por 17.4 puntos: eso no es un problema de parámetros, es un problema de sitios — hay 22% del área sin −110 dBm (tu p5 de RSRP es −117 dBm) y tienes <strong>3 sitios de reserva</strong> bajo el tope de R8 que nunca usaste. La respuesta lúcida era: densificar (o recolocar) es la salida principal, y decir <em>dónde</em>: el mapa muestra los huecos entre tus 4 esquinas. Nota también lo que tu diseño sí compró: con solo 12 celdas co-canal, los píxeles cubiertos tienen SINR excelente (SE 4.78, p5 = 55 Mbps ≥ 50 — R4 cumple, cosa que un diseño de 7 sitios no logra con 40 Mbps). Tu red es una red de calidad alta y cobertura corta; nombrar ese trade-off era la mitad del diagnóstico.</p>
+<h2>Nota de forma (no afecta el puntaje)</h2>
+<p>Tu notebook llegó con todas las salidas presentes pero sin contadores de ejecución en ninguna celda de código. Las salidas se tomaron como evidencia válida — la cadena F0→F6 es internamente coherente y los verificadores están en verde —, pero para la próxima entrega conviene mandar el archivo tal como quedó tras la corrida final: los contadores son la prueba de en qué orden se ejecutó todo, y sin ellos no puedo distinguir una sesión limpia de una reconstruida a mano.</p>
+<h2>En resumen</h2>
+<ul>
+<li><strong>Lo mejor</strong>: cadena numérica sin una sola grieta, justificaciones con aritmética propia, y método de medición bien entendido (calidades de muestreo, corrección de array, σ medida).</li>
+<li><strong>Para la próxima</strong>: los proxies de la Fase 4 son evidencia, no trámite — cuando el mapa contradice al mínimo analítico, se itera; y el diagnóstico final debe salir de <em>tus</em> mediciones (bisturí +0.0 pp, 3 sitios de reserva, huecos localizables), no de la escalera genérica de la lección.</li>
+</ul>
+<p><strong>Nota final: 18.6 / 20</strong></p>
+<hr />
+<h2>Nota final del curso</h2>
+<p>Esta es tu nota final, con el peso de cada evaluación:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Evaluación</th>
+<th>Peso</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promedio de trabajos prácticos</td>
+<td>30%</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Examen parcial</td>
+<td>30%</td>
+<td>13.4</td>
+</tr>
+<tr>
+<td>Examen final (este informe)</td>
+<td>40%</td>
+<td>18.6</td>
+</tr>
+<tr>
+<td><strong>Nota final</strong></td>
+<td></td>
+<td><strong>15.9</strong> — quince con nueve décimas</td>
+</tr>
+</tbody>
+</table></div>
+<p>El examen final pesa el 40%, así que los 18.6 puntos que obtuviste aquí aportan 7.44 a esa nota.</p>
+<footer>
+  Comunicaciones Inalámbricas · Retroalimentación del examen final ·
+  ¿Dudas sobre la calificación? Escríbeme y la revisamos.
+</footer>
+</main>
+</body>
+</html>

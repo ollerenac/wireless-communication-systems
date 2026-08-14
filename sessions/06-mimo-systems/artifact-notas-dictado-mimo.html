@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notas de dictado - Sesion 06 MIMO</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #55616f;
+      --line: #d9e1e8;
+      --paper: #ffffff;
+      --band: #f5f7fa;
+      --blue: #1f77b4;
+      --green: #2ca02c;
+      --orange: #d97706;
+      --red: #c2410c;
+      --teal: #0f766e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.55;
+    }
+
+    header {
+      padding: 34px clamp(20px, 5vw, 64px) 28px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 28px clamp(18px, 4vw, 42px) 56px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 4.6vw, 54px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      margin: 42px 0 12px;
+      padding-top: 8px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 26px 0 10px;
+      font-size: 21px;
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul, ol {
+      margin: 0 0 18px;
+      padding-left: 24px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    strong {
+      font-weight: 720;
+    }
+
+    code {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 0.94em;
+      background: #eef2f6;
+      padding: 0.12rem 0.32rem;
+      border-radius: 4px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-weight: 780;
+      text-transform: uppercase;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .subtitle {
+      max-width: 860px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .meta span {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin: 24px 0 10px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc a {
+      display: block;
+      min-height: 100%;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--blue);
+      border-radius: 7px;
+      padding: 10px 12px;
+      color: var(--ink);
+      text-decoration: none;
+      background: #fff;
+    }
+
+    .toc small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .band {
+      margin: 28px calc(clamp(18px, 4vw, 42px) * -1);
+      padding: 26px clamp(18px, 4vw, 42px);
+      background: var(--band);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--green);
+      border-radius: 7px;
+      padding: 14px 16px;
+      background: #fff;
+    }
+
+    .note.orange {
+      border-left-color: var(--orange);
+    }
+
+    .note.red {
+      border-left-color: var(--red);
+    }
+
+    .note.teal {
+      border-left-color: var(--teal);
+    }
+
+    .label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 780;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+
+    .script {
+      border-left: 4px solid var(--blue);
+      padding: 12px 0 12px 18px;
+      margin: 14px 0 20px;
+      color: #24313f;
+      background: #f8fbfe;
+    }
+
+    .class-block {
+      padding: 26px 0 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    .class-block:first-of-type {
+      border-top: 0;
+    }
+
+    .block-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 680;
+      font-size: 14px;
+    }
+
+    figure {
+      margin: 22px 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    figcaption {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      background: #fbfcfd;
+    }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 0;
+      background: #fff;
+      margin: 12px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 720;
+    }
+
+    details > div {
+      padding: 0 14px 14px;
+      color: #2d3742;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      border-bottom: 1px solid var(--line);
+      padding: 9px 0;
+    }
+
+    .checklist li:last-child {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 760px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding-top: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Guia docente interna</p>
+    <h1>Sesion 06 - MIMO en redes reales</h1>
+    <p class="subtitle">Notas narrativas para dictar la clase con enfoque implementativo: como llevar al estudiante desde un problema de red hasta la eleccion de arreglo, rank, detector, precoder y arquitectura CSI.</p>
+    <div class="meta">
+      <span>Base: <code>index.md</code></span>
+      <span>Laboratorio: <code>lab.ipynb</code></span>
+      <span>Figuras nuevas: mapa, flujo rank/precoder, CSI</span>
+      <span>Uso: preparacion y dictado</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="tesis">
+      <h2>Tesis de la clase</h2>
+      <p>La frase que debe sostener toda la sesion es: <strong>MIMO no se diseña contando antenas; se diseña leyendo el canal y el problema de red</strong>. Cada bloque debe volver a esa idea. Si una parte se vuelve demasiado algebraica, regresar a la pregunta operativa: "¿que decision de red sale de esta formula?".</p>
+      <div class="script">
+        <strong>Apertura sugerida.</strong> "Hasta ahora hemos peleado contra el canal ajustando potencia, modulacion, codificacion y OFDM. MIMO cambia la forma de pensar: ahora tenemos varios caminos espaciales. La pregunta no es solo cuanta capacidad promete una matriz, sino que problema real de red queremos resolver con esas antenas."
+      </div>
+      <div class="grid">
+        <div class="note">
+          <span class="label">Objetivo emocional</span>
+          <p>Que el estudiante deje de ver MIMO como una formula de capacidad y lo vea como una caja de decisiones: cobertura, rank, interferencia, CSI y arquitectura.</p>
+        </div>
+        <div class="note orange">
+          <span class="label">Cuidado</span>
+          <p>No empezar con SVD. La SVD llega despues, como herramienta para diagnosticar si el canal permite varias capas.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">Ancla recurrente</span>
+          <p>"Primero cierro el enlace; despues subo el rank." Repetirla al hablar de borde de celda, DMT, rank adaptation y FR2.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="terminologia" class="band">
+      <h2>Terminologia pactada (usarla consistente al dictar)</h2>
+      <p>El material (<code>index.md</code>) abre con una caja de vocabulario y una de prerrequisitos con referencias de repaso (3Blue1Brown caps. 13-14, Khan Academy "valores y vectores propios"). Señalarlas en los primeros minutos: ahorran la mitad de las preguntas. Convenciones que el material usa y el dictado debe respetar:</p>
+      <ul>
+        <li><strong>Capa = stream = flujo</strong>: sinonimos, es lo que se transmite. <strong>Modo espacial = subcanal</strong>: por donde pasa (cada canal paralelo dentro de H). No decir "tubo" — el termino del material es subcanal.</li>
+        <li><strong>Grados de libertad espaciales</strong> = el presupuesto (cuantas cosas a la vez); los subcanales son los objetos que lo materializan. El presupuesto puede gastarse en robustez, capas o usuarios.</li>
+        <li><strong>Tiempo de simbolo</strong>, no "ranura" ni "slot": el slot de LTE/5G agrupa muchos simbolos (14 en NR) y Alamouti opera sobre 2 tiempos de simbolo.</li>
+        <li><strong>d<sup>opt</sup>(r)</strong> en el DMT: funcion de r (se elige r, devuelve la mejor diversidad), no producto. La literatura escribe <code>d*(r)</code>; avisar la colision: en Alamouti el asterisco significa <strong>conjugado complejo</strong>, otra cosa.</li>
+        <li><strong>Eigenvalores/eigenvectores</strong>: en los textos en español el tema se llama <strong>valores y vectores propios</strong> — decir ambos nombres una vez.</li>
+        <li><strong>Condicionamiento</strong>: sensibilidad a errores al invertir H (bien condicionado = errores chicos se quedan chicos). Umbrales de dictado: kappa ≈ 1 docil, ≳ 10 fragil, → ∞ keyhole/rank deficiente.</li>
+        <li><strong>CSI / CSIT / CSIR</strong>: conocimiento de H; la letra final dice quien lo tiene (Transmisor/Receptor). CSIR barato (pilotos de bajada), CSIT caro (feedback o reciprocidad TDD).</li>
+      </ul>
+    </section>
+
+    <section id="ruta" class="band">
+      <h2>Ruta sugerida de dictado</h2>
+      <ol>
+        <li><strong>10 min:</strong> abrir con sintomas de red y el mapa problema -> estrategia.</li>
+        <li><strong>12 min:</strong> elegir arreglos: SIMO, MISO, SU-MIMO, MU-MIMO, Massive MIMO e hibrido FR2.</li>
+        <li><strong>18 min:</strong> presentar <code>\mathbf{H}</code> como diagnostico operativo, no como notacion.</li>
+        <li><strong>12 min:</strong> contrastar diversidad, beamforming y multiplexacion usando DMT y Alamouti.</li>
+        <li><strong>18 min:</strong> explicar deteccion y precodificacion: ZF, MMSE, ML, MRT, ZF/RZF.</li>
+        <li><strong>12 min:</strong> rank adaptation y capacidad util, con el flujo de decision.</li>
+        <li><strong>15 min:</strong> Massive MIMO como problema de pilotos, TDD, scheduler, hardening y FR2.</li>
+        <li><strong>8 min:</strong> cerrar con ejercicios como mini-casos de diseño.</li>
+      </ol>
+    </section>
+
+    <nav aria-label="Indice del artifact">
+      <h2>Bloques de explicacion</h2>
+      <ul class="toc">
+        <li><a href="#bloque-1">1. Problema de red <small>La clase empieza por sintomas, no por algebra.</small></a></li>
+        <li><a href="#bloque-2">2. Arreglos de antenas <small>Que puede resolver cada configuracion.</small></a></li>
+        <li><a href="#bloque-3">3. Canal <code>H</code> <small>Rank, valores singulares, condicionamiento y CSI.</small></a></li>
+        <li><a href="#bloque-4">4. Tres usos del espacio <small>Diversidad, beamforming y multiplexacion.</small></a></li>
+        <li><a href="#bloque-5">5. Separar la mezcla <small>Detectores y precoders implementables.</small></a></li>
+        <li><a href="#bloque-6">6. Rank adaptation <small>Cuando subir o bajar capas.</small></a></li>
+        <li><a href="#bloque-7">7. Massive MIMO <small>TDD, pilotos, hardening y FR2.</small></a></li>
+      </ul>
+    </nav>
+
+    <section id="bloque-1" class="class-block">
+      <div class="block-head">
+        <h2>1. Primero el problema de red</h2>
+        <span class="time">Tiempo sugerido: 10 min</span>
+      </div>
+      <p>Este bloque debe romper una intuicion peligrosa: "mas antenas = mas velocidad". Presentar MIMO como un presupuesto espacial. Ese presupuesto puede gastarse en robustez, direccion, capas o usuarios. La eleccion depende del sintoma.</p>
+      <figure>
+        <img src="figures/mimo-design-map.png" alt="Mapa de decision MIMO">
+        <figcaption>Division de trabajo: en clase usar solo esta figura — las flechas se narran como decisiones ("leo el sintoma, elijo estrategia, y me llevo el costo"). La tabla del material es la version para releer en casa. No explicar ambas: dicen lo mismo.</figcaption>
+      </figure>
+      <div class="script">
+        <strong>Protocolo de lectura (antes de tocar filas).</strong> "Esto se lee como recetario medico: sintoma, tratamiento, efecto secundario. Ningun tratamiento es gratis — la columna derecha es lo que hay que vigilar. Si alguien les vende una estrategia MIMO sin decirles el costo, desconfien." La habilidad que se lleva el estudiante es el protocolo sintoma → estrategia → costo, no memorizar cinco escenarios.
+      </div>
+      <div class="script">
+        <strong>Dictar a fondo solo los dos extremos.</strong> "Borde de celda: sobra espectro, falta energia — concentro (rank 1, beamforming o diversidad). Hotspot: sobra energia, la interferencia mata — separo (nulos espaciales, MU-MIMO con scheduler)." Son polos opuestos y entre ambos abarcan el espacio de decision. Indoor se lanza como pregunta a la clase: "canal rico, distancias cortas — ¿cual es la trampa?" (antenas juntas, correlacion, rank efectivo menor al nominal). Massive y FR2 se despachan como regimenes extremos que se retoman al final. Verificacion inmediata: lanzar P1 y P2 del material — P1 es la fila 1 y P2 es la fila 2 (el caso donde falla el requisito "canales separables"). Las dos preguntas cierran los dos extremos recien dictados.
+      </div>
+      <details>
+        <summary>Pizarra: que recurso escasea en cada fila</summary>
+        <div>
+          <p>Escribir esta tabla corta y dictarla con la pregunta guia <strong>"¿que falta aqui?"</strong> — el estudiante que aprende a preguntar eso ya no necesita memorizar la tabla grande.</p>
+          <ol>
+            <li>Borde de celda → falta <strong>energia</strong> (SNR): concentrarla.</li>
+            <li>Hotspot → falta <strong>separacion espacial</strong> (interferencia): gastar dimensiones en nulos.</li>
+            <li>Indoor → falta <strong>descorrelacion</strong> (antenas juntas): mirar rank efectivo, no nominal.</li>
+            <li>Massive sub-6 → falta <strong>CSI</strong> (pilotos): el conocimiento del canal es el cuello.</li>
+            <li>FR2 → falta <strong>link budget y cadenas RF</strong>: el limite es hardware.</li>
+          </ol>
+        </div>
+      </details>
+      <div class="note teal">
+        <span class="label">La tabla es el indice de la clase</span>
+        <p>Decirlo explicito: "esta tabla es el mapa de hoy; la recorremos fila por fila". Borde de celda → bloque 4 (diversidad/DMT); hotspot → bloque 5 (precoders); indoor → bloque 3 (rank y SVD); massive → bloque 7 (TDD/pilotos); FR2 → cierre del bloque 7. Cada seccion posterior "regresa" a su fila y la tabla se aprende sola por repeticion.</p>
+      </div>
+      <details>
+        <summary>Pregunta para la clase</summary>
+        <div>
+          <p>"Si dos usuarios estan cerca angularmente y sus canales se parecen, ¿MU-MIMO ayuda o complica?" Buscar que respondan que complica: ZF tendra que forzar ortogonalidad y puede perder potencia o amplificar ruido.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Error comun que conviene corregir</summary>
+        <div>
+          <p>No decir "MIMO aumenta capacidad" como verdad aislada. Mejor: "MIMO puede aumentar capacidad si el canal tiene modos espaciales utilizables y el sistema puede estimarlos".</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-2" class="class-block">
+      <div class="block-head">
+        <h2>2. Que arreglo de antenas usar</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>La explicacion debe responder tres preguntas: donde estan las antenas, quien conoce el canal y que se quiere optimizar. SIMO y MISO son excelentes para introducir la diferencia entre diversidad de recepcion y beamforming de transmision. SU-MIMO y MU-MIMO ya exigen hablar de rank y separabilidad.</p>
+      <figure>
+        <img src="figures/mimo-configurations.png" alt="Configuraciones SISO SIMO MISO MIMO">
+        <figcaption>Recorrer la figura desde SISO hasta MIMO, pero deteniendose en el caso de uso de cada configuracion.</figcaption>
+      </figure>
+      <div class="grid">
+        <div class="note">
+          <span class="label">SIMO</span>
+          <p>Explicar como "varios oidos escuchando la misma transmision". Sirve para combinar y reducir desvanecimientos, no para crear varias capas si el transmisor tiene una sola antena.</p>
+        </div>
+        <div class="note">
+          <span class="label">MISO</span>
+          <p>Explicar como "varias bocas coordinadas para que la onda llegue alineada". Es natural para cobertura downlink y UEs simples.</p>
+        </div>
+        <div class="note">
+          <span class="label">SU-MIMO vs MU-MIMO</span>
+          <p>SU-MIMO exprime un UE multiantena; MU-MIMO reparte dimensiones espaciales entre usuarios. El segundo depende mucho mas del scheduler.</p>
+        </div>
+      </div>
+      <div class="script">
+        "No confundan antenas fisicas con grados de libertad. Un telefono puede tener dos antenas, pero si estan correlacionadas el segundo modo espacial sera debil. La red no deberia subir rank solo porque el equipo tiene dos puertos."
+      </div>
+      <details>
+        <summary>Pizarra: fases alineadas vs fases al azar</summary>
+        <div>
+          <p>Dibujar un UE y dos antenas TX. Caso 1: las dos ondas llegan alineadas en fase (dos sinusoides que suman) — eso es beamforming y necesita CSI. Caso 2: fases al azar — a veces suman, a veces se cancelan. Misma geometria, distinto conocimiento del canal, distinto resultado.</p>
+          <p>Al lado, el mismo par de flechas apuntado de dos maneras. Aclarar primero: la flecha <strong>no es una antena</strong>, es un flujo de datos (una capa). Con 2 grados de libertad espaciales la BS puede empujar 2 flujos simultaneos; la decision de diseño es hacia donde apunta cada uno.</p>
+          <ul>
+            <li><strong>SU-MIMO (capas):</strong> ambas flechas terminan en el mismo UE — recibe <code>s1</code> y <code>s2</code> a la vez, doble throughput para el. Exige UE con 2+ antenas y rank 2 util.</li>
+            <li><strong>MU-MIMO (usuarios):</strong> una flecha a cada UE — cada uno recibe 1 capa, la celda sirve 2 usuarios a la vez en el mismo recurso. Los UEs pueden ser simples (1 antena), pero los canales deben ser separables y la BS necesita CSI.</li>
+          </ul>
+          <p>Moraleja del dibujo: misma BS, mismo espectro, mismas dimensiones espaciales — lo que cambia es a quien se asignan (concentrar vs repartir; el presupuesto del bloque 1 hecho flechas). Remate anti-confusion: "la BS puede tener 64 antenas y dibujar solo 2 flechas; la flecha es informacion, la antena es fierro". Y recalcar: las capas viajan <strong>al mismo tiempo y en la misma banda</strong>; se separan por firma espacial, no por subportadoras ni slots. Es la confusion mas comun del bloque.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-3" class="class-block">
+      <div class="block-head">
+        <h2>3. La matriz <code>H</code> como diagnostico operativo</h2>
+        <span class="time">Tiempo sugerido: 18 min</span>
+      </div>
+      <p>La matriz <code>\mathbf{H}</code> debe aparecer como instrumento de medicion. En sistemas reales, el receptor o la estacion base estiman el canal con pilotos y esa estimacion alimenta rank, beamforming, precoding, deteccion y scheduling.</p>
+      <div class="two-col">
+        <div>
+          <figure>
+            <img src="figures/mimo-channel-matrix.png" alt="Matriz de canal MIMO">
+            <figcaption>Cada celda responde cuanto llega desde una antena transmisora a una antena receptora, con magnitud y fase.</figcaption>
+          </figure>
+        </div>
+        <div>
+          <h3>Como narrarlo</h3>
+          <p>Primero escribir <code>y = Hx + n</code> y traducirlo verbalmente: "lo que recibo es una mezcla espacial de lo que transmiti, mas ruido". Luego conectar cada fila con una antena RX y cada columna con una antena TX.</p>
+          <p>Despues introducir la tabla de indicadores: rank, valores singulares, condicionamiento, producto interno entre usuarios, norma del canal y tiempo de coherencia.</p>
+          <p>Si preguntan por OFDM: hay una <code>H[k]</code> por subportadora; la Sesion 03 dejo canales planos y aqui la decision espacial se repite en cada uno.</p>
+          <p>Definir CSI aqui, sin dejarlo flotando: es la estimacion de <code>H</code> que alguien obtuvo midiendo pilotos. <strong>CSIR</strong> (el receptor conoce H) es barato y casi siempre esta. <strong>CSIT</strong> (el transmisor conoce H) es caro — feedback en FDD o reciprocidad en TDD — y caduca con el tiempo de coherencia: "CSI fresco" significa mas nuevo que la coherencia del canal. Jerarquia de exigencia: Alamouti sin CSIT &lt; beamforming &lt; MU-MIMO con CSI preciso y fresco. Esa exigencia creciente es la razon de ser del bloque 7.</p>
+          <details>
+            <summary>Pizarra: la jerarquia CSIT en tres lineas</summary>
+            <div>
+              <p>Tabla de dos columnas. <strong>¿Que sabe el TX?</strong> → nada / hacia donde / hacia donde + hacia donde NO, de todos, ahora. <strong>¿Como falla si el CSI se degrada?</strong> → no falla / pierde unos dB / piso de interferencia que ningun SNR arregla.</p>
+              <p>Imagen para dictarla: apuntar un haz es alumbrar con una linterna — si tiemblas, sigues alumbrando (el maximo de un haz es plano ante el error). Poner un nulo es mantener una sombra exacta sobre los ojos de otro — si tiemblas, lo encandilas (el nulo es filoso, y la fuga escala con la potencia de la señal ajena, no con el ruido). Conecta directo con la figura MRT vs ZF del bloque 5: MRT robusto pero satura; ZF exigente pero sin piso cuando el CSI es bueno.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+      <details>
+        <summary>Pizarra: como se estima H con pilotos (una division por casilla)</summary>
+        <div>
+          <p>El material tiene esta caja completa ("Como se estima H con pilotos"); en pizarra basta el esqueleto en tres ideas:</p>
+          <ol>
+            <li><strong>Un piloto es una pregunta con respuesta conocida.</strong> El TX manda un simbolo pactado <code>x_p</code>; el RX recibe <code>y_p = h&middot;x_p + n</code> y despeja <code>h_hat = y_p/x_p</code>. Es estimacion, no medicion: el ruido viene incluido — por eso pilotos con potencia generosa y promediado.</li>
+            <li><strong>Una antena habla, las demas callan.</strong> Una division llena UNA casilla y H tiene <code>Nr&times;Nt</code>. Instante 1: habla TX1, las Nr antenas RX dividen a la vez → columna 1 completa. Instante 2: habla TX2 → columna 2. Dictar el caso 2x2: "2 pilotos por 2 antenas receptoras = 4 divisiones = las 4 casillas".</li>
+            <li><strong>El contraste que justifica el diseño:</strong> en REs de piloto una TX habla y no hay mezcla (ahi se MIDE H); en REs de datos todas hablan a la vez y hay mezcla total (ahi se USA H). Cada RE de piloto es throughput sacrificado, y la medida caduca con el tiempo de coherencia — entre pilotos se interpola.</li>
+          </ol>
+          <p>Cierre que engancha con el bloque 7: "quien ejecuta la division y como viaja el resultado al otro extremo (feedback FDD o reciprocidad TDD) es lo que decide la arquitectura de Massive MIMO".</p>
+        </div>
+      </details>
+      <figure>
+        <img src="figures/mimo-svd-channels.png" alt="SVD del canal MIMO">
+        <figcaption>La SVD se presenta como forma de ver cuantos canales paralelos realmente existen.</figcaption>
+      </figure>
+      <div class="script">
+        "La SVD no es la protagonista por ser elegante; es util porque me dice si hay una segunda o tercera capa que valga la pena. Si <code>sigma_2</code> es pequeña, la segunda capa existe en algebra pero sera cara en BER."
+      </div>
+      <details>
+        <summary>Pizarra recomendada (momento central de algebra)</summary>
+        <div>
+          <ol>
+            <li>Escribir <code>H = [[1, 0.5], [0.5, 1]]</code> y al lado <code>y = Hx + n</code>.</li>
+            <li>Probar las direcciones naturales sin calcular SVD completa: <code>v1 = (1,1)/&radic;2</code> y <code>v2 = (1,-1)/&radic;2</code>. De donde salen: <code>v1</code> = las dos antenas en fase — el camino cruzado SUMA al directo (<code>1 + 0.5 = 1.5</code>); <code>v2</code> = antenas en contrafase — el cruzado RESTA (<code>1 - 0.5 = 0.5</code>). No se derivan: se proponen por esa intuicion y se verifican multiplicando en vivo: <code>H&middot;v1 = 1.5&middot;v1</code>, <code>H&middot;v2 = 0.5&middot;v2</code> (4 numeros comprobables en pizarra). Si preguntan por un canal no simetrico o por el procedimiento general: el material tiene la receta completa de 5 pasos (via <code>H^H&middot;H</code>, con la relacion <code>sigma = &radic;lambda</code>: los eigenvalores son energias, sigma es amplitud) y un segundo ejemplo no simetrico donde <code>U &ne; V</code> — remitir ahi, no improvisarlo en pizarra.</li>
+            <li>Contraste que le da sentido al test: probar un vector cualquiera, <code>H&middot;(1,0) = (1, 0.5)</code> — entro por una antena y salio regado por las dos: el canal lo MEZCLO. Ese es el comportamiento normal; <code>v1</code> y <code>v2</code> son las unicas direcciones que salen limpias (solo escaladas). Transmitir alineado con ellas convierte el 2x2 mezclador en dos subcanales SISO independientes de ganancias 1.5 y 0.5 — eso es la SVD sin decir las palabras. Vocabulario en voz alta: "a estos canales paralelos el material los llama subcanales o modos espaciales; la capa es lo que mando, el subcanal es por donde pasa".</li>
+            <li>Anotar ganancias: <code>sigma_1^2 = 2.25</code> contra <code>sigma_2^2 = 0.25</code>. La segunda capa es nueve veces mas debil.</li>
+            <li>Chequeo de energia en la misma pizarra: <code>||H||_F^2 = 1 + 0.25 + 0.25 + 1 = 2.5 = 2.25 + 0.25</code>. La energia total se reparte entre modos.</li>
+          </ol>
+          <p>Rematar con: "rank algebraico no siempre significa rank util". Dejar el canal escrito: vuelve en el bloque 5 para mostrar cuanto ruido paga ZF.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Pizarra: la tabla de indicadores son solo 3 preguntas (3+2+1)</summary>
+        <div>
+          <p>No leer las 6 filas en orden. Dibujar <code>H</code> al centro y sacar tres flechas:</p>
+          <ol>
+            <li><strong>¿Cuantas capas?</strong> (mirar DENTRO de una H): rank cuenta los subcanales, <code>sigma_k</code> mide el ancho de cada uno, <code>kappa</code> compara el mejor contra el peor. Propiedades de UN usuario; alimentan la decision de multiplexacion.</li>
+            <li><strong>¿Que usuarios van juntos?</strong> (mirar ENTRE usuarios): el producto interno dice cuanto se parecen dos usuarios vistos desde la BS — esto ES la P2 del bloque 1: producto cerca de 1 = "se ven iguales". La norma dice quien llega fuerte y quien necesita ayuda. Alimentan scheduler y MU-MIMO.</li>
+            <li><strong>¿Cuanto dura la foto?</strong> (mirar el RELOJ): el tiempo de coherencia no mide el canal — mide la fecha de caducidad de las otras cinco filas. De ahi el costo de pilotos y la velocidad de adaptacion.</li>
+          </ol>
+          <p>Gancho con el 2x2 recien calculado: las tres primeras filas ya tienen numeros en la pizarra — rank 2, <code>sigma = 1.5 / 0.5</code>, y calcular en vivo <code>kappa = 1.5/0.5 = 3</code>. Anunciar: "recuerden este 3: es el desbalance que en el bloque 5 se traduce en el x2.22 de ruido que paga ZF". Al dictar kappa, dar el significado del termino (viene del analisis numerico): "condicionamiento = sensibilidad a errores; kappa dice cuantas veces se amplifican al invertir H". Escalada si la clase va bien — el canal B del material: subir el acoplamiento a 0.9 da <code>sigma = 1.9 / 0.1</code>, <code>kappa = 19</code>, y ZF pagaria x50. Mismo rank algebraico, destino opuesto; la frase del material: "el rank cuenta los modos; kappa dice si valen algo". Fisica en una linea: con 0.9 las dos antenas RX escuchan casi lo mismo — la segunda capa vive en la resta <code>1 - 0.9</code>, y el ruido entierra diferencias pequeñas.</p>
+          <p>Metafora que continua el bloque 1: alla fueron sintomas externos (SNR, BLER); aqui llego el analisis de laboratorio (la H estimada con pilotos). Frase de dictado: <strong>"H no se mira, se interroga; estas son las seis preguntas"</strong>. Y como la tabla del bloque 1, esta tambien es indice: kappa → bloque 5 (detectores), sigma_k → bloque 6 (water-filling y rank), producto interno → bloque 5 (MU-MIMO), coherencia → bloque 7 (CSI y pilotos).</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-4" class="class-block">
+      <div class="block-head">
+        <h2>4. Diversidad, beamforming y multiplexacion</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>Este bloque debe sentirse como una decision de presupuesto: si gasto dimensiones en robustez, no las gasto todas en throughput; si gasto dimensiones en capas, pierdo margen de diversidad.</p>
+      <figure>
+        <img src="figures/mimo-dmt.png" alt="Curva DMT MIMO">
+        <figcaption>No vender DMT como formula para memorizar. Usarlo como dibujo de tradeoff: mas multiplexacion reduce diversidad.</figcaption>
+      </figure>
+      <div class="script">
+        "El DMT formaliza una tension de ingenieria. Cuando estoy desesperado por robustez, bajo rank y uso diversidad o beamforming. Cuando el canal ya es fuerte y tiene modos independientes, subo capas."
+      </div>
+      <div class="note orange">
+        <span class="label">Alamouti</span>
+        <p>Explicarlo como ejemplo de diversidad elegante: dos antenas transmiten una estructura que permite al receptor cancelar terminos cruzados. La moraleja no es el codigo en si; es que a veces conviene usar antenas para confiabilidad, no para velocidad.</p>
+      </div>
+      <details>
+        <summary>Pizarra: Alamouti en cuatro lineas</summary>
+        <div>
+          <p>Antes de la tabla, dos avisos de notacion en voz alta: el asterisco aqui es <strong>conjugado complejo</strong> (no el "optimo" del DMT — colision de simbolos), y las dos filas son <strong>tiempos de simbolo</strong> consecutivos, no slots (un slot NR son 14 simbolos).</p>
+          <ol>
+            <li>Tabla 2 tiempos de simbolo x 2 antenas: tiempo 1 envia <code>s1, s2</code>; tiempo 2 envia <code>-s2*, s1*</code> (intercambiados, conjugados, un signo cambiado — el patron esta diseñado hacia atras desde la cancelacion del paso 3).</li>
+            <li>Recibido: <code>r1 = h1&middot;s1 + h2&middot;s2 + n1</code>, <code>r2 = -h1&middot;s2* + h2&middot;s1* + n2</code> (mismos h: dos tiempos de simbolo caben de sobra en el tiempo de coherencia).</li>
+            <li>Combinador: <code>s1_hat = h1*&middot;r1 + h2&middot;r2*</code>. De donde salen los pesos — regla del filtro adaptado, dictable en una frase: "cada copia de s1 se multiplica por el conjugado del coeficiente que la acompaña; <code>h*&middot;h&middot;s = |h|^2&middot;s</code> cancela la fase y alinea las copias para que sumen". Expandir en vivo y mostrar que los terminos cruzados se cancelan exacto.</li>
+            <li>Resultado: <code>sk_hat = (|h1|^2 + |h2|^2)&middot;sk + ruido</code> — cada simbolo cobra ambos trayectos, sin CSIT. La SNR final es la suma de las SNR de los dos caminos.</li>
+          </ol>
+          <p>Caso numerico rapido si hay tiempo: <code>h1 = 1, h2 = j</code> da <code>s1_hat = 2&middot;s1</code>. Verificable en una linea. Precio para cerrar: 2 simbolos en 2 tiempos = tasa 1, igual que una sola antena — Alamouti no multiplexa, gasta el presupuesto espacial completo en proteccion.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Pizarra: DMT como dibujo, no como formula</summary>
+        <div>
+          <p>Definir los dos ejes antes de dibujar: <code>r</code> = ganancia de multiplexacion (cuantas capas efectivas); <code>d</code> = ganancia de diversidad (que tan rapido cae el error: BER &prop; SNR<sup>-d</sup>). La formula del material es <code>d_opt(r) = (Nt-r)(Nr-r)</code> — funcion de r, no producto: se elige r y la formula devuelve la mejor d alcanzable. Para 2x2 evaluar en vivo los tres puntos: <code>d_opt(0) = 2&middot;2 = 4</code>, <code>d_opt(1) = 1&middot;1 = 1</code>, <code>d_opt(2) = 0</code>, y unirlos con recta quebrada. Leerlo en voz alta: "cada capa que agrego me quita proteccion". Es la Figura 5 hecha a mano, para que quede la pendiente y no la formula. Ubicar Alamouti en el dibujo: vive en <code>r = 0</code>, proteccion maxima.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-5" class="class-block">
+      <div class="block-head">
+        <h2>5. Separar la mezcla: detector o precoder</h2>
+        <span class="time">Tiempo sugerido: 18 min</span>
+      </div>
+      <p>Plantear la pregunta: si las capas o usuarios llegan mezclados, ¿quien hace el trabajo de separacion? Si el transmisor no conoce el canal, separa el receptor. Si la base conoce el canal, puede precodificar antes de transmitir.</p>
+      <figure>
+        <img src="figures/mimo-detectors.png" alt="BER de detectores MIMO">
+        <figcaption>Usar esta figura para comparar costo y robustez: ZF es barato, MMSE regulariza, ML es referencia optima pero no escala.</figcaption>
+      </figure>
+      <div class="script">
+        "ZF dice: voy a invertir el canal y eliminar interferencia. Eso suena perfecto, hasta que el canal esta mal condicionado. Entonces al invertir tambien agrando el ruido. MMSE acepta un poco de interferencia para no destruir el SNR."
+      </div>
+      <details>
+        <summary>Pizarra: cuanto ruido paga ZF (numero concreto)</summary>
+        <div>
+          <ol>
+            <li>Recuperar el canal 2x2 del bloque 3. Escribir <code>H^H&middot;H = [[1.25, 1], [1, 1.25]]</code>.</li>
+            <li>Invertir en vivo con la regla 2x2 (dictarla: "intercambio la diagonal, niego la antidiagonal, divido entre el determinante"): determinante <code>1.25^2 - 1 = 0.5625</code>, diagonal de la inversa <code>1.25/0.5625 &asymp; 2.22</code>.</li>
+            <li>Conclusion en una frase: ZF elimina la interferencia pero multiplica el ruido de cada flujo por 2.22. MMSE existe para no pagar eso completo.</li>
+            <li>Escalada si el bloque 3 dicto el canal B (acoplamiento 0.9): la misma cuenta da diagonal <code>&asymp; 50</code> — el ruido x50. Ahi kappa se vuelve numero: paso de 3 a 19 y el precio de invertir paso de x2.22 a x50 (crece como <code>1/sigma_2^2</code>, el modo debil manda).</li>
+          </ol>
+        </div>
+      </details>
+      <figure>
+        <img src="figures/mimo-mrt-zf.png" alt="MRT vs ZF">
+        <figcaption>Para downlink MU-MIMO, cambiar el lenguaje: ya no separa cada UE, la estacion base intenta no contaminar a los demas.</figcaption>
+      </figure>
+      <div class="grid">
+        <div class="note">
+          <span class="label">MRT</span>
+          <p>Bueno cuando domina ruido o cuando <code>M/K</code> es grande. Se alinea con el usuario deseado, pero no cancela completamente interferencia.</p>
+        </div>
+        <div class="note red">
+          <span class="label">ZF</span>
+          <p>Bueno cuando domina interferencia y los canales son separables. Malo si los usuarios tienen canales casi paralelos.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">RZF/MMSE</span>
+          <p>Presentarlo como el compromiso practico: cancelar interferencia sin pagar una inversion agresiva cuando el canal o el SNR no lo justifican.</p>
+        </div>
+      </div>
+      <details>
+        <summary>Pizarra: la ecuacion del downlink con el enemigo subrayado</summary>
+        <div>
+          <p>Escribir <code>y_k = h_k^H&middot;w_k&middot;s_k + &Sigma;_{j&ne;k} h_k^H&middot;w_j&middot;s_j + n_k</code> y subrayar el termino de la suma. Todo el bloque se resume ahi: MRT maximiza el primer termino e ignora el subrayado; ZF anula el subrayado aunque encoja el primero; RZF negocia entre ambos segun SNR. Dejar la ecuacion escrita mientras se comenta la Figura de MRT vs ZF.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-6" class="class-block">
+      <div class="block-head">
+        <h2>6. Rank adaptation y capacidad util</h2>
+        <span class="time">Tiempo sugerido: 12 min</span>
+      </div>
+      <p>Aqui conviene reconciliar teoria y operacion. La capacidad explica por que varias capas pueden aumentar throughput, pero el sistema real no sube rank por entusiasmo: mira SNR, BLER, valores singulares, RI, CQI, PMI e interferencia.</p>
+      <figure>
+        <img src="figures/mimo-rank-precoder-flow.png" alt="Flujo de decision rank y precoder">
+        <figcaption>Este flujo es la pieza central para estudiantes implementativos: cada decision sale de una medicion.</figcaption>
+      </figure>
+      <figure>
+        <img src="figures/mimo-capacity.png" alt="Capacidad MIMO">
+        <figcaption>La curva de capacidad debe cerrar el argumento, no abrirlo: las antenas se convierten en tasa si el canal permite modos utiles.</figcaption>
+      </figure>
+      <div class="script">
+        "La capacidad promete una pendiente mejor con mas antenas. La implementacion pregunta: ¿puedo estimar el canal?, ¿el segundo modo es fuerte?, ¿el BLER quedo bajo control?, ¿el UE reporta un RI que justifica mas capas?"
+      </div>
+      <details>
+        <summary>Pregunta rapida</summary>
+        <div>
+          <p>"Si el sistema reporta alto SNR pero <code>sigma_2</code> es muy pequeño, ¿subimos a dos capas?" La respuesta esperada es: no necesariamente; alto SNR no corrige por completo un modo espacial debil o mala condicion.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Pizarra: water-filling como recipiente</summary>
+        <div>
+          <p>Dibujar un recipiente con un escalon por modo espacial, de altura <code>N0/sigma_k^2</code>: el modo fuerte es un escalon bajo, el debil uno alto. Verter "agua" hasta el nivel <code>mu</code> (definirlo al dictar: la constante que se ajusta hasta que las potencias suman el total disponible); la potencia de cada modo es el agua que queda sobre su escalon. Con las ganancias del material (<code>sigma^2 = 52, 13, 4</code>) los tres escalones quedan bajo el agua: reparto <code>(0.43, 0.37, 0.20)</code>, casi uniforme — water-filling gana poco. Segundo caso del material: hundir el tercer modo a <code>sigma_3^2 = 0.04</code> — su escalon (<code>N0/0.04 = 25</code>) sobresale de cualquier nivel de agua alcanzable y recibe <strong>cero</strong> potencia. El mensaje operativo: apagar un modo ES bajar rank — water-filling hace rank adaptation por si solo.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="bloque-7" class="class-block">
+      <div class="block-head">
+        <h2>7. Massive MIMO como problema de red</h2>
+        <span class="time">Tiempo sugerido: 15 min</span>
+      </div>
+      <p>Massive MIMO debe explicarse como un regimen: <code>M >> K</code>. No es solo agregar antenas. Con muchas antenas, el canal se estabiliza y los usuarios tienden a separarse, pero aparece el costo de estimar CSI y mantener reciprocidad.</p>
+      <figure>
+        <img src="figures/mimo-massive.png" alt="Channel hardening y favorable propagation">
+        <figcaption>Hardening: el canal efectivo fluctua menos. Favorable propagation: usuarios distintos se vuelven mas ortogonales al crecer M.</figcaption>
+      </figure>
+      <figure>
+        <img src="figures/mimo-csi-overhead.png" alt="Sobrecarga CSI FDD TDD">
+        <figcaption>Usar esta figura para explicar por que Massive MIMO practico suele preferir TDD.</figcaption>
+      </figure>
+      <div class="script">
+        "Si tengo 128 antenas, FDD me obliga a conocer y reportar un canal enorme de bajada. En TDD, los usuarios mandan pilotos en subida y la base reutiliza esa estimacion por reciprocidad. El overhead queda ligado a usuarios, no a antenas."
+      </div>
+      <details>
+        <summary>Pizarra: contaminacion de pilotos en dos celdas</summary>
+        <div>
+          <p>Dibujar dos celdas vecinas. UE A en la celda 1 y UE B en la celda 2 usan el MISMO piloto <code>p</code>. Flechas de ambos llegando a la BS 1: su estimacion queda <code>h_hat = h_A + h_B + ruido</code> — el canal del vecino queda pegado a la estimacion. Remate: agregar antenas no limpia esto; el haz de la BS 1 apunta en parte hacia B para siempre. Por eso el diseño de pilotos y su reutilizacion entre celdas son problema de red, no de algebra.</p>
+          <p>Al lado, el contraste FDD/TDD en dos flechas: FDD baja <code>M</code> pilotos y sube reportes; TDD sube <code>K</code> pilotos y reusa por reciprocidad. El costo escala con usuarios, no con antenas.</p>
+        </div>
+      </details>
+      <figure>
+        <img src="figures/mimo-sumrate.png" alt="Sum rate Massive MIMO">
+        <figcaption>La comparacion MRT/ZF ayuda a mostrar que con M grande algunos precoders simples empiezan a ser competitivos.</figcaption>
+      </figure>
+      <div class="note orange">
+        <span class="label">Cierre FR2</span>
+        <p>En mmWave, no basta decir "muchas antenas". El problema es link budget, bloqueo, busqueda de haces y costo de cadenas RF. Por eso aparece beamforming hibrido.</p>
+      </div>
+    </section>
+
+    <section id="laboratorio" class="band">
+      <h2>Puente hacia el laboratorio</h2>
+      <p>Presentar el notebook como una secuencia de decisiones, no como una coleccion de graficos. Cada bloque del laboratorio responde una pregunta de diseño:</p>
+      <ul class="checklist">
+        <li><strong>SVD y valores singulares:</strong> ¿cuantas capas son razonables?</li>
+        <li><strong>Capacidad:</strong> ¿cuando las antenas se vuelven throughput?</li>
+        <li><strong>ZF/MMSE/ML:</strong> ¿cuando vale pagar regularizacion o complejidad?</li>
+        <li><strong>MRT/ZF:</strong> ¿domina ruido o interferencia?</li>
+        <li><strong>Massive MIMO:</strong> ¿a partir de que <code>M/K</code> se estabiliza el sistema?</li>
+      </ul>
+    </section>
+
+    <section id="cierre">
+      <h2>Cierre de clase</h2>
+      <div class="script">
+        "Si se llevan una sola idea: MIMO es una herramienta de diseño espacial. A veces la uso para que el enlace cierre, a veces para subir capas, a veces para separar usuarios, y a veces para compensar path loss con haces. La matematica nos dice que opciones existen; el canal y la red nos dicen cual conviene."
+      </div>
+      <div class="grid">
+        <div class="note">
+          <span class="label">Tres preguntas finales</span>
+          <p>¿Cierra el enlace? ¿El canal tiene rank util? ¿La interferencia o el CSI hacen viable servir mas capas o usuarios?</p>
+        </div>
+        <div class="note red">
+          <span class="label">Mala decision tipica</span>
+          <p>Subir rank porque hay antenas disponibles, sin mirar BLER, SNR, valores singulares o correlacion espacial.</p>
+        </div>
+        <div class="note teal">
+          <span class="label">Buena decision tipica</span>
+          <p>Usar rank bajo y beamforming para robustez; subir capas solo cuando el canal y el enlace ya lo permiten.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+

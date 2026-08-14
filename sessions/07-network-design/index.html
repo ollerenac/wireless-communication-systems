@@ -1,0 +1,3938 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="El flujo profesional de diseño de RAN — requisitos, espectro, cobertura, capacidad, plan nominal, parámetros y validación — ejecutado sobre una escena ray-traced de San Isidro, Lima.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/07-network-design/">
+      
+      
+        <link rel="prev" href="../06-mimo-systems/">
+      
+      
+        <link rel="next" href="rsrp-rsrq-sinr/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sesion-07-diseno-de-red-de-acceso-4g5g-sobre-una-ciudad-real" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../exams/" class="md-tabs__link">
+          
+  
+  
+  Evaluaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-gnuradio-ofdm/gnuradio-ofdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-mimo-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 — Diseño de Red de Acceso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    07 — Diseño de Red de Acceso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El proyecto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-0-requisitos-el-diseno-empieza-en-numeros-no-en-antenas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 0 — Requisitos: el diseño empieza en números, no en antenas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 0 — Requisitos: el diseño empieza en números, no en antenas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-las-tres-metricas-que-gobiernan-los-requisitos-de-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.1 Las tres métricas que gobiernan los requisitos de radio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-umbral-de-sinr-para-servicios-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.2 Umbral de SINR para servicios de datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-requisitos-de-bitrate-y-latencia-por-servicio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.3 Requisitos de bitrate y latencia por servicio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0.3 Requisitos de bitrate y latencia por servicio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-target-de-borde-r4-y-esta-tabla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El target de borde (R4) y esta tabla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-latencia-no-la-mide-el-trazador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La latencia no la mide el trazador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-de-gb-por-mes-a-mbps-de-hora-cargada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.4 De GB por mes a Mbps de hora cargada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-requisitos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.5 Requisitos del proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-1-estrategia-de-espectro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1 — Estrategia de espectro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 1 — Estrategia de espectro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-frecuencia-y-alcance-efecto-en-el-radio-de-celda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Frecuencia y alcance: efecto en el radio de celda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bandas-de-5g-y-capas-de-espectro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Bandas de 5G y capas de espectro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-reparto-tdd-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Reparto TDD del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-numerologia-y-bloques-de-recursos-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Numerología y bloques de recursos del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-de-la-fase-1-lo-que-hereda-el-resto-del-diseno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisión de la Fase 1 (lo que hereda el resto del diseño)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-2-dimensionamiento-por-cobertura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2 — Dimensionamiento por cobertura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 2 — Dimensionamiento por cobertura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-potencia-por-elemento-de-recurso-epre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Potencia por elemento de recurso: EPRE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-presupuesto-del-enlace-de-bajada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Presupuesto del enlace de bajada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-de-mapl-a-radio-el-modelo-de-propagacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 De MAPL a radio: el modelo de propagación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-presupuesto-del-enlace-de-subida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Presupuesto del enlace de subida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-de-rss-a-rsrp-verificacion-con-sionna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 De RSS a RSRP: verificación con Sionna
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-3-dimensionamiento-por-capacidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3 — Dimensionamiento por capacidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 3 — Dimensionamiento por capacidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-capacidad-de-celda-promedio-sobre-la-distribucion-de-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Capacidad de celda: promedio sobre la distribución de SINR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-calculo-de-la-capacidad-de-celda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Cálculo de la capacidad de celda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-sitios-por-capacidad-y-veredicto-del-dimensionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Sitios por capacidad y veredicto del dimensionamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-verificacion-de-la-capacidad-de-subida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Verificación de la capacidad de subida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-4-plan-nominal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4 — Plan nominal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 4 — Plan nominal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-sectorizacion-3120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Sectorización 3×120°
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-azimut-de-los-sectores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Azimut de los sectores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-downtilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Downtilt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-plan-nominal-de-san-isidro-y-resultados-del-trazador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Plan nominal de San Isidro y resultados del trazador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-5-planificacion-detallada-pci-rach-y-tracking-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 5 — Planificación detallada: PCI, RACH y tracking areas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 5 — Planificación detallada: PCI, RACH y tracking areas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-procedimientos-del-ue-del-encendido-a-los-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Procedimientos del UE: del encendido a los datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-planificacion-de-pci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Planificación de PCI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-zona-de-contencion-del-prach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Zona de contención del PRACH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-dimensionamiento-de-las-tracking-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Dimensionamiento de las tracking areas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-listas-de-vecinas-y-evento-a3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Listas de vecinas y evento A3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-6-validacion-y-optimizacion-del-diseno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 6 — Validación y optimización del diseño
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 6 — Validación y optimización del diseño">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-calidad-del-muestreo-y-comparacion-de-mapas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Calidad del muestreo y comparación de mapas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-verificacion-de-r2-y-el-drive-test-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Verificación de R2 y el drive test virtual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-eficiencia-espectral-medida-y-re-veredicto-de-capacidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Eficiencia espectral medida y re-veredicto de capacidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-tilt-por-celda-el-ajuste-fino-medido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Tilt por celda: el ajuste fino, medido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-el-veredicto-r1r8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 El veredicto R1–R8
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="rsrp-rsrq-sinr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="crs-dos-celdas-pci-mod3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: CRS con dos celdas y PCI mod 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="de-sinr-a-capacidad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: de SINR a capacidad de celda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="escena-osm-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía: escena OSM con Blender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcial 01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/examen-diseno-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examen — Diseño de red 5G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#el-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El proyecto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-0-requisitos-el-diseno-empieza-en-numeros-no-en-antenas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 0 — Requisitos: el diseño empieza en números, no en antenas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 0 — Requisitos: el diseño empieza en números, no en antenas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#01-las-tres-metricas-que-gobiernan-los-requisitos-de-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.1 Las tres métricas que gobiernan los requisitos de radio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#02-umbral-de-sinr-para-servicios-de-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.2 Umbral de SINR para servicios de datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#03-requisitos-de-bitrate-y-latencia-por-servicio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.3 Requisitos de bitrate y latencia por servicio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0.3 Requisitos de bitrate y latencia por servicio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-target-de-borde-r4-y-esta-tabla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El target de borde (R4) y esta tabla
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-latencia-no-la-mide-el-trazador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La latencia no la mide el trazador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#04-de-gb-por-mes-a-mbps-de-hora-cargada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.4 De GB por mes a Mbps de hora cargada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#05-requisitos-del-proyecto" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0.5 Requisitos del proyecto
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-1-estrategia-de-espectro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 1 — Estrategia de espectro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 1 — Estrategia de espectro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-frecuencia-y-alcance-efecto-en-el-radio-de-celda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Frecuencia y alcance: efecto en el radio de celda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-bandas-de-5g-y-capas-de-espectro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Bandas de 5G y capas de espectro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-reparto-tdd-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Reparto TDD del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-numerologia-y-bloques-de-recursos-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Numerología y bloques de recursos del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#decision-de-la-fase-1-lo-que-hereda-el-resto-del-diseno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decisión de la Fase 1 (lo que hereda el resto del diseño)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-2-dimensionamiento-por-cobertura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 2 — Dimensionamiento por cobertura
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 2 — Dimensionamiento por cobertura">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-potencia-por-elemento-de-recurso-epre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Potencia por elemento de recurso: EPRE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-presupuesto-del-enlace-de-bajada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Presupuesto del enlace de bajada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-de-mapl-a-radio-el-modelo-de-propagacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 De MAPL a radio: el modelo de propagación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-presupuesto-del-enlace-de-subida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Presupuesto del enlace de subida
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-de-rss-a-rsrp-verificacion-con-sionna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 De RSS a RSRP: verificación con Sionna
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-3-dimensionamiento-por-capacidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 3 — Dimensionamiento por capacidad
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 3 — Dimensionamiento por capacidad">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-capacidad-de-celda-promedio-sobre-la-distribucion-de-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Capacidad de celda: promedio sobre la distribución de SINR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-calculo-de-la-capacidad-de-celda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Cálculo de la capacidad de celda
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-sitios-por-capacidad-y-veredicto-del-dimensionamiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Sitios por capacidad y veredicto del dimensionamiento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-verificacion-de-la-capacidad-de-subida" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Verificación de la capacidad de subida
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-4-plan-nominal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 4 — Plan nominal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 4 — Plan nominal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-sectorizacion-3120" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Sectorización 3×120°
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-azimut-de-los-sectores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Azimut de los sectores
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-downtilt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Downtilt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-plan-nominal-de-san-isidro-y-resultados-del-trazador" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Plan nominal de San Isidro y resultados del trazador
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-5-planificacion-detallada-pci-rach-y-tracking-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 5 — Planificación detallada: PCI, RACH y tracking areas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 5 — Planificación detallada: PCI, RACH y tracking areas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-procedimientos-del-ue-del-encendido-a-los-datos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Procedimientos del UE: del encendido a los datos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-planificacion-de-pci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Planificación de PCI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-zona-de-contencion-del-prach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Zona de contención del PRACH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-dimensionamiento-de-las-tracking-areas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Dimensionamiento de las tracking areas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-listas-de-vecinas-y-evento-a3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Listas de vecinas y evento A3
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fase-6-validacion-y-optimizacion-del-diseno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fase 6 — Validación y optimización del diseño
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fase 6 — Validación y optimización del diseño">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-calidad-del-muestreo-y-comparacion-de-mapas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Calidad del muestreo y comparación de mapas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-verificacion-de-r2-y-el-drive-test-virtual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Verificación de R2 y el drive test virtual
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-eficiencia-espectral-medida-y-re-veredicto-de-capacidad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.3 Eficiencia espectral medida y re-veredicto de capacidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-tilt-por-celda-el-ajuste-fino-medido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.4 Tilt por celda: el ajuste fino, medido
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#65-el-veredicto-r1r8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.5 El veredicto R1–R8
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sesion-07-diseno-de-red-de-acceso-4g5g-sobre-una-ciudad-real">Sesión 07 — Diseño de red de acceso 4G/5G sobre una ciudad real</h1>
+<ul>
+<li><a href="https://youtu.be/8icS5ytCRE0?si=_KFLc8OG0f721oz5">Vídeo - Parte 1</a> Fecha: Agosto 04</li>
+<li><a href="https://youtu.be/E50KJ3e77UI">Vídeo - Parte 2</a> Fecha: Agosto 12</li>
+</ul>
+<blockquote>
+<p><strong>Página en construcción</strong> — se escribe fase por fase junto con el
+notebook <code>design.ipynb</code> (Fases 0–6 listas; falta el cierre).</p>
+</blockquote>
+<div class="admonition tip">
+<p class="admonition-title">Cómo correr el notebook del ejercicio</p>
+<ol>
+<li><a href="https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/07-network-design/design.ipynb">Abrir design.ipynb en Colab</a>.</li>
+<li>Activar GPU: <em>Entorno de ejecución → Cambiar tipo de entorno → T4 GPU</em>.</li>
+<li><em>Ejecutar todo</em>. La primera celda instala Sionna RT y descarga el
+   mapa del curso sola.</li>
+</ol>
+<p><strong>Si te asignaron otro mapa</strong> (p. ej. <code>miraflores</code>): en la primera
+celda cambia la única variable — <code>ESCENA = "miraflores"</code> — y ejecuta
+todo; el mapa se descarga automáticamente del sitio del curso.</p>
+</div>
+<h2 id="objetivos-de-aprendizaje">Objetivos de Aprendizaje</h2>
+<p>Al finalizar esta sesión, el estudiante será capaz de:</p>
+<ol>
+<li>Traducir metas de negocio en requisitos técnicos medibles de una red de acceso (cobertura, calidad, capacidad, servicios).</li>
+<li>Ejecutar el flujo profesional de diseño de RAN: espectro → dimensionamiento por cobertura → dimensionamiento por capacidad → plan nominal → planificación detallada → validación.</li>
+<li>Justificar la elección de bandas 4G/5G según penetración, radio de celda y capacidad, sobre geometría urbana real.</li>
+<li>Configurar y defender los parámetros que consumen los procedimientos de red: PCI, RACH, tracking areas, vecindades y umbrales de handover.</li>
+<li>Validar un diseño con ray tracing (Sionna RT) sobre un escenario real y cerrar el lazo de optimización.</li>
+</ol>
+<details class="note">
+<summary>Siglas y símbolos de la sesión (referencia rápida)</summary>
+<p>Cada término se explica en su primer uso; esta tabla es el respaldo
+para lectura no lineal.</p>
+<table>
+<thead>
+<tr>
+<th>Sigla / símbolo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UE / BS, gNB</td>
+<td><em>User Equipment</em> (el teléfono) / estación base (en 5G: gNB)</td>
+</tr>
+<tr>
+<td>DL / UL</td>
+<td><em>downlink</em> (bajada, BS→UE) / <em>uplink</em> (subida, UE→BS)</td>
+</tr>
+<tr>
+<td>TDD / FDD</td>
+<td>duplexación por división de tiempo / de frecuencia</td>
+</tr>
+<tr>
+<td>SCS</td>
+<td><em>subcarrier spacing</em> — separación entre subportadoras OFDM (aquí 30 kHz)</td>
+</tr>
+<tr>
+<td>CP</td>
+<td>prefijo cíclico del símbolo OFDM (Sesión 03)</td>
+</tr>
+<tr>
+<td>RE / PRB</td>
+<td><em>resource element</em> (1 subportadora × 1 símbolo) / <em>physical resource block</em> (12 subportadoras)</td>
+</tr>
+<tr>
+<td>EPRE</td>
+<td><em>energy per resource element</em> — potencia por RE</td>
+</tr>
+<tr>
+<td>RSRP / RSRQ / RSSI</td>
+<td>potencia de la señal de referencia / su versión relativa / potencia total recibida</td>
+</tr>
+<tr>
+<td>SNR / SINR</td>
+<td>señal-a-ruido / señal-a-(interferencia+ruido)</td>
+</tr>
+<tr>
+<td>NF</td>
+<td><em>noise figure</em> — figura de ruido: cuánto ruido agrega el propio receptor</td>
+</tr>
+<tr>
+<td>MAPL</td>
+<td><em>maximum allowable path loss</em> — pérdida máxima admisible del trayecto</td>
+</tr>
+<tr>
+<td>PL / UMa / NLOS</td>
+<td><em>path loss</em> / modelo urbano-macro del 3GPP / sin línea de vista</td>
+</tr>
+<tr>
+<td>σ, n</td>
+<td>desviación del shadowing (dB) / exponente de propagación</td>
+</tr>
+<tr>
+<td>SE</td>
+<td>eficiencia espectral (bit/s/Hz)</td>
+</tr>
+<tr>
+<td>OH</td>
+<td><em>overhead</em> — fracción de espectro gastada en señalización</td>
+</tr>
+<tr>
+<td>MCS</td>
+<td><em>modulation and coding scheme</em> — la pareja modulación+código que el scheduler elige según el SINR</td>
+</tr>
+<tr>
+<td>SISO / MIMO</td>
+<td>una antena por extremo / múltiples (Sesión 06)</td>
+</tr>
+<tr>
+<td>dBi</td>
+<td>ganancia de antena en dB respecto a la isotrópica</td>
+</tr>
+<tr>
+<td>SSB, PSS/SSS, PBCH/MIB, SIB</td>
+<td>bloque de sincronización y sus partes: señales de sincronía primaria/secundaria, canal broadcast con la información mínima/del sistema</td>
+</tr>
+<tr>
+<td>PCI</td>
+<td><em>physical cell identity</em> (0–1007)</td>
+</tr>
+<tr>
+<td>RACH / PRACH / ZC / N_CS</td>
+<td>acceso aleatorio / su canal físico / secuencias Zadoff–Chu / separación mínima entre preámbulos</td>
+</tr>
+<tr>
+<td>RRC / NAS</td>
+<td>señalización de radio (UE↔gNB) / de red (UE↔núcleo)</td>
+</tr>
+<tr>
+<td>AMF / SMF / UPF</td>
+<td>nodos del núcleo 5G: movilidad y acceso / gestión de sesiones / plano de datos de usuario</td>
+</tr>
+<tr>
+<td>TA</td>
+<td>según contexto: <em>timing advance</em> (avance temporal, Msg2) o <em>tracking area</em> (§5.4)</td>
+</tr>
+<tr>
+<td>A3 / TTT</td>
+<td>evento de handover "la vecina supera a la serving" / <em>time-to-trigger</em>, su temporizador</td>
+</tr>
+<tr>
+<td>ANR</td>
+<td><em>automatic neighbour relations</em> — llenado automático de listas de vecinas</td>
+</tr>
+<tr>
+<td>ICIC</td>
+<td>coordinación de interferencia entre celdas (§Fase 0, R1)</td>
+</tr>
+<tr>
+<td>eMBB / VoNR</td>
+<td>banda ancha móvil mejorada / voz sobre NR</td>
+</tr>
+<tr>
+<td>SON</td>
+<td><em>self-organizing networks</em> — el lazo de optimización en operación continua</td>
+</tr>
+<tr>
+<td>p5, p50</td>
+<td>percentiles 5 y 50 (mediana) de una distribución</td>
+</tr>
+</tbody>
+</table>
+</details>
+<hr />
+<h2 id="el-proyecto">El proyecto</h2>
+<p>Un operador móvil te contrata para diseñar su red de acceso 5G en un
+polígono de <strong>San Isidro, Lima</strong> — 1.32 × 0.83 km del distrito financiero.
+Tienes licencia de 100 MHz en la banda n78 (3.5 GHz), azoteas disponibles
+y un presupuesto limitado de sitios — todo fijado en los <strong>términos de
+referencia</strong> del contrato. La publicidad que la empresa quiere poder
+cumplir:</p>
+<blockquote>
+<p><em>"Videollamadas nítidas y tu oficina en la nube, en todo San Isidro."</em></p>
+</blockquote>
+<p>Todo lo que sigue en esta sesión es resolver ese proyecto con método.</p>
+<div class="admonition note">
+<p class="admonition-title">Los mapas los proporciona el curso</p>
+<p>El laboratorio corre sobre mapas 3D reales construidos desde
+OpenStreetMap (el del proyecto: San Isidro). El curso los publica
+listos — no necesitas fabricar nada para el ejercicio. Si te interesa
+cómo se fabrican (o quieres crear el de <em>tu</em> distrito como extensión):
+<strong><a href="escena-osm-blender/">Guía: crear tu escena OSM con Blender</a></strong>
+(<a href="https://youtu.be/PIdn1R7FSrg?si=V8-HVuCvWGZG6v39">video del proceso</a>).</p>
+</div>
+<hr />
+<h2 id="fase-0-requisitos-el-diseno-empieza-en-numeros-no-en-antenas">Fase 0 — Requisitos: el diseño empieza en números, no en antenas</h2>
+<p>Un requisito de red vale solo si es <strong>medible</strong>. "Buena cobertura" no es un
+requisito; "RSRP ≥ −110 dBm en el 95% del área" sí, porque se puede verificar
+con un mapa o un drive test y se puede firmar en un contrato.</p>
+<h3 id="01-las-tres-metricas-que-gobiernan-los-requisitos-de-radio">0.1 Las tres métricas que gobiernan los requisitos de radio</h3>
+<ul>
+<li><strong>RSRP</strong> (<em>Reference Signal Received Power</em>): potencia recibida de la señal
+  de referencia de la celda — en 5G, del <strong>SSB</strong>, el bloque de
+  sincronización que la celda difunde periódicamente haya o no datos. Mide
+  <strong>cobertura de control</strong>:
+  ¿el UE encuentra la red y puede engancharse a ella? No dice nada de
+  interferencia.</li>
+<li><strong>SINR</strong>: señal sobre interferencia más ruido. Mide <strong>calidad de datos</strong>:
+  ¿la señal sirve para transportar bits? Se puede tener RSRP excelente con
+  SINR pésimo — típico en frontera de dos celdas sin coordinación.</li>
+<li><strong>RSRQ</strong> (<em>Reference Signal Received Quality</em>): híbrido que relaciona RSRP
+  con la potencia total recibida; útil para decidir handovers cuando RSRP
+  solo no discrimina.</li>
+</ul>
+<p>La pareja RSRP/SINR separa dos preguntas de diseño distintas: <strong>cobertura</strong>
+(Fase 2) y <strong>calidad/capacidad</strong> (Fase 3). Confundirlas es el error clásico.</p>
+<p>¿Y cuánto RSRP es "suficiente"? La convención de la industria (la misma que
+usa un <em>drive test</em>) clasifica así:</p>
+<p><strong>Tabla 0.1 — Rangos de RSRP y calidad de servicio esperada (convención de drive test)</strong></p>
+<table>
+<thead>
+<tr>
+<th>RSRP (SSB)</th>
+<th>Calidad</th>
+<th>Qué esperas en ese punto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ −80 dBm</td>
+<td>Excelente</td>
+<td>modulación máxima, throughput pico</td>
+</tr>
+<tr>
+<td>−80 a −90 dBm</td>
+<td>Buena</td>
+<td>servicio pleno sin restricciones</td>
+</tr>
+<tr>
+<td>−90 a −100 dBm</td>
+<td>Regular</td>
+<td>el servicio funciona, el throughput empieza a caer</td>
+</tr>
+<tr>
+<td>−100 a −110 dBm</td>
+<td>Débil</td>
+<td>borde de servicio: handovers frecuentes, datos lentos</td>
+</tr>
+<tr>
+<td>&lt; −110 dBm</td>
+<td>Sin servicio confiable</td>
+<td>el UE pierde sincronización y el acceso falla</td>
+</tr>
+</tbody>
+</table>
+<p>El umbral de <strong>−110 dBm</strong> que usan los requisitos no es arbitrario: por
+debajo, los canales de control (los que el UE necesita para engancharse y
+mantenerse en la red) dejan de decodificarse con fiabilidad — está unos dB
+sobre la sensibilidad del receptor, como margen. Por eso R2 se llama
+<em>cobertura de control</em>: garantiza que la red <strong>existe</strong> para el UE, no que
+sea rápida. La rapidez la gobiernan SINR y throughput (R3, R4).</p>
+<p>¿Y con qué <strong>probabilidad</strong> se exige ese umbral? Al 100% del área, nunca:
+la Sesión 01 mostró que la señal urbana es una variable aleatoria — el
+shadowing log-normal hace que dos esquinas a la misma distancia de la BS
+difieran 10–20 dB — y cada punto porcentual final cuesta más que todos los
+anteriores. Por eso la industria diseña a probabilidad, y para el control
+la exige <strong>alta — típicamente 95% del área</strong> — porque quedarse sin red es
+la falla más grave que existe para el usuario. El precio se paga en el
+link budget como <strong>margen de shadowing</strong> (Fase 2).</p>
+<div class="admonition info">
+<p class="admonition-title">Nota de profundización</p>
+<p>La mecánica completa de las tres métricas — dónde viven en la grilla
+tiempo-frecuencia, el patrón de señales de referencia, EPRE, el techo
+estructural del RSRQ y las trampas de medición — está en
+<a href="rsrp-rsrq-sinr/">RSRP, RSRQ y SINR — nota de referencia</a>. Aquí basta
+el nivel conceptual; la Fase 2 recurre a esa nota para calcular.</p>
+</div>
+<h3 id="02-umbral-de-sinr-para-servicios-de-datos">0.2 Umbral de SINR para servicios de datos</h3>
+<p>La Tabla 0.1 respondió "¿hay red?"; falta "¿la señal sirve?". El puente
+entre SINR y bits es la <strong>eficiencia espectral</strong> — cuántos bits por segundo
+transporta cada hertz de espectro — cuyo techo da Shannon:</p>
+<div class="arithmatex">\[SE = \log_2(1 + \text{SINR}_{\text{lineal}}) \quad \text{[bit/s/Hz]}\]</div>
+<p>El punto de referencia que hay que memorizar: <strong>SINR = 0 dB (señal igual a
+interferencia más ruido) da SE ≈ 1 bit/s/Hz</strong>. Con una tajada modesta del
+canal — digamos 10 de los 100 MHz — eso ya son ~10 Mbps: suficiente para un
+stream HD. Por debajo de 0 dB la eficiencia colapsa exponencialmente y
+aparecen los "cortes". La clasificación de planificación:</p>
+<p><strong>Tabla 0.2 — Rangos de SINR y calidad de datos esperada (valores de planificación)</strong></p>
+<table>
+<thead>
+<tr>
+<th>SINR</th>
+<th>Calidad</th>
+<th>Qué esperas en ese punto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>≥ 20 dB</td>
+<td>Excelente</td>
+<td>modulaciones altas (256-QAM), SE ≈ 6–8 bit/s/Hz, throughput pico</td>
+</tr>
+<tr>
+<td>13 a 20 dB</td>
+<td>Buena</td>
+<td>throughput alto sostenido, SE ≈ 4–6</td>
+</tr>
+<tr>
+<td>0 a 13 dB</td>
+<td>Regular</td>
+<td>el servicio funciona, SE ≈ 1–4</td>
+</tr>
+<tr>
+<td>−5 a 0 dB</td>
+<td>Borde de datos</td>
+<td>los streams empiezan a cortarse, SE &lt; 1</td>
+</tr>
+<tr>
+<td>&lt; −5 dB</td>
+<td>Inutilizable para datos</td>
+<td>el control aún engancha (R2), los datos no fluyen</td>
+</tr>
+</tbody>
+</table>
+<p>Por eso el umbral convencional de "datos utilizables" en los requisitos es
+<strong>SINR ≥ 0 dB</strong>: es la frontera donde la eficiencia espectral todavía
+sostiene un servicio real. La cadena completa SINR → SE → Mbps por celda
+se cobra en la Fase 3; la mecánica fina está en
+<a href="de-sinr-a-capacidad/">De SINR a capacidad — nota de referencia</a>.</p>
+<p>La probabilidad que acompaña a este umbral es <strong>menor que la del control —
+típicamente 90% del área contra 95%</strong>. La razón: datos degradados son una
+falla <em>elástica</em> — el buffer del video y el scheduler disimulan huecos
+breves — mientras que quedarse sin red (§0.1) no tiene disimulo. Los
+valores exactos los negocia cada contrato (90–95% es el rango urbano
+usual), pero la práctica consistente de la industria mantiene el orden:
+la probabilidad de control no baja de la de datos. La traducción exacta
+oferta → (umbral, probabilidad) es una <strong>decisión del diseñador</strong> — lo
+defendible no es el número, es el razonamiento.</p>
+<h3 id="03-requisitos-de-bitrate-y-latencia-por-servicio">0.3 Requisitos de bitrate y latencia por servicio</h3>
+<p>La oferta comercial habla de servicios ("video sin cortes", "llamadas
+nítidas"); los requisitos hablan de bits. La tabla que traduce — valores
+típicos de planificación:</p>
+<p><strong>Tabla 0.3 — Servicios y aplicaciones: bitrate y latencia mínimos (valores de planificación)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Servicio / aplicación</th>
+<th>DL por usuario</th>
+<th>UL por usuario</th>
+<th>Latencia</th>
+<th>Lo que manda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VoNR (voz sobre NR)</td>
+<td>~0.1 Mbps</td>
+<td>~0.1 Mbps</td>
+<td>&lt; 100 ms</td>
+<td>latencia y pérdida, no bitrate</td>
+</tr>
+<tr>
+<td>Video streaming SD (480p)</td>
+<td>1–2 Mbps</td>
+<td>—</td>
+<td>tolerante (buffer)</td>
+<td>bitrate DL</td>
+</tr>
+<tr>
+<td>Video streaming HD (1080p)</td>
+<td>5–8 Mbps</td>
+<td>—</td>
+<td>tolerante (buffer)</td>
+<td>bitrate DL</td>
+</tr>
+<tr>
+<td>Video streaming 4K</td>
+<td>15–25 Mbps</td>
+<td>—</td>
+<td>tolerante (buffer)</td>
+<td>bitrate DL</td>
+</tr>
+<tr>
+<td>Videollamada HD</td>
+<td>2–4 Mbps</td>
+<td>2–4 Mbps</td>
+<td>&lt; 150 ms</td>
+<td><strong>UL simétrico</strong> + latencia</td>
+</tr>
+<tr>
+<td>Web / redes sociales</td>
+<td>1–5 Mbps (ráfagas)</td>
+<td>&lt; 1 Mbps</td>
+<td>&lt; 300 ms</td>
+<td>percepción de carga</td>
+</tr>
+<tr>
+<td>Gaming en línea</td>
+<td>1–5 Mbps</td>
+<td>0.5–1 Mbps</td>
+<td>&lt; 50 ms</td>
+<td>latencia, no bitrate</td>
+</tr>
+<tr>
+<td>FWA (internet fijo por 5G)</td>
+<td>50–100 Mbps</td>
+<td>10–20 Mbps</td>
+<td>tolerante</td>
+<td>bitrate sostenido</td>
+</tr>
+</tbody>
+</table>
+<h4 id="el-target-de-borde-r4-y-esta-tabla">El target de borde (R4) y esta tabla</h4>
+<p>En nuestro proyecto el target viene dado por la guía de planificación
+del operador: <strong>DL = 50 Mbps</strong> — la referencia
+<a href="https://www.ngmn.org/wp-content/uploads/NGMN_5G_White_Paper_V1_0.pdf">NGMN</a>
+(§4.1.2) <em>"50 Mbps everywhere"</em>, exigible en al menos el 95% de las
+ubicaciones incluido el borde de celda — y <strong>UL = 5 Mbps</strong>: el mayor
+valor de la <strong>columna UL</strong> entre los servicios ofrecidos (videollamada,
+2–4 Mbps) más margen, porque no existe referencia publicada de UL "en
+todas partes".</p>
+<p>El papel de esta tabla es <strong>verificar que el target cubre lo ofrecido</strong>:
+el mayor DL entre los servicios de la publicidad queda muy por debajo de
+50 ✓. Si la oferta fuera pesada — FWA pide 50–100 Mbps DL y 10–20 UL —
+la referencia NGMN quedaría corta y el mínimo de la tabla mandaría el
+target en <strong>ambas</strong> columnas (p. ej. 100 DL / 20–25 UL). (El
+aspiracional de largo plazo es
+<a href="https://www.itu.int/dms_pub/itu-r/opb/rep/R-REP-M.2410-2017-PDF-E.pdf">ITU-R M.2410</a>
+§4.3: 100 DL / 50 UL en urbano denso.)</p>
+<p>¿Y por qué el target no se calcula de la demanda? Porque necesitarías
+cuántos sitios y celdas tendrá la red — el <strong>resultado</strong> del diseño
+(Fases 2–4), no un dato de la Fase 0. <strong>R4 se recibe/adopta; R5 se
+calcula de los TdR (§0.4).</strong></p>
+<div class="admonition note">
+<p class="admonition-title">En la práctica: ¿quién fija este número?</p>
+<p>El planificador de radio casi nunca lo fija — <strong>lo recibe</strong>, en este
+orden de fuerza: obligaciones del regulador → definición de producto
+del operador → guía interna de planificación (los perfiles de
+servicio que traen herramientas como Atoll o Planet). Este
+procedimiento de §0.3 es el que ejecuta la oficina técnica del
+operador <strong>una vez</strong>, al escribir esa guía — en el curso te toca
+ese rol porque no hay nadie que te la herede.</p>
+<p>Y en el Perú la oferta comercial no es solo marketing — es exigible:</p>
+<ul>
+<li>La <a href="https://lpderecho.pe/ley-internet-70-velocidad-minima/">Ley N° 31207</a>
+  (vigente desde dic. 2022) obliga a garantizar al menos el <strong>70% de
+  la velocidad contratada, en bajada y en subida</strong>;
+  <a href="https://www.osiptel.gob.pe/portal-del-usuario/noticias/osiptel-adecua-reglamento-de-calidad-para-garantizar-el-70-de-velocidad-minima-en-servicio-de-internet-de-banda-ancha/">OSIPTEL la monitorea</a>
+  mediante el registro RENAMV. Ojo con la lectura: la ley <strong>no fija
+  un valor absoluto</strong> (no dice "50 Mbps") — fija un porcentaje de
+  <strong>lo que tú ofreciste</strong>. Qué ofrecer sigue siendo decisión del
+  operador, y por eso traducir la publicidad a números verificables
+  — la Fase 0 entera — es una obligación legal, no un ejercicio de
+  aula.</li>
+<li>La <a href="https://www.gob.pe/institucion/mtc/noticias/1249724-peru-avanza-hacia-la-era-del-5g-mtc-oficializa-resultados-de-la-subasta-de-espectro-en-la-banda-3-5-ghz">subasta de la banda 3.5 GHz</a>
+  — la banda de este proyecto, en bloques de 100 MHz — se adjudicó
+  con compromisos de despliegue en sedes concretas (estadios,
+  universidades, centros de salud).</li>
+<li>El <a href="https://mobiletime.la/noticias/03/08/2026/peru-cobertura-movil-carreteras/">MTC propone</a>
+  medir la cobertura 4G en carreteras con el criterio <strong>RSRP ≥ −110
+  dBm</strong> — el mismo umbral de control de la Tabla 0.1 y de R2.</li>
+</ul>
+</div>
+<h4 id="la-latencia-no-la-mide-el-trazador">La latencia no la mide el trazador</h4>
+<p>Bitrates y
+  SINR se cobran en la Fase 6 con mapas; la latencia y la prioridad de VoNR
+  se garantizan por arquitectura y QoS (colas 5QI en el gNB y el core). Por
+  eso R6 existe como requisito pero no aparece en el <code>REQ</code> del notebook —
+  no hay mapa que lo verifique.</p>
+<h3 id="04-de-gb-por-mes-a-mbps-de-hora-cargada">0.4 De GB por mes a Mbps de hora cargada</h3>
+<p>La capacidad no se dimensiona para el promedio del día sino para la <strong>hora
+cargada</strong> (<em>busy hour</em>). La conversión estándar:</p>
+<div class="arithmatex">\[R_{\text{usuario}} = \frac{V_{\text{mes}} \cdot f_{BH}}{30 \cdot 3600}\]</div>
+<p>donde <span class="arithmatex">\(V_{\text{mes}}\)</span> es el volumen mensual por abonado (bits) y <span class="arithmatex">\(f_{BH}\)</span>
+la fracción del tráfico diario que cae en la hora cargada. Para <span class="arithmatex">\(f_{BH}\)</span>
+no hay valor normado — es una <strong>hipótesis que el diseñador declara</strong>,
+pero está bien acotada: si el día fuera uniforme, una hora llevaría
+<span class="arithmatex">\(1/24 \approx 4\%\)</span> del tráfico; y la medición real del
+<a href="https://www.ericsson.com/en/reports-and-papers/mobility-report/articles/traffic-patterns-drive-network-evolution">Ericsson Mobility Report</a>
+(jun. 2023, Fig. 24, Europa Occidental) muestra la hora pico llevando
+<strong>~7% del tráfico diario</strong> en denso urbano (mediodía) y ~6% en rural
+(noche, empujada por FWA). La hipótesis usual de planificación,
+<strong>8–12%</strong>, queda deliberadamente por encima de lo medido: es colchón de
+crecimiento. (El marco formal para <em>medir</em> la hora cargada es la
+recomendación <a href="https://www.itu.int/rec/T-REC-E.500">ITU-T E.500</a>.)</p>
+<p><img alt="Tráfico horario como fracción del tráfico de 24 h — denso urbano pica ~7% al mediodía, rural ~6.5% de noche" src="figures/ericsson-emr-jun2023-fig24-trafico-horario.png" /></p>
+<p><em>Figura: tráfico por hora dividido entre el tráfico de 24 h, Europa
+Occidental. Fuente: <a href="https://www.ericsson.com/en/reports-and-papers/mobility-report/articles/traffic-patterns-drive-network-evolution">Ericsson Mobility Report, jun. 2023, Fig. 24</a>.</em></p>
+<p>Ejemplo con números de Perú urbano: 10 GB/mes ≈ <span class="arithmatex">\(2.7\)</span> Gbit/día; con
+<span class="arithmatex">\(f_{BH} = 10\%\)</span> → <strong>~74 kbps sostenidos por abonado</strong> (Tabla 0.4). Parece poco — esa es
+la magia de la multiplexión estadística: miles de usuarios que navegan a
+ráfagas comparten la celda, y el diseñador dimensiona la suma, no los picos
+individuales.</p>
+<p>La fórmula, tabulada para volúmenes típicos y el rango usual de <span class="arithmatex">\(f_{BH}\)</span>
+(todas las celdas salen de la ecuación de arriba):</p>
+<p><strong>Tabla 0.4 — Tasa media por abonado en hora cargada, <span class="arithmatex">\(R_{usuario}\)</span> en kbps (calculada de la fórmula de esta sección)</strong></p>
+<table>
+<thead>
+<tr>
+<th><span class="arithmatex">\(V_{mes}\)</span></th>
+<th><span class="arithmatex">\(f_{BH}=8\%\)</span></th>
+<th><span class="arithmatex">\(f_{BH}=10\%\)</span></th>
+<th><span class="arithmatex">\(f_{BH}=12\%\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5 GB/mes</td>
+<td>29.6</td>
+<td>37.0</td>
+<td>44.4</td>
+</tr>
+<tr>
+<td>10 GB/mes</td>
+<td>59.3</td>
+<td>74.1</td>
+<td>88.9</td>
+</tr>
+<tr>
+<td>12 GB/mes</td>
+<td>71.1</td>
+<td>88.9</td>
+<td>106.7</td>
+</tr>
+<tr>
+<td>20 GB/mes</td>
+<td>118.5</td>
+<td>148.1</td>
+<td>177.8</td>
+</tr>
+<tr>
+<td>30 GB/mes</td>
+<td>177.8</td>
+<td>222.2</td>
+<td>266.7</td>
+</tr>
+</tbody>
+</table>
+<h3 id="05-requisitos-del-proyecto">0.5 Requisitos del proyecto</h3>
+<p><strong>Tabla 0.5 — Requisitos del proyecto (R1–R8): meta y método de verificación</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Requisito</th>
+<th>Meta</th>
+<th>Se verifica con</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>Área de servicio</td>
+<td>polígono de 1.1 km² (San Isidro)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>Cobertura de control</td>
+<td>RSRP ≥ −110 dBm en 95% del área</td>
+<td>mapa RSS / drive test</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>Calidad de datos</td>
+<td>SINR ≥ 0 dB en 90% del área</td>
+<td>mapa SINR</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>Throughput de borde</td>
+<td>p5 ≥ 50 Mbps DL, ≥ 5 Mbps UL</td>
+<td>mapa de throughput</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>Capacidad agregada</td>
+<td>≥ 600 Mbps/km² en hora cargada</td>
+<td>Fase 3</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>Servicios</td>
+<td>eMBB + VoNR, latencia de usuario &lt; 20 ms</td>
+<td>arquitectura/QoS</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>Espectro</td>
+<td>100 MHz TDD en n78 (3.5 GHz)</td>
+<td>licencia (MTC)</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>Despliegue</td>
+<td>solo azoteas existentes, máximo 6 sitios</td>
+<td>plan nominal</td>
+</tr>
+</tbody>
+</table>
+<p>Los ocho nacen aquí — son el contrato — pero se trabajan distinto. <strong>R2 a
+R5</strong> se calculan o fijan en esta fase con las secciones 0.1–0.4, y las
+fases de diseño los satisfacen y verifican. <strong>R1, R7 y R8</strong> son datos del
+contrato que se registran tal cual: la Fase 1 desarrolla las
+consecuencias de R7 (TDD, numerología, PRBs) y las Fases 2 y 4 respetan
+R8 (potencia en el link budget, sitios en el plan). <strong>R6</strong> se declara y
+se hereda: lo garantiza la arquitectura/QoS, no un mapa de radio — por
+eso es el único que no entra al diccionario <code>REQ</code> del notebook.</p>
+<p>Notación de R4: <strong>p5 = percentil 5</strong> de la distribución de throughput
+sobre el área — el valor que el 95% de los puntos supera. Es la forma
+estadística de decir "throughput de borde garantizado": el borde de celda
+<em>es</em> la cola baja de la distribución. Mismo espíritu probabilístico que
+el 95% de R2 y el 90% de R3.</p>
+<p>El cálculo detrás de R5: 25 000 personas/km² presentes en hora cargada
+(distrito financiero) × 30% de participación de mercado × 74.1 kbps por
+abonado (Tabla 0.4: fila 10 GB/mes, <span class="arithmatex">\(f_{BH}=10\%\)</span>) ≈ 556 Mbps/km²,
+redondeado al centenar superior → 600. Cada factor es una hipótesis de
+negocio — cámbialos y cambia la red que hay que construir.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> ¿Puede un punto del mapa cumplir R2 e incumplir R3 a la vez?
+¿Qué lo causaría?</p>
+<p><strong>P2.</strong> Si el market share sube al 45%, ¿qué requisitos cambian y qué
+fases del diseño hay que rehacer?</p>
+<hr />
+<p><strong>R1.</strong> Sí: RSRP alto con SINR bajo — señal fuerte pero interferida,
+típico en fronteras de celda. Se cura con coordinación/tilts, no con
+más potencia.</p>
+<p>Ojo con la palabra <em>coordinación</em>: la intuición sugiere "que las celdas
+se turnen" — desalinear los patrones TDD para que el DL de una no
+coincida con el DL de la vecina. La figura muestra por qué eso es
+exactamente lo prohibido:</p>
+<p><img alt="Patrones TDD alineados vs desalineados y cross-link interference" src="figures/tdd_nr_sincronizacion_cross_link_interference.svg" /></p>
+<p>Si B se desplaza dos slots, aparecen slots donde A transmite DL
+(~46 dBm, en azotea, casi línea de vista hacia la otra azotea)
+mientras B intenta recibir UL de UEs que le llegan a ~−120 dBm: la
+<em>cross-link interference</em> entre gNBs deja ciego al receptor en <strong>toda</strong>
+la celda, no solo en el borde. Por eso todas las celdas co-canal usan
+el <strong>mismo patrón DDDSU sincronizado</strong> — es requisito regulatorio en la
+banda, no una opción de diseño.</p>
+<p>La coordinación que sí cura el borde opera con la trama ya sincronizada,
+en los ejes de frecuencia y scheduling (ICIC): las vecinas acuerdan
+sub-bandas de borde disjuntas — A sirve a sus UEs de frontera en unos
+PRBs, B en otros, y el centro reusa todo. El UE de borde recibe su señal
+donde la vecina no transmite a plena potencia → baja I sin tocar la
+potencia total. El tilt (Fase 4) ataca lo mismo por el eje espacial.</p>
+<p><strong>R2.</strong> Cambia R5 (∝ abonados). La cobertura (Fase 2) no se toca; el
+dimensionamiento por capacidad (Fase 3) y quizá el plan nominal (más
+sectores/sitios) sí.</p>
+</div>
+<hr />
+<h2 id="fase-1-estrategia-de-espectro">Fase 1 — Estrategia de espectro</h2>
+<p>Antes de colocar un solo sitio hay que decidir <strong>en qué frecuencia vive la
+red</strong>. Es la decisión más estructural del diseño: fija el radio de celda (y
+por tanto cuántos sitios costará la cobertura), la penetración en interiores
+y cuánta capacidad hay para vender. En nuestro proyecto la licencia ya está
+dada (R7: 100 MHz en n78) — pero hay que entender qué compramos y qué no.</p>
+<h3 id="11-frecuencia-y-alcance-efecto-en-el-radio-de-celda">1.1 Frecuencia y alcance: efecto en el radio de celda</h3>
+<p>La pérdida de espacio libre crece con <span class="arithmatex">\(20\log_{10}(f)\)</span>: subir de banda cuesta
+dB, y esos dB se pagan en radio de celda. Además, a mayor frecuencia peor
+difracción (las esquinas "doblan" menos la señal) y peor penetración de
+muros. Regla mental honesta: en espacio libre (<span class="arithmatex">\(n=2\)</span>) bajar una octava
+dobla el radio; en urbano denso (<span class="arithmatex">\(n \approx 3.8\)</span>) la misma octava rinde
+solo <strong>×1.4</strong> — el exponente alto "amortigua" la ventaja de bajar de banda
+(la tabla siguiente usa el <span class="arithmatex">\(n\)</span> urbano: por eso 700↔3500, que son 2.3
+octavas, da ×2.3 y no ×5).</p>
+<p>Con el exponente de propagación urbano (<span class="arithmatex">\(n \approx 3.8\)</span>), el delta de
+pérdida se convierte en radio de celda — y el radio, en sitios. Las tres
+fórmulas de la cadena:</p>
+<div class="arithmatex">\[\Delta = 20\log_{10}\!\left(\frac{f}{f_{ref}}\right) \qquad\quad
+r_{rel} = 10^{-\Delta/(10\,n)} \qquad\quad
+\text{sitios}_{rel} = \frac{1}{r_{rel}^{2}}\]</div>
+<p>donde <span class="arithmatex">\(f\)</span> es la frecuencia de la banda candidata y <span class="arithmatex">\(f_{ref}\)</span> la de
+referencia. La primera es el término de frecuencia de la pérdida de
+propagación: a distancia igual, subir de banda cuesta <span class="arithmatex">\(\Delta\)</span> dB. La
+segunda sale de mantener fijo el presupuesto del enlace (MAPL): los dB
+que la banda regala (o cobra) los absorbe el término de distancia
+<span class="arithmatex">\(10\,n\log_{10}(r)\)</span>, así el radio crece o se encoge. La tercera es
+geometría: para tapar la misma área con celdas de radio <span class="arithmatex">\(r_{rel}\)</span>
+relativo hacen falta <span class="arithmatex">\(1/r_{rel}^2\)</span> sitios — el área de cada celda escala
+con el cuadrado del radio.</p>
+<p><strong>Tabla 1.1 — Bandas candidatas frente a n78: pérdida, radio y sitios relativos (<span class="arithmatex">\(n = 3.8\)</span>)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Banda</th>
+<th><span class="arithmatex">\(\Delta\)</span> pérdida vs n78</th>
+<th>Radio relativo</th>
+<th>Sitios para la misma área</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>700 MHz (n28)</td>
+<td>−14 dB</td>
+<td>×2.3</td>
+<td>÷5.4</td>
+</tr>
+<tr>
+<td>2.1 GHz (B4/n1)</td>
+<td>−4.4 dB</td>
+<td>×1.3</td>
+<td>÷1.7</td>
+</tr>
+<tr>
+<td><strong>3.5 GHz (n78)</strong></td>
+<td>0 (referencia)</td>
+<td>×1.0</td>
+<td>×1.0</td>
+</tr>
+<tr>
+<td>26 GHz (n258)</td>
+<td>+17.4 dB</td>
+<td>×0.35</td>
+<td>×8</td>
+</tr>
+</tbody>
+</table>
+<p>Ya lo medimos sobre Lima real: mismos 3 sitios a 2.1 GHz cubren 74.6% del
+área; a 3.5 GHz, 71.2% (<code>test_scene.ipynb</code>, Parte 5) — y eso que 2.1→3.5 es
+el salto <em>chico</em> de la tabla.</p>
+<h3 id="12-bandas-de-5g-y-capas-de-espectro">1.2 Bandas de 5G y capas de espectro</h3>
+<p>Porque el alcance se paga en capacidad: en low-band hay poco espectro (10–20
+MHz por operador, y repartido); en mid-band hay bloques de 80–100 MHz. De ahí
+la arquitectura de <strong>capas</strong> que usa todo operador real:</p>
+<ul>
+<li><strong>Capa de cobertura</strong> (700/850/900 MHz): llega lejos y adentro, pero la
+  banda entera de 700 MHz es 2×45 MHz (FDD) repartidos entre operadores —
+  en la subasta peruana de 2016 tocó <strong>2×15 MHz por operador</strong>, o sea
+  15 MHz de bajada → sostiene voz, IoT y el "siempre conectado", no el
+  tráfico masivo.</li>
+<li><strong>Capa de capacidad</strong> (2.6/3.5 GHz): bloques de <strong>80–100 MHz</strong> por
+  operador (nuestro proyecto: 100 MHz en n78, R7) — unas <strong>6–7×</strong> la bajada
+  de la capa baja → sostiene el tráfico eMBB; celdas chicas → más sitios.</li>
+<li><strong>Capa de hotspot</strong> (mmWave): n258 (26 GHz) tiene 3.25 GHz de banda
+  total; se asigna en portadoras de <strong>400 MHz</strong> y un operador típicamente
+  agrega <strong>800–1000 MHz</strong> — otras <strong>8–10×</strong> lo de mid-band, pero con
+  alcance de cuadra; solo donde la densidad lo justifica.</li>
+</ul>
+<p><strong>Tabla 1.2 — Franjas de espectro y rangos de frecuencia 3GPP</strong></p>
+<table>
+<thead>
+<tr>
+<th>Franja</th>
+<th>Rango</th>
+<th>Ejemplos</th>
+<th>En 3GPP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Low-band</strong></td>
+<td>&lt; 1 GHz</td>
+<td>700 MHz (n28), 850, 900</td>
+<td>FR1</td>
+</tr>
+<tr>
+<td><strong>Mid-band</strong></td>
+<td>1–7 GHz</td>
+<td>1.9 GHz, AWS, 2.6, <strong>3.5 GHz (n78)</strong></td>
+<td>FR1</td>
+</tr>
+<tr>
+<td><strong>High-band</strong> (mmWave)</td>
+<td>24–52 GHz</td>
+<td><strong>26 GHz (n258)</strong>, 28</td>
+<td>FR2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>FR1</strong> agrupa low + mid (hasta 7.125 GHz); <strong>FR2</strong> es el mundo
+milimétrico. La "C-band" de la prensa técnica es el nombre histórico
+satelital de 3.3–4.2 GHz — el pedazo de mid-band donde vive n78.</p>
+<p>Nuestro proyecto es deliberadamente <strong>mono-capa</strong> (solo n78): más simple para
+aprender, y realista para un despliegue 5G inicial. La comparación con una
+capa de 700 MHz queda como extensión (requiere escena de 3×3 km — una celda
+low-band tapa nuestra escena entera).</p>
+<h3 id="13-reparto-tdd-del-canal">1.3 Reparto TDD del canal</h3>
+<p>n78 es TDD (Sesión 06: subida y bajada alternan sobre la misma frecuencia).
+El tiempo se reparte con un patrón de slots; el típico en n78 es <strong>DDDSU</strong>:
+de cada 5 slots, 3 son de bajada, 1 "especial" (mayormente bajada + guarda) y
+1 de subida. Consecuencia aritmética que golpea el diseño:</p>
+<ul>
+<li>DL dispone de ≈ 71% del tiempo → <strong>≈ 71 MHz "efectivos"</strong> de los 100.</li>
+<li>UL dispone de ≈ 20% → <strong>≈ 20 MHz efectivos</strong> — y el UE ya era el extremo
+  débil (23 dBm). El uplink pierde dos veces: en potencia y en tiempo.</li>
+</ul>
+<p>¿De dónde salen el 71% y el 20%? De <strong>contar símbolos</strong>. Cada slot tiene
+14 símbolos OFDM. En DDDSU hay 3 slots D (42 símbolos de bajada), 1 slot
+U (14 de subida) y 1 slot S cuya partición interna es configurable — este
+curso la declara <strong>8 símbolos DL + 6 de guarda</strong> (la guarda le da tiempo
+al UE para conmutar de recibir a transmitir):</p>
+<div class="arithmatex">\[f_{DL} = \frac{3 \times 14 + 8}{5 \times 14} = \frac{50}{70} \approx 71\%
+\qquad\quad
+f_{UL} = \frac{14}{70} = 20\%\]</div>
+<p>Con otra partición de S salen otras fracciones — por eso se declara.</p>
+<p>El patrón TDD además debe estar <strong>sincronizado entre operadores vecinos</strong> de
+la banda (lo coordina el regulador): si mi celda transmite DL mientras la
+tuya escucha UL, mi potencia entierra a tus usuarios.</p>
+<p>En FDD (las bandas bajas clásicas) esto no existe: DL y UL tienen cada uno su
+frecuencia dedicada, tiempo completo.</p>
+<h3 id="14-numerologia-y-bloques-de-recursos-del-canal">1.4 Numerología y bloques de recursos del canal</h3>
+<p>Las numerologías de NR son una familia cerrada: <span class="arithmatex">\(SCS = 15 \cdot 2^{\mu}\)</span>
+kHz. En FR1 las opciones son tres, y la pareja banda + ancho de canal
+decide sola:</p>
+<p><strong>Tabla 1.3 — Numerologías FR1 frente a un canal ancho de n78 (TS 38.101-1, Tabla 5.3.2-1)</strong></p>
+<table>
+<thead>
+<tr>
+<th>SCS</th>
+<th>Canal máximo del estándar</th>
+<th>Veredicto para mid-band</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15 kHz (µ=0)</td>
+<td>50 MHz (270 PRB)</td>
+<td>un canal de 80–100 MHz <strong>ni existe</strong> — exigiría dos portadoras agregadas</td>
+</tr>
+<tr>
+<td><strong>30 kHz (µ=1)</strong></td>
+<td><strong>100 MHz (273 PRB)</strong></td>
+<td>el estándar de mid-band: llena el canal con CP de 2.3 µs</td>
+</tr>
+<tr>
+<td>60 kHz (µ=2)</td>
+<td>100 MHz (135 PRB)</td>
+<td>CP a la mitad (~1.2 µs) sin ganancia a cambio en FR1</td>
+</tr>
+</tbody>
+</table>
+<p>En n78 queda 30 kHz (Sesión 03: µ=1): slots de 0.5 ms, CP de 2.3 µs — y ya
+verificamos sobre Lima que el delay spread urbano (mediana 60 ns) cabe
+holgado en ese CP (<code>test_scene.ipynb</code>, Parte 8). La numerología la fijan
+banda y estándar; no es un parámetro que el diseñador pueda ajustar.</p>
+<p><strong>De los MHz del canal a los PRB.</strong> El ancho licenciado no se transmite
+completo: el estándar reserva una <strong>banda de guarda</strong> a cada borde del
+canal (para cumplir la máscara de emisión — los lóbulos OFDM no caen en
+seco), tabulada en
+<a href="https://www.etsi.org/deliver/etsi_ts/138100_138199/13810101/">TS 38.101-1</a>,
+Tabla 5.3.3-1, según ancho y SCS. El método, válido para cualquier canal:</p>
+<div class="arithmatex">\[BW_{tx} = BW_{canal} - 2 \cdot g
+\qquad\quad
+N_{PRB} = \left\lfloor \frac{BW_{tx}}{12 \cdot SCS} \right\rfloor\]</div>
+<p>donde <span class="arithmatex">\(g\)</span> es la guarda de la tabla y <span class="arithmatex">\(12 \cdot SCS\)</span> el ancho de un PRB
+(con 30 kHz: 360 kHz). Para nuestro canal de 100 MHz, <span class="arithmatex">\(g = 0.845\)</span> MHz →
+<span class="arithmatex">\(BW_{tx} = 98.31\)</span> MHz → <strong>273 PRB</strong> (utilización 98.3%). El resultado
+coincide con la Tabla 5.3.2-1 del estándar — que es el contraste
+obligatorio del cálculo.</p>
+<h3 id="decision-de-la-fase-1-lo-que-hereda-el-resto-del-diseno">Decisión de la Fase 1 (lo que hereda el resto del diseño)</h3>
+<blockquote>
+<p>Banda <strong>n78 (3.5 GHz)</strong>, <strong>100 MHz</strong> TDD con patrón <strong>DDDSU</strong> (≈71/20% 
+DL/UL), SCS 30 kHz. La Fase 2 dimensionará cobertura con la física de 3.5
+GHz; la Fase 3 repartirá 71/20 MHz efectivos contra la demanda de R5.</p>
+</blockquote>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> Un colega propone pedir al regulador cambiar la licencia a 20 MHz
+en 700 MHz "porque cubre 5 veces más área con los mismos sitios". ¿Qué
+requisito del proyecto mata la propuesta?</p>
+<p><strong>P2.</strong> ¿Por qué el patrón TDD de tu red no es 100% decisión tuya?</p>
+<hr />
+<p><strong>R1.</strong> R5/R4: con 20 MHz no hay capacidad ni throughput de borde — la
+cobertura barata de low-band se paga en Mbps. (Cálculo rápido: 20 MHz ×
+~74% DL deja ~15 MHz efectivos; ni la mediana de 50 Mbps se sostiene con
+carga.)</p>
+<p><strong>R2.</strong> Debe sincronizarse con los demás operadores de la banda en la
+zona: patrones cruzados = interferencia DL→UL entre redes. Lo fija el
+regulador o el acuerdo inter-operador.</p>
+</div>
+<h2 id="fase-2-dimensionamiento-por-cobertura">Fase 2 — Dimensionamiento por cobertura</h2>
+<p>La pregunta de esta fase: <strong>¿cuántos sitios necesita R2</strong> (RSRP ≥ −110 dBm en
+95% del área)<strong>?</strong> La herramienta es el <em>link budget</em>: una contabilidad en dB
+donde cada ganancia suma, cada pérdida resta, y lo que queda es cuánto camino
+puede recorrer la señal.</p>
+<h3 id="21-potencia-por-elemento-de-recurso-epre">2.1 Potencia por elemento de recurso: EPRE</h3>
+<p>Error clásico: arrancar el presupuesto con "la BS transmite 44 dBm". Esos
+44 dBm se reparten entre <strong>todas</strong> las subportadoras del canal. Con 100 MHz
+a separación de subportadora (SCS) de 30 kHz caben 273 <em>resource blocks</em>
+(PRB, bloques de 12 subportadoras) — es decir 273 × 12 = 3 276
+subportadoras:</p>
+<div class="arithmatex">\[\text{EPRE} = 44 - 10\log_{10}(3276) \approx 44 - 35.2 = 8.8 \text{ dBm por RE}\]</div>
+<div class="admonition note">
+<p class="admonition-title">¿De dónde salen los 273 PRB?</p>
+<p>Del método de §1.4: guardas de la Tabla 5.3.3-1 del estándar →
+<span class="arithmatex">\(BW_{tx} = 98.31\)</span> MHz → 273 bloques de 360 kHz (utilización 98.3%,
+contra el ~90% fijo de LTE). Ahí están también la familia de
+numerologías (Tabla 1.3) y por qué el SCS de 30 kHz viene forzado.</p>
+</div>
+<p>Como el RSRP se mide <strong>por resource element</strong> (ver la
+<a href="rsrp-rsrq-sinr/">nota de referencia</a>), el link budget de cobertura de
+control empieza en 8.8 dBm, no en 44. La red incluso difunde este número
+(<code>referenceSignalPower</code> en el SIB) para que el UE pueda despejar el path
+loss.</p>
+<h3 id="22-presupuesto-del-enlace-de-bajada">2.2 Presupuesto del enlace de bajada</h3>
+<div class="arithmatex">\[\text{RSRP}_{\text{borde}} = \underbrace{\text{EPRE}}_{8.8} + \underbrace{G_{tx}}_{+16} - \underbrace{\text{PL}}_{?} - \underbrace{M_{\text{shadow}}}_{9} \geq -110 \text{ dBm}\]</div>
+<p><strong>Tabla 2.1 — Términos del presupuesto de bajada y su origen</strong></p>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Valor</th>
+<th>De dónde sale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EPRE</td>
+<td>8.8 dBm</td>
+<td>44 dBm ÷ 3 276 subportadoras</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(G_{tx}\)</span></td>
+<td>+16 dBi</td>
+<td>antena sectorial macro típica</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(M_{\text{shadow}}\)</span></td>
+<td>−9 dB</td>
+<td>compra el 95% de área con shadowing log-normal <span class="arithmatex">\(\sigma = 8\)</span> dB</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(G_{rx}\)</span>, pérdidas de cuerpo/cable</td>
+<td>0 dB neto</td>
+<td>UE: antena ~0 dBi; simplificación explícita</td>
+</tr>
+</tbody>
+</table>
+<p>Despejando: la señal puede perder hasta</p>
+<div class="arithmatex">\[\text{MAPL} = 8.8 + 16 + 110 - 9 \approx 126 \text{ dB}\]</div>
+<p><strong>MAPL</strong> (<em>Maximum Allowable Path Loss</em>) es el número que resume toda la
+fase: el presupuesto de pérdida que el trayecto no debe superar.</p>
+<p>El margen de shadowing es donde la meta probabilística de la Fase 0 se
+vuelve un número: con <span class="arithmatex">\(\sigma = 8\)</span> dB, reservar ~9 dB garantiza que el ~95%
+del área (no solo el punto medio) quede sobre el umbral. Más probabilidad =
+más margen = menos radio: la certeza se paga en dB.</p>
+<details class="note">
+<summary>¿De dónde salen los 9 dB de <span class="arithmatex">\(M_{\text{shadow}}\)</span>? (el cálculo ingenuo da 13.2)</summary>
+<p><strong>Qué es el shadowing.</strong> El modelo de propagación (UMa) predice la
+pérdida <em>mediana</em> a cada distancia. Pero dos esquinas a la misma
+distancia difieren según qué edificios estorben el trayecto: esa
+variación alrededor de la mediana es el <em>shadowing</em>, y medido en dB se
+comporta como una gaussiana de media 0 y desviación <span class="arithmatex">\(\sigma\)</span>
+(log-normal en potencia). En urbano denso, <span class="arithmatex">\(\sigma \approx 6\text{–}10\)</span>
+dB; usamos 8, el valor de libro. (No confundir con el <em>fast fading</em>
+multitrayecto, que varía en centímetros y lo absorben HARQ y el
+scheduler — el shadowing varía en decenas de metros y se paga en link
+budget.)</p>
+<p><strong>El cálculo ingenuo.</strong> Si quiero que un punto del <strong>borde</strong> de celda
+esté sobre el umbral el 95% de las veces, necesito cubrir el percentil
+95 de la gaussiana:</p>
+<div class="arithmatex">\[M = z_{0.95} \cdot \sigma = 1.645 \times 8 \approx 13.2 \text{ dB}\]</div>
+<p>¿Por qué la industria usa ~9? Porque 13.2 dB responde la pregunta
+equivocada.</p>
+<p><strong>La pregunta correcta es de área.</strong> R2 pide 95% del <strong>área</strong>, y el
+borde es el peor lugar de la celda: todo el interior tiene pérdida
+menor que la del borde, o sea margen de sobra. Al integrar la
+probabilidad de cobertura sobre toda la celda (la integral clásica de
+Jakes, 1974), con <span class="arithmatex">\(\sigma = 8\)</span> y exponente de propagación <span class="arithmatex">\(n \approx
+3.8\)</span>, basta que el <strong>borde</strong> quede cubierto ~86% del tiempo para que
+el <strong>área</strong> quede cubierta 95%:</p>
+<div class="arithmatex">\[M = z_{0.86} \cdot \sigma \approx 1.06 \times 8 \approx 8.5 \approx 9 \text{ dB}\]</div>
+<p>Los ~4.7 dB de diferencia entre 13.2 y 8.5 no son un tecnicismo: en el
+modelo UMa equivalen a ~27% más de radio, que al cuadrado es ~60% menos
+sitios por km². Leer bien la letra chica del requisito (¿95% <em>de qué</em>?)
+es dinero.</p>
+<p><strong>La receta para tus propios diseños.</strong> Dos tablas y dos pasos:</p>
+<ol>
+<li>
+<p>Toma la σ del <strong>escenario</strong> (misma tabla del 38.901 que el path
+   loss, 7.4.1-1) — o mídela con drive test:</p>
+<p><strong>Tabla 2.2 — Desviación del shadowing por escenario (TR 38.901, Tabla 7.4.1-1, y tradición Okumura/COST-231)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>σ_SF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UMa LOS</td>
+<td>4 dB</td>
+</tr>
+<tr>
+<td>UMa NLOS</td>
+<td>6 dB</td>
+</tr>
+<tr>
+<td>UMi NLOS</td>
+<td>7.8 dB</td>
+</tr>
+<tr>
+<td>RMa NLOS</td>
+<td>8 dB</td>
+</tr>
+<tr>
+<td>urbano denso (tradición Okumura/COST-231, nuestro caso)</td>
+<td>8–10 dB</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Convierte la meta <strong>de área</strong> a probabilidad <strong>de borde</strong> (integral
+   de Jakes — el notebook la resuelve numéricamente en 6 líneas) y
+   multiplica: <span class="arithmatex">\(M = z_{\text{borde}} \cdot \sigma\)</span>. Para σ = 8,
+   n ≈ 3.8, ya resuelto:</p>
+<p><strong>Tabla 2.3 — Margen de shadowing según la meta de área (σ = 8 dB, n = 3.8, integral de Jakes)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Meta de área</th>
+<th>Borde equivalente</th>
+<th>z</th>
+<th>M</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90%</td>
+<td>74%</td>
+<td>0.65</td>
+<td><strong>5.2 dB</strong></td>
+</tr>
+<tr>
+<td>95%</td>
+<td>86%</td>
+<td>1.06</td>
+<td><strong>8.5 ≈ 9 dB</strong></td>
+</tr>
+<tr>
+<td>99%</td>
+<td>96.5%</td>
+<td>1.81</td>
+<td><strong>14.5 dB</strong></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p>El error a evitar: entrar a la tabla de z directamente con la meta de
+área (<span class="arithmatex">\(z_{0.95} = 1.645 \to 13.2\)</span> dB) — ese margen responde "95% <em>del
+borde</em>", una oferta más cara que la que firma el contrato.</p>
+<p><strong>El precio sube empinado.</strong> 99% de área ya cuesta ~14.5 dB (y 18.6 si
+alguien lo exige en el propio borde) — la razón por la que ningún
+operador firma 100%. Y <span class="arithmatex">\(\sigma = 8\)</span> es una hipótesis declarada más: el
+drive test (Fase 6) la mide de verdad para <em>esta</em> ciudad; si San
+Isidro resulta ser <span class="arithmatex">\(\sigma = 10\)</span>, el 9 ya no compra el 95%.</p>
+</details>
+<h3 id="23-de-mapl-a-radio-el-modelo-de-propagacion">2.3 De MAPL a radio: el modelo de propagación</h3>
+<p>El MAPL se convierte en distancia invirtiendo un modelo. El estándar de la
+industria cuando aún no se tiene el modelo 3D de la ciudad (o no hace
+falta) es el <strong>UMa NLOS de 3GPP TR 38.901</strong> — un modelo <em>estadístico</em>:
+resume miles de mediciones de urbanos reales en una fórmula que solo pide
+frecuencia y distancia. No sabe nada de San Isidro; responde por el
+"urbano macro promedio". El modelo 3D (nuestra escena OSM) es el insumo de
+la otra familia — el ray tracing determinístico de las Fases 4 y 6:</p>
+<div class="arithmatex">\[\text{PL} = 13.54 + 39.08\log_{10}(d) + 20\log_{10}(f_c) \quad [\text{d en m, } f_c \text{ en GHz}]\]</div>
+<p>Con el MAPL exacto (125.8 dB) y <span class="arithmatex">\(f_c = 3.5\)</span>: <span class="arithmatex">\(d \approx 394\)</span> m — el orden
+de cientos de metros esperado para una macro de mid-band en urbano denso
+(la figura de §2.4 lo muestra cruzando su umbral en ~393 m).</p>
+<p>Cada sitio trisectorial cubre un hexágono de área <span class="arithmatex">\(\approx 2.6\,r^2\)</span>:</p>
+<div class="arithmatex">\[N_{\text{sitios}} = \frac{1.1 \text{ km}^2}{2.6 \times 0.394^2 \text{ km}^2} \approx 3 \text{ sitios por cobertura}\]</div>
+<p><strong>Tres sitios</strong> — coherente con el esbozo (<code>test_scene.ipynb</code>) que con 3 BS
+logró ~71% de SINR &gt; 0: la cobertura de control alcanza, la calidad todavía
+no. La fórmula da el <em>orden de magnitud</em>; el ray tracing sobre la escena
+real (Fase 6) da la verdad calle por calle. Ambos se necesitan: la fórmula
+para dimensionar sin escena, el trazador para validar con ella.</p>
+<h3 id="24-presupuesto-del-enlace-de-subida">2.4 Presupuesto del enlace de subida</h3>
+<p>El mismo ejercicio con el UE como transmisor: 23 dBm sobre sus PRBs
+asignados (no per-RE de 100 MHz — el UE concentra su potencia en pocos PRB,
+su gran defensa), antena de 0 dBi, y la BS escuchando con figura de ruido
+(NF) de 5 dB. El
+enlace que soporte <strong>menos</strong> pérdida define el radio real de la celda: de
+nada sirve que el UE oiga a la BS si la BS no lo oye de vuelta.</p>
+<p>El término nuevo del cálculo es la <strong>sensibilidad del receptor</strong> — el mínimo
+que la BS necesita recibir para demodular:</p>
+<div class="arithmatex">\[S_{BS} = \underbrace{-174}_{kT\ [\text{dBm/Hz}]} + 10\log_{10}(BW) + NF + SNR_{min}\]</div>
+<p>Término a término: −174 dBm/Hz es el mínimo técnico térmico universal (<span class="arithmatex">\(kT\)</span> a 290 K
+— nadie escucha por debajo de eso); <span class="arithmatex">\(10\log_{10}(BW)\)</span> es cuánto ruido
+entra por la ventana que se escucha; <span class="arithmatex">\(NF\)</span> la suciedad que el propio
+receptor agrega; <span class="arithmatex">\(SNR_{min}\)</span> lo que el demodulador exige sobre el ruido.
+Con la asignación de 5 MHz y una meta modesta (<span class="arithmatex">\(SNR_{min} = 0\)</span> dB):</p>
+<div class="arithmatex">\[S_{BS} = -174 + 10\log_{10}(5\times10^6) + 5 + 0 = -102 \text{ dBm}\]</div>
+<div class="arithmatex">\[\text{MAPL}_{UL} = \underbrace{23}_{P_{UE}} + \underbrace{16}_{G_{BS}} - (-102) - \underbrace{9}_{M_{shadow}} = 132 \text{ dB}\]</div>
+<p>Aquí está la física de la "gran defensa": la sensibilidad mejora con
+<span class="arithmatex">\(10\log_{10}\)</span> del ancho escuchado. Transmitir en 5 MHz en vez de 100 baja
+el mínimo técnico de ruido de la BS en <span class="arithmatex">\(10\log_{10}(20) = 13\)</span> dB — la concentración
+de PRBs no es un truco de potencia, es un truco de <strong>ruido</strong>. Resultado
+con nuestros números: 132 dB de UL contra 126 del DL de control — el
+enlace limitante aquí es el DL, al revés del folclor "el uplink siempre
+limita" (que sí aplica cuando se piden muchos Mbps de subida: más PRBs →
+más BW → sensibilidad peor → MAPL cae). El cálculo ejecutable está en
+<code>design.ipynb</code>.</p>
+<details class="note">
+<summary>¿Por qué justo 5 MHz asignados al UE? (y por qué no darle más)</summary>
+<p>El 5 MHz no es un valor arbitrario: <strong>sale del requisito R4-UL</strong>. La
+oferta de borde es 5 Mbps de subida, y a <span class="arithmatex">\(SNR_{min} = 0\)</span> dB la
+eficiencia espectral es <span class="arithmatex">\(SE = \log_2(1+1) \approx 1\)</span> bit/s/Hz:</p>
+<div class="arithmatex">\[BW_{UL} = \frac{R_{\text{borde}}}{SE(SNR_{min})} = \frac{5 \text{ Mbps}}{1 \text{ bit/s/Hz}} = 5 \text{ MHz} \approx 14 \text{ PRB}\]</div>
+<p>¿Y por qué no darle más PRBs al pobre UE de borde? Porque su potencia
+es <strong>fija</strong> (23 dBm): cada PRB extra diluye la densidad espectral
+transmitida, mientras el ruido que la BS escucha crece con
+<span class="arithmatex">\(10\log_{10}(BW)\)</span>. Duplicar el ancho regala +3 dB de capacidad
+potencial y cobra −3 dB de SNR — que en el borde, pegado al mínimo, no
+tienes. Es un óptimo con joroba:</p>
+<ul>
+<li><strong>Menos de 5 MHz</strong> → SNR sobrado, pero el techo <span class="arithmatex">\(BW \times SE\)</span> no
+  llega a los 5 Mbps ofrecidos.</li>
+<li><strong>Más de 5 MHz</strong> → el SNR de borde cae bajo 0 dB, la SE se desploma,
+  y pierdes por el otro lado.</li>
+</ul>
+<p>El par (5 MHz, 0 dB) es el punto <strong>autoconsistente</strong>: el ancho mínimo
+que cumple la meta, evaluado al SNR que ese mismo ancho sostiene a
+132 dB de pérdida. En la red real esto no se congela: el <em>scheduler</em> y
+el <em>power control</em> lo negocian por milisegundo (UE de borde → pocos
+PRBs a potencia máxima; UE cercano → muchos PRBs). El dimensionamiento
+congela el caso de borde porque es el que firma R4.</p>
+<p><strong>¿Y por qué SNR_min = 0 dB y no otro punto?</strong> Ningún requisito fija
+los 5 MHz: R4 solo fija el producto <span class="arithmatex">\(BW \times SE(SNR_{min}) = 5\)</span>
+Mbps. Un grado de libertad — y estos son los otros repartos del mismo
+requisito, con los mismos 23 dBm del UE (fijos en los tres casos: el
+UE de borde ya está a máxima potencia; la moneda del trade-off no es
+potencia, es <strong>alcance</strong>):</p>
+<p><strong>Tabla 2.4 — El mismo requisito R4-UL con tres repartos BW/SNR (P_UE fija)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Elección</th>
+<th>BW necesario</th>
+<th>Sensibilidad BS</th>
+<th>MAPL_UL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SNR_min = +10 dB</td>
+<td>1.45 MHz</td>
+<td>−97.4 dBm</td>
+<td>127.4 dB (<strong>−4.6</strong>)</td>
+</tr>
+<tr>
+<td><strong>SNR_min = 0 dB</strong></td>
+<td><strong>5 MHz</strong></td>
+<td><strong>−102 dBm</strong></td>
+<td><strong>132 dB</strong></td>
+</tr>
+<tr>
+<td>SNR_min = −10 dB</td>
+<td>36.4 MHz</td>
+<td>−103.4 dBm</td>
+<td>133.4 dB (+1.4)</td>
+</tr>
+</tbody>
+</table>
+<p>La explicación en versión subibaja: en el presupuesto <strong>restan dos
+términos atados</strong> — el ruido que entra por la ventana
+(<span class="arithmatex">\(10\log_{10} BW\)</span>) y lo que exiges sobre el ruido (<span class="arithmatex">\(SNR_{min}\)</span>); la
+oferta de 5 Mbps hace que bajar uno suba el otro. Por <strong>debajo</strong> de
+0 dB, cada dB de SNR que perdonas se devuelve casi exacto en ruido
+extra (el BW crece rápido): empate — por eso −10 dB solo gana 1.4 dB,
+y a cambio secuestra 36 MHz de PRBs para <em>un</em> usuario y exige MCS que
+apenas existen. Por <strong>encima</strong> de 0 dB, cada dB que exiges no se
+compensa con el poco BW que ahorras (la SE crece solo
+logarítmicamente): pérdida neta — +10 dB cuesta 4.6 dB de alcance.
+<strong>0 dB es el codo de la curva</strong>: capturas el plateau sin pagar los
+extremos. Ese es el "por experiencia de diseño" de la industria,
+puesto en números.</p>
+<p>Letra chica declarada: <span class="arithmatex">\(SE = 1\)</span> a 0 dB es Shannon puro; con MCS reales
+es ~0.8–0.9, así que 5 MHz queda un pelo optimista — tolerable porque
+el UE de borde rara vez sostiene los 5 Mbps continuos.</p>
+<p><strong>¿Mínimo, promedio o peor caso?</strong> Ninguna de las dos primeras: el
+mínimo asignable es 1 PRB (360 kHz — y con él el enlace cierra aún más
+lejos, pero no salen 5 Mbps), y no hay promedio de nada. Es el <strong>peor
+caso del servicio ofrecido</strong>: peor ubicación (el borde, a MAPL) × el
+contrato (R4-UL). El presupuesto responde "¿hasta dónde cumplo la
+oferta completa?", no "¿hasta dónde hay señal?".</p>
+<p>¿Y el canal de control, no habría que garantizarlo con el peor caso?
+Ya está garantizado dos veces: el control de <strong>subida</strong> (PUCCH) ocupa
+~1 PRB — concentración máxima, MAPL mejor que los 132 dB de datos; si
+los datos cierran, el control UL cierra con margen. Y el control de
+<strong>bajada</strong> (SSB/RSRP, R2) es el presupuesto de 126 dB — que resultó el
+limitante de toda la red. Jerarquía completa:
+<span class="arithmatex">\(\text{MAPL}_{ctrl,UL} &gt; \text{MAPL}_{datos,UL} (132) &gt;
+\text{MAPL}_{ctrl,DL} (126)\)</span>. La cobertura es una cebolla: el anillo
+exterior donde apenas "hay red" (1 PRB, kbps), y anillos interiores
+donde cada servicio ofrecido se cumple — el radio de diseño es el del
+anillo del contrato.</p>
+</details>
+<p>La imagen que resume los dos enlaces y sus umbrales:</p>
+<p><img alt="Márgenes DL y UL sobre sus umbrales vs distancia: el DL cruza cero en 393 m y define el borde; el UL cruzaría en 566 m y llega al borde real con 6 dB de holgura" src="figures/bordes_dl_ul.png" /></p>
+<p>Lectura en una regla: <strong>cada enlace muere donde su curva cruza su propio
+umbral, medido en su receptor</strong> (DL: RSRP en el UE; UL: SNR en la BS). El
+primero que cruza define el borde de la celda; el otro llega con holgura
+— aquí el DL muere primero (393 m) y al UL le sobran 6 dB que nadie
+exigió.</p>
+<h3 id="25-de-rss-a-rsrp-verificacion-con-sionna">2.5 De RSS a RSRP: verificación con Sionna</h3>
+<p>Los radio maps de Sionna entregan potencia de banda ancha (RSS). Para
+verificar R2 hay que convertir: restar <span class="arithmatex">\(10\log_{10}(N_{\text{RE}})\)</span> del
+despliegue. Es el mismo cálculo del EPRE visto del lado del receptor — y el
+motivo por el que la meta R2 no puede compararse directo contra el mapa
+crudo. La verificación numérica se ejecuta en la Fase 6, sobre el mapa
+consolidado.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> El operador propone duplicar el ancho de banda a 200 MHz "para
+duplicar capacidad" manteniendo los 44 dBm. ¿Qué pasa con la cobertura?</p>
+<p><strong>P2.</strong> ¿Por qué el margen de shadowing no se puede eliminar "midiendo
+mejor el canal"?</p>
+<hr />
+<p><strong>R1.</strong> El EPRE cae 3 dB (misma potencia entre el doble de
+subportadoras) → el RSRP cae 3 dB en todo punto → el MAPL pierde 3 dB →
+el radio se encoge ~16% y hacen falta ~40% más sitios. La capacidad
+también se paga en cobertura.</p>
+<p><strong>R2.</strong> Porque no es error de medición: es la variabilidad <em>física</em> del
+entorno (qué edificios estorban en cada punto). Se puede mapear con ray
+tracing punto a punto, pero al diseñar con un modelo estadístico, la
+incertidumbre espacial es irreducible y hay que presupuestarla.</p>
+</div>
+<h2 id="fase-3-dimensionamiento-por-capacidad">Fase 3 — Dimensionamiento por capacidad</h2>
+<p>La Fase 2 preguntó "¿cuántos sitios para que la señal <em>llegue</em>?". Esta
+pregunta es distinta: <strong>¿cuántos sitios para que la red <em>aguante</em> la demanda
+de R5</strong> (600 Mbps/km² en hora cargada)<strong>?</strong> Son dos cálculos independientes y
+el diseño final obedece a la peor:</p>
+<div class="arithmatex">\[N_{\text{sitios}} = \max(N_{\text{cobertura}},\ N_{\text{capacidad}})\]</div>
+<h3 id="31-capacidad-de-celda-promedio-sobre-la-distribucion-de-sinr">3.1 Capacidad de celda: promedio sobre la distribución de SINR</h3>
+<p>La publicidad ofrece "hasta 1 Gbps"; la celda real sirve usuarios repartidos
+por toda su área compartiendo los mismos PRBs. Su capacidad es un <strong>promedio
+sobre la distribución espacial de SINR</strong> — y qué promedio usar depende del
+scheduler: reparto equitativo de <em>tiempo</em> rinde la media aritmética de las
+eficiencias; reparto igualitario de <em>datos</em> colapsa hacia la media armónica
+(el usuario de borde consume el tiempo de todos). Este es el concepto
+difícil de la fase y tiene nota propia:
+<a href="de-sinr-a-capacidad/">De la distribución de SINR a la capacidad de celda</a>.</p>
+<h3 id="32-calculo-de-la-capacidad-de-celda">3.2 Cálculo de la capacidad de celda</h3>
+<p><span class="arithmatex">\(R_{\text{celda,DL}}\)</span> es la <strong>capacidad de bajada de la celda</strong>: la tasa
+de datos agregada (bit/s) que la celda entrega en DL, repartida entre
+todos sus usuarios — el número que se puede vender. (Su gemela de subida,
+<span class="arithmatex">\(R_{\text{celda,UL}}\)</span>, se verifica en §3.4.) Se arma en tres factores:</p>
+<div class="arithmatex">\[R_{\text{celda,DL}} = \underbrace{\text{SE}_{\text{celda}}}_{2.0 \text{ bit/s/Hz}} \times \underbrace{B_{\text{DL,ef}}}_{71 \text{ MHz}} \times \underbrace{(1 - OH)}_{0.78} \approx 111 \text{ Mbps}\]</div>
+<p>La forma fácil de leer el producto — una planilla de trabajadores: <strong>B</strong>
+es cuántos trabajadores tienes (cada Hz de espectro es un trabajador que
+produce bits), <strong>SE</strong> es la productividad de cada uno (cuántos bit/s
+exprime cada Hz — la fija el SINR: con buen SINR producen a 256-QAM, con
+malo a QPSK), y <strong>(1−OH)</strong> es la fracción del turno que producen de
+verdad — el resto se va en papeleo (señalización) necesario pero que no
+es producto. Capacidad = trabajadores × productividad × fracción
+productiva. Cada fase movió su propio parámetro: la Fase 1 entregó los trabajadores
+(espectro y reparto TDD), el SINR del área fija la productividad (la
+Fase 6 la medirá), y el overhead lo fija el estándar.</p>
+<ul>
+<li><span class="arithmatex">\(\text{SE}_{\text{celda}}\)</span> — <strong>eficiencia espectral</strong> media de la celda
+  (bits por segundo por cada Hz de espectro): usamos 2.0 bit/s/Hz,
+  hipótesis conservadora de industria para SISO (una antena por extremo,
+  sin MIMO) — <strong>declarada</strong> para ser reemplazada en la Fase 6 por la
+  integral del mapa SINR ray-traced de San Isidro.</li>
+<li><span class="arithmatex">\(B_{\text{DL,ef}} = 71\)</span> MHz — el ancho de banda <strong>efectivo</strong> de bajada:
+  herencia directa de la Fase 1 (patrón TDD DDDSU).</li>
+<li><span class="arithmatex">\(OH\)</span> — el <strong><em>overhead</em></strong> (sobrecarga): la fracción del espectro que se
+  gasta en señalización — SSB, canales de control (PDCCH), pilotos de
+  demodulación (DMRS) — y por tanto no transporta datos de usuario.
+  Típico en NR: ~22%, de ahí el factor <span class="arithmatex">\((1-OH) = 0.78\)</span>.</li>
+</ul>
+<p>Un sitio trisectorial: <span class="arithmatex">\(3 \times 111 \approx 334\)</span> Mbps.</p>
+<h3 id="33-sitios-por-capacidad-y-veredicto-del-dimensionamiento">3.3 Sitios por capacidad y veredicto del dimensionamiento</h3>
+<p>Demanda total: <span class="arithmatex">\(600 \text{ Mbps/km}^2 \times 1.096 \text{ km}^2 \approx 657\)</span> Mbps.</p>
+<div class="arithmatex">\[N_{\text{capacidad}} = \lceil 657 / 334 \rceil = 2 \text{ sitios} \qquad
+N_{\text{sitios}} = \max(3, 2) = \mathbf{3}\]</div>
+<p>Hoy la red está <strong>limitada por cobertura</strong>: los 3 sitios de la Fase 2 traen
+capacidad de sobra (~1 000 Mbps instalados vs 657 demandados — margen 1.52×).
+Pero el tráfico móvil crece ~25% anual: en ~2 años la desigualdad se
+invierte y la capacidad pasa a mandar. Ahí las salidas son (en orden de
+costo): exprimir SE con MU-MIMO/sectorización, agregar portadora, y solo al
+final agregar sitios — la curva de densificación del laboratorio mostró por
+qué es el último recurso.</p>
+<h3 id="34-verificacion-de-la-capacidad-de-subida">3.4 Verificación de la capacidad de subida</h3>
+<p>El veredicto de §3.3 se calculó solo con el DL. Falta verificar que la
+capacidad de <strong>subida</strong> de esos mismos 3 sitios aguanta la demanda de
+subida — si no aguantara, el uplink mandaría sobre el número de sitios y
+habría que rehacer el veredicto. El mismo cálculo de §3.2, con los
+insumos de subida:</p>
+<div class="arithmatex">\[R_{\text{celda,UL}} = \underbrace{\text{SE}_{\text{UL}}}_{1.2 \text{ bit/s/Hz}} \times \underbrace{B_{\text{UL,ef}}}_{20 \text{ MHz}} \times \underbrace{(1-OH)}_{0.78} = 18.7 \text{ Mbps por celda}\]</div>
+<p>→ 3 sectores ≈ <strong>56 Mbps por sitio</strong> → 3 sitios ≈ <strong>168 Mbps instalados</strong>
+en subida.</p>
+<ul>
+<li><span class="arithmatex">\(\text{SE}_{\text{UL}} = 1.2\)</span> bit/s/Hz es el <strong>promedio de celda en
+  subida</strong> — el análogo del 2.0 que usamos en DL (§3.2), y como aquel, una
+  hipótesis declarada de industria. <strong>No confundirlo con el 1.0 de §2.4</strong>:
+  aquel era la SE del <em>punto de borde</em> (el peor lugar de la celda, un solo
+  UE a máxima pérdida); este es el promedio de <em>todos</em> los usuarios
+  repartidos. Es menor que el 2.0 del DL porque los UEs transmiten con
+  menos potencia (peor distribución de SINR) y los equipos comunes no
+  soportan 256-QAM en subida.</li>
+<li>La demanda de subida se toma como <strong>15% de la de bajada</strong> — hipótesis
+  declarada (el tráfico móvil real sube entre el 10 y el 20% de lo que
+  baja): 0.15 × 657 ≈ <strong>99 Mbps</strong> — contra 168 instalados: sobra.</li>
+</ul>
+<p>Conclusión de la fase completa: el uplink no limita ni en cobertura
+(Fase 2: 132 &gt; 126 dB) ni en volumen agregado (100 &lt; 168 Mbps). Cuando el
+UL limita una red real, suele ser en la <em>cobertura de servicios de subida
+exigentes</em> (video en vivo, cámaras) — otro servicio, otro cálculo.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> Marketing pide "duplicar la velocidad de borde garantizada"
+(R4: 50 → 100 Mbps). ¿Eso es un problema de capacidad o de cobertura?
+¿Qué fase se rehace?</p>
+<p><strong>P2.</strong> Un ingeniero propone dimensionar con la SE del mapa medido un
+domingo a las 7 am. ¿Cuál es el error?</p>
+<hr />
+<p><strong>R1.</strong> De cobertura/calidad (R4 es percentil 5 = borde), no de volumen
+agregado. Se rehace la Fase 2 con un umbral de SINR de borde más alto →
+MAPL menor → celdas más chicas → probablemente más sitios; la Fase 3
+apenas cambia.</p>
+<p><strong>R2.</strong> Carga↔interferencia acopladas: en hora valle las vecinas callan
+y el SINR es optimista. Se dimensiona full-buffer (todas las celdas
+transmitiendo), que es el escenario de la hora cargada — la única que
+importa para capacidad.</p>
+</div>
+<h2 id="fase-4-plan-nominal">Fase 4 — Plan nominal</h2>
+<p>Las fases 2–3 dijeron <strong>cuántos</strong> sitios (3). Esta fase decide <strong>dónde y
+cómo</strong>: posiciones sobre azoteas reales, sectorización, azimuts y downtilt.
+Es la fase gráfica del diseño — aquí la aritmética se encuentra con la
+ciudad.</p>
+<h3 id="41-sectorizacion-3120">4.1 Sectorización 3×120°</h3>
+<p>Un sitio omnidireccional es una celda. El mismo sitio con <strong>3 antenas
+sectoriales de 120°</strong> son <strong>tres celdas independientes</strong>: cada una con su
+espectro completo, su scheduler y su PCI. La capacidad del sitio se
+triplica sin comprar terreno ni torre — por eso la sectorización 3×120° es
+el estándar universal de macro urbana.</p>
+<p>El truco está en el patrón de la antena: el elemento sectorial 3GPP tiene
+<strong>65° de ancho de haz</strong> (−3 dB), no 120°. Los tres pétalos no llenan el
+círculo: entre sectores quedan valles de ~10 dB donde el UE ve dos sectores
+parejos — ahí vive el handover intra-sitio.</p>
+<!-- FIGURA PENDIENTE: figures/sectorizacion_3x120.svg -->
+
+<h3 id="42-azimut-de-los-sectores">4.2 Azimut de los sectores</h3>
+<p>El azimut de cada sector es un parámetro de diseño por sitio. Regla
+práctica: apuntar los sectores hacia la <strong>demanda</strong> (avenidas, edificios de
+oficinas) y <strong>no</strong> de frente contra el sector de un sitio vecino (dos
+sectores frente a frente = interferencia máxima en la franja intermedia).
+En el plan nominal usamos 0°/120°/240° uniformes como punto de partida; la
+optimización fina de azimuts es trabajo de la Fase 6.</p>
+<h3 id="43-downtilt">4.3 Downtilt</h3>
+<p>La antena no se apunta al horizonte: se inclina hacia abajo. Geometría
+simple — con altura <span class="arithmatex">\(h\)</span> y tilt <span class="arithmatex">\(\theta\)</span>, el haz principal toca el suelo a:</p>
+<div class="arithmatex">\[d = \frac{h}{\tan\theta}\]</div>
+<p>El criterio del plan: que el haz toque suelo a ~0.7 × el radio de diseño
+(~276 m para nuestra celda de 394 m — el interior de la celda,
+considerando el ancho vertical del haz). Despejando <span class="arithmatex">\(\theta\)</span> con la
+altura real de cada azotea: una antena a 23 m pide ~4.5°, una a 36 m
+pide ~7.1° — <strong>antena más alta, más tilt</strong>. La lección
+contraintuitiva: <strong>inclinar la antena hacia abajo MEJORA la red</strong>, porque
+la energía que iba al horizonte no servía a nadie propio — solo
+interfería a las celdas vecinas (<em>overshooting</em>). El tilt es además la
+herramienta de optimización más barata que existe: el tilt eléctrico se ajusta
+por software, sin subir a la torre.</p>
+<ul>
+<li><strong>Tilt 0°</strong>: celda "infinita" — cobertura propia igual, interferencia
+  regada a todo el mapa.</li>
+<li><strong>Tilt excesivo</strong>: la celda se encoge más que su área asignada — huecos
+  entre sitios.</li>
+<li>El óptimo es un compromiso, y depende de la geometría real → barrido en
+  <code>design.ipynb</code>.</li>
+</ul>
+<!-- FIGURA PENDIENTE: figures/downtilt_geometria.svg -->
+
+<h3 id="44-plan-nominal-de-san-isidro-y-resultados-del-trazador">4.4 Plan nominal de San Isidro y resultados del trazador</h3>
+<p><strong>Tabla 4.1 — Plan nominal de San Isidro: posiciones y configuración inicial</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sitio</th>
+<th>Posición (x, y) [m]</th>
+<th>Antena (techo real + 3 m)</th>
+<th>Azimuts</th>
+<th>Tilt inicial</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s1</td>
+<td>(−420, 180)</td>
+<td>23.2 m</td>
+<td>0°/120°/240°</td>
+<td>4.5°</td>
+</tr>
+<tr>
+<td>s2</td>
+<td>(450, 230)</td>
+<td>35.6 m</td>
+<td>0°/120°/240°</td>
+<td>7.1°</td>
+</tr>
+<tr>
+<td>s3</td>
+<td>(80, −260)</td>
+<td>22.6 m</td>
+<td>0°/120°/240°</td>
+<td>4.4°</td>
+</tr>
+</tbody>
+</table>
+<p>Las posiciones nominales se mudan al <strong>mejor techo en ±100 m</strong>
+(<code>altura_en</code>, ray cast vertical): la antena no flota a una altura de
+libro — se posa en una azotea que existe.</p>
+<p>Dos resultados del ray tracing que contradicen la intuición de libro — y
+por eso enseñan:</p>
+<p><strong>1. Sectorizar bajó el % de SINR</strong> (41% con 9 celdas en azoteas reales
+de 20–33 m vs 71% del esbozo con 3 omnis a 30 m uniformes). No es un
+error: pasar de 3 a 9 celdas co-canal multiplica los interferentes — y
+las azoteas reales, más bajas que los 30 m de libro, recortan alcance. Lo que se compró con la
+sectorización no es SINR — es <strong>capacidad</strong> (×3 celdas, cada una con el
+espectro completo). La métrica correcta para juzgar la sectorización es
+Mbps agregados de la Fase 3, no el % del mapa. Cada decisión de diseño
+optimiza una métrica y factura en otra.</p>
+<p><strong>2. El barrido uniforme de tilt (0°/6°/12°) casi no movió el SINR</strong>
+(±0.2 puntos). Verificamos que el tilt sí redistribuye potencia (+14 dB
+de RSS al suelo entre ±30°); lo que pasa es que al tiltear <strong>todas</strong> las
+celdas por igual, señal e interferencia suben juntas y el cociente no
+cambia. La regla de libro "tilt = control de interferencia" aplica al
+<em>overshooting</em> hacia sitios lejanos — macro abierta, haces verticales de
+~7°. En 1 km² denso, el tilt se usa <strong>por celda</strong> (asimétrico, para
+corregir una invasión concreta), no como ajuste global. La Fase 6 lo
+usará así.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> Si sectorizar triplica la capacidad, ¿por qué no usar 6
+sectores de 60° y sextuplicarla?</p>
+<p><strong>P2.</strong> Un sector tiene excelente SINR cerca del sitio pero su celda
+"invade" el área del sitio vecino. ¿Primer parámetro a tocar y por qué?</p>
+<hr />
+<p><strong>R1.</strong> Rendimientos decrecientes con castigo: antenas de 60° reales
+solapan más (el haz no es rectangular), el handover intra-sitio se
+multiplica, y la interferencia entre sectores propios crece. 3×120°
+con elementos de 65° es el equilibrio que la industria convergió.</p>
+<p><strong>R2.</strong> Downtilt (eléctrico si existe): reduce el alcance del sector
+invasor sin tocar su cobertura cercana, es remoto y reversible.
+Bajar potencia también encoge la celda pero degrada a TODOS sus
+usuarios, incluidos los cercanos; el tilt redistribuye, la potencia
+amputa.</p>
+</div>
+<h2 id="fase-5-planificacion-detallada-pci-rach-y-tracking-areas">Fase 5 — Planificación detallada: PCI, RACH y tracking areas</h2>
+<p>Las Fases 0–4 decidieron <em>dónde</em> y <em>cuánto</em>: 3 sitios, 9 celdas, azimuts y
+tilts. Pero una red con antenas perfectas y parámetros vacíos no da servicio:
+cada procedimiento que el UE ejecuta — encontrar la celda, pedir acceso,
+registrarse, moverse — <strong>consume un parámetro que el diseñador tuvo que
+fijar antes</strong>. La Fase 5 es esa lista de números. La regla mnemotécnica:
+<em>por cada flecha de un diagrama de secuencia, hay una fila en la hoja de
+parámetros</em>.</p>
+<h3 id="51-procedimientos-del-ue-del-encendido-a-los-datos">5.1 Procedimientos del UE: del encendido a los datos</h3>
+<p>Lo que pasa entre "enciendo el teléfono" y "veo video" son cuatro
+procedimientos encadenados. Los nombres de los mensajes son los reales del
+estándar (3GPP TS 38.331 para RRC, TS 24.501 para NAS) — conviene
+reconocerlos porque son los que aparecen en cualquier traza de campo.</p>
+<p><strong>Acto 1 — Búsqueda de celda y acceso aleatorio (UE ↔ gNB):</strong></p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant UE
+    participant gNB
+    Note over UE,gNB: Búsqueda de celda (broadcast, sin diálogo)
+    gNB-)UE: SSB = PSS + SSS + PBCH/MIB (cada 20 ms)
+    Note over UE: PSS → NID2 (0,1,2) · SSS → NID1&lt;br/&gt;PCI = 3·NID1 + NID2 → sincronizado
+    gNB-)UE: SIB1 (configuración de acceso: recursos PRACH)
+    Note over UE,gNB: Acceso aleatorio (Msg1–Msg4)
+    UE-&gt;&gt;gNB: Msg1 — preámbulo PRACH (raíz Zadoff–Chu)
+    gNB-&gt;&gt;UE: Msg2 — Random Access Response (TA + grant)
+    UE-&gt;&gt;gNB: Msg3 — RRCSetupRequest
+    gNB-&gt;&gt;UE: Msg4 — RRCSetup (resolución de contención)
+    UE-&gt;&gt;gNB: RRCSetupComplete → conexión RRC establecida</code></pre>
+<p><strong>Acto 2 — Registro y sesión de datos (UE ↔ núcleo).</strong> Los actores del
+núcleo 5G: <strong>AMF</strong> (gestión de acceso y movilidad — el que te registra),
+<strong>SMF</strong> (gestión de sesiones — el que autoriza tu sesión de datos) y
+<strong>UPF</strong> (plano de usuario — por donde fluyen los datos de verdad):</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant UE
+    participant gNB
+    participant AMF
+    participant SMF_UPF as SMF/UPF
+    UE-&gt;&gt;AMF: Registration Request (vía gNB, NAS)
+    AMF-&gt;&gt;UE: Authentication / Security Mode
+    AMF-&gt;&gt;UE: Registration Accept (lista de tracking areas)
+    UE-&gt;&gt;SMF_UPF: PDU Session Establishment Request
+    SMF_UPF-&gt;&gt;UE: PDU Session Establishment Accept (QoS, IP)
+    Note over UE,SMF_UPF: túnel de datos activo — recién AQUÍ fluye el video</code></pre>
+<p>Cada flecha consume un parámetro nuestro:</p>
+<p><strong>Tabla 5.1 — Parámetros de diseño que consume cada procedimiento del UE</strong></p>
+<table>
+<thead>
+<tr>
+<th>Flecha</th>
+<th>Parámetro que consume</th>
+<th>Quién lo fijó</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PSS/SSS</td>
+<td><strong>PCI</strong> de la celda</td>
+<td>Fase 5 (§5.2)</td>
+</tr>
+<tr>
+<td>Msg1</td>
+<td><strong>raíces ZC del PRACH</strong> y su zona de contención</td>
+<td>Fase 5 (§5.3)</td>
+</tr>
+<tr>
+<td>Msg2 (Timing Advance)</td>
+<td>radio máximo de celda</td>
+<td>Fase 2 (394 m)</td>
+</tr>
+<tr>
+<td>Registration Accept</td>
+<td><strong>tracking areas</strong></td>
+<td>Fase 5 (§5.4)</td>
+</tr>
+<tr>
+<td>(movilidad posterior)</td>
+<td><strong>vecinas, A3, histéresis, TTT</strong></td>
+<td>Fase 5 (§5.5)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-planificacion-de-pci">5.2 Planificación de PCI</h3>
+<p>El PCI (0–1007) es lo primero que el UE aprende de una celda, y se
+descompone en PCI = 3·N₁ + N₂: el <strong>mod 3 viene de la PSS</strong>. Tres reglas,
+en orden de gravedad:</p>
+<ol>
+<li><strong>Sin colisión</strong>: dos celdas vecinas con el mismo PCI → el UE no puede
+   distinguirlas. Fatal.</li>
+<li><strong>Sin confusión</strong>: dos vecinas <em>de una misma celda</em> con igual PCI → el
+   handover "hacia PCI 301" es ambiguo para la celda origen. Fatal para
+   movilidad.</li>
+<li><strong>Cuidar el mod 3</strong>: vecinas con el mismo PCI mod 3 superponen sus
+   señales de referencia en las mismas subportadoras — interferencia
+   pilot-a-pilot justo donde se mide el canal. La nota
+   <a href="crs-dos-celdas-pci-mod3/">CRS de dos celdas y PCI mod 3</a> muestra el
+   mecanismo resource element por resource element.</li>
+</ol>
+<p>Con 9 celdas y solo 3 grupos mod-3, esto es un problema de <strong>coloreo de
+grafos con 3 colores</strong>: el grafo de vecindad sale del mapa best-server
+(dos celdas son vecinas si sus áreas se tocan), y no siempre es
+3-coloreable — en cuyo caso se sacrifican las fronteras más cortas. El
+notebook lo resuelve para San Isidro y verifica cuántos metros de frontera
+quedan en conflicto.</p>
+<p>Resultado medido: de los ~48 km de fronteras del best-server, <strong>~2 km
+(4%) quedan entre vecinas del mismo grupo</strong> — y el coloreo ponderado <em>no
+mejoró</em> al plan ingenuo de PCIs consecutivos por sitio (quedó incluso
+~150 m peor). En una geometría
+compacta de 9 celdas, la numeración consecutiva ya cumple la regla
+co-sitio, y el residuo lo imponen los <strong>vecindarios densos</strong> del mapa: en
+cuanto una celda tiene cuatro o más vecinas mutuamente en contacto (nada
+raro con fronteras ray-traced que serpentean entre edificios), tres grupos
+no alcanzan para separar a todas de todas. La planificación de PCI gana
+valor con la escala: cientos de celdas, vecindarios irregulares, y celdas
+nuevas que heredan un plan viejo.</p>
+<h3 id="53-zona-de-contencion-del-prach">5.3 Zona de contención del PRACH</h3>
+<p>El preámbulo Msg1 es una secuencia Zadoff–Chu; celdas distintas usan
+raíces o desplazamientos cíclicos distintos. El desplazamiento mínimo
+N_CS debe absorber el retardo de ida y vuelta del UE más lejano (más el
+delay spread del canal, que también corre la llegada) — si la
+zona de contención es menor que el radio de celda, un UE legítimo del borde
+aparece como <em>otro preámbulo</em>: colisión fantasma.</p>
+<p>El cálculo (en el notebook): radio 394 m → ida y vuelta 2.6 µs → con la
+secuencia larga (839 chips, 800 µs) basta N_CS ≈ 13, que deja ~64
+preámbulos por raíz → <strong>una sola raíz por celda</strong>. La lección invertida:
+en celdas urbanas chicas el RACH es barato; una celda rural de 15 km
+devora raíces (y por eso el plan de raíces se hace junto al plan de PCI).</p>
+<h3 id="54-dimensionamiento-de-las-tracking-areas">5.4 Dimensionamiento de las tracking areas</h3>
+<p>Cuando el UE está en reposo (idle), la red no sabe en qué celda está —
+solo en qué <strong>tracking area</strong> (TA). El tamaño de la TA es un compromiso:</p>
+<ul>
+<li>TA grande → el UE casi nunca reporta que se movió (poco <em>TAU</em>), pero
+  cada llamada entrante obliga a hacer <strong>paging en todas las celdas</strong> de
+  la TA.</li>
+<li>TA chica → paging barato, pero el UE gasta batería y señalización
+  actualizando su posición a cada rato.</li>
+</ul>
+<p>Nuestra red es trivial — 9 celdas, 1.1 km² → <strong>una sola TA</strong> — pero el
+criterio de diseño escala: un operador de Lima con 5 000 celdas y TAs de 50
+celdas paga 50 pagings por llamada entrante a cambio de TAUs solo al
+cruzar fronteras de TA (que se trazan donde la gente <em>no</em> cruza a diario:
+nunca partir una avenida llena de commuters por la mitad).</p>
+<h3 id="55-listas-de-vecinas-y-evento-a3">5.5 Listas de vecinas y evento A3</h3>
+<p>El handover lo dispara el <strong>evento A3</strong>: "la vecina supera a la serving
+por <code>offset</code> dB durante <code>TTT</code> ms (<em>time-to-trigger</em>, el temporizador que
+filtra fluctuaciones)". Sin histéresis, el UE en la frontera
+rebota entre celdas a cada fluctuación de shadowing — el esbozo lo midió
+sobre San Isidro (Parte 4 de <code>test_scene.ipynb</code>): un recorrido con A3
+crudo dio <strong>8 handovers; con offset + TTT razonables, 1</strong>. Cada handover
+es señalización (y riesgo de caída): el ping-pong no es cosmético.</p>
+<p>Las <strong>listas de vecinas</strong> cierran el círculo: la celda solo puede mandar
+"mide a la vecina X" si X está en su lista. Completas pero sin basura —
+una vecina falsa (que ya no existe o no es alcanzable) produce handovers
+a ciegas. En redes modernas las llena ANR (<em>Automatic Neighbour
+Relations</em>), pero el diseñador las audita: es el primer lugar donde se ve
+un PCI confundido.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> Un drive test reporta que en una esquina el UE ve dos celdas
+distintas con el mismo PCI. ¿Cuál de las tres reglas de §5.2 se violó,
+y qué procedimiento de §5.1 falla primero?</p>
+<p><strong>P2.</strong> ¿Por qué la zona de contención RACH se dimensiona con el radio
+de celda de la Fase 2 y no con el radio "real" que midió el ray tracer?</p>
+<hr />
+<p><strong>R1.</strong> Colisión (regla 1). Falla primero la búsqueda de celda /
+medición: el UE suma la energía de ambas como si fueran una sola
+"celda" y reporta mediciones sin sentido; el handover hacia ese PCI es
+ambiguo aun antes del Msg1.</p>
+<p><strong>R2.</strong> Porque el preámbulo debe funcionar para el UE <em>legal</em> más
+lejano que la celda declara servir — el radio de diseño (MAPL) es el
+contrato. Si el ray tracer muestra que la celda "llega" más lejos por
+un cañón urbano, ese UE lejano igual debe poder acceder: overshooting
+también estresa el RACH, otra razón para controlarlo con tilt por
+celda.</p>
+</div>
+<h2 id="fase-6-validacion-y-optimizacion-del-diseno">Fase 6 — Validación y optimización del diseño</h2>
+<p>Cada fase dejó hipótesis declaradas esperando esta hora: la SE de 2.0, la
+σ de 8, el "3 sitios alcanzan" de la fórmula, el "tilt como bisturí". La
+Fase 6 las cobra todas contra el <strong>mapa consolidado</strong>: 10⁶ rayos con
+reflexión difusa — el mapa "de reporte", 10× más caro que los
+exploratorios ("se explora barato, se reporta caro").</p>
+<h3 id="61-calidad-del-muestreo-y-comparacion-de-mapas">6.1 Calidad del muestreo y comparación de mapas</h3>
+<p>El mismo plan nominal que a 10⁵ rayos daba SINR &gt; 0 en el <strong>41%</strong> del
+área, a 10⁶ da <strong>~74%</strong>. Treinta y tres puntos de diferencia sin tocar la red:
+con pocos rayos, las zonas que solo se alcanzan por rebotes difusos
+quedan mudas y el mapa las declara muertas. De ahí la regla que este
+curso repite: los mapas solo se comparan <strong>entre la misma calidad</strong> — el
+barrido exploratorio contra su línea base exploratoria, el veredicto
+contra el consolidado. Mezclarlas produce conclusiones espectacularmente
+falsas.</p>
+<h3 id="62-verificacion-de-r2-y-el-drive-test-virtual">6.2 Verificación de R2 y el drive test virtual</h3>
+<p>El cálculo anunciado en §2.5: RSRP = RSS del mapa + 8 dB (corrección del
+array que el solver no modela, declarada en Fase 4) − 10log₁₀(3276).
+Resultado sobre el consolidado: <strong>RSRP ≥ −110 dBm en ~68% del área — R2
+reprueba</strong> (meta: 95%). La mediana es cómoda (−81 dBm); la cola no: p5 ≈
+−117 dBm. Las calles en sombra profunda de edificios que la fórmula UMa
+"promedia" existen de verdad en San Isidro.</p>
+<p>El <strong>drive test virtual</strong> explica el porqué: ajustando pérdida vs
+log₁₀(distancia) sobre el propio mapa salen <strong>n ≈ 1.8</strong> (declaramos 3.8 —
+los cañones urbanos guían, y el best-server mete sesgo de selección: te
+sirve el más fuerte, así que los píxeles lejanos que quedan servidos son
+anómalamente buenos) y <strong>σ ≈ 15 dB</strong> (declaramos 8 — con el caveat de que
+el patrón de antena contamina el residuo). La moraleja conecta con el desplegable de §2.2: con σ real de
+dos dígitos, los 9 dB de margen compran mucho menos del 95% — <strong>el margen
+de shadowing es tan bueno como la σ que lo alimenta</strong>, y la σ se mide, no
+se recita.</p>
+<h3 id="63-eficiencia-espectral-medida-y-re-veredicto-de-capacidad">6.3 Eficiencia espectral medida y re-veredicto de capacidad</h3>
+<p>La integral del mapa SINR (media aritmética espacial por celda, techo
+256-QAM) da <strong>SE ≈ 4.9 bit/s/Hz</strong> contra la hipótesis 2.0 de la Fase 3:
+la capacidad por sitio salta de 334 a ~810 Mbps y la red queda limitada
+por capacidad con <strong>1 solo sitio</strong>. ¿Estaba "mal" la hipótesis? Está
+<em>sesgada en la dirección opuesta al mapa</em>: el full-buffer Shannon del
+trazador ignora fast fading, MCS reales, retransmisiones y carga
+desigual; el 2.0 de industria los incluye. La verdad operativa vive entre
+ambos — y el diseño con 2.0 era la opción <em>conservadora correcta</em> para
+dimensionar. <strong>R4-DL de paso cumple</strong>: throughput p5 ≈ 66 Mbps ≥ 50.</p>
+<h3 id="64-tilt-por-celda-el-ajuste-fino-medido">6.4 Tilt por celda: el ajuste fino, medido</h3>
+<p>El plan era corregir al "invasor" (la celda cuyo best-server llega más
+lejos: s2c2, p90 = 399 m) con tilt individual +6° sobre el de su sitio
+(7.1° → 13.1°). Resultado, a la misma calidad que su línea base: <strong>delta
+global −0.0 pp, delta local −0.1 dB</strong> — y la pista estaba en el
+diagnóstico: la "zona invadida" tenía SINR medio de <strong>+29 dB</strong>. No era una zona con problema: era una celda
+sirviendo lejos <em>y bien</em>. En esta escena chica y densa la interferencia
+no es <em>overshooting</em> geométrico que un tilt recorte — es scattering
+urbano entre vecinas inmediatas. El tilt (uniforme en Fase 4, quirúrgico
+aquí) queda <strong>medido dos veces como inefectivo para este layout</strong>: los
+parámetros que siguen son azimuts, ICIC en las fronteras del best-server, o
+sitios.</p>
+<h3 id="65-el-veredicto-r1r8">6.5 El veredicto R1–R8</h3>
+<p><strong>Tabla 6.1 — Veredicto R1–R8 sobre el mapa consolidado</strong></p>
+<table>
+<thead>
+<tr>
+<th>Req</th>
+<th>Meta</th>
+<th>Medido</th>
+<th>Veredicto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R1</td>
+<td>área de servicio</td>
+<td>escena cubre el polígono</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>R2</td>
+<td>RSRP ≥ −110 en 95%</td>
+<td><strong>~68%</strong></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>R3</td>
+<td>SINR ≥ 0 en 90%</td>
+<td><strong>~74%</strong></td>
+<td>❌</td>
+</tr>
+<tr>
+<td>R4</td>
+<td>p5 ≥ 50/5 Mbps</td>
+<td>DL p5 ≈ 66 ✓; UL por cálculo (132&gt;126 dB)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>R5</td>
+<td>≥ 600 Mbps/km²</td>
+<td>SE 4.9 → ~810 Mbps/sitio</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>R6</td>
+<td>eMBB+VoNR, &lt;20 ms</td>
+<td>por arquitectura/QoS</td>
+<td>—</td>
+</tr>
+<tr>
+<td>R7</td>
+<td>100 MHz n78</td>
+<td>licencia</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>R8</td>
+<td>≤ 6 sitios, azoteas</td>
+<td>3 sitios</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>La red dimensionada por fórmula entrega capacidad y throughput de sobra,
+y <strong>reprueba las dos metas de radio</strong> (R2, R3). Ese no es un final
+fallido: es el estado normal de un diseño al salir de la validación — el
+plan nominal nunca es el plan final. Las salidas, en orden de costo:</p>
+<ol>
+<li><strong>Re-posicionar/azimutar</strong> los 3 sitios mirando el mapa de sombras
+   (gratis en papel, el trazador re-evalúa en minutos).</li>
+<li><strong>ICIC</strong> entre los pares de fronteras que el best-server ya
+   identificó (Fase 5 dejó el grafo listo).</li>
+<li><strong>El 4º sitio</strong> en la zona de sombra dominante — R8 autoriza hasta 6;
+   la curva de densificación del esbozo (3→6 sitios: 71→92% a calidad
+   exploratoria) sugiere que con 4–5 se alcanza R3.</li>
+<li><strong>Renegociar</strong>: si el cliente acepta 90% de R2 en vez de 95, el diseño
+   actual casi cierra — leer §0.1: el último 5% es el caro.</li>
+</ol>
+<p>El cierre conceptual de la sesión: <strong>predicción → medición → ajuste →
+repetir</strong>. En operación continua ese lazo tiene nombre propio — <em>SON,
+Self-Organizing Networks</em> — y nunca termina. El diseño no es una fórmula
+que se resuelve: es un proceso que se converge.</p>
+<div class="admonition question">
+<p class="admonition-title">Comprueba tu comprensión</p>
+<p><strong>P1.</strong> R2 reprueba (68%) pero R4-DL cumple (p5 = 66 Mbps). ¿Cómo
+puede el throughput de borde estar bien si la cobertura de control
+está mal?</p>
+<p><strong>P2.</strong> La σ medida (15 dB) casi duplica la declarada (8 dB). Si se
+rehiciera la Fase 2 con σ = 15, ¿qué pasaría con el radio, los sitios
+y el presupuesto R8 — y qué dice eso del orden fórmula→trazador?</p>
+<hr />
+<p><strong>R1.</strong> Miden poblaciones distintas: R4 se evalúa sobre los píxeles
+<em>cubiertos</em> (donde llegó algún rayo), R2 sobre el área <em>total</em> —
+incluidas las sombras donde no llega nada. Una red puede servir
+excelente donde llega y a la vez no llegar a suficiente área. Por eso
+R2 y R4 son requisitos separados, igual que R2 y R3 en la Fase 0.</p>
+<p><strong>R2.</strong> Margen para 95% de área con σ=15 (por Jakes) ≈ 20 dB → MAPL
+cae ~11 dB → el radio se encoge a la mitad → los sitios por cobertura
+se triplican (~10, muy por encima del R8 de 6 — con el caveat de que
+la σ aparente es cota superior). Lección: la fórmula con σ de libro
+dimensiona el <em>arranque</em>; el número final de sitios siempre lo dicta
+la validación sobre el terreno (o su gemelo ray-traced) — exactamente
+el orden que siguió esta sesión.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

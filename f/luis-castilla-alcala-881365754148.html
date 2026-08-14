@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Informe de calificación — Examen final de diseño de red 5G</title>
+<style>
+  :root {
+    --fondo: #ffffff; --texto: #1f2328; --tenue: #59636e;
+    --borde: #d1d9e0; --acento: #1c6bba; --suave: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0d1117; --texto: #e6edf3; --tenue: #9198a1;
+      --borde: #30363d; --acento: #6cb0ff; --suave: #161b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 5rem;
+    background: var(--fondo); color: var(--texto);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  .aviso {
+    border: 1px solid var(--borde); border-left: 3px solid var(--acento);
+    background: var(--suave); padding: .7rem .9rem; border-radius: 5px;
+    font-size: .87rem; color: var(--tenue); margin-bottom: 2.5rem;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 1.2rem; }
+  h2 {
+    font-size: 1.18rem; margin: 2.4rem 0 .8rem;
+    padding-bottom: .3rem; border-bottom: 1px solid var(--borde);
+  }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .6rem; }
+  p, li { margin: 0 0 .85rem; }
+  code {
+    background: var(--suave); border: 1px solid var(--borde);
+    border-radius: 4px; padding: .1em .35em; font-size: .875em;
+  }
+  .tabla { overflow-x: auto; margin: 1.2rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { border: 1px solid var(--borde); padding: .45rem .7rem; text-align: left; }
+  th { background: var(--suave); font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--borde); margin: 2.5rem 0; }
+  blockquote {
+    margin: 1.2rem 0; padding-left: 1rem;
+    border-left: 3px solid var(--borde); color: var(--tenue);
+  }
+  footer {
+    margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--borde);
+    font-size: .82rem; color: var(--tenue);
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="aviso">
+  Página personal y no listada. Su dirección es única para ti — no aparece en el
+  menú ni en el buscador del curso. Evita reenviarla.
+</div>
+<h1>Informe de calificación — Examen final de diseño de red 5G</h1>
+<p><strong>Alumno:</strong> Luis Castilla Alcalá<br />
+<strong>Escena:</strong> <code>jesus-maria-01</code> (80 MHz en n78, máximo 7 sitios, 217 PRB)<br />
+<strong>Nota final: 18.6 / 20</strong></p>
+<hr />
+<h2>Lo primero, en una línea</h2>
+<p>Entregaste un examen completo y coherente: los siete verificadores pasan, ninguna celda quedó sin ejecutar y la cadena de números viaja limpia desde el TdR hasta la tabla R1–R8. Lo que te separa de la nota perfecta no es el diseño, es que en varios puntos tu texto describe números que no son los que tu propio notebook imprimió.</p>
+<hr />
+<h2>Fase 0 — Requisitos (1.9 / 2.0)</h2>
+<p>La demanda está bien construida con el TdR de <strong>tu</strong> escena: 30 000 hab/km² × 25% × 12 GB/mes → 89 kbps por abonado → 667 Mbps/km², y de ahí tu R5 = 700 Mbps/km² con un margen declarado de ~5%. Ese es exactamente el orden correcto: el requisito sale de tu demanda, no al revés.</p>
+<p>Elegiste −105 dBm en vez de la referencia de −110 y citaste la fila (residencial en interiores y calle densa de la Tabla 0.1). Es una decisión legítima y bien defendida: la oferta comercial dice "en tu casa y en la calle", y penetrar muros cuesta esos decibelios. Ten presente, eso sí, que te autoimpusiste un objetivo 5 dB más exigente que la referencia, y eso te va a cobrar factura en la Fase 6 — volveremos a esto.</p>
+<p>Lo que faltó: la pregunta 2 pedía los bitrates concretos de la Tabla 0.3, el más exigente de cada columna. Respondiste "video HD en descarga y videollamadas en subida" sin citar los números. La idea es correcta, pero una justificación sin cifras propias vale la mitad.</p>
+<h2>Fase 1 — Espectro (3.0 / 3.0)</h2>
+<p>Perfecta. Tu réplica de la tabla de bandas es correcta (n258 te costaría 8.26 veces los sitios, n28 solo 0.18) y la lectura de n28 es la buena: ganarías cobertura y perderías capacidad porque en 700 MHz no existe espectro contiguo ancho. Los 217 PRB los tomas del estándar y explicas bien por qué no salen de dividir 80 MHz entre 0.36. El reparto DDDSU te deja 57.1 MHz efectivos en bajada y 16.0 en subida, y cierras con el razonamiento correcto: el cuello de botella del uplink no es el tiempo, es la potencia del terminal. Nada que objetar.</p>
+<h2>Fase 2 — Cobertura (2.9 / 3.0)</h2>
+<p>Muy buena. El EPRE con la aritmética mostrada (43 dBm repartidos entre 217 × 12 = 2604 RE → 8.8 dBm), MAPL DL 120.8 dB contra UL 132.0 dB, radio 293 m y 7 sitios por cobertura. Todo coherente con el umbral que elegiste en la Fase 0.</p>
+<p>Identificas correctamente que aquí <strong>limita la bajada de control</strong>, y explicas bien en qué tipo de proyecto sí limitaría la subida (celdas grandes, rurales, donde los 23 dBm del terminal no alcanzan). Ese es justo el matiz que buscaba.</p>
+<p>El único descuento es la pregunta 3: dices con razón que exigir el 99% encogería el radio hasta pasarte de los 7 sitios autorizados, pero no pusiste el margen que la Tabla 2.3 da para 99%. La dirección es correcta; faltó el número.</p>
+<h2>Fase 3 — Capacidad (2.5 / 3.0)</h2>
+<p>Aquí está tu mayor pérdida, y es una pena porque <strong>el cálculo es impecable</strong>: celda de 89 Mbps, sitio de 267 Mbps, demanda total de 951 Mbps, <code>n_capacidad</code> = 4, veredicto <code>max(7, 4)</code> = 7 sitios de 7 autorizados. Verificador en verde.</p>
+<p>El problema es que tu justificación no lee esas salidas:</p>
+<ul>
+<li><strong>Pregunta 1.</strong> Escribes que cobertura y capacidad dan "exactamente el mismo número (7 sitios)" y que el margen se consume "en aproximadamente 0 años". Tu propia celda imprimió que la capacidad pedía <strong>4</strong>, no 7. Y como instalas 7 sitios × 267 Mbps = 1872 Mbps contra una demanda de 951, tienes casi el doble de capacidad instalada: con 1.25^t eso son unos <strong>3 años</strong> de margen, no cero. La conclusión correcta era la contraria a la que escribiste: tu red nace sobrada de capacidad y limitada por propagación.</li>
+<li><strong>Pregunta 3.</strong> "Diez puntos porcentuales" sobre 25% es 35%, o sea un factor <strong>1.4</strong> (951 → 1332 Mbps), no un +10% relativo (1046). El veredicto al que llegas sí es el correcto — sigue mandando la cobertura con 7 sitios — pero por el camino equivocado. Ojo además con que en la Fase 0 dijiste que ese mismo escenario provocaría saturación: tu Fase 3 demuestra que no.</li>
+</ul>
+<p>Las preguntas 2 y 4 están muy bien: la explicación de por qué SE_UL &lt; SE_DL y por qué ninguna es el 1.0 del borde es exactamente la distinción entre promedio de celda y punto de operación de borde.</p>
+<h2>Fase 4 — Plan nominal (2.8 / 3.0)</h2>
+<p>Siete sitios en azoteas, dentro del tope R8, con alturas reales obtenidas por ray cast y un tilt derivado por sitio del criterio de tocar suelo a 0.7 × radio (de 4.0° a 12.2°, todos por debajo del límite de 15°). Coherente con el veredicto de la Fase 3 y con el verificador en verde. Los proxies bajos (R2 57.7%, R3 62.1%) no son un problema: explicas correctamente que ese mapa es exploratorio y que el elemento de ~8 dBi del trazador lo deja unos 8 dB por debajo de tu presupuesto de enlace.</p>
+<p>Las respuestas 2, 3 y 4 están bien argumentadas y con tus propios números. El descuento va a la respuesta 1: dices que te apoyaste en "un buscador automático de azoteas (<code>mejor_techo</code>)". Ese buscador no está en tu código — tus siete coordenadas están escritas a mano y <code>altura_en</code> solo consulta la altura del techo donde ya decidiste poner el sitio. Describe lo que hiciste, que fue colocación manual por cuadrantes: es una decisión de diseñador perfectamente defendible y no necesitaba adornarse.</p>
+<h2>Fase 5 — Identidades y acceso (2.9 / 3.0)</h2>
+<p>El plan de PCI es correcto: 21 identificadores únicos con <code>3i + grupo[i]</code>, regla co-sitio cumplida, y la explicación de por qué esa regla es dura y la de entre sitios es blanda está bien planteada. El RACH es exacto de punta a punta: t_guard de 2.06 µs, N_CS mínimo 3 → N_CS = 13 de la tabla → 64 preámbulos por raíz → una sola raíz por celda. Y la tracking area única está bien justificada por el tamaño del área, con los dos costos extremos correctamente descritos.</p>
+<p>Lo que se te escapó está en la pregunta 4. Argumentas —bien— que un conflicto residual es inevitable, pero no miraste tus propios metros: tu plan deja <strong>19 930 m</strong> en conflicto mod-3, <em>más</em> que el coloreo ingenuo de referencia (17 955 m). Un plan que empeora la línea base merecía al menos una frase tuya, aunque el coloreo greedy venga dado.</p>
+<h2>Fase 6 — Validación (2.6 / 3.0)</h2>
+<p>Todas las fórmulas del veredicto están bien y el verificador cierra en verde: R2 85.3%, R3 85.2%, SE medida 3.51 bit/s/Hz (que reduce a 3 los sitios necesarios por capacidad), p5 de 41 Mbps, n medido 2.35 y sigma aparente 13.1 dB. Tu tabla R1–R8 marca correctamente R2, R3 y R4 como reprobados, y <strong>no alcanzar las metas no es lo que te resta</strong> — lo que miro aquí es tu diagnóstico.</p>
+<p>Lo que hiciste bien: la respuesta 1 aplica la regla correcta (cada mapa se juzga contra su propia calidad, la diferencia entre 62.1% y 85.2% es muestreo y no red). La respuesta 2 es madura: la hipótesis de 2.0 no estaba mal, estaba sesgada en la dirección conservadora, y para dimensionar la próxima red seguirías usándola. Y la lectura de la sigma es exactamente la que había que hacer: 13.1 dB medidos contra 8 asumidos significa que tu margen de 9 dB de la Fase 2 se quedó corto.</p>
+<p>Lo que le falta al diagnóstico para ser completo:</p>
+<ol>
+<li><strong>No dices dónde falla.</strong> R2 y R3 reprueban en un 15% del área, pero no identificas qué zonas del mapa son. Un diagnóstico útil localiza el hueco antes de proponer el remedio.</li>
+<li><strong>No interrogas tu propio bisturí.</strong> El delta salió de exactamente −0.0 pp y el SINR local no se movió ni una décima (20.4 → 20.4 dB). Tampoco nombras al invasor que tu celda sí imprimió: <strong>s1c0</strong>, con tilt de 12.2° sirviendo hasta 464 m. La lectura que faltaba: en una escena urbana densa la interferencia viene del scattering entre vecinas inmediatas, no de un overshooting geométrico que un tilt pueda recortar — por eso el bisturí no mueve la aguja, y las herramientas que siguen son azimuts, ICIC sobre las fronteras que ya mediste en la Fase 5, o reposicionar.</li>
+<li><strong>Propones densificar cuando ya no puedes.</strong> Entre tus salidas correctivas incluyes "añadir nuevos sitios físicos de refuerzo". Estás en 7 de 7: el octavo sitio no existe sin renegociar R8. Esa restricción debía aparecer en tu lista.</li>
+<li><strong>No cierras el círculo con la Fase 0.</strong> Tu R2 falla en parte porque te autoimpusiste −105 dBm en vez de la referencia de −110. Con el umbral de referencia tu mismo mapa habría dado un porcentaje bastante mejor. Decirlo no es excusarse: es demostrar que entiendes qué requisito estás midiendo. Lo mismo con la n medida de 2.35 frente al 3.8 declarado — la propagación resultó <em>mejor</em> de lo que asumiste y aun así R2 no cierra, lo que apunta directo a geometría y a sombras, no a pérdidas de trayecto.</li>
+</ol>
+<hr />
+<h2>Resumen de puntos</h2>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Numérico</th>
+<th>Justificación</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F0 — Requisitos</td>
+<td>1.2 / 1.2</td>
+<td>0.7 / 0.8</td>
+<td><strong>1.9 / 2.0</strong></td>
+</tr>
+<tr>
+<td>F1 — Espectro</td>
+<td>1.8 / 1.8</td>
+<td>1.2 / 1.2</td>
+<td><strong>3.0 / 3.0</strong></td>
+</tr>
+<tr>
+<td>F2 — Cobertura</td>
+<td>1.8 / 1.8</td>
+<td>1.1 / 1.2</td>
+<td><strong>2.9 / 3.0</strong></td>
+</tr>
+<tr>
+<td>F3 — Capacidad</td>
+<td>1.8 / 1.8</td>
+<td>0.7 / 1.2</td>
+<td><strong>2.5 / 3.0</strong></td>
+</tr>
+<tr>
+<td>F4 — Plan nominal</td>
+<td>1.8 / 1.8</td>
+<td>1.0 / 1.2</td>
+<td><strong>2.8 / 3.0</strong></td>
+</tr>
+<tr>
+<td>F5 — Identidades</td>
+<td>1.8 / 1.8</td>
+<td>1.1 / 1.2</td>
+<td><strong>2.9 / 3.0</strong></td>
+</tr>
+<tr>
+<td>F6 — Validación</td>
+<td>1.8 / 1.8</td>
+<td>0.8 / 1.2</td>
+<td><strong>2.6 / 3.0</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><strong>Nota final</strong></td>
+<td><strong>18.6 / 20</strong></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2>Si te llevas una sola cosa</h2>
+<p>Tu parte numérica está a nivel de 20: los siete verificadores pasan, la cadena es coherente y ningún valor aparece sin origen. Todos los puntos que perdiste están en el mismo sitio — en el texto que describe esos números. En la Fase 3 escribiste "7 y 7" cuando tu celda imprimió 4; en la Fase 4 describiste un buscador de azoteas que no programaste; en la Fase 5 no miraste que tu conflicto superaba al ingenuo; en la Fase 6 propusiste un sitio que el TdR no te permite.</p>
+<p>La costumbre que te falta es barata y vale mucho: antes de escribir cada justificación, vuelve a leer la salida de <strong>tu</strong> celda y cita literalmente lo que dice. El diseño ya lo tienes.</p>
+<hr />
+<h2>Nota final del curso</h2>
+<p>Esta es tu nota final, con el peso de cada evaluación:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Evaluación</th>
+<th>Peso</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promedio de trabajos prácticos</td>
+<td>30%</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Examen parcial</td>
+<td>30%</td>
+<td>19.7</td>
+</tr>
+<tr>
+<td>Examen final (este informe)</td>
+<td>40%</td>
+<td>18.6</td>
+</tr>
+<tr>
+<td><strong>Nota final</strong></td>
+<td></td>
+<td><strong>17.8</strong> — diecisiete con ocho décimas</td>
+</tr>
+</tbody>
+</table></div>
+<p>El examen final pesa el 40%, así que los 18.6 puntos que obtuviste aquí aportan 7.44 a esa nota.</p>
+<footer>
+  Comunicaciones Inalámbricas · Retroalimentación del examen final ·
+  ¿Dudas sobre la calificación? Escríbeme y la revisamos.
+</footer>
+</main>
+</body>
+</html>

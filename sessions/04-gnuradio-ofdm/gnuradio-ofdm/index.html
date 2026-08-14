@@ -1,0 +1,2745 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Construcción visual de la cadena OFDM completa: TX, canal AWGN y multipath, RX con ecualización, y medición de BER en tiempo real.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/04-gnuradio-ofdm/gnuradio-ofdm/">
+      
+      
+        <link rel="prev" href="../../03-ofdm-systems/">
+      
+      
+        <link rel="next" href="../../05-channel-coding/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab — OFDM con GNU Radio - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-estudiando-ofdm-con-gnu-radio" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab — OFDM con GNU Radio
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../exams/" class="md-tabs__link">
+          
+  
+  
+  Evaluaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Instalación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Instalación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux-ubuntu-debian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux (Ubuntu / Debian)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-el-flowgraph-ofdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. El Flowgraph OFDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. El Flowgraph OFDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parametros-globales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros globales
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-transmisor-tx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Transmisor (TX)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Transmisor (TX)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-1-random-uniform-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 1 — Random Uniform Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-2-throttle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 2 — Throttle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-3-pack-k-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 3 — Pack K Bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-4-chunks-to-symbols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 4 — Chunks to Symbols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-5-stream-to-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 5 — Stream to Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-6-fft-ifft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 6 — FFT (IFFT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-7-ofdm-cyclic-prefixer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 7 — OFDM Cyclic Prefixer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Canal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Canal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-8-channel-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 8 — Channel Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-receptor-rx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Receptor (RX)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Receptor (RX)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-9-keep-m-in-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 9 — Keep M in N
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-10-stream-to-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 10 — Stream to Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-11-fft-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 11 — FFT (Forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-12-vector-to-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 12 — Vector to Stream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-13-multiply-const" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 13 — Multiply Const
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-14-constellation-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 14 — Constellation Decoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-15-unpack-k-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 15 — Unpack K Bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-16-null-sink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 16 — Null Sink
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-visualizacion-de-subportadoras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Visualización de Subportadoras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-demostraciones-efectos-del-prefijo-ciclico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Demostraciones: Efectos del Prefijo Cíclico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ejercicio-medir-ber-en-tiempo-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Ejercicio — Medir BER en Tiempo Real
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Ejercicio — Medir BER en Tiempo Real">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-de-la-alineacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El problema de la alineación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#construccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Construcción
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calibracion-del-delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calibración del delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#medicion-ber-vs-snr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medición BER vs SNR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extension-ber-con-multipath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensión — BER con multipath
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas-laboratorio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notas — Laboratorio 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-mimo-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 — Diseño de Red de Acceso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    07 — Diseño de Red de Acceso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-network-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-network-design/rsrp-rsrq-sinr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-network-design/crs-dos-celdas-pci-mod3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: CRS con dos celdas y PCI mod 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-network-design/de-sinr-a-capacidad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: de SINR a capacidad de celda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-network-design/escena-osm-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía: escena OSM con Blender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcial 01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exams/examen-diseno-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examen — Diseño de red 5G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-instalacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Instalación
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Instalación">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linux-ubuntu-debian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Linux (Ubuntu / Debian)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-el-flowgraph-ofdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. El Flowgraph OFDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. El Flowgraph OFDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parametros-globales" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros globales
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-transmisor-tx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Transmisor (TX)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Transmisor (TX)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-1-random-uniform-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 1 — Random Uniform Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-2-throttle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 2 — Throttle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-3-pack-k-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 3 — Pack K Bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-4-chunks-to-symbols" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 4 — Chunks to Symbols
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-5-stream-to-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 5 — Stream to Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-6-fft-ifft" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 6 — FFT (IFFT)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-7-ofdm-cyclic-prefixer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 7 — OFDM Cyclic Prefixer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Canal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Canal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-8-channel-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 8 — Channel Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-receptor-rx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Receptor (RX)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Receptor (RX)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bloque-9-keep-m-in-n" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 9 — Keep M in N
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-10-stream-to-vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 10 — Stream to Vector
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-11-fft-forward" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 11 — FFT (Forward)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-12-vector-to-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 12 — Vector to Stream
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-13-multiply-const" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 13 — Multiply Const
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-14-constellation-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 14 — Constellation Decoder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-15-unpack-k-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 15 — Unpack K Bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bloque-16-null-sink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bloque 16 — Null Sink
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-visualizacion-de-subportadoras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Visualización de Subportadoras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-demostraciones-efectos-del-prefijo-ciclico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Demostraciones: Efectos del Prefijo Cíclico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ejercicio-medir-ber-en-tiempo-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Ejercicio — Medir BER en Tiempo Real
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Ejercicio — Medir BER en Tiempo Real">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-problema-de-la-alineacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El problema de la alineación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#construccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Construcción
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calibracion-del-delay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calibración del delay
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#medicion-ber-vs-snr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medición BER vs SNR
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extension-ber-con-multipath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensión — BER con multipath
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notas-laboratorio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notas — Laboratorio 2
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-estudiando-ofdm-con-gnu-radio">Lab — Estudiando OFDM con GNU Radio</h1>
+<ul>
+<li><a href="https://youtu.be/SWQYXDt1svw?si=1wB68uDhIBoqPfg2">Vídeo</a></li>
+</ul>
+<p>GNU Radio Companion (GRC) permite construir sistemas de procesamiento de señal como <strong>flowgraphs</strong> visuales: cada etapa de la cadena es un bloque, las conexiones son los flujos de datos, y la ejecución corre en tiempo real. En este laboratorio construiremos la cadena OFDM completa y observaremos en vivo el efecto del canal, el prefijo cíclico y el ruido sobre la constelación recibida.</p>
+<hr />
+<h2 id="1-instalacion">1. Instalación</h2>
+<h3 id="windows">Windows</h3>
+<p>GNU Radio en Windows se instala a través de <strong>radioconda</strong>, un entorno conda que incluye GNU Radio y todos sus componentes Qt GUI.</p>
+<ol>
+<li>Ve a <a href="https://github.com/radioconda/radioconda-installer">https://github.com/radioconda/radioconda-installer</a> y descarga el instalador bajo <strong>OS: Windows — x86_64 (amd64)</strong>.</li>
+<li>Ejecuta el <code>.exe</code> y acepta los valores por defecto.</li>
+<li>Abre <strong>Radioconda Prompt</strong> desde el menú Inicio.</li>
+<li>Verifica la instalación:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>gnuradio-companion<span class="w"> </span>--version
+</code></pre></div>
+<ol>
+<li>Lanza GRC:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>gnuradio-companion
+</code></pre></div>
+<details class="note">
+<summary>Alternativa: WSL2</summary>
+<p>Si prefieres Linux nativo en Windows, instala WSL2 con Ubuntu y ejecuta:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gnuradio
+</code></pre></div>
+Para usar la GUI desde WSL2 necesitas un servidor X (VcXsrv o WSLg en Windows 11).</p>
+</details>
+<h3 id="linux-ubuntu-debian">Linux (Ubuntu / Debian)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gnuradio
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>gnuradio-companion
+</code></pre></div>
+<hr />
+<h2 id="2-el-flowgraph-ofdm">2. El Flowgraph OFDM</h2>
+<p>El sistema que construiremos implementa la cadena completa de un símbolo OFDM: desde bits aleatorios hasta la constelación decodificada, con visualización en cada etapa.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>[Fuente bits] → [Pack] → [QPSK] → [S→V] → [IFFT] → [+CP]
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>                                                         ↓
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>                                                     [Canal]
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>                                                         ↓
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>                          [Const RX] ← [×1] ← [FFT] ← [−CP]
+</code></pre></div>
+<h3 id="parametros-globales">Parámetros globales</h3>
+<p>Antes de colocar bloques, define estas variables (bloque <strong>Variable</strong>):</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Valor</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>samp_rate</code></td>
+<td><code>100000</code></td>
+<td>Tasa de bits de la fuente — controla la velocidad de simulación</td>
+</tr>
+<tr>
+<td><code>fft_size</code></td>
+<td><code>8</code></td>
+<td>N = número de subportadoras OFDM</td>
+</tr>
+<tr>
+<td><code>cp_len</code></td>
+<td><code>2</code></td>
+<td>Longitud del prefijo cíclico (N/4)</td>
+</tr>
+</tbody>
+</table>
+<p>Y un control deslizante (bloque <strong>QT GUI Range</strong>):</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Start</th>
+<th>Stop</th>
+<th>Step</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>noise_amp</code></td>
+<td><code>0.0</code></td>
+<td><code>2.0</code></td>
+<td><code>0.01</code></td>
+<td><code>0.1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Finalmente, añade el bloque <strong><code>Constellation Object</code></strong> para elegir la modulación:</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID</strong></td>
+<td><code>mod_const</code></td>
+</tr>
+<tr>
+<td><strong>Constellation Type</strong></td>
+<td>Elige entre: <code>QPSK</code>, <code>16QAM</code>, <code>64QAM</code>, <code>8PSK</code></td>
+</tr>
+</tbody>
+</table>
+<p>Este bloque centraliza la modulación — cambiando solo este parámetro el TX y RX se adaptan automáticamente.</p>
+<div class="admonition warning">
+<p class="admonition-title">Ajusta K según la modulación elegida</p>
+<p>El parámetro <strong>K</strong> de <code>Pack K Bits</code> y <code>Unpack K Bits</code> debe coincidir:</p>
+<table>
+<thead>
+<tr>
+<th>Constellation Type</th>
+<th>K (bits/símbolo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QPSK</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td>8PSK</td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td>16QAM</td>
+<td><code>4</code></td>
+</tr>
+<tr>
+<td>64QAM</td>
+<td><code>6</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr />
+<h2 id="3-transmisor-tx">3. Transmisor (TX)</h2>
+<h3 id="bloque-1-random-uniform-source">Bloque 1 — Random Uniform Source</h3>
+<p><strong>Búscalo como:</strong> <code>Random Uniform Source</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Byte</code></td>
+<td>Genera bytes, usaremos valores 0 ó 1 como bits</td>
+</tr>
+<tr>
+<td>Minimum</td>
+<td><code>0</code></td>
+<td>Bit mínimo</td>
+</tr>
+<tr>
+<td>Maximum</td>
+<td><code>2</code></td>
+<td>Genera {0, 1} — rango [min, max)</td>
+</tr>
+</tbody>
+</table>
+<p>Produce un flujo continuo de bits aleatorios uniformes.</p>
+<h3 id="bloque-2-throttle">Bloque 2 — Throttle</h3>
+<p><strong>Búscalo como:</strong> <code>Throttle</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Byte</code></td>
+<td>Mismo tipo que la fuente</td>
+</tr>
+<tr>
+<td>Sample Rate</td>
+<td><code>samp_rate</code></td>
+<td>Limita la CPU para que la GUI sea fluida</td>
+</tr>
+</tbody>
+</table>
+<p>Sin este bloque el flowgraph consume el 100% de CPU generando muestras tan rápido como puede.</p>
+<h3 id="bloque-3-pack-k-bits">Bloque 3 — Pack K Bits</h3>
+<p><strong>Búscalo como:</strong> <code>Pack K Bits</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K</td>
+<td><code>2</code> (QPSK)</td>
+<td>Agrupa K bits → 1 índice de símbolo (ver tabla de modulaciones arriba)</td>
+</tr>
+</tbody>
+</table>
+<p>Convierte el flujo de bits individuales en índices de símbolo. K debe coincidir con la modulación elegida en <code>mod_const</code>.</p>
+<h3 id="bloque-4-chunks-to-symbols">Bloque 4 — Chunks to Symbols</h3>
+<p><strong>Búscalo como:</strong> <code>Chunks to Symbols</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input Type</td>
+<td><code>Byte</code></td>
+<td>Recibe índices 0–3</td>
+</tr>
+<tr>
+<td>Output Type</td>
+<td><code>Complex</code></td>
+<td>Produce puntos complejos I+jQ</td>
+</tr>
+<tr>
+<td>Symbol Table</td>
+<td><code>mod_const.points()</code></td>
+<td>Puntos de la constelación elegida en <code>mod_const</code></td>
+</tr>
+<tr>
+<td>Dimensionality</td>
+<td><code>1</code></td>
+<td>Un símbolo complejo por índice de entrada</td>
+</tr>
+</tbody>
+</table>
+<p>Mapea cada índice de símbolo a su punto en el plano complejo. Aquí cada byte vale un punto QPSK — esto es la modulación.</p>
+<div class="admonition tip">
+<p class="admonition-title">GUI ① — Constelación TX</p>
+<p>Conecta un <strong>QT GUI Constellation Sink</strong> a la salida de este bloque. Verás los puntos de la constelación elegida perfectos antes de entrar al canal.</p>
+</div>
+<h3 id="bloque-5-stream-to-vector">Bloque 5 — Stream to Vector</h3>
+<p><strong>Búscalo como:</strong> <code>Stream to Vector</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item Size</td>
+<td><code>Complex</code></td>
+<td>Recibe símbolos complejos</td>
+</tr>
+<tr>
+<td>Num Items</td>
+<td><code>fft_size</code></td>
+<td>Agrupa N=8 símbolos en un vector</td>
+</tr>
+</tbody>
+</table>
+<p>La IFFT necesita recibir todos los N símbolos del dominio de la frecuencia juntos para producir un símbolo OFDM en tiempo. Este bloque forma ese paquete de N símbolos: <span class="arithmatex">\(\mathbf{X} = [X_0, X_1, \ldots, X_{N-1}]\)</span>.</p>
+<h3 id="bloque-6-fft-ifft">Bloque 6 — FFT (IFFT)</h3>
+<p><strong>Búscalo como:</strong> <code>FFT</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FFT Size</td>
+<td><code>fft_size</code></td>
+<td>Tamaño N de la IFFT</td>
+</tr>
+<tr>
+<td>Forward/Reverse</td>
+<td><code>Reverse</code></td>
+<td>Reverse = IFFT: convierte X[k] → x[n]</td>
+</tr>
+<tr>
+<td>Window</td>
+<td><code>Rectangular</code></td>
+<td>Sin ventana — la OFDM no ventanea el IFFT</td>
+</tr>
+<tr>
+<td>Shift</td>
+<td><code>No</code></td>
+<td>Sin fftshift — subportadora 0 en índice 0</td>
+</tr>
+</tbody>
+</table>
+<p>Implementa <span class="arithmatex">\(x[n] = \frac{1}{N}\sum_{k=0}^{N-1} X[k]\, e^{+j2\pi kn/N}\)</span>. Cada muestra de salida es la suma de N subportadoras ortogonales.</p>
+<details class="note">
+<summary>¿Por qué Rectangular y no Blackman-Harris?</summary>
+<p>La ventana se usa para reducir <em>spectral leakage</em> al <strong>analizar</strong> señales. Aquí estamos <strong>generando</strong> la señal OFDM — aplicar una ventana al IFFT distorsionaría la ortogonalidad entre subportadoras, que es la propiedad fundamental que hace funcionar OFDM.</p>
+</details>
+<h3 id="bloque-7-ofdm-cyclic-prefixer">Bloque 7 — OFDM Cyclic Prefixer</h3>
+<p><strong>Búscalo como:</strong> <code>OFDM Cyclic Prefixer</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input Size</td>
+<td><code>fft_size</code></td>
+<td>Recibe vectores de N muestras</td>
+</tr>
+<tr>
+<td>Output Size</td>
+<td><code>fft_size+cp_len</code></td>
+<td>Produce vectores de N+CP muestras</td>
+</tr>
+<tr>
+<td>Rolloff</td>
+<td><code>0</code></td>
+<td>Sin roll-off, transición rectangular</td>
+</tr>
+<tr>
+<td>Tag Length Key</td>
+<td><code>""</code></td>
+<td>Modo stream continuo (sin paquetes etiquetados)</td>
+</tr>
+</tbody>
+</table>
+<p>Copia las últimas <code>cp_len</code> muestras del símbolo OFDM al inicio: <span class="arithmatex">\([x_{N-CP}, \ldots, x_{N-1}, x_0, x_1, \ldots, x_{N-1}]\)</span>. El prefijo cíclico es lo que convierte la convolución lineal del canal en circular, permitiendo la ecualización de un tap por subportadora.</p>
+<div class="admonition tip">
+<p class="admonition-title">GUI ② — Símbolo OFDM en tiempo</p>
+<p>Conecta un <strong>QT GUI Time Sink</strong> (Size: <code>fft_size+cp_len</code>, Type: <code>Complex</code>) a la salida de este bloque. Con N=8 y CP=2 verás un símbolo de 10 muestras — las primeras 2 (CP) son copia exacta de las últimas 2.</p>
+</div>
+<hr />
+<h2 id="4-canal">4. Canal</h2>
+<h3 id="bloque-8-channel-model">Bloque 8 — Channel Model</h3>
+<p><strong>Búscalo como:</strong> <code>Channel Model</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Noise Voltage</td>
+<td><code>noise_amp</code></td>
+<td>Amplitud del AWGN — controlado por el slider</td>
+</tr>
+<tr>
+<td>Frequency Offset</td>
+<td><code>0</code></td>
+<td>Sin desplazamiento de frecuencia portadora</td>
+</tr>
+<tr>
+<td>Epsilon</td>
+<td><code>1.0</code></td>
+<td>Sin error de timing (reloj TX = RX)</td>
+</tr>
+<tr>
+<td>Taps</td>
+<td><code>[1.0+0j]</code></td>
+<td>Canal AWGN plano — sin multipath</td>
+</tr>
+</tbody>
+</table>
+<p>Modela el canal de propagación. Con <code>taps=[1.0+0j]</code> el canal es transparente excepto por el ruido AWGN. Para añadir multipath: <code>taps=[1.0, 0, 0.5j]</code> agrega una reflexión con retardo 2 muestras y desfase 90°.</p>
+<div class="admonition tip">
+<p class="admonition-title">GUI ③ y ④ — Señal recibida y espectro</p>
+<p>Conecta desde la salida de este bloque:
+- <strong>QT GUI Time Sink</strong> → verás la señal OFDM ruidosa
+- <strong>QT GUI Frequency Sink</strong> → verás el espectro plano y rectangular que ocupa el ancho de banda OFDM</p>
+</div>
+<hr />
+<h2 id="5-receptor-rx">5. Receptor (RX)</h2>
+<h3 id="bloque-9-keep-m-in-n">Bloque 9 — Keep M in N</h3>
+<p><strong>Búscalo como:</strong> <code>Keep M in N</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Complex</code></td>
+<td>Muestras complejas</td>
+</tr>
+<tr>
+<td>M</td>
+<td><code>fft_size</code></td>
+<td>Número de muestras a conservar (N útiles)</td>
+</tr>
+<tr>
+<td>N</td>
+<td><code>fft_size+cp_len</code></td>
+<td>Período total de un símbolo con CP</td>
+</tr>
+<tr>
+<td>Offset</td>
+<td><code>cp_len</code></td>
+<td>Empieza a conservar después del CP</td>
+</tr>
+</tbody>
+</table>
+<p>De cada bloque de N+CP muestras, descarta las primeras <code>cp_len</code> (el prefijo cíclico, que ya cumplió su función) y conserva las N muestras útiles del símbolo OFDM.</p>
+<h3 id="bloque-10-stream-to-vector">Bloque 10 — Stream to Vector</h3>
+<p>Igual que en TX: agrupa N muestras en un vector para alimentar la FFT.</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item Size</td>
+<td><code>Complex</code></td>
+</tr>
+<tr>
+<td>Num Items</td>
+<td><code>fft_size</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="bloque-11-fft-forward">Bloque 11 — FFT (Forward)</h3>
+<p><strong>Búscalo como:</strong> <code>FFT</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FFT Size</td>
+<td><code>fft_size</code></td>
+<td>Mismo N que el IFFT del TX</td>
+</tr>
+<tr>
+<td>Forward/Reverse</td>
+<td><code>Forward</code></td>
+<td>Forward = FFT: x[n] → Y[k] = X[k] (canal plano)</td>
+</tr>
+<tr>
+<td>Window</td>
+<td><code>Rectangular</code></td>
+<td>Sin ventana</td>
+</tr>
+<tr>
+<td>Shift</td>
+<td><code>No</code></td>
+<td>Consistente con el TX</td>
+</tr>
+</tbody>
+</table>
+<p>Implementa <span class="arithmatex">\(Y[k] = \sum_{n=0}^{N-1} y[n]\, e^{-j2\pi kn/N}\)</span>. Para canal plano sin ruido: <span class="arithmatex">\(Y[k] = X[k]\)</span> — recupera exactamente los símbolos transmitidos.</p>
+<h3 id="bloque-12-vector-to-stream">Bloque 12 — Vector to Stream</h3>
+<p>Convierte el vector de N complejos de vuelta a un stream continuo.</p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Item Size</td>
+<td><code>Complex</code></td>
+</tr>
+<tr>
+<td>Num Items</td>
+<td><code>fft_size</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="bloque-13-multiply-const">Bloque 13 — Multiply Const</h3>
+<p><strong>Búscalo como:</strong> <code>Multiply Const</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Complex</code></td>
+<td>Opera sobre símbolos complejos</td>
+</tr>
+<tr>
+<td>Constant</td>
+<td><code>1.0</code></td>
+<td>Canal plano H[k]=1: no se necesita corrección</td>
+</tr>
+</tbody>
+</table>
+<p>Este es el <strong>ecualizador de un tap</strong>. Para un canal plano sin multipath, <span class="arithmatex">\(H[k]=1\)</span> para toda subportadora, por lo que la corrección es multiplicar por <span class="arithmatex">\(1/H[k] = 1\)</span>. Con multipath se necesita primero estimar <span class="arithmatex">\(H[k]\)</span> mediante pilotos y luego dividir por él.</p>
+<div class="admonition tip">
+<p class="admonition-title">GUI ⑤ — Constelación RX post-ecualización</p>
+<p>Conecta un <strong>QT GUI Constellation Sink</strong> aquí. Este es el sink más importante del laboratorio: muestra qué tan bien se recuperan los símbolos después del canal.</p>
+</div>
+<h3 id="bloque-14-constellation-decoder">Bloque 14 — Constellation Decoder</h3>
+<p><strong>Búscalo como:</strong> <code>Constellation Decoder</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Constellation</td>
+<td><code>mod_const</code></td>
+<td>Mismo objeto que en TX</td>
+</tr>
+</tbody>
+</table>
+<p>Toma cada símbolo complejo recibido y decide cuál de los 4 puntos QPSK es el más cercano (decisión dura). Convierte cada punto complejo en un índice {0,1,2,3}.</p>
+<h3 id="bloque-15-unpack-k-bits">Bloque 15 — Unpack K Bits</h3>
+<p><strong>Búscalo como:</strong> <code>Unpack K Bits</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K</td>
+<td><code>2</code></td>
+<td>Desempaqueta 2 bits por símbolo decodificado</td>
+</tr>
+</tbody>
+</table>
+<p>Convierte el índice de símbolo {0,1,2,3} de vuelta a bits individuales {0,1} — el inverso del bloque <code>Pack K Bits</code> del TX.</p>
+<h3 id="bloque-16-null-sink">Bloque 16 — Null Sink</h3>
+<p><strong>Búscalo como:</strong> <code>Null Sink</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Byte</code></td>
+</tr>
+</tbody>
+</table>
+<p>Descarta los bits decodificados. En el ejercicio final lo reemplazaremos por un comparador BER.</p>
+<hr />
+<h2 id="6-visualizacion-de-subportadoras">6. Visualización de Subportadoras</h2>
+<p>Para ver las 8 subportadoras individualmente <strong>después de la FFT</strong>, añade:</p>
+<p><strong>Bloque A — Complex to Mag</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vec Length</td>
+<td><code>fft_size</code></td>
+</tr>
+</tbody>
+</table>
+<p>Conectado a la salida vectorial del <strong>FFT (Forward)</strong>, antes del <code>Vector to Stream</code>.</p>
+<p><strong>Bloque B — QT GUI Vector Sink</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vec Size</td>
+<td><code>fft_size</code></td>
+</tr>
+<tr>
+<td>X Step</td>
+<td><code>samp_rate/fft_size</code></td>
+</tr>
+<tr>
+<td>X Axis Label</td>
+<td><code>Frecuencia (Hz)</code></td>
+</tr>
+<tr>
+<td>Y Axis Label</td>
+<td><code>Magnitud</code></td>
+</tr>
+</tbody>
+</table>
+<p>Muestra la magnitud de cada subportadora individualmente. Con canal plano y sin ruido, las 8 barras tienen la misma altura.</p>
+<hr />
+<h2 id="7-demostraciones-efectos-del-prefijo-ciclico">7. Demostraciones: Efectos del Prefijo Cíclico</h2>
+<p>Con el flowgraph completo, realiza estas demostraciones en secuencia:</p>
+<table>
+<thead>
+<tr>
+<th>Paso</th>
+<th><code>noise_amp</code></th>
+<th><code>taps</code></th>
+<th><code>cp_len</code></th>
+<th>Lo que verás</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>0</code></td>
+<td><code>[1.0+0j]</code></td>
+<td><code>2</code></td>
+<td>4 puntos perfectos — canal ideal</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>0.1</code></td>
+<td><code>[1.0+0j]</code></td>
+<td><code>2</code></td>
+<td>Pequeñas nubes — AWGN bajo</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>0.5</code></td>
+<td><code>[1.0+0j]</code></td>
+<td><code>2</code></td>
+<td>Nubes solapadas — BER notable</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>0</code></td>
+<td><code>[1.0, 0, 0.5j]</code></td>
+<td><code>2</code></td>
+<td>4 puntos limpios — CP absorbe multipath</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>0</code></td>
+<td><code>[1.0, 0, 0.5j]</code></td>
+<td><code>0</code></td>
+<td>Constelación colapsada — sin CP, ISI destruye la señal</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>0</code></td>
+<td><code>[1.0, 0, 0.5j]</code></td>
+<td><code>2</code></td>
+<td>Recuperación — CP restaura la señal</td>
+</tr>
+</tbody>
+</table>
+<details class="note">
+<summary>¿Por qué el CP absorbe el multipath?</summary>
+<p>El canal <code>[1.0, 0, 0.5j]</code> tiene un eco con retardo 2 muestras. El CP de longitud 2 copia las últimas 2 muestras al inicio del símbolo. Cuando el eco del símbolo anterior llega con 2 muestras de retraso, "aterriza" dentro del CP del símbolo actual — no contamina las N muestras útiles. Al quitar el CP en el receptor, el símbolo útil ve solo la convolución <strong>circular</strong> del canal, que la FFT puede ecualizar subportadora a subportadora con un solo coeficiente.</p>
+</details>
+<hr />
+<h2 id="8-ejercicio-medir-ber-en-tiempo-real">8. Ejercicio — Medir BER en Tiempo Real</h2>
+<p>¿Hay forma de medir BER directamente en GNU Radio? Sí — usando el bloque <code>digital.ber_bf</code> que compara dos streams de bits alineados.</p>
+<h3 id="el-problema-de-la-alineacion">El problema de la alineación</h3>
+<p>El TX genera bits y el RX los decodifica con un <strong>retardo de procesamiento</strong> que proviene de los bloques del pipeline (stream_to_vector, FFT, etc.). Para comparar TX vs RX necesitas retrasar los bits TX exactamente esa cantidad.</p>
+<h3 id="construccion">Construcción</h3>
+<p><strong>Paso 1 — Bifurcar el stream TX</strong></p>
+<p>Después de <code>Pack K Bits</code>, conecta la salida a dos destinos:
+- Al <code>Chunks to Symbols</code> (cadena existente)
+- A un nuevo bloque <strong><code>Delay</code></strong></p>
+<p><strong>Paso 2 — Bloque Delay</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td><code>Byte</code></td>
+</tr>
+<tr>
+<td>Delay</td>
+<td><code>delay_val</code></td>
+</tr>
+</tbody>
+</table>
+<p>Añade una nueva variable: <code>delay_val = 0</code>.</p>
+<p><strong>Paso 3 — Bloque BER BF</strong></p>
+<p><strong>Búscalo como:</strong> <code>BER BF</code></p>
+<table>
+<thead>
+<tr>
+<th>Puerto</th>
+<th>Conexión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input 0</td>
+<td>Salida de <code>Unpack K Bits</code> (bits RX decodificados)</td>
+</tr>
+<tr>
+<td>Input 1</td>
+<td>Salida del <code>Delay</code> (bits TX retrasados)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Paso 4 — Mostrar BER</strong></p>
+<p>Conecta la salida de <code>BER BF</code> a un <strong>QT GUI Number Sink</strong>.</p>
+<h3 id="calibracion-del-delay">Calibración del delay</h3>
+<ol>
+<li>Pon <code>noise_amp = 0</code>, <code>taps = [1.0+0j]</code> (canal ideal)</li>
+<li>Añade una variable <code>variable_qtgui_range</code> para <code>delay_val</code>: Start=0, Stop=200, Step=1</li>
+<li>Mueve el slider de <code>delay_val</code> hasta que el Number Sink muestre BER ≈ 0</li>
+<li>Ese valor es el retardo de procesamiento del sistema</li>
+</ol>
+<h3 id="medicion-ber-vs-snr">Medición BER vs SNR</h3>
+<p>Con el delay calibrado, llena esta tabla variando <code>noise_amp</code>:</p>
+<table>
+<thead>
+<tr>
+<th><code>noise_amp</code> σ</th>
+<th>BER medido</th>
+<th>BER teórico QPSK</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.0</td>
+<td>—</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0.2</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0.5</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1.0</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>La BER teórica de QPSK es: <span class="arithmatex">\(\text{BER} = Q\!\left(\sqrt{2\,E_b/N_0}\right)\)</span></p>
+<p>donde <span class="arithmatex">\(E_b/N_0 \approx 1/(2\sigma^2)\)</span> para señal de potencia unitaria.</p>
+<details class="note">
+<summary>¿Por qué el BER aumenta con σ?</summary>
+<p>El bloque <code>Channel Model</code> añade ruido gaussiano complejo con potencia <span class="arithmatex">\(\sigma^2\)</span> por componente. Cuando la nube de ruido es suficientemente grande como para cruzar el límite de decisión entre dos puntos QPSK (separados √2 en el plano complejo), el decoder toma la decisión incorrecta y produce un error de bit.</p>
+</details>
+<h3 id="extension-ber-con-multipath">Extensión — BER con multipath</h3>
+<p>Con el delay calibrado, cambia los taps a <code>[1.0, 0, 0.5j]</code> (multipath, delay spread = 2):</p>
+<ul>
+<li>Con <code>cp_len = 2</code> (CP ≥ delay spread): el BER debería ser el mismo que sin multipath</li>
+<li>Con <code>cp_len = 0</code> (sin CP): el BER debe dispararse aunque <code>noise_amp = 0</code></li>
+</ul>
+<p>Esto demuestra cuantitativamente que el CP no solo es una "guardia de seguridad" — es el mecanismo que garantiza que el multipath no añade BER cuando su retardo está dentro del CP.</p>
+<hr />
+<h2 id="notas-laboratorio-2">Notas — Laboratorio 2</h2>
+<table>
+<thead>
+<tr>
+<th>Alumno</th>
+<th style="text-align: center;"><strong>Nota /20</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bermúdez Silva, Moisés</td>
+<td style="text-align: center;"><strong>18</strong></td>
+</tr>
+<tr>
+<td>Castilla Alcalá, Luis</td>
+<td style="text-align: center;"><strong>18</strong></td>
+</tr>
+<tr>
+<td>Livia Mariano, Mariano</td>
+<td style="text-align: center;"><strong>18</strong></td>
+</tr>
+<tr>
+<td>Loayza Sáenz, Néstor</td>
+<td style="text-align: center;"><strong>18</strong></td>
+</tr>
+<tr>
+<td>Taipe Quiroz, Meri</td>
+<td style="text-align: center;"><strong>18</strong></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

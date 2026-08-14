@@ -1,0 +1,2537 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Del límite de Shannon a los códigos que lo alcanzan: LDPC con belief propagation y Polar con cancelación sucesiva, tal como se usan en 5G NR.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/05-channel-coding/">
+      
+      
+        <link rel="prev" href="../04-gnuradio-ofdm/gnuradio-ofdm/">
+      
+      
+        <link rel="next" href="../06-mimo-systems/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Sesión 05 — Codificación de Canal: LDPC y Códigos Polar - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sesion-05-codificacion-de-canal-ldpc-y-codigos-polar" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sesión 05 — Codificación de Canal: LDPC y Códigos Polar
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../exams/" class="md-tabs__link">
+          
+  
+  
+  Evaluaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-gnuradio-ofdm/gnuradio-ofdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-el-limite-de-shannon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. El Límite de Shannon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-codificacion-de-canal-redundancia-estructurada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Codificación de Canal: Redundancia Estructurada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-codigos-ldpc-grafos-dispersos-e-iteracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Códigos LDPC: Grafos Dispersos e Iteración
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Códigos LDPC: Grafos Dispersos e Iteración">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-el-grafo-de-tanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 El Grafo de Tanner
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-belief-propagation-propagacion-de-creencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Belief Propagation (Propagación de Creencias)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ldpc-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 LDPC en 5G NR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-codigos-polar-polarizacion-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Códigos Polar: Polarización del Canal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Códigos Polar: Polarización del Canal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-polarizacion-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Polarización del Canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-decodificacion-por-cancelacion-sucesiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Decodificación por Cancelación Sucesiva
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-polar-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Polar en 5G NR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-comparacion-ldpc-vs-polar-y-seleccion-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Comparación LDPC vs Polar y Selección en 5G NR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Comparación LDPC vs Polar y Selección en 5G NR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-numerico-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo Numérico End-to-End
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-diseno-completo-canal-modulacion-codificacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Diseño Completo: Canal + Modulación + Codificación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-mimo-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 — Diseño de Red de Acceso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    07 — Diseño de Red de Acceso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/rsrp-rsrq-sinr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/crs-dos-celdas-pci-mod3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: CRS con dos celdas y PCI mod 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/de-sinr-a-capacidad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: de SINR a capacidad de celda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/escena-osm-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía: escena OSM con Blender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcial 01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/examen-diseno-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examen — Diseño de red 5G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-el-limite-de-shannon" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. El Límite de Shannon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-codificacion-de-canal-redundancia-estructurada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Codificación de Canal: Redundancia Estructurada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-codigos-ldpc-grafos-dispersos-e-iteracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Códigos LDPC: Grafos Dispersos e Iteración
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Códigos LDPC: Grafos Dispersos e Iteración">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-el-grafo-de-tanner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 El Grafo de Tanner
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-belief-propagation-propagacion-de-creencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Belief Propagation (Propagación de Creencias)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-ldpc-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 LDPC en 5G NR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-codigos-polar-polarizacion-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Códigos Polar: Polarización del Canal
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Códigos Polar: Polarización del Canal">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-polarizacion-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Polarización del Canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-decodificacion-por-cancelacion-sucesiva" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Decodificación por Cancelación Sucesiva
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-polar-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Polar en 5G NR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-comparacion-ldpc-vs-polar-y-seleccion-en-5g-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Comparación LDPC vs Polar y Selección en 5G NR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Comparación LDPC vs Polar y Selección en 5G NR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-numerico-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo Numérico End-to-End
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sintesis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Síntesis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ejercicios">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 1
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 2
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 3
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 4
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 5
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicio-6-diseno-completo-canal-modulacion-codificacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicio 6 — Diseño Completo: Canal + Modulación + Codificación
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lecturas-recomendadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lecturas Recomendadas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sesion-05-codificacion-de-canal-ldpc-y-codigos-polar">Sesión 05 — Codificación de Canal: LDPC y Códigos Polar</h1>
+<ul>
+<li>
+<p><a href="https://youtu.be/eafyTPziosg?si=S6IAtSw0Fj_14okx">Vídeo - Parte 1</a></p>
+</li>
+<li>
+<p><a href="https://youtu.be/Y11RbHtiZXY?si=tS5Q1cUh9ATKVz1N">Vídeo - Parte 2</a></p>
+</li>
+</ul>
+<h2 id="objetivos-de-aprendizaje">Objetivos de Aprendizaje</h2>
+<p>Al finalizar esta sesión, el estudiante será capaz de:</p>
+<ol>
+<li>Calcular la capacidad de Shannon de un canal AWGN y determinar el Eb/N0 mínimo teórico para comunicación fiable</li>
+<li>Explicar el concepto de ganancia de codificación y calcularla a partir de curvas de BER</li>
+<li>Describir la estructura del grafo de Tanner de un código LDPC y el principio del algoritmo de belief propagation</li>
+<li>Derivar las transformaciones de polarización del canal que dan lugar a los códigos Polar</li>
+<li>Identificar qué código (LDPC o Polar) usa 5G NR en cada canal físico y por qué</li>
+</ol>
+<hr />
+<h2 id="introduccion">Introducción</h2>
+<p>En la Sesión 03, el Ejercicio 6 calculó que un sistema OFDM operaba al 86% de la capacidad de Shannon en condiciones realistas. En la Sesión 02, el selector de MCS usó un umbral de BER pre-FEC de <span class="arithmatex">\(10^{-1}\)</span> — una BER que un detector sin código nunca aceptaría — dando por sentado que el código LDPC de 5G NR la transformaba en <span class="arithmatex">\(&lt;10^{-5}\)</span>. Ambas sesiones usaron la codificación de canal como una "caja negra" con propiedades mágicas. Esta sesión abre esa caja.</p>
+<p>La pregunta central es: si un canal introduce errores inevitablemente, ¿cómo es posible comunicar sin errores? La respuesta, contra toda intuición, es: añadiendo más bits. Específicamente, añadiendo bits de redundancia cuidadosamente diseñados para que el receptor pueda detectar y corregir los errores del canal. Shannon (1948) demostró que esto es posible para cualquier tasa <span class="arithmatex">\(R &lt; C\)</span>, donde <span class="arithmatex">\(C\)</span> es la capacidad del canal. Durante casi 50 años nadie supo construir códigos que se acercaran al límite; los turbo codes (1993) y los LDPC codes (redescubiertos 1996) rompieron esa barrera. Los códigos Polar (Arıkan 2009) son los primeros en ser teóricamente demostrables como capacity-achieving.</p>
+<hr />
+<h2 id="teoria">Teoría</h2>
+<h3 id="1-el-limite-de-shannon">1. El Límite de Shannon</h3>
+<p>La Sesión 03 usó la capacidad de Shannon como referencia de throughput. El resultado central es el <strong>Teorema de Shannon-Hartley</strong>:</p>
+<div class="arithmatex">\[\boxed{C = B\log_2(1+\text{SNR})\quad \text{[bit/s]}} \tag{1}\]</div>
+<p>donde <span class="arithmatex">\(B\)</span> es el ancho de banda [Hz] y SNR es la relación señal a ruido lineal en el receptor. Este límite establece dos hechos complementarios: la <em>mitad positiva</em> — para cualquier tasa <span class="arithmatex">\(R &lt; C\)</span> existe un código de longitud <span class="arithmatex">\(n\)</span> suficientemente grande tal que la probabilidad de error es arbitrariamente pequeña — y la <em>mitad negativa</em> o "converso" — para cualquier <span class="arithmatex">\(R &gt; C\)</span>, la probabilidad de error se acerca a 1 sin importar qué código se use.</p>
+<!-- Derivación geométrica (sphere-packing) comentada 2026-06-04.
+
+  Capacidad como ratio de volúmenes: en n usos del canal, la señal transmitida ocupa un
+  punto en R^n con energía E_s = nP_s. El ruido la desplaza dentro de una esfera de radio
+  sqrt(nN_0/2); el punto recibido cae en una esfera de radio sqrt(n(P_s+N_0/2)).
+  Número máximo de mensajes: M ≈ (1+SNR)^(n/2) → C = (1/2)log2(1+SNR) [bits/uso real].
+  Para canales bandpass (2 dimensiones/uso): C = B·log2(1+SNR) [bit/s].
+
+  Figura original: figures/shannon-sphere-packing.png  (generada por gsd-quick shannon-sphere-packing)
+  Caption: Argumento geométrico de Shannon. Izquierda: el punto transmitido x vive en una
+  esfera de radio sqrt(nPs); el ruido lo desplaza dentro de una esfera de radio sqrt(nN0/2).
+  El número máximo de codewords distinguibles es el número de esferas de ruido que caben en
+  la esfera total de radio sqrt(n(Ps+N0/2)). Derecha: M ≈ (1+SNR)^(n/2) crece
+  exponencialmente con el bloque n.
+-->
+
+<p><strong>El límite de Eb/N0.</strong> ¿Cuál es el SNR mínimo absoluto para comunicar fiablemente? Si la tasa espectral es <span class="arithmatex">\(\eta = R/B\)</span> [bit/s/Hz], la condición <span class="arithmatex">\(R &lt; C\)</span> exige:</p>
+<div class="arithmatex">\[\eta &lt; \log_2(1 + \text{SNR}) \Rightarrow \text{SNR} &gt; 2^\eta - 1\]</div>
+<p>Expresando SNR en términos de Eb/N0: <span class="arithmatex">\(\text{SNR} = (E_b/N_0)\cdot(R/B) = (E_b/N_0)\cdot\eta\)</span>. Sustituyendo:</p>
+<div class="arithmatex">\[(E_b/N_0)\cdot\eta &gt; 2^\eta - 1 \Rightarrow E_b/N_0 &gt; \frac{2^\eta - 1}{\eta}\]</div>
+<p>A medida que <span class="arithmatex">\(\eta \to 0\)</span> (tasa de bits muy baja): <span class="arithmatex">\(\lim_{\eta\to0}\frac{2^\eta-1}{\eta} = \ln 2 \approx 0{,}693\)</span>.</p>
+<p>El <strong>límite absoluto de Shannon</strong> es <span class="arithmatex">\(E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}\)</span>. Por debajo de este valor no existe ningún código capaz de comunicar fiablemente, para ninguna tasa y ningún esquema de modulación.</p>
+<p>La figura siguiente sitúa los MCS codificados de la Sesión 02 sobre la frontera de Shannon. Las flechas muestran la <strong>brecha de codificación</strong>: cuántos dB de <span class="arithmatex">\(E_b/N_0\)</span> separan cada sistema del límite teórico a la misma eficiencia espectral.</p>
+<figure>
+  <img alt="Capacidad de Shannon y puntos de operación" src="figures/shannon-capacity.png" />
+<br />
+<!-- generada por celda 3 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 1.</strong> Eficiencia espectral <span class="arithmatex">\(\eta = C/B\)</span> (bit/s/Hz) en función de <span class="arithmatex">\(E_b/N_0\)</span> (dB) para el canal AWGN. La <strong>curva azul</strong> es la frontera de Shannon: para cada <span class="arithmatex">\(\eta\)</span>, el <span class="arithmatex">\(E_b/N_0\)</span> mínimo necesario es <span class="arithmatex">\((2^\eta-1)/\eta\)</span>. La <strong>región salmón</strong> (izquierda de la curva) es no alcanzable — ningún código puede comunicar fiablemente por debajo de esa frontera, independientemente de su complejidad. Los puntos de colores son cinco MCS codificados de la Sesión 02: BPSK <span class="arithmatex">\(r=1/2\)</span>, QPSK <span class="arithmatex">\(r=1/2\)</span>, QPSK <span class="arithmatex">\(r=3/4\)</span>, 16-QAM <span class="arithmatex">\(r=1/2\)</span> y 64-QAM <span class="arithmatex">\(r=3/4\)</span>, situados en <span class="arithmatex">\((\eta_{\text{eff}},\,E_b/N_0)\)</span> con <span class="arithmatex">\(\eta_{\text{eff}} = \log_2(M)\cdot r_c\)</span>. Las flechas horizontales muestran la <strong>brecha de codificación</strong>: cuántos dB podría reducirse el <span class="arithmatex">\(E_b/N_0\)</span> si el código operara justo en el límite de Shannon a la misma <span class="arithmatex">\(\eta_{\text{eff}}\)</span>. La línea roja vertical marca el límite absoluto <span class="arithmatex">\(E_b/N_0 = -1{,}59\)</span> dB.
+  </figcaption>
+</figure>
+<p>La pregunta natural es: el límite <span class="arithmatex">\(E_b/N_0 \geq \ln 2 = -1{,}59\ \text{dB}\)</span> marca la frontera absoluta de lo posible, pero los sistemas reales operan varios dB por encima de ella. ¿Cómo se construye un código que se acerque a esa frontera sin cruzarla? La respuesta es la redundancia estructurada: añadir bits de paridad diseñados para que el receptor detecte y corrija los errores del canal, reduciendo el Eb/N0 necesario mediante ganancia de codificación.</p>
+<hr />
+<h3 id="2-codificacion-de-canal-redundancia-estructurada">2. Codificación de Canal: Redundancia Estructurada</h3>
+<p>La intuición es que la redundancia permite corrección de errores: si se envían 3 copias de cada bit y el receptor vota por mayoría, puede corregir hasta 1 error de 3. Pero esta repetición simple es ineficiente en espectro — la tasa cae a 1/3. Los códigos modernos logran la misma corrección con mucho menos overhead.</p>
+<p><strong>Códigos de bloque lineales.</strong> Un código <span class="arithmatex">\((n, k)\)</span> mapea <span class="arithmatex">\(k\)</span> bits de información en <span class="arithmatex">\(n\)</span> bits de codeword. La tasa del código es <span class="arithmatex">\(r_c = k/n\)</span>. El conjunto de codewords válidos forman un subespacio lineal de <span class="arithmatex">\(\mathbb{F}_2^n\)</span> — el espacio vectorial binario de dimensión <span class="arithmatex">\(n\)</span>.</p>
+<p>La estructura se define mediante la <strong>matriz de verificación de paridad</strong> <span class="arithmatex">\(\mathbf{H}\)</span> de dimensiones <span class="arithmatex">\((n-k)\times n\)</span>: un vector <span class="arithmatex">\(\mathbf{c}\)</span> es una codeword válida si y sólo si:</p>
+<div class="arithmatex">\[\mathbf{H}\,\mathbf{c} = \mathbf{0} \pmod{2}\]</div>
+<p>La <strong>distancia mínima</strong> <span class="arithmatex">\(d_{\min}\)</span> del código es el número mínimo de bits en que difieren dos codewords distintas. Un código de distancia mínima <span class="arithmatex">\(d_{\min}\)</span> puede corregir hasta <span class="arithmatex">\(t = \lfloor(d_{\min}-1)/2\rfloor\)</span> errores.</p>
+<p><strong>El trade-off de la codificación.</strong> Con un código de tasa <span class="arithmatex">\(r_c &lt; 1\)</span>, para transmitir <span class="arithmatex">\(k\)</span> bits de información el codificador produce <span class="arithmatex">\(n = k/r_c\)</span> bits de canal. La energía total del bloque es <span class="arithmatex">\(k \cdot E_b\)</span> — la comprometida por los <span class="arithmatex">\(k\)</span> bits de información. Los <span class="arithmatex">\(n - k\)</span> bits de paridad no aportan energía adicional: son redundancia, no nueva información transmitida. Al repartir esa energía fija entre los <span class="arithmatex">\(n\)</span> bits de canal:</p>
+<div class="arithmatex">\[E_c = \frac{k \cdot E_b}{n} = \frac{k \cdot E_b}{k/r_c} = r_c \cdot E_b \quad \Longrightarrow \quad \frac{E_c}{N_0} = r_c \cdot \frac{E_b}{N_0}\]</div>
+<p>Cada bit de canal recibe solo una fracción <span class="arithmatex">\(r_c\)</span> de la energía por bit de información. Esto introduce una <strong>penalización por tasa</strong> de <span class="arithmatex">\(10\log_{10}(1/r_c)\)</span> dB. Para que el código sea beneficioso, la ganancia en distancia mínima debe superar esa penalización — esta es la condición necesaria para que exista ganancia de codificación neta.</p>
+<p>La <strong>ganancia de codificación</strong> es la reducción neta de Eb/N0 (en dB) necesaria para alcanzar una BER objetivo:</p>
+<div class="arithmatex">\[G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{con código}} \quad \text{[dB, a misma BER]} \tag{2}\]</div>
+<p>Para LDPC con <span class="arithmatex">\(r_c = 1/2\)</span> operando a BER <span class="arithmatex">\(= 10^{-5}\)</span> sobre AWGN: <span class="arithmatex">\(G_c \approx 8\ \text{dB}\)</span> — se necesita 8 dB menos de SNR que con BPSK sin código para la misma fiabilidad.</p>
+<p>La pregunta natural es: <span class="arithmatex">\(G_c \approx 8\ \text{dB}\)</span> es una mejora sustancial, pero ¿qué estructura interna tiene el código que lo hace posible? Añadir bits de redundancia arbitrarios no es suficiente — la ganancia de codificación depende de cómo se diseñan las relaciones de paridad entre bits. ¿Qué arquitectura matemática permite al decodificador explotar esas relaciones de forma eficiente? La respuesta es el grafo de Tanner disperso de los códigos LDPC, donde cada ecuación de paridad conecta solo un subconjunto pequeño de bits y el decodificador puede propagar correcciones de forma iterativa.</p>
+<hr />
+<h3 id="3-codigos-ldpc-grafos-dispersos-e-iteracion">3. Códigos LDPC: Grafos Dispersos e Iteración</h3>
+<p>Los códigos LDPC (<em>Low-Density Parity-Check</em>) fueron propuestos por Gallager (1962) y redescubiertos por MacKay (1996). Su nombre describe la propiedad clave: la matriz de verificación de paridad <span class="arithmatex">\(\mathbf{H}\)</span> es <strong>dispersa</strong> — tiene muy pocos unos respecto al total de entradas.</p>
+<h4 id="31-el-grafo-de-tanner">3.1 El Grafo de Tanner</h4>
+<p>La representación más intuitiva de un LDPC es su <strong>grafo de Tanner</strong>: un grafo bipartito con dos tipos de nodos:</p>
+<ul>
+<li><strong>Nodos de variable</strong> (<span class="arithmatex">\(n\)</span> nodos, uno por cada bit del codeword): representan los <span class="arithmatex">\(n\)</span> bits transmitidos.</li>
+<li><strong>Nodos de verificación</strong> (<span class="arithmatex">\(n-k\)</span> nodos, uno por cada ecuación de paridad): representan las <span class="arithmatex">\(n-k\)</span> ecuaciones <span class="arithmatex">\(\mathbf{H}\,\mathbf{c} = \mathbf{0}\)</span>.</li>
+</ul>
+<p>Para el código LDPC <span class="arithmatex">\((8,4)\)</span> del laboratorio, la matriz <span class="arithmatex">\(\mathbf{H}\)</span> de dimensiones <span class="arithmatex">\(4\times 8\)</span> es:</p>
+<div class="arithmatex">\[\mathbf{H} = \begin{pmatrix}
+1&amp;1&amp;1&amp;1&amp;0&amp;0&amp;0&amp;0\\
+0&amp;1&amp;1&amp;0&amp;1&amp;1&amp;0&amp;0\\
+0&amp;0&amp;1&amp;1&amp;0&amp;1&amp;1&amp;0\\
+1&amp;0&amp;0&amp;1&amp;0&amp;0&amp;1&amp;1
+\end{pmatrix}\]</div>
+<p>Cada fila es una ecuación de paridad: la suma XOR de los bits en las columnas donde hay un 1 debe ser cero. Las cuatro restricciones que todo codeword válido debe satisfacer son:</p>
+<table>
+<thead>
+<tr>
+<th>Check node</th>
+<th>Ecuación de paridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(c_0\)</span></td>
+<td><span class="arithmatex">\(v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(c_1\)</span></td>
+<td><span class="arithmatex">\(v_1 \oplus v_2 \oplus v_4 \oplus v_5 = 0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(c_2\)</span></td>
+<td><span class="arithmatex">\(v_2 \oplus v_3 \oplus v_5 \oplus v_6 = 0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(c_3\)</span></td>
+<td><span class="arithmatex">\(v_0 \oplus v_3 \oplus v_6 \oplus v_7 = 0\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Hay una arista entre <span class="arithmatex">\(v_j\)</span> y <span class="arithmatex">\(c_i\)</span> si y sólo si <span class="arithmatex">\(H_{ij} = 1\)</span> — cuando el bit <span class="arithmatex">\(j\)</span> participa en la ecuación de paridad <span class="arithmatex">\(i\)</span>. La Figura 2 muestra ese grafo para este código.</p>
+<figure>
+  <img alt="Grafo de Tanner del código LDPC" src="figures/tanner-graph.png" />
+<br />
+<!-- generada por celda 7 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 2.</strong> Grafo bipartito de Tanner para un código LDPC representativo. Los nodos de variable <span class="arithmatex">\(v_j\)</span> (círculos) representan los bits del codeword; los nodos de verificación <span class="arithmatex">\(c_i\)</span> (cuadrados) representan las ecuaciones de paridad <span class="arithmatex">\(H_{ij}=1\)</span> de la matriz <span class="arithmatex">\(\mathbf{H}\)</span>.
+  La dispersidad del grafo — pocos unos en <span class="arithmatex">\(\mathbf{H}\)</span>, aristas escasas — garantiza ciclos largos y convergencia rápida del decodificador belief propagation.
+  </figcaption>
+</figure>
+<p>La dispersidad del grafo es la razón por la que el decodificador iterativo converge eficientemente. En grafos dispersos, los ciclos son largos — esto minimiza las correlaciones entre mensajes en iteraciones sucesivas.</p>
+<p><strong>La entrada al decodificador: valores LLR.</strong> Tras la demodulación, el receptor no entrega bits duros (0 o 1) al decodificador — entrega una <strong>medida de confianza</strong> por cada bit del codeword, el <em>log-likelihood ratio</em>:</p>
+<div class="arithmatex">\[\lambda_v = \log\frac{P(\text{bit}=0 \mid y)}{P(\text{bit}=1 \mid y)} \tag{3}\]</div>
+<p>Un LLR grande y positivo indica que el bit es casi seguramente 0; grande y negativo, casi seguramente 1; cercano a cero, alta incertidumbre. El canal AWGN puede invertir el signo del LLR de algún bit — ese es el "error" que el decodificador debe corregir.</p>
+<p><strong>El objetivo de la decodificación.</strong> El decodificador BP parte de esos LLRs de canal y los ajusta iterativamente usando las ecuaciones de paridad como restricciones: los check nodes detectan qué bits violan sus ecuaciones y retroalimentan esa información a sus variable nodes vecinos para corregir sus LLRs. El proceso termina cuando los bits decodificados satisfacen simultáneamente las <span class="arithmatex">\(n-k\)</span> ecuaciones:</p>
+<div class="arithmatex">\[\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0} \pmod{2}\]</div>
+<p>El cómo se calculan esos mensajes entre nodos es el algoritmo de belief propagation, que se detalla a continuación.</p>
+<p>La pregunta natural es: el grafo de Tanner disperso con ciclos largos es la estructura que hace posible la decodificación iterativa, pero ¿cómo explota concretamente esa estructura un decodificador para propagar correcciones de bit en bit? ¿Qué mensajes se intercambian entre nodos de variable y nodos de verificación, y cómo convergen hacia la codeword correcta? La respuesta es el algoritmo de belief propagation, que circula log-likelihood ratios por las aristas del grafo en iteraciones sucesivas hasta que todas las ecuaciones de paridad se satisfacen.</p>
+<h4 id="32-belief-propagation-propagacion-de-creencias">3.2 Belief Propagation (Propagación de Creencias)</h4>
+<p>El algoritmo de decodificación de LDPC es <strong>belief propagation</strong> (BP), también llamado <em>sum-product algorithm</em> o <em>message passing</em>. La idea es que cada nodo transmite a sus vecinos un mensaje que representa su "creencia" sobre los bits desconocidos, basándose en toda la información que ha recibido de sus otros vecinos.</p>
+<p>Los mensajes se representan como <strong>log-likelihood ratios</strong> (LLRs): <span class="arithmatex">\(\lambda = \log(P(\text{bit}=0)/P(\text{bit}=1))\)</span>. Un LLR positivo indica que el bit es probablemente 0; negativo, que probablemente 1.</p>
+<p><strong>Inicialización.</strong> El canal proporciona el LLR de observación para cada bit: <span class="arithmatex">\(\lambda_v^{(0)} = \log\frac{P(y|c_v=0)}{P(y|c_v=1)}\)</span>. Para AWGN con varianza <span class="arithmatex">\(\sigma^2\)</span>: <span class="arithmatex">\(\lambda_v^{(0)} = 2y/\sigma^2\)</span>.</p>
+<p><strong>Iteración.</strong> En cada iteración:</p>
+<p><strong>Paso 1 (variable → verificación).</strong> Cada nodo de variable <span class="arithmatex">\(v\)</span> envía a cada nodo de verificación <span class="arithmatex">\(c\)</span> la suma de todos los mensajes entrantes <em>excepto</em> el de <span class="arithmatex">\(c\)</span>:</p>
+<div class="arithmatex">\[\mu_{v\to c} = \lambda_v^{(0)} + \sum_{c' \neq c} \mu_{c' \to v} \tag{4}\]</div>
+<p><strong>Paso 2 (verificación → variable).</strong> Cada nodo de verificación <span class="arithmatex">\(c\)</span> envía a cada nodo de variable <span class="arithmatex">\(v\)</span> la "verificación de consistencia" de todos los demás mensajes entrantes:</p>
+<div class="arithmatex">\[\mu_{c\to v} = 2\,\text{arctanh}\!\left(\prod_{v' \neq v} \tanh\!\left(\frac{\mu_{v'\to c}}{2}\right)\right) \tag{5}\]</div>
+<p>Este mensaje puede interpretarse como: "dado todo lo que sé de mis otros vecinos, ¿qué debería ser el bit <span class="arithmatex">\(v\)</span> para que la paridad se cumpla?"</p>
+<p><strong>Paso 3 (decisión).</strong> La creencia actualizada de cada nodo de variable es:</p>
+<div class="arithmatex">\[\lambda_v^{(\text{total})} = \lambda_v^{(0)} + \sum_c \mu_{c\to v}\]</div>
+<p>La decisión es <span class="arithmatex">\(\hat{c}_v = 0\)</span> si <span class="arithmatex">\(\lambda_v^{(\text{total})} &gt; 0\)</span>, y <span class="arithmatex">\(1\)</span> en caso contrario.</p>
+<details class="example">
+<summary>Ejemplo numérico: una iteración completa con LDPC (8,4)</summary>
+<p><strong>Escenario.</strong> Se transmite el codeword de todos ceros sobre BPSK (bit 0 → señal +1, bit 1 → señal −1) a través de un canal AWGN con <span class="arithmatex">\(\sigma^2 = 1\)</span>. El receptor observa señales con ruido y calcula los LLRs de canal con <span class="arithmatex">\(\lambda_v^{(0)} = 2y\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Señal recibida <span class="arithmatex">\(y\)</span></th>
+<th><span class="arithmatex">\(\lambda^{(0)} = 2y\)</span></th>
+<th>Canal dice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(v_0\)</span></td>
+<td>+0.7</td>
+<td><strong>+1.4</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_1\)</span></td>
+<td>+1.2</td>
+<td><strong>+2.4</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_2\)</span></td>
+<td>−0.3</td>
+<td><strong>−0.6</strong></td>
+<td>probablemente 1 ✗ ← error</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_3\)</span></td>
+<td>+0.8</td>
+<td><strong>+1.6</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_4\)</span></td>
+<td>+1.5</td>
+<td><strong>+3.0</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_5\)</span></td>
+<td>+0.4</td>
+<td><strong>+0.8</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_6\)</span></td>
+<td>+1.1</td>
+<td><strong>+2.2</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_7\)</span></td>
+<td>+0.9</td>
+<td><strong>+1.8</strong></td>
+<td>probablemente 0 ✓</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(v_2\)</span> llegó negativo por ruido: sin FEC sería un bit erróneo. BP debe corregirlo.</p>
+<p><strong>Vecinos de <span class="arithmatex">\(v_2\)</span> en el grafo de Tanner.</strong>
+La columna 2 de <span class="arithmatex">\(\mathbf{H}\)</span> indica qué check nodes verifican <span class="arithmatex">\(v_2\)</span> (filas con <span class="arithmatex">\(H_{i,2}=1\)</span>):</p>
+<div class="arithmatex">\[\mathbf{H} = \begin{pmatrix} 1&amp;1&amp;\mathbf{1}&amp;1&amp;0&amp;0&amp;0&amp;0 \\ 0&amp;1&amp;\mathbf{1}&amp;0&amp;1&amp;1&amp;0&amp;0 \\ 0&amp;0&amp;\mathbf{1}&amp;1&amp;0&amp;1&amp;1&amp;0 \\ 1&amp;0&amp;\mathbf{0}&amp;1&amp;0&amp;0&amp;1&amp;1 \end{pmatrix}\]</div>
+<p>Las filas 0, 1 y 2 tienen un 1 en la columna de <span class="arithmatex">\(v_2\)</span>, por eso <span class="arithmatex">\(v_2\)</span> tiene aristas con <span class="arithmatex">\(c_0\)</span>, <span class="arithmatex">\(c_1\)</span> y <span class="arithmatex">\(c_2\)</span> — y no con <span class="arithmatex">\(c_3\)</span>.</p>
+<hr />
+<p><strong>Paso 1 (v→c)</strong> — fórmula: <span class="arithmatex">\(\mu_{v \to c} = \lambda_v^{(0)} + \sum_{c' \neq c} \mu_{c' \to v}\)</span></p>
+<p>En la primera iteración no hay mensajes previos de los check nodes (<span class="arithmatex">\(\mu_{c' \to v} = 0\)</span>), así que la fórmula se reduce a <span class="arithmatex">\(\mu_{v \to c} = \lambda_v^{(0)}\)</span>. Cada variable reenvía simplemente su LLR de canal:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Envía a</th>
+<th>Mensaje <span class="arithmatex">\(\mu_{v \to c}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(v_2\)</span></td>
+<td><span class="arithmatex">\(c_0\)</span></td>
+<td><span class="arithmatex">\(-0.6\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_2\)</span></td>
+<td><span class="arithmatex">\(c_1\)</span></td>
+<td><span class="arithmatex">\(-0.6\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_2\)</span></td>
+<td><span class="arithmatex">\(c_2\)</span></td>
+<td><span class="arithmatex">\(-0.6\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>(Todos los demás bits envían igualmente sus LLRs iniciales a sus respectivos vecinos check.)</p>
+<hr />
+<p><strong>Paso 2 (c→v)</strong> — fórmula: <span class="arithmatex">\(\mu_{c \to v} = 2\,\text{arctanh}\!\left(\prod_{v' \neq v} \tanh\!\left(\frac{\mu_{v' \to c}}{2}\right)\right)\)</span></p>
+<p><span class="arithmatex">\(c_0\)</span> verifica <span class="arithmatex">\(\{v_0, v_1, v_2, v_3\}\)</span> (fila 0 de <span class="arithmatex">\(\mathbf{H}\)</span>). Recibió <span class="arithmatex">\(\mu_{v_0\to c_0}{=}{+1.4}\)</span>, <span class="arithmatex">\(\mu_{v_1\to c_0}{=}{+2.4}\)</span>, <span class="arithmatex">\(\mu_{v_2\to c_0}{=}{-0.6}\)</span>, <span class="arithmatex">\(\mu_{v_3\to c_0}{=}{+1.6}\)</span>. Para enviar a <span class="arithmatex">\(v_2\)</span>, excluye <span class="arithmatex">\(v_2\)</span> y multiplica los tanh de los demás:</p>
+<div class="arithmatex">\[\tanh(+1.4/2)\cdot\tanh(+2.4/2)\cdot\tanh(+1.6/2) = 0.604\times0.834\times0.664 = +0.334\]</div>
+<div class="arithmatex">\[\mu_{c_0 \to v_2} = 2\,\text{arctanh}(+0.334) = +0.696\]</div>
+<p>El signo positivo significa: <em>"<span class="arithmatex">\(v_0\)</span>, <span class="arithmatex">\(v_1\)</span> y <span class="arithmatex">\(v_3\)</span> creen que son 0; para que <span class="arithmatex">\(v_0 \oplus v_1 \oplus v_2 \oplus v_3 = 0\)</span>, tú también debes ser 0."</em></p>
+<p>De forma análoga <span class="arithmatex">\(c_1\)</span> (fila 1, verifica <span class="arithmatex">\(\{v_1,v_2,v_4,v_5\}\)</span>) y <span class="arithmatex">\(c_2\)</span> (fila 2, verifica <span class="arithmatex">\(\{v_2,v_3,v_5,v_6\}\)</span>) envían:</p>
+<div class="arithmatex">\[\mu_{c_1 \to v_2} = +0.876 \qquad \mu_{c_2 \to v_2} = +0.523\]</div>
+<hr />
+<p><strong>Paso 3 (decisión)</strong> — fórmula: <span class="arithmatex">\(\lambda_v^{(\text{total})} = \lambda_v^{(0)} + \sum_c \mu_{c \to v}\)</span></p>
+<div class="arithmatex">\[\lambda_{v_2}^{(\text{total})} = \underbrace{-0.6}_{\text{canal}} + \underbrace{+0.696}_{c_0} + \underbrace{+0.876}_{c_1} + \underbrace{+0.523}_{c_2} = +1.095\]</div>
+<p>El LLR pasó de <span class="arithmatex">\(-0.6\)</span> (canal: "probablemente 1") a <span class="arithmatex">\(+1.095\)</span> (BP: "probablemente 0") — <strong>error corregido en una sola iteración</strong>.</p>
+<hr />
+<p><strong>Resultado final tras 1 iteración</strong> (todos los bits):</p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th><span class="arithmatex">\(\lambda\)</span> canal</th>
+<th><span class="arithmatex">\(\lambda\)</span> final</th>
+<th>Decisión</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(v_0\)</span></td>
+<td>+1.4</td>
+<td>+1.877</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_1\)</span></td>
+<td>+2.4</td>
+<td>+1.964</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_2\)</span></td>
+<td><strong>−0.6</strong></td>
+<td><strong>+1.095</strong></td>
+<td><strong>0</strong></td>
+<td><strong>✓ corregido</strong></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_3\)</span></td>
+<td>+1.6</td>
+<td>+1.850</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_4\)</span></td>
+<td>+3.0</td>
+<td>+2.815</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_5\)</span></td>
+<td>+0.8</td>
+<td>+0.041</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_6\)</span></td>
+<td>+2.2</td>
+<td>+2.644</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(v_7\)</span></td>
+<td>+1.8</td>
+<td>+2.466</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(v_5\)</span> quedó con <span class="arithmatex">\(\lambda = +0.041\)</span> — casi en el umbral. Con más ruido o más bits erróneos simultáneos, haría falta una segunda iteración para consolidarlo.</p>
+</details>
+<p>El algoritmo itera hasta que <span class="arithmatex">\(\mathbf{H}\,\hat{\mathbf{c}} = \mathbf{0}\)</span> (codeword válida) o hasta un número máximo de iteraciones (típicamente 50–100). El comportamiento en la práctica muestra una <strong>curva en cascada</strong> (<em>waterfall</em>): por encima del umbral de SNR, el BP converge en pocas iteraciones; por debajo, no converge y la BER cae precipitosamente.</p>
+<figure>
+  <img alt="Evolución de LLR en belief propagation" src="figures/bp-messages.png" />
+<br />
+<!-- generada por celda 7c de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 3.</strong> Histograma de los LLR marginales <span class="arithmatex">\(\lambda_v^{(\text{total})}\)</span> de los <span class="arithmatex">\(n=240\)</span> bits durante el algoritmo de belief propagation. Cada barra indica cuántos bits tienen un LLR en ese rango. Código LDPC <span class="arithmatex">\(r_c\approx1/2\)</span>, codeword todo-ceros transmitida (todos los bits deben ser 0), <span class="arithmatex">\(E_b/N_0=2{,}5\ \text{dB}\)</span> (zona de transición del waterfall). Por convención, un LLR correcto es positivo (<span class="arithmatex">\(\lambda &gt; 0\)</span> → decisión 0 ✓); un bit a la izquierda de la línea naranja (<span class="arithmatex">\(\lambda &lt; 0\)</span>) es un error. El número en rojo de cada panel cuenta exactamente esos bits.
+  <strong>Iteración 1:</strong> los LLR son esencialmente los del canal (<span class="arithmatex">\(\lambda_v^{(0)} = 2y/\sigma^2\)</span>); la distribución gaussiana refleja el ruido AWGN y se centra en un valor pequeño y positivo — la mayoría de bits apunta correctamente a 0 pero con poca confianza.
+  <strong>Iteración 3:</strong> la distribución se desplaza hacia la derecha (+x): los mensajes de los check nodes refuerzan las creencias correctas y alejan los LLRs del cero, reduciendo la incertidumbre. No hay desplazamiento hacia el extremo negativo porque el codeword es todo-ceros.
+  <strong>Iteración 10:</strong> el histograma muestra pocas barras dentro del rango <span class="arithmatex">\([-25, +25]\)</span> — las barras visibles corresponden a bits con LLR de magnitud moderada en esa iteración, entre ellos los errores residuales (LLR <span class="arithmatex">\(&lt; 0\)</span>). El algoritmo termina cuando <span class="arithmatex">\(\mathbf{H}\hat{\mathbf{c}} = \mathbf{0}\)</span> (todos los bits positivos implican decisión 0, que es la codeword correcta), no cuando los LLRs alcanzan algún umbral de magnitud.
+  </figcaption>
+</figure>
+<figure>
+  <img alt="Curvas BER Monte Carlo LDPC n=240" src="figures/ldpc-ber-waterfall.png" />
+<br />
+<!-- generada por celda 7d de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 4.</strong> Curvas BER Monte Carlo para el código LDPC de <span class="arithmatex">\(n=240\)</span> bits con tasas <span class="arithmatex">\(r_c\approx1/2\)</span> (azul) y <span class="arithmatex">\(r_c\approx3/4\)</span> (naranja), comparadas con BPSK sin código (negro). Simulación BP sum-product con 200 bloques por punto de SNR; las líneas verticales punteadas marcan el límite teórico de Shannon para cada tasa.
+  Las líneas verticales punteadas son los <strong>límites de Shannon</strong> por tasa (<span class="arithmatex">\(E_b/N_0\vert_{\text{Shannon}} \approx -0{,}8\)</span> dB para <span class="arithmatex">\(r_c\approx0{,}51\)</span>), no umbrales de BP. El <strong>umbral práctico de decodificación</strong> — donde la cascada empieza a caer — está alrededor de <span class="arithmatex">\(\approx 2\)</span> dB para este código corto (<span class="arithmatex">\(n=240\)</span>): la "brecha al límite de Shannon" de este código es <span class="arithmatex">\(\approx 2{,}8\)</span> dB. A partir de ese umbral práctico, la BER cae más de 3 décadas en <span class="arithmatex">\(\approx 1{,}5\)</span> dB (de <span class="arithmatex">\(10^{-1}\)</span> a <span class="arithmatex">\(\lesssim 10^{-4}\)</span> entre 2 y 3,5 dB) — esa pendiente abrupta es la cascada característica del LDPC. La irregularidad visible a BER <span class="arithmatex">\(\lesssim 10^{-4}\)</span> es ruido estadístico de Monte Carlo (<span class="arithmatex">\(\sim\)</span>5 errores por punto a esa BER), no un <em>error floor</em> real.
+  </figcaption>
+</figure>
+<p>La pregunta natural es: la decisión <span class="arithmatex">\(\hat{c}_v\)</span> y la curva waterfall describen el comportamiento ideal sobre un grafo pequeño, pero 5G NR transmite bloques de datos de miles de bits — los grafos correspondientes tendrían millones de aristas y serían inviables de almacenar y procesar directamente. ¿Cómo escala el algoritmo BP a esas dimensiones manteniendo el mismo hardware de decodificador? La respuesta es la estructura de grafo base con lifting: un grafo compacto que se expande mediante permutaciones cíclicas para generar matrices <span class="arithmatex">\(\mathbf{H}\)</span> de cualquier longitud con un único diseño de hardware.</p>
+<h4 id="33-ldpc-en-5g-nr">3.3 LDPC en 5G NR</h4>
+<p>5G NR usa dos familias de grafos base LDPC (<em>base graphs</em>, BG):</p>
+<ul>
+<li><strong>BG1</strong>: grafo base de 46×68, bloque máximo de información de <span class="arithmatex">\(k = 8448\)</span> bits. Optimizado para bloques de datos grandes (<span class="arithmatex">\(k &gt; 3840\)</span> bits) y tasas altas (<span class="arithmatex">\(r_c \geq 1/3\)</span>). Se usa en PDSCH y PUSCH para la mayoría de las transmisiones de datos.</li>
+<li><strong>BG2</strong>: grafo base de 42×52, bloque máximo de <span class="arithmatex">\(k = 3840\)</span> bits. Optimizado para bloques pequeños y tasas bajas (<span class="arithmatex">\(r_c \geq 1/5\)</span>). Para control de datos y retransmisiones HARQ.</li>
+</ul>
+<details class="note">
+<summary>Canales físicos de 5G NR mencionados</summary>
+<ul>
+<li><strong>PDSCH</strong> (<em>Physical Downlink Shared Channel</em>): canal de datos en downlink — lleva tráfico IP desde la red hacia el UE. Usa BG1 para la mayoría de las transmisiones.</li>
+<li><strong>PUSCH</strong> (<em>Physical Uplink Shared Channel</em>): canal de datos en uplink — lleva tráfico desde el UE hacia la red. También usa BG1 en condiciones normales.</li>
+<li><strong>HARQ</strong> (<em>Hybrid Automatic Repeat reQuest</em>): mecanismo de retransmisión que combina FEC con solicitud de reenvío. Si el decodificador falla, el UE pide una retransmisión; el receptor combina ambas recepciones para mejorar la probabilidad de éxito. Los bloques HARQ son típicamente más cortos, de ahí el uso de BG2.</li>
+</ul>
+</details>
+<p><strong>Lifting: un grafo base, cientos de longitudes.</strong> El grafo base (por ejemplo BG1 de 46×68) es un diseño compacto de referencia. El <em>lifting</em> con factor <span class="arithmatex">\(Z\)</span> lo expande: cada nodo del grafo base se convierte en <span class="arithmatex">\(Z\)</span> nodos, y cada arista en una permutación cíclica entre grupos de <span class="arithmatex">\(Z\)</span> nodos. La matriz <span class="arithmatex">\(\mathbf{H}\)</span> resultante tiene dimensiones <span class="arithmatex">\((46 \times Z) \times (68 \times Z)\)</span>, produciendo codewords de longitud <span class="arithmatex">\(n = 68Z\)</span>. En 5G NR, <span class="arithmatex">\(Z\)</span> puede tomar valores de 2 a 384, cubriendo codewords de hasta <span class="arithmatex">\(68 \times 384 = 26\,112\)</span> bits — todos decodificables con el mismo hardware diseñado para el grafo base.</p>
+<p>La pregunta natural es: los grafos base BG1 y BG2 se encontraron mediante búsqueda empírica — se simularon miles de grafos candidatos y se eligieron los que producían el mejor umbral waterfall. Funcionan muy bien en práctica, pero no existe demostración matemática de que alcancen la capacidad de Shannon. ¿Existe una familia de códigos que alcance la capacidad del canal con una prueba formal, sin búsqueda aleatoria de grafos? La respuesta es la familia de códigos Polar: Arıkan (2009) demostró matemáticamente que alcanzan exactamente la capacidad de Shannon en el límite <span class="arithmatex">\(N \to \infty\)</span>, mediante transformaciones deterministas — los primeros códigos en la historia con esa garantía teórica.</p>
+<hr />
+<h3 id="4-codigos-polar-polarizacion-del-canal">4. Códigos Polar: Polarización del Canal</h3>
+<p>Los códigos Polar fueron propuestos por Arıkan (2009) y son los primeros códigos demostrablemente <em>capacity-achieving</em> para canales binarios simétricos — no se aproximan al límite, sino que lo alcanzan asintóticamente con decodificación de cancelación sucesiva.</p>
+<h4 id="41-polarizacion-del-canal">4.1 Polarización del Canal</h4>
+<p>La idea central de Arıkan: mezclar dos copias del canal físico crea un canal "mejor" y uno "peor". Repetir esta operación <span class="arithmatex">\(m\)</span> veces produce <span class="arithmatex">\(N = 2^m\)</span> canales cada vez más polarizados hacia los extremos. El diseñador asigna bits de información a los mejores y deja los peores vacíos — alcanzando la capacidad de Shannon.</p>
+<p><strong>El canal físico <span class="arithmatex">\(W\)</span>.</strong> <span class="arithmatex">\(W\)</span> modela cómo el canal transforma cada bit transmitido en señal recibida. Para AWGN-BPSK: envías <span class="arithmatex">\(x \in \{+1,-1\}\)</span> y recibes <span class="arithmatex">\(y = x + n\)</span> con <span class="arithmatex">\(n \sim \mathcal{N}(0,\sigma^2)\)</span>; en general, <span class="arithmatex">\(W(y\mid x)\)</span> es la probabilidad de observar <span class="arithmatex">\(y\)</span> dado <span class="arithmatex">\(x\)</span>. La capacidad <span class="arithmatex">\(C(W)\)</span> es el máximo de bits fiables por uso — fijada por la física del enlace, no por el diseñador.</p>
+<p><strong>Copias independientes de <span class="arithmatex">\(W\)</span>.</strong> Transmitir dos bits consecutivos usa el canal dos veces con <strong>ruidos independientes</strong>: conocer <span class="arithmatex">\(y_0\)</span> no dice nada sobre <span class="arithmatex">\(n_1\)</span>. Formalmente, la probabilidad conjunta factoriza:</p>
+<div class="arithmatex">\[W^2(y_0,y_1\mid x_0,x_1) = W(y_0\mid x_0)\cdot W(y_1\mid x_1) \tag{6}\]</div>
+<p>Sin términos cruzados: eso es lo que significa <em>canal sin memoria</em>. Esas dos transmisiones independientes son la materia prima de la polarización.</p>
+<figure>
+  <img alt="Canal físico W y dos usos independientes" src="figures/polar-channel-model.png" />
+<br />
+<figcaption><strong>Figura 5.</strong> Canal físico <span class="arithmatex">\(W\)</span> y copias independientes. <em>Izquierda:</em> un uso de <span class="arithmatex">\(W\)</span>: el transmisor envía <span class="arithmatex">\(x\)</span> y el receptor observa <span class="arithmatex">\(y = x+n\)</span>, corrompido por ruido gaussiano. <em>Derecha:</em> dos usos consecutivos del mismo canal; los ruidos <span class="arithmatex">\(n_0\)</span> y <span class="arithmatex">\(n_1\)</span> son independientes — conocer <span class="arithmatex">\(y_0\)</span> no reduce la incertidumbre sobre <span class="arithmatex">\(n_1\)</span>. Estas dos transmisiones son la materia prima de la polarización.</figcaption>
+</figure>
+<p><strong>Canales sintéticos <span class="arithmatex">\(W_2^{(-)}\)</span> y <span class="arithmatex">\(W_2^{(+)}\)</span>.</strong> En lugar de transmitir <span class="arithmatex">\((u_0,u_1)\)</span> directamente, Arıkan los mezcla primero con la transformación butterfly primitiva <span class="arithmatex">\(G_2\)</span>:</p>
+<div class="arithmatex">\[x_0 = u_0 \oplus u_1, \quad x_1 = u_1 \tag{7}\]</div>
+<p>Esa mezcla crea <strong>dos sub-problemas de decodificación distintos</strong> sobre las mismas observaciones físicas <span class="arithmatex">\((y_0, y_1)\)</span>:</p>
+<ul>
+<li><strong><span class="arithmatex">\(W_2^{(-)}\)</span></strong> (<em>canal malo</em>): estimar <span class="arithmatex">\(u_0\)</span> desde <span class="arithmatex">\((y_0,y_1)\)</span> sin información adicional. El receptor ve ruido mezclado, sin saber <span class="arithmatex">\(u_1\)</span>. Resultado: canal <strong>peor</strong> que <span class="arithmatex">\(W\)</span>.</li>
+<li><strong><span class="arithmatex">\(W_2^{(+)}\)</span></strong> (<em>canal bueno</em>): estimar <span class="arithmatex">\(u_1\)</span> desde <span class="arithmatex">\((y_0,y_1)\)</span> <strong>y</strong> <span class="arithmatex">\(u_0\)</span> ya conocido. Conocer <span class="arithmatex">\(u_0\)</span> permite cancelar su efecto de <span class="arithmatex">\(y_0\)</span>, reduciendo drásticamente la ambigüedad. Resultado: canal <strong>mejor</strong> que <span class="arithmatex">\(W\)</span>.</li>
+</ul>
+<figure>
+  <img alt="Canales sintéticos W₂⁻ y W₂⁺ del código Polar" src="figures/polar-synthetic-channels.png" />
+<br />
+<figcaption><strong>Figura 6.</strong> Canales sintéticos primitivos <span class="arithmatex">\(W_2^{(-)}\)</span> y <span class="arithmatex">\(W_2^{(+)}\)</span>. La transformación <span class="arithmatex">\(G_2\)</span> (XOR) mezcla <span class="arithmatex">\((u_0,u_1)\)</span> antes de transmitir por dos copias del canal físico <span class="arithmatex">\(W\)</span>. Esto genera dos sub-problemas de decodificación con distinto acceso a información lateral: <span class="arithmatex">\(W_2^{(-)}\)</span> estima <span class="arithmatex">\(u_0\)</span> sin contexto; <span class="arithmatex">\(W_2^{(+)}\)</span> estima <span class="arithmatex">\(u_1\)</span> con <span class="arithmatex">\(u_0\)</span> ya conocido. La XOR <em>redistribuye</em> capacidad — no la crea: <span class="arithmatex">\(C(W_2^{(-)}) + C(W_2^{(+)}) = 2\,C(W)\)</span>.</figcaption>
+</figure>
+<p>Un canal sintético no es un canal físico — es una abstracción que describe la dificultad de un sub-problema de decodificación. La diferencia entre <span class="arithmatex">\(W_2^{(+)}\)</span> y <span class="arithmatex">\(W_2^{(-)}\)</span> no está en las transmisiones físicas (ambos usan las mismas <span class="arithmatex">\(y_0,y_1\)</span>), sino en qué información tiene el receptor al decidir. Esta primitiva <span class="arithmatex">\(N=2\)</span> se anida <span class="arithmatex">\(m\)</span> veces para producir <span class="arithmatex">\(N = 2^m\)</span> canales sintéticos con calidades cada vez más extremas.</p>
+<p>La Figura 7 muestra cómo la primitiva se aplica recursivamente <span class="arithmatex">\(m = \log_2 N\)</span> veces. Cada columna de nodos XOR es una etapa butterfly: la etapa 1 combina pares adyacentes, la etapa 2 combina bloques de 4, y así sucesivamente. Con <span class="arithmatex">\(N=8\)</span> hay 3 etapas.</p>
+<figure>
+  <img alt="Red butterfly de Arikan para código Polar N=8" src="figures/polar-butterfly.png" />
+<br />
+<!-- generada por celda 15 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 7.</strong> Red butterfly de Arikan para un código Polar de <span class="arithmatex">\(N=8\)</span>, <span class="arithmatex">\(k=4\)</span> (tasa <span class="arithmatex">\(r_c=1/2\)</span>). Los nodos de entrada (izquierda) corresponden al vector <span class="arithmatex">\(\mathbf{u}\)</span>: los azules son bits de información, los salmón son bits congelados (fijados a 0 por el codificador). Cada nodo interior (marcado con "+") representa una operación XOR que implementa recursivamente la transformación <span class="arithmatex">\(G_N = G_2^{\otimes m}\)</span> de Arıkan; la composición de <span class="arithmatex">\(m = \log_2 N\)</span> etapas butterfly produce la codeword <span class="arithmatex">\(\mathbf{x}\)</span> (cuadrados, derecha).
+  </figcaption>
+</figure>
+<p>La polarización separa los <span class="arithmatex">\(N\)</span> canales sintéticos en dos grupos a medida que <span class="arithmatex">\(N\)</span> crece: los mejores se vuelven casi perfectos, los peores casi inútiles. La Figura 7 ya muestra el resultado para <span class="arithmatex">\(N=8\)</span>, <span class="arithmatex">\(k=4\)</span>: los cuatro nodos azules son los canales buenos asignados a bits de información; los cuatro salmón son los malos, congelados en cero.</p>
+<p><strong>El encoder como transformación N→N.</strong> La red butterfly es una transformación cuadrada: recibe exactamente <span class="arithmatex">\(N\)</span> bits de entrada y produce exactamente <span class="arithmatex">\(N\)</span> bits de codeword. De esos <span class="arithmatex">\(N\)</span> bits de entrada, <span class="arithmatex">\(k\)</span> son <strong>bits de información</strong> (los que el transmisor quiere comunicar) y <span class="arithmatex">\(N-k\)</span> son <strong>bits congelados</strong>, fijados a 0 por diseño. El transmisor construye el vector completo <span class="arithmatex">\(\mathbf{u}\)</span> colocando sus <span class="arithmatex">\(k\)</span> bits en las posiciones "buenas" y un cero en cada posición "mala"; ese <span class="arithmatex">\(\mathbf{u}\)</span> — completamente conocido — entra al butterfly. La tasa del código es <span class="arithmatex">\(r_c = k/N\)</span>.</p>
+<p><strong>Calidad del canal sintético: el parámetro <span class="arithmatex">\(Z\)</span>.</strong> Para comparar los <span class="arithmatex">\(N\)</span> canales sintéticos entre sí se necesita una métrica de calidad. El <strong>parámetro de Bhattacharyya</strong> <span class="arithmatex">\(Z(W_N^{(i)}) \in [0,\,1]\)</span> es esa métrica: mide cuánto se solapan las distribuciones condicionales de <span class="arithmatex">\(y\)</span> bajo las dos hipótesis posibles (<span class="arithmatex">\(u_i = 0\)</span> frente a <span class="arithmatex">\(u_i = 1\)</span>). Si <span class="arithmatex">\(Z \approx 0\)</span>, las dos distribuciones son casi disjuntas — el canal sintético es casi perfecto, el decoder difícilmente se equivoca. Si <span class="arithmatex">\(Z \approx 1\)</span>, las distribuciones son casi idénticas — el canal sintético es casi inútil, la información de <span class="arithmatex">\(u_i\)</span> queda enterrada en ruido. La polarización hace exactamente esto: convierte los valores intermedios de <span class="arithmatex">\(Z\)</span> del canal físico en extremos — unos pocos <span class="arithmatex">\(Z \approx 0\)</span> y el resto <span class="arithmatex">\(Z \approx 1\)</span> — a medida que <span class="arithmatex">\(N\)</span> crece.</p>
+<p><strong>Selección de posiciones.</strong> La elección de qué posiciones son buenas y cuáles son malas se hace fuera de línea, como parte del diseño del código. Los <span class="arithmatex">\(N\)</span> canales sintéticos se ordenan por calidad — del mejor al peor — y se asignan:</p>
+<ul>
+<li>Las <span class="arithmatex">\(k\)</span> posiciones con <span class="arithmatex">\(Z\)</span> <strong>más bajo</strong> → bits de información (canales buenos)</li>
+<li>Las <span class="arithmatex">\(N-k\)</span> posiciones con <span class="arithmatex">\(Z\)</span> <strong>más alto</strong> → bits congelados = 0 (canales malos)</li>
+</ul>
+<p>Tanto el encoder como el decoder conocen de antemano cuáles posiciones son información y cuáles están congeladas — es información pública del código, no se transmite por el canal.</p>
+<details class="example">
+<summary>Ejemplo: encoding butterfly N=4 paso a paso</summary>
+<p><figure markdown="span">
+  <img alt="Red butterfly Arikan para código Polar N=4" src="figures/polar-butterfly-n4.png" />
+  <!-- generada por celda 16 de lab.ipynb -->
+  <figcaption markdown="1"><strong>Red butterfly para el ejemplo.</strong> Código Polar <span class="arithmatex">\(N=4\)</span>, <span class="arithmatex">\(k=2\)</span>, tasa <span class="arithmatex">\(r_c=1/2\)</span>. Los nodos de entrada (izquierda) muestran los valores del vector <span class="arithmatex">\(\mathbf{u}=[0,0,1,0]\)</span>: los salmón son bits congelados (fijados a 0), los azules son bits de información. Los valores intermedios <span class="arithmatex">\(w_i\)</span> entre etapas y la codeword de salida <span class="arithmatex">\(\mathbf{x}=[1,0,1,0]\)</span> (cuadrados, derecha) corresponden paso a paso al cálculo detallado a continuación.</figcaption>
+</figure></p>
+<p><strong>Escenario.</strong> Código Polar <span class="arithmatex">\(N=4\)</span>, tasa <span class="arithmatex">\(r_c=1/2\)</span>. Los bits congelados son <span class="arithmatex">\(\{u_0, u_1\}\)</span> (fijados a 0) y los bits de información son <span class="arithmatex">\(\{u_2, u_3\}\)</span>. Tomamos el vector de entrada:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>u = [u0, u1, u2, u3] = [0, 0, 1, 0]
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>     frozen frozen info  info
+</code></pre></div>
+<p><strong>Etapa 1 — combinar pares adyacentes (índices 0,1) y (2,3):</strong></p>
+<p><span class="arithmatex">\(w_0 = u_0 \oplus u_1 = 0 \oplus 0 = 0\)</span><br />
+<span class="arithmatex">\(w_1 = u_1 = 0\)</span><br />
+<span class="arithmatex">\(w_2 = u_2 \oplus u_3 = 1 \oplus 0 = 1\)</span><br />
+<span class="arithmatex">\(w_3 = u_3 = 0\)</span>  </p>
+<p>Valores intermedios: <span class="arithmatex">\(\mathbf{w} = [0, 0, 1, 0]\)</span></p>
+<p><strong>Etapa 2 — combinar pares intercalados (índices 0,2) y (1,3):</strong></p>
+<p><span class="arithmatex">\(x_0 = w_0 \oplus w_2 = 0 \oplus 1 = 1\)</span><br />
+<span class="arithmatex">\(x_1 = w_1 \oplus w_3 = 0 \oplus 0 = 0\)</span><br />
+<span class="arithmatex">\(x_2 = w_2 = 1\)</span><br />
+<span class="arithmatex">\(x_3 = w_3 = 0\)</span>  </p>
+<p>Codeword resultante: <strong>x = [1, 0, 1, 0]</strong></p>
+<p><strong>¿Por qué <span class="arithmatex">\(u_0\)</span> es el canal sintético más débil?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Bit</th>
+<th>Aparece en</th>
+<th>Señales que lo transportan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(u_0\)</span></td>
+<td><span class="arithmatex">\(x_0\)</span></td>
+<td><strong>1</strong></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u_1\)</span></td>
+<td><span class="arithmatex">\(x_0, x_1\)</span></td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u_2\)</span></td>
+<td><span class="arithmatex">\(x_0, x_2\)</span></td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(u_3\)</span></td>
+<td><span class="arithmatex">\(x_0, x_1, x_2, x_3\)</span></td>
+<td><strong>4</strong></td>
+</tr>
+</tbody>
+</table>
+<p><span class="arithmatex">\(u_3\)</span> se distribuye por las 4 posiciones del codeword: el receptor dispone de cuatro observaciones ruidosas independientes para recuperarlo, más la información de cancelación de <span class="arithmatex">\(\hat{u}_0\)</span>, <span class="arithmatex">\(\hat{u}_1\)</span>, <span class="arithmatex">\(\hat{u}_2\)</span> ya decodificados. <span class="arithmatex">\(u_0\)</span>, en cambio, solo llega a <span class="arithmatex">\(x_0\)</span> y el decodificador SC lo decodifica primero, sin ninguna información de cancelación. Eso es exactamente lo que mide el parámetro de Bhattacharyya <span class="arithmatex">\(Z(W)\)</span>: la dificultad de recuperar un bit sin contexto adicional.</p>
+</details>
+<p>Con el encoder y el mapa de posiciones definidos, la imagen del lado transmisor queda completa. La pregunta que cierra la teoría: ¿cuántas posiciones buenas produce la polarización cuando <span class="arithmatex">\(N\)</span> es grande — es decir, cuántos bits de información puede cargar el código? El teorema de Arıkan lo garantiza:</p>
+<div class="arithmatex">\[\lim_{N\to\infty} \frac{\overbrace{|\{i : Z(W_N^{(i)}) &lt; \delta\}|}^{\text{nº de canales con } Z \approx 0}}{N} = C(W) \quad \text{para todo } \delta &gt; 0 \tag{9}\]</div>
+<p>El teorema dice: a medida que <span class="arithmatex">\(N\)</span> crece, la fracción de canales sintéticos con <span class="arithmatex">\(Z \approx 0\)</span> (casi perfectos) converge exactamente a <span class="arithmatex">\(C(W)\)</span> — la capacidad de Shannon del canal físico original. La fracción restante, <span class="arithmatex">\(1 - C(W)\)</span>, colapsa hacia <span class="arithmatex">\(Z \approx 1\)</span> (casi inútiles). No hay término medio: la polarización empuja todos los canales hacia uno de los dos extremos.</p>
+<p><strong>¿Qué significa esto en la práctica?</strong> Supón un canal AWGN con <span class="arithmatex">\(C(W) = 0{,}7\)</span> bits/uso. Con <span class="arithmatex">\(N = 1024\)</span> canales sintéticos, aproximadamente <span class="arithmatex">\(0{,}7 \times 1024 \approx 717\)</span> de ellos tendrán <span class="arithmatex">\(Z \approx 0\)</span> — son los buenos. Si colocas un bit de información en cada uno de esos 717 canales y congelas los 307 restantes, tu código transmite 717 bits útiles en un bloque de 1024 bits de codeword. Tasa resultante: <span class="arithmatex">\(r_c = 717/1024 \approx 0{,}7 = C(W)\)</span>.</p>
+<p>La polarización no crea capacidad de la nada — la <strong>concentra</strong>. El canal físico siempre tuvo <span class="arithmatex">\(C(W) = 0{,}7\)</span>; la red butterfly redistribuye esa capacidad en unos pocos canales casi perfectos y descarta los demás. El resultado es que puedes usar esos canales buenos como si fueran ideales, alcanzando la tasa máxima teórica. Los códigos Polar no se <em>aproximan</em> al límite de Shannon — lo <strong>alcanzan</strong>.</p>
+<figure>
+  <img alt="Histograma de polarización de canales sintéticos Polar N=64" src="figures/polar-polarization.png" />
+<br />
+<!-- generada por celda 17 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 8.</strong> Histograma del parámetro de Bhattacharyya <span class="arithmatex">\(Z(W_{64}^{(i)})\)</span> para los <span class="arithmatex">\(N=64\)</span> canales sintéticos de un código Polar con <span class="arithmatex">\(r_c=1/2\)</span>, diseñado a <span class="arithmatex">\(E_b/N_0=3\ \text{dB}\)</span>. La distribución es bimodal: los 32 canales de información (azul) se concentran en <span class="arithmatex">\(Z\approx 0\)</span> (canales casi perfectos), mientras los 32 canales congelados (salmón) se acumulan en <span class="arithmatex">\(Z\approx 1\)</span> (canales casi inútiles). Esta polarización extrema — demostrada asintóticamente para <span class="arithmatex">\(N\to\infty\)</span> — es la propiedad que garantiza que el código alcance la capacidad del canal.
+  </figcaption>
+</figure>
+<p>La pregunta natural es: el parámetro de Bhattacharyya <span class="arithmatex">\(Z(W_N^{(i)})\)</span> identifica cuáles canales sintéticos son fiables, pero el decodificador debe extraer los bits de información de esos canales sin conocer aún los bits que siguen — cada decisión afecta a todas las posteriores. ¿Cómo resuelve el decodificador esa dependencia causal de forma eficiente? La respuesta es la cancelación sucesiva: decodificar los bits en orden estricto <span class="arithmatex">\(u_1, u_2, \ldots, u_N\)</span>, usando cada decisión anterior como condición conocida para calcular el LLR del siguiente.</p>
+<h4 id="42-decodificacion-por-cancelacion-sucesiva">4.2 Decodificación por Cancelación Sucesiva</h4>
+<p>El decodificador SC (<em>Successive Cancellation</em>) decodifica los bits de entrada <span class="arithmatex">\(u_0, u_1, \ldots, u_{N-1}\)</span> en orden estricto:</p>
+<ul>
+<li>Si <span class="arithmatex">\(u_i\)</span> es un <strong>bit congelado</strong>: <span class="arithmatex">\(\hat{u}_i = 0\)</span> — no hay nada que calcular, el receptor ya conoce su valor.</li>
+<li>Si <span class="arithmatex">\(u_i\)</span> es un <strong>bit de información</strong>: se calcula el LLR de <span class="arithmatex">\(u_i\)</span> condicionado en los bits ya decodificados <span class="arithmatex">\(\hat{u}_0, \ldots, \hat{u}_{i-1}\)</span>, y se decide <span class="arithmatex">\(\hat{u}_i = 0\)</span> si LLR <span class="arithmatex">\(&gt; 0\)</span>, y <span class="arithmatex">\(1\)</span> en caso contrario.</li>
+</ul>
+<p>El cálculo de LLRs propaga mensajes hacia atrás por el grafo butterfly. En cada nodo hay dos roles: el bit sin contexto previo (primero del par) y el bit cuyo predecesor ya fue decidido (segundo del par). Cada rol tiene su operación:</p>
+<div class="arithmatex">\[f(a,\,b) = 2\,\text{arctanh}\!\left(\tanh\!\tfrac{a}{2}\cdot\tanh\!\tfrac{b}{2}\right) \qquad \text{[primer bit del par — igual que el mensaje check→variable de BP]} \tag{10}\]</div>
+<div class="arithmatex">\[g(a,\,b,\,\hat{u}) = b + (1-2\hat{u})\,a \qquad \text{[segundo bit — cancela el XOR del codificador usando el bit ya conocido]} \tag{11}\]</div>
+<p>La operación <span class="arithmatex">\(g\)</span> es la "cancelación sucesiva": una vez que <span class="arithmatex">\(\hat{u}\)</span> es conocido, deshace el XOR que el codificador aplicó y libera el LLR del siguiente bit con la información completa. La complejidad total es <span class="arithmatex">\(\mathcal{O}(N\log N)\)</span> — la misma que la FFT.</p>
+<p>La Figura 9 muestra las dos pasadas del decodificador SC para el ejemplo N=4. <strong>Pasada 1</strong> (panel izquierdo, naranja): el decoder lee los cuatro LLRs de canal y los combina de a pares con <span class="arithmatex">\(f\)</span> — obteniendo dos valores intermedios que resumen la información conjunta de <span class="arithmatex">\((L_0, L_2)\)</span> y <span class="arithmatex">\((L_1, L_3)\)</span> respectivamente. Desde esos dos intermedios, una segunda aplicación de <span class="arithmatex">\(f\)</span> y <span class="arithmatex">\(g\)</span> produce los LLRs para <span class="arithmatex">\(\hat{u}_0\)</span> y <span class="arithmatex">\(\hat{u}_1\)</span>; como son bits congelados, la decisión es trivial: siempre 0. <strong>Pasada 2</strong> (panel derecho, verde): con <span class="arithmatex">\(\hat{u}_0 = \hat{u}_1 = 0\)</span> ya conocidos, el decoder regresa a los mismos LLRs de canal pero ahora aplica <span class="arithmatex">\(g\)</span> en lugar de <span class="arithmatex">\(f\)</span> — la operación <span class="arithmatex">\(g\)</span> incorpora los bits ya decididos como cancelación, actualizando los intermedios. Los nuevos valores intermedios <span class="arithmatex">\((-4{,}4\)</span> y <span class="arithmatex">\(+3{,}6)\)</span> alimentan <span class="arithmatex">\(f\)</span> y <span class="arithmatex">\(g\)</span> para decidir <span class="arithmatex">\(\hat{u}_2 = 1\)</span> y <span class="arithmatex">\(\hat{u}_3 = 0\)</span>: los bits de información, recuperados correctamente.</p>
+<figure>
+  <img alt="Decodificación SC N=4 — dos pasadas con LLRs anotados" src="figures/sc-decoding-n4.png" />
+<br />
+<!-- generada por celda 15 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 9.</strong> Decodificación SC para el ejemplo N=4, k=2. <strong>Pasada 1</strong> (naranja): los cuatro LLRs de canal se combinan con <span class="arithmatex">\(f\)</span> para producir dos valores intermedios; luego <span class="arithmatex">\(f\)</span> y <span class="arithmatex">\(g\)</span> deciden <span class="arithmatex">\(\hat{u}_0=0\)</span> y <span class="arithmatex">\(\hat{u}_1=0\)</span> (bits congelados, siempre correctos). <strong>Pasada 2</strong> (verde): con <span class="arithmatex">\(\hat{u}_0, \hat{u}_1\)</span> conocidos, la operación <span class="arithmatex">\(g\)</span> actualiza los intermedios; <span class="arithmatex">\(f\)</span> y <span class="arithmatex">\(g\)</span> deciden <span class="arithmatex">\(\hat{u}_2=1\)</span> y <span class="arithmatex">\(\hat{u}_3=0\)</span> (bits de información, ambos correctos ✓).
+  </figcaption>
+</figure>
+<details class="example">
+<summary>Ejemplo numérico: SC sobre Polar N=4, tasa 1/2</summary>
+<p><strong>Código.</strong> Polar <span class="arithmatex">\(N=4\)</span> con bits congelados en <span class="arithmatex">\(\{u_0, u_1\}\)</span> (los dos canales sintéticos más débiles) y bits de información en <span class="arithmatex">\(\{u_2, u_3\}\)</span>.</p>
+<p><strong>Transmisión.</strong> Se envían bits de información <span class="arithmatex">\([u_2, u_3] = [1, 0]\)</span>. Con <span class="arithmatex">\([u_0, u_1] = [0, 0]\)</span> fijos, el codificador aplica el butterfly de 2 etapas y produce la codeword <span class="arithmatex">\(\mathbf{x} = [1, 0, 1, 0]\)</span>. En BPSK (bit 0 → <span class="arithmatex">\(+1\)</span>, bit 1 → <span class="arithmatex">\(-1\)</span>), la señal transmitida es <span class="arithmatex">\([-1, +1, -1, +1]\)</span>.</p>
+<p><strong>Recepción.</strong> El canal AWGN añade ruido; el receptor observa <span class="arithmatex">\(y = [-0{,}8,\; +1{,}2,\; -1{,}4,\; +0{,}6]\)</span> y calcula los LLRs de canal:</p>
+<table>
+<thead>
+<tr>
+<th>Posición</th>
+<th>Señal <span class="arithmatex">\(y\)</span></th>
+<th>LLR <span class="arithmatex">\(= 2y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td><span class="arithmatex">\(-0{,}8\)</span></td>
+<td><span class="arithmatex">\(-1{,}6\)</span></td>
+</tr>
+<tr>
+<td>1</td>
+<td><span class="arithmatex">\(+1{,}2\)</span></td>
+<td><span class="arithmatex">\(+2{,}4\)</span></td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="arithmatex">\(-1{,}4\)</span></td>
+<td><span class="arithmatex">\(-2{,}8\)</span></td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="arithmatex">\(+0{,}6\)</span></td>
+<td><span class="arithmatex">\(+1{,}2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>El decoder SC recorre el grafo butterfly de <strong>derecha a izquierda</strong> — al revés que el codificador. Para <span class="arithmatex">\(N=4\)</span> con 2 etapas, el recorrido se organiza en cuatro pasos.</p>
+<hr />
+<p><strong>Etapa 1 — LLRs intermedios (deshacer Stage 2 hacia atrás)</strong></p>
+<p>El codificador combinó en Stage 2 los pares <span class="arithmatex">\((x_0, x_2)\)</span> y <span class="arithmatex">\((x_1, x_3)\)</span> mediante XOR. El decoder deshace esa mezcla aplicando <span class="arithmatex">\(f\)</span> a esos mismos pares de LLRs de canal — con la aproximación min-sum <span class="arithmatex">\(f(a,b) \approx \text{signo}(a)\cdot\text{signo}(b)\cdot\min(|a|,|b|)\)</span>. El resultado son dos <strong>LLRs intermedios</strong> que capturan la información conjunta de cada par sin conocer aún qué bit ocupa cada posición:</p>
+<div class="arithmatex">\[\ell_{02} = f(L_0,\, L_2) = f(-1{,}6,\;-2{,}8) \approx \mathbf{+1{,}6}\]</div>
+<div class="arithmatex">\[\ell_{13} = f(L_1,\, L_3) = f(+2{,}4,\;+1{,}2) \approx \mathbf{+1{,}2}\]</div>
+<hr />
+<p><strong>Etapa 2 — Decodificar <span class="arithmatex">\(u_0\)</span> y <span class="arithmatex">\(u_1\)</span> (deshacer Stage 1 hacia atrás)</strong></p>
+<p>Con <span class="arithmatex">\(\ell_{02}\)</span> y <span class="arithmatex">\(\ell_{13}\)</span> disponibles, el decoder aplica Stage 1 al revés sobre el par <span class="arithmatex">\((u_0, u_1)\)</span>. La regla es siempre la misma: <span class="arithmatex">\(f\)</span> para el primer bit del par (sin contexto previo), <span class="arithmatex">\(g\)</span> para el segundo (usando el bit ya decidido):</p>
+<p><em>Decisión <span class="arithmatex">\(u_0\)</span></em> — ningún bit decidido aún; se aplica <span class="arithmatex">\(f\)</span>:
+$<span class="arithmatex">\(\text{LLR}(u_0) = f(\ell_{02},\,\ell_{13}) = f(+1{,}6,\;+1{,}2) \approx +1{,}2 \quad\longrightarrow\quad \hat{u}_0 = \mathbf{0} \text{ (congelado)}\)</span>$</p>
+<p><em>Decisión <span class="arithmatex">\(u_1\)</span></em> — <span class="arithmatex">\(\hat{u}_0 = 0\)</span> ya conocido; se aplica <span class="arithmatex">\(g\)</span>, que cancela la contribución de <span class="arithmatex">\(\hat{u}_0\)</span>:
+$<span class="arithmatex">\(\text{LLR}(u_1) = g(\ell_{02},\,\ell_{13},\,\hat{u}_0 = 0) = +1{,}2 + 1\cdot(+1{,}6) = +2{,}8 \quad\longrightarrow\quad \hat{u}_1 = \mathbf{0} \text{ (congelado)}\)</span>$</p>
+<hr />
+<p><strong>Etapa 3 — Cancelar <span class="arithmatex">\((\hat{u}_0, \hat{u}_1)\)</span> y calcular nuevos LLRs intermedios para <span class="arithmatex">\((u_2, u_3)\)</span></strong></p>
+<p>Con <span class="arithmatex">\(\hat{u}_0\)</span> y <span class="arithmatex">\(\hat{u}_1\)</span> decididos, el decoder vuelve un nivel y aplica <span class="arithmatex">\(g\)</span> directamente sobre los LLRs de canal — usando los bits que Stage 1 produce para las posiciones <span class="arithmatex">\((0,2)\)</span> y <span class="arithmatex">\((1,3)\)</span> — para eliminar la contribución de la primera mitad:</p>
+<div class="arithmatex">\[g_{02} = g(L_0,\,L_2,\,\hat{u}_0 \oplus \hat{u}_1 = 0) = -2{,}8 + 1\cdot(-1{,}6) = \mathbf{-4{,}4}\]</div>
+<div class="arithmatex">\[g_{13} = g(L_1,\,L_3,\,\hat{u}_1 = 0) = +1{,}2 + 1\cdot(+2{,}4) = \mathbf{+3{,}6}\]</div>
+<p>Estos nuevos LLRs son más informativos que los originales: la incertidumbre sobre <span class="arithmatex">\(u_0\)</span> y <span class="arithmatex">\(u_1\)</span> queda eliminada y la información de cuatro posiciones de canal se concentra en dos valores.</p>
+<hr />
+<p><strong>Etapa 4 — Decodificar <span class="arithmatex">\(u_2\)</span> y <span class="arithmatex">\(u_3\)</span></strong></p>
+<p>Con <span class="arithmatex">\(g_{02}\)</span> y <span class="arithmatex">\(g_{13}\)</span>, se repite exactamente la misma lógica que en la Etapa 2 — <span class="arithmatex">\(f\)</span> para el primero del par, <span class="arithmatex">\(g\)</span> para el segundo:</p>
+<p><em>Decisión <span class="arithmatex">\(u_2\)</span></em> — ningún bit adicional conocido; se aplica <span class="arithmatex">\(f\)</span>:
+$<span class="arithmatex">\(\text{LLR}(u_2) = f(g_{02},\,g_{13}) = f(-4{,}4,\;+3{,}6) \approx -3{,}6 \quad\longrightarrow\quad \hat{u}_2 = \mathbf{1} \checkmark \text{ correcto}\)</span>$</p>
+<p><em>Decisión <span class="arithmatex">\(u_3\)</span></em> — <span class="arithmatex">\(\hat{u}_2 = 1\)</span> ya conocido; se aplica <span class="arithmatex">\(g\)</span>:
+$<span class="arithmatex">\(\text{LLR}(u_3) = g(g_{02},\,g_{13},\,\hat{u}_2 = 1) = +3{,}6 + (1-2)\cdot(-4{,}4) = +3{,}6 + 4{,}4 = +8{,}0 \quad\longrightarrow\quad \hat{u}_3 = \mathbf{0} \checkmark \text{ correcto}\)</span>$</p>
+<p>La cancelación sucesiva es visible en los LLRs finales: <span class="arithmatex">\(|\text{LLR}(u_2)| = 3{,}6\)</span> y <span class="arithmatex">\(|\text{LLR}(u_3)| = 8{,}0\)</span> son mucho más nítidos que los LLRs de canal originales (<span class="arithmatex">\(|\text{LLR}| \in \{1{,}2, 2{,}4, 1{,}6, 2{,}8\}\)</span>). Cada decisión previa "ayuda" a las siguientes aportando información adicional mediante la operación <span class="arithmatex">\(g\)</span>.</p>
+</details>
+<p>La limitación del SC básico es la <strong>propagación de errores</strong>: si <span class="arithmatex">\(\hat{u}_i\)</span> es incorrecto, todos los bits posteriores reciben información errónea de la operación <span class="arithmatex">\(g\)</span>, y el bloque completo puede fallar.</p>
+<p><strong>Decodificador de lista (SCL).</strong> Cada decisión binaria bifurca el árbol de posibilidades: el SC básico siempre toma el camino de mayor LLR (<em>greedy</em>), descartando la alternativa. El SCL mantiene <span class="arithmatex">\(L\)</span> caminos activos en paralelo — conserva ambas ramas en cada bifurcación hasta que la lista supere <span class="arithmatex">\(L\)</span> hipótesis, y elimina entonces la de menor métrica acumulada. Es exactamente un <em>beam search</em> sobre un árbol de decisión binario: con <span class="arithmatex">\(L=8\)</span> se exploran hasta 256 trayectorias candidatas en lugar de 1, recuperando casi todo el rendimiento del decodificador ML sin necesidad de buscar exhaustivamente entre las <span class="arithmatex">\(2^K\)</span> codewords posibles. El SCL con <span class="arithmatex">\(L=8\)</span> y CRC exterior (<em>CA-Polar</em>, el esquema de 5G NR) da prestaciones cercanas a la decodificación ML.</p>
+<p>La pregunta natural es: el CA-Polar con SCL <span class="arithmatex">\(L=8\)</span> ofrece prestaciones próximas al óptimo, pero ¿en qué canales físicos concretos de 5G NR se despliega este esquema, y qué característica de esos canales hace que Polar sea preferible a LDPC — que ya existe en el estándar y funciona bien para datos? La respuesta es el conjunto de canales de control de bloques cortos (PBCH, PDCCH, PUCCH), donde la longitud limitada del bloque favorece la estructura sistemática de Polar frente a la búsqueda iterativa de BP.</p>
+<h4 id="43-polar-en-5g-nr">4.3 Polar en 5G NR</h4>
+<p>5G NR usa códigos Polar en los canales de control:</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Descripción</th>
+<th>Bloques</th>
+<th>Tasa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PBCH</td>
+<td>Broadcast Channel</td>
+<td>32 bits</td>
+<td>fija</td>
+</tr>
+<tr>
+<td>PDCCH</td>
+<td>Downlink Control</td>
+<td>12–140 bits</td>
+<td>1/4–1</td>
+</tr>
+<tr>
+<td>PUCCH</td>
+<td>Uplink Control</td>
+<td>1–11 bits</td>
+<td>1/3–1</td>
+</tr>
+</tbody>
+</table>
+<p>La longitud máxima del bloque de información es 1706 bits. En todos los casos se usa el esquema CA-Polar con CRC de 6 o 24 bits para detectar errores de decodificación y guiar el SCL. La ventaja de Polar sobre LDPC en bloques cortos es su estructura sistemática y su desempeño garantizado por teoría.</p>
+<p>La pregunta natural es: 1706 bits de bloque máximo para Polar frente a 8448 bits para LDPC BG1 marca una diferencia clara de escala, pero ¿cuáles son los criterios cuantitativos completos que determinan cuándo elegir uno u otro en un sistema real? ¿Hay un cruce de rendimiento medible entre ambas familias, o la elección depende solo del tipo de canal físico? La respuesta es la comparación directa de la §5, que tabula los criterios de complejidad, longitud de bloque, y capacidad-achieving para guiar la selección en un sistema como 5G NR.</p>
+<hr />
+<h3 id="5-comparacion-ldpc-vs-polar-y-seleccion-en-5g-nr">5. Comparación LDPC vs Polar y Selección en 5G NR</h3>
+<p>La figura siguiente muestra las curvas de BER (<em>waterfall</em>) de los dos códigos frente a BPSK sin código.</p>
+<figure>
+  <img alt="Curvas waterfall LDPC y Polar vs BPSK sin código" src="figures/waterfall-curves.png" />
+<br />
+<!-- generada por celda 18 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 10.</strong> Curvas de BER (<em>waterfall</em>) en función de <span class="arithmatex">\(E_b/N_0\)</span> para BPSK sin código (negro), LDPC <span class="arithmatex">\(r_c\approx1/2\)</span> (azul, Monte Carlo, N=240) y cota de unión Bhattacharyya para Polar <span class="arithmatex">\(r_c=1/2\)</span> (<span class="arithmatex">\(N=64\)</span>, naranja), todas sobre canal AWGN.
+  </figcaption>
+</figure>
+<p>La elección entre LDPC y Polar en 5G NR sigue criterios de complejidad de implementación y longitud de bloque:</p>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th style="text-align: center;">LDPC</th>
+<th style="text-align: center;">Polar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bloques grandes (&gt;1000 bits)</td>
+<td style="text-align: center;">✓ mejor</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Bloques pequeños (&lt;1000 bits)</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✓ mejor</td>
+</tr>
+<tr>
+<td>Tasa variable</td>
+<td style="text-align: center;">✓ puncturing/shortening</td>
+<td style="text-align: center;">✓ rate-matching</td>
+</tr>
+<tr>
+<td>Complejidad decodificador</td>
+<td style="text-align: center;"><span class="arithmatex">\(O(N_{\text{iter}}\cdot N)\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(O(L\cdot N\log N)\)</span></td>
+</tr>
+<tr>
+<td>Capacidad-achieving</td>
+<td style="text-align: center;">Asintóticamente</td>
+<td style="text-align: center;">Demostrado</td>
+</tr>
+<tr>
+<td>Uso en NR</td>
+<td style="text-align: center;">PDSCH, PUSCH (datos)</td>
+<td style="text-align: center;">PDCCH, PBCH (control)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ejemplo-numerico-end-to-end">Ejemplo Numérico End-to-End</h4>
+<p>Un terminal 5G NR debe transmitir un bloque de transporte de <span class="arithmatex">\(k = 4000\)</span> bits en el enlace descendente PDSCH usando LDPC BG1, <span class="arithmatex">\(r_c = 2/3\)</span>. El SNR recibido (Sesión 01) es 18 dB.</p>
+<p><strong>Paso 1 — Longitud del bloque codificado:</strong> <span class="arithmatex">\(n = k/r_c = 4000\times3/2 = 6000\)</span> bits.</p>
+<p><strong>Paso 2 — Umbral LDPC BG1:</strong> para <span class="arithmatex">\(r_c = 2/3\)</span> y longitud 6000, el umbral típico es Eb/N0 <span class="arithmatex">\(\approx 5\)</span> dB (a BER pre-FEC <span class="arithmatex">\(\approx 10^{-1}\)</span>). El SNR de 18 dB da un Eb/N0 efectivo por bit de canal:</p>
+<div class="arithmatex">\[\frac{E_b}{N_0}\bigg\vert_{\text{canal}} = \text{SNR} - 10\log_{10}(k_{\text{bits/sym}}\cdot r_c) = 18 - 10\log_{10}(6 \times 2/3) = 18 - 6 = 12\ \text{dB}\]</div>
+<p><strong>Paso 3 — Ganancia de codificación:</strong> el umbral LDPC BG1 para <span class="arithmatex">\(r_c = 2/3\)</span> es <span class="arithmatex">\(E_b/N_0 \approx 5{,}5\ \text{dB}\)</span> a BER <span class="arithmatex">\(= 10^{-5}\)</span>; BPSK sin código necesita <span class="arithmatex">\(12{,}6\ \text{dB}\)</span> a la misma BER. Ganancia de codificación neta: <span class="arithmatex">\(G_c = 12{,}6 - 5{,}5 \approx \mathbf{7{,}1\ \text{dB}}\)</span>. A <span class="arithmatex">\(E_b/N_0 = 12\ \text{dB}\)</span> el sistema opera muy por encima del umbral de <span class="arithmatex">\(5{,}5\ \text{dB}\)</span>, por lo que la BER post-FEC <span class="arithmatex">\(\ll 10^{-10}\)</span>.</p>
+<p><strong>Paso 4 — Throughput:</strong> con <span class="arithmatex">\(r_c = 2/3\)</span> y 64-QAM (6 bits/símbolo), la eficiencia espectral efectiva es <span class="arithmatex">\(6\times2/3 = 4\)</span> bit/s/Hz (ver Sesión 02 tabla MCS). Para <span class="arithmatex">\(B = 40\)</span> MHz: <span class="arithmatex">\(R \approx 160\)</span> Mbit/s — coherente con el resultado de la Sesión 03 Sección 5.</p>
+<p>La pregunta natural es: el ejemplo end-to-end muestra <span class="arithmatex">\(R \approx 160\)</span> Mbit/s con una ganancia de codificación de <span class="arithmatex">\(\approx 7\ \text{dB}\)</span> — un resultado analítico convincente, pero ¿cómo se verifica empíricamente que estos códigos realmente alcanzan esa ganancia sobre un canal simulado? ¿Cómo se construye y mide esa cadena en el laboratorio, y cuántas realizaciones de ruido son necesarias para trazar una curva waterfall confiable? La respuesta es la sección de laboratorio, que implementa exactamente esta cadena con simulación Monte Carlo y mide la BER bit a bit.</p>
+<figure>
+  <img alt="BER end-to-end OFDM+LDPC vs sin FEC vs AWGN" src="figures/ofdm-ldpc-ber.png" />
+<br />
+<!-- generada por celda 20 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 11.</strong> BER en función de <span class="arithmatex">\(E_b/N_0\)</span> para un sistema OFDM (<span class="arithmatex">\(N=128\)</span> subportadoras, CP=16, QPSK) sobre un canal frequency-selective de 3 taps con ecualizador ZF, comparada con la referencia AWGN (negro punteado) y con OFDM+LDPC <span class="arithmatex">\(r_c\approx0{,}51\)</span> (naranja). Simulación Monte Carlo con 300 realizaciones por punto de SNR.
+  El canal frequency-selective degrada la BER respecto al canal AWGN ideal (curva azul vs línea negra): el ZF amplifica el ruido en los nulos espectrales del canal. La codificación LDPC (naranja) compensa parcialmente esta degradación, recuperando <span class="arithmatex">\(\approx 3\ \text{dB}\)</span> de ganancia a BER <span class="arithmatex">\(= 10^{-3}\)</span> gracias al entrelazado implícito sobre las subportadoras del bloque OFDM.
+  </figcaption>
+</figure>
+<hr />
+<h2 id="sintesis">Síntesis</h2>
+<p><strong>Dimensión 1: El límite de Shannon como frontera absoluta.</strong> La capacidad <span class="arithmatex">\(C = B\log_2(1+\text{SNR})\)</span> define qué tasas son alcanzables. El límite de Eb/N0 = -1.59 dB es inalcanzable para ningún código. <em>Implicación de diseño</em>: la "brecha de Shannon" (<em>gap to capacity</em>) de un sistema mide cuánto más eficiente podría ser con mejor codificación.</p>
+<p><strong>Dimensión 2: Ganancia de codificación y penalización de tasa.</strong> Un código de tasa <span class="arithmatex">\(r_c\)</span> introduce una penalización de <span class="arithmatex">\(10\log_{10}(1/r_c)\)</span> dB pero ofrece una ganancia de distancia mínima mayor. La ganancia neta es positiva para buenos códigos, y crece logarítmicamente con la longitud del bloque <span class="arithmatex">\(n\)</span>. <em>Implicación de diseño</em>: bloques más largos → mayor ganancia de codificación → mejor acercamiento al límite de Shannon.</p>
+<p><strong>Dimensión 3: LDPC — esparsidad y propagación de creencias.</strong> La clave del éxito de LDPC es el grafo disperso: permite BP con complejidad <span class="arithmatex">\(\mathcal{O}(N)\)</span> por iteración y convergencia garantizada para grafos sin ciclos cortos. <em>Implicación de diseño</em>: el diseño del grafo (grado de distribución de nodos) determina el umbral de SNR y el posible <em>error floor</em>.</p>
+<p><strong>Dimensión 4: Polar — polarización estructurada.</strong> La construcción Polar es determinista y sistemática: no requiere búsqueda aleatoria de buenos códigos. La polarización garantiza asintóticamente la capacidad. <em>Implicación de diseño</em>: para bloques cortos, el CA-Polar con SCL supera a LDPC; para bloques largos, LDPC es preferido por menor complejidad de decodificación a igual rendimiento.</p>
+<p><strong>Dimensión 5: Curva waterfall como firma del código.</strong> El umbral de decodificación define el punto de operación: por encima, la BER cae verticalmente; por debajo, es inútil. La pendiente de la cascada depende de la longitud del bloque: bloques más largos dan cascadas más abruptas. <em>Implicación de diseño</em>: en 5G NR, el HARQ (<em>Hybrid ARQ</em>) permite retransmitir si el bloque no se decodifica, convirtiendo el fallo ocasional bajo el umbral en latencia adicional en lugar de en error permanente.</p>
+<p><strong>Dependencias hacia adelante:</strong></p>
+<ul>
+<li><em>Sesión 07 — Acceso múltiple</em>: HARQ opera sobre bloques LDPC completos. La gestión de retransmisiones HARQ es parte del radio resource management.</li>
+<li><em>Sesión 06 — MIMO</em>: los flujos MIMO independientes se codifican de forma independiente con LDPC/Polar antes de ser precodificados.</li>
+<li><em>Sesión 09 — 5G NR</em>: el mapeo de bloques de transporte a resource blocks, la selección de BG y el rate-matching se definen en 3GPP TS 38.212.</li>
+<li><em>Sesión 14 — IA/ML</em>: los decodificadores neuronales (neural BP, turbo decoders) son una aplicación directa de ML a los algoritmos de esta sesión.</li>
+</ul>
+<hr />
+<h2 id="ejercicios">Ejercicios</h2>
+<h3 id="ejercicio-1">Ejercicio 1</h3>
+<p>Un canal de comunicaciones tiene SNR = 10 dB y ancho de banda <span class="arithmatex">\(B = 1\ \text{MHz}\)</span>.</p>
+<p><strong>(a)</strong> Calcula la capacidad de Shannon <span class="arithmatex">\(C\)</span> en Mbit/s.</p>
+<p><strong>(b)</strong> Un sistema opera con QPSK y tasa de código <span class="arithmatex">\(r_c = 1/2\)</span>. ¿Cuál es su eficiencia espectral efectiva? ¿Qué fracción de la capacidad de Shannon alcanza?</p>
+<p><strong>(c)</strong> ¿Cuál es el SNR mínimo teórico (límite de Eb/N0) para comunicar a <span class="arithmatex">\(R = 500\ \text{kbit/s}\)</span> sobre este canal? Verifica que el sistema del apartado (b) lo supera.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> <span class="arithmatex">\(C = B\log_2(1+\text{SNR}) = 10^6\times\log_2(1+10) = 10^6\times\log_2(11) \approx 10^6\times3{,}459 = \mathbf{3{,}46\ \text{Mbit/s}}\)</span>.</p>
+<p><strong>(b)</strong> Con QPSK y <span class="arithmatex">\(r_c=1/2\)</span>: <span class="arithmatex">\(\eta = \log_2(4)\times r_c = 2\times0{,}5 = 1{,}0\)</span> bit/s/Hz. Tasa efectiva <span class="arithmatex">\(R = 1{,}0\times10^6 = 1\ \text{Mbit/s}\)</span>.</p>
+<p>Fracción de Shannon: <span class="arithmatex">\(R/C = 1{,}0/3{,}46 = \mathbf{28{,}9\%}\)</span>.</p>
+<p><strong>(c)</strong> Para <span class="arithmatex">\(R = 500\ \text{kbit/s}\)</span> en <span class="arithmatex">\(B = 1\ \text{MHz}\)</span>: <span class="arithmatex">\(\eta = 0{,}5\)</span> bit/s/Hz. La condición <span class="arithmatex">\(\eta &lt; \log_2(1+\text{SNR})\)</span>:</p>
+<p><span class="arithmatex">\(\text{SNR}_{\min} = 2^{0{,}5} - 1 = \sqrt{2} - 1 \approx 0{,}414 \Rightarrow -3{,}8\ \text{dB}\)</span>.</p>
+<p>El límite de Eb/N0 para esta tasa: <span class="arithmatex">\(\text{SNR}_{\min}/\eta = 0{,}414/0{,}5 = 0{,}828 \Rightarrow -0{,}8\ \text{dB}\)</span>.</p>
+<p>El sistema QPSK <span class="arithmatex">\(r_c=1/2\)</span> a SNR=10 dB tiene Eb/N0 efectivo <span class="arithmatex">\(= \text{SNR}/\eta = 10\ \text{dB} - 10\log_{10}(1) = 10\ \text{dB} \gg -0{,}8\ \text{dB}\)</span> ✓ — opera con amplio margen sobre el límite teórico para esa tasa, pero sólo al 29% de la capacidad máxima disponible con SNR=10 dB.</p>
+</details>
+<hr />
+<h3 id="ejercicio-2">Ejercicio 2</h3>
+<p>Un sistema BPSK sin código necesita Eb/N0 = 12.6 dB para BER = <span class="arithmatex">\(10^{-5}\)</span>.</p>
+<p><strong>(a)</strong> Calcula el Eb/N0 del canal necesario para que un código LDPC de <span class="arithmatex">\(r_c = 1/2\)</span> y umbral de decodificación Eb/N0<span class="arithmatex">\(_{\text{umbral}} = 3{,}5\ \text{dB}\)</span> (para BER post-FEC <span class="arithmatex">\(= 10^{-5}\)</span>) opere correctamente.</p>
+<p><strong>(b)</strong> ¿Cuál es la ganancia de codificación neta?</p>
+<p><strong>(c)</strong> Si se aumenta la tasa a <span class="arithmatex">\(r_c = 3/4\)</span> (umbral <span class="arithmatex">\(= 5{,}5\ \text{dB}\)</span>), ¿cuál es la nueva ganancia de codificación?</p>
+<p><strong>(d)</strong> ¿Qué tasa ofrece mayor ganancia neta? ¿Por qué puede ser preferible la tasa más alta en un sistema real con SNR elevado?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>El umbral de decodificación <span class="arithmatex">\(E_b/N_0\vert_{\text{umbral}}\)</span> se expresa en <span class="arithmatex">\(E_b/N_0\)</span> <em>por bit de información</em> — la misma normalización del eje horizontal de la curva waterfall, que ya incorpora el factor de tasa. La ganancia de codificación neta es la diferencia directa a la misma BER:</p>
+<div class="arithmatex">\[G_c = \left.\frac{E_b}{N_0}\right\vert_{\text{sin código}} - \left.\frac{E_b}{N_0}\right\vert_{\text{umbral}} \quad \text{[dB, a la misma BER]}\]</div>
+<p><strong>(a)</strong> <span class="arithmatex">\(r_c = 1/2\)</span>, umbral <span class="arithmatex">\(= 3{,}5\ \text{dB}\)</span>.</p>
+<p><span class="arithmatex">\(E_b/N_0\)</span> del canal necesario <span class="arithmatex">\(= \mathbf{3{,}5\ \text{dB}}\)</span>.</p>
+<p><strong>(b)</strong> Ganancia neta: <span class="arithmatex">\(G_c = 12{,}6 - 3{,}5 = \mathbf{9{,}1\ \text{dB}}\)</span>.</p>
+<p><strong>(c)</strong> <span class="arithmatex">\(r_c = 3/4\)</span>, umbral <span class="arithmatex">\(= 5{,}5\ \text{dB}\)</span>.</p>
+<p><span class="arithmatex">\(E_b/N_0\)</span> del canal necesario <span class="arithmatex">\(= \mathbf{5{,}5\ \text{dB}}\)</span>. Ganancia: <span class="arithmatex">\(12{,}6 - 5{,}5 = \mathbf{7{,}1\ \text{dB}}\)</span>.</p>
+<p><strong>(d)</strong> La tasa <span class="arithmatex">\(r_c = 1/2\)</span> tiene mayor ganancia de codificación (9.1 dB vs 7.1 dB). Sin embargo, <span class="arithmatex">\(r_c = 3/4\)</span> transmite 50% más bits por uso del canal — en un sistema con SNR suficiente para ambas tasas, la tasa más alta maximiza el caudal. El trade-off entre ganancia de codificación y eficiencia espectral es la motivación de la adaptación de enlace: a SNR bajo se prefiere <span class="arithmatex">\(r_c\)</span> bajo (mayor protección), a SNR alto se prefiere <span class="arithmatex">\(r_c\)</span> alto (mayor caudal).</p>
+</details>
+<hr />
+<h3 id="ejercicio-3">Ejercicio 3</h3>
+<p>Considera el código de bloque (7,4) de Hamming con la siguiente matriz de verificación de paridad:</p>
+<div class="arithmatex">\[\mathbf{H} = \begin{pmatrix} 0&amp;1&amp;1&amp;0&amp;1&amp;0&amp;1 \\ 0&amp;0&amp;0&amp;1&amp;1&amp;1&amp;1 \\ 1&amp;1&amp;0&amp;1&amp;1&amp;0&amp;0 \end{pmatrix} \pmod{2}\]</div>
+<p><strong>(a)</strong> Verifica que <span class="arithmatex">\(\mathbf{c}_1 = [1, 1, 0, 1, 1, 0, 0]^T\)</span> es un codeword válido.</p>
+<p><strong>(b)</strong> Si el canal introduce un error en el bit 3 (índice 2): <span class="arithmatex">\(\mathbf{r} = [1, 1, 1, 1, 1, 0, 0]^T\)</span>, calcula el <strong>síndrome</strong> <span class="arithmatex">\(\mathbf{s} = \mathbf{H}\,\mathbf{r} \pmod{2}\)</span>. ¿Cuál es la columna de <span class="arithmatex">\(\mathbf{H}\)</span> que coincide con <span class="arithmatex">\(\mathbf{s}\)</span>? ¿Qué indica eso?</p>
+<p><strong>(c)</strong> ¿Cuántos errores puede corregir garantizadamente este código? Calcula su distancia mínima contando las columnas que definen la tasa de corrección de errores <span class="arithmatex">\(t\)</span>.</p>
+<hr />
+<h3 id="ejercicio-4">Ejercicio 4</h3>
+<p>Calcula los parámetros de Bhattacharyya para un código Polar con <span class="arithmatex">\(N = 8\)</span> sobre un canal de borramiento binario (BEC) con probabilidad de borrado <span class="arithmatex">\(\varepsilon = 0{,}5\)</span>.</p>
+<p><strong>(a)</strong> Aplica las fórmulas de polarización recursivamente:</p>
+<div class="arithmatex">\[Z(W^{(-)}) = 2Z - Z^2, \qquad Z(W^{(+)}) = Z^2\]</div>
+<p>partiendo de <span class="arithmatex">\(Z_0 = \varepsilon = 0{,}5\)</span> para obtener los 8 canales sintéticos <span class="arithmatex">\(Z(W_8^{(i)})\)</span>, <span class="arithmatex">\(i=0,\ldots,7\)</span>.</p>
+<p><strong>(b)</strong> Para un código Polar de tasa <span class="arithmatex">\(r_c = 1/2\)</span> (<span class="arithmatex">\(K = 4\)</span> bits de información), ¿cuáles 4 canales sintéticos se deben elegir para los bits de información? ¿Cuáles son los bits congelados?</p>
+<p><strong>(c)</strong> La capacidad de cada canal sintético es <span class="arithmatex">\(I(W) = 1 - Z(W)\)</span> para el BEC. Calcula la capacidad total de los 8 canales y verifica que coincide con <span class="arithmatex">\(N\times I(W) = 8\times(1-0{,}5) = 4\)</span> (conservación de la información).</p>
+<hr />
+<h3 id="ejercicio-5">Ejercicio 5</h3>
+<p>A partir de las curvas de BER waterfall de LDPC con <span class="arithmatex">\(r_c = 1/2\)</span> y <span class="arithmatex">\(r_c = 3/4\)</span> (disponibles en el laboratorio):</p>
+<p><strong>(a)</strong> Lee los umbrales de Eb/N0 para BER <span class="arithmatex">\(= 10^{-5}\)</span> en ambas tasas. Calcula la ganancia de codificación neta respecto a BPSK sin código (Eb/N0 <span class="arithmatex">\(= 12{,}6\ \text{dB}\)</span> para BER <span class="arithmatex">\(= 10^{-5}\)</span>).</p>
+<p><strong>(b)</strong> Para un sistema OFDM con <span class="arithmatex">\(B = 20\ \text{MHz}\)</span> y 64-QAM, calcula el throughput neto con cada tasa de código. ¿Qué tasa es preferible si el SNR recibido es 15 dB? ¿Y si es 8 dB?</p>
+<p><strong>(c)</strong> Justifica cualitativamente por qué la pendiente de la cascada es mayor para <span class="arithmatex">\(r_c = 1/2\)</span> que para <span class="arithmatex">\(r_c = 3/4\)</span>.</p>
+<details class="example">
+<summary>Solución</summary>
+<p><strong>(a)</strong> Valores típicos de LDPC de longitud <span class="arithmatex">\(n \approx 4000\)</span> bits:</p>
+<ul>
+<li><span class="arithmatex">\(r_c = 1/2\)</span>: umbral <span class="arithmatex">\(\approx 2{,}5\ \text{dB}\)</span> → ganancia neta <span class="arithmatex">\(= 12{,}6 - 2{,}5 = \mathbf{10{,}1\ \text{dB}}\)</span>.</li>
+<li><span class="arithmatex">\(r_c = 3/4\)</span>: umbral <span class="arithmatex">\(\approx 5{,}5\ \text{dB}\)</span> → ganancia neta <span class="arithmatex">\(= 12{,}6 - 5{,}5 = \mathbf{7{,}1\ \text{dB}}\)</span>.</li>
+</ul>
+<p><strong>(b)</strong> Throughput: <span class="arithmatex">\(R = B \times \log_2(M) \times r_c = 20\times10^6 \times 6 \times r_c\)</span>.</p>
+<ul>
+<li><span class="arithmatex">\(r_c = 1/2\)</span>: <span class="arithmatex">\(R = 60\ \text{Mbit/s}\)</span>; umbral <span class="arithmatex">\(\approx 2{,}5 + 10\log_{10}(6\times0{,}5) = 2{,}5+4{,}8 = 7{,}3\ \text{dB}\)</span> (Eb/N0 del canal).</li>
+<li><span class="arithmatex">\(r_c = 3/4\)</span>: <span class="arithmatex">\(R = 90\ \text{Mbit/s}\)</span>; umbral <span class="arithmatex">\(\approx 5{,}5 + 10\log_{10}(6\times0{,}75) = 5{,}5+6{,}5 = 12{,}0\ \text{dB}\)</span>.</li>
+</ul>
+<p>A SNR = 15 dB: ambas tasas superan su umbral → preferir <span class="arithmatex">\(r_c = 3/4\)</span> (mayor caudal, 90 vs 60 Mbit/s).</p>
+<p>A SNR = 8 dB: <span class="arithmatex">\(r_c = 3/4\)</span> no supera su umbral de 12 dB → usar <span class="arithmatex">\(r_c = 1/2\)</span> (<span class="arithmatex">\(7{,}3\ \text{dB} &lt; 8\ \text{dB}\)</span> ✓).</p>
+<p><strong>(c)</strong> La pendiente de la cascada está relacionada con la longitud del bloque y el grado mínimo de los nodos del grafo: a mayor longitud de bloque y mayor distancia mínima del código, la transición entre "decodificación fiable" y "fallo total" es más abrupta. El código <span class="arithmatex">\(r_c = 1/2\)</span> tiene más bits de paridad por bit de información — mayor redundancia — lo que aumenta la distancia mínima efectiva del código y produce cascadas más abruptas. También a <span class="arithmatex">\(r_c\)</span> más bajo, el BP tiene más ecuaciones de verificación que le ayudan a resolver ambigüedades, convergiendo más agresivamente.</p>
+</details>
+<hr />
+<h3 id="ejercicio-6-diseno-completo-canal-modulacion-codificacion">Ejercicio 6 — Diseño Completo: Canal + Modulación + Codificación</h3>
+<p>Un sistema 5G NR transmite datos en el PDSCH sobre un canal UMi LOS. Usando los parámetros de la Sesión 01 (<span class="arithmatex">\(\sigma_\tau = 100\ \text{ns}\)</span>, <span class="arithmatex">\(f_c = 2{,}6\ \text{GHz}\)</span>, <span class="arithmatex">\(v = 50\ \text{km/h}\)</span>, factor Rician <span class="arithmatex">\(K = 9\ \text{dB}\)</span>) y asumiendo un SNR recibido de 20 dB en la subportadora de referencia:</p>
+<p><strong>(a)</strong> Selecciona el MCS de la tabla de la Sesión 02. Usando la ganancia de codificación LDPC BG1 apropiada para ese MCS, calcula el Eb/N0 efectivo con código.</p>
+<p><strong>(b)</strong> ¿El sistema opera por encima del umbral de decodificación LDPC (<span class="arithmatex">\(\approx 5\ \text{dB}\)</span> para <span class="arithmatex">\(r_c = 2/3\)</span>)?</p>
+<p><strong>(c)</strong> Calcula la brecha al límite de Shannon: ¿cuántos dB separan la tasa efectiva del sistema de la capacidad de Shannon al SNR recibido?</p>
+<p><strong>(d)</strong> Con <span class="arithmatex">\(K = 9\ \text{dB}\)</span> (canal Rician), ¿esperarías una BER pre-FEC mayor o menor que en un canal Rayleigh con el mismo SNR medio? ¿Cómo afecta esto a la elección del umbral de BER pre-FEC?</p>
+<hr />
+<h2 id="laboratorio-python">Laboratorio Python</h2>
+<p><a href="https://colab.research.google.com/github/ollerenac/wireless-communication-systems/blob/main/docs/sessions/05-channel-coding/lab.ipynb"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a></p>
+<p>En este laboratorio (~140 minutos) implementarás los conceptos fundamentales de codificación de canal, desde el límite teórico hasta un sistema OFDM+LDPC end-to-end:</p>
+<ol>
+<li>
+<p><strong>Ej. 1 — Capacidad de Shannon y puntos de operación (~15 min)</strong>: Grafica la curva de Shannon <span class="arithmatex">\(C/B\)</span> vs SNR y marca los puntos de operación de las modulaciones de la Sesión 02. Visualiza el límite absoluto de Eb/N0 = -1.59 dB y la brecha de cada modulación respecto al límite teórico.</p>
+</li>
+<li>
+<p><strong>Ej. 2 — Código LDPC: verificación de paridad (~15 min)</strong>: Construye la matriz <span class="arithmatex">\(\mathbf{H}\)</span> en GF(2), verifica si un vector es codeword válido calculando <span class="arithmatex">\(\mathbf{H}\,\mathbf{c} \pmod{2}\)</span>, y detecta la posición de un error a partir del síndrome.</p>
+</li>
+<li>
+<p><strong>Ej. 3 — LDPC BP realista sobre código de n=240 bits (~30 min)</strong>: Implementa el algoritmo sum-product (belief propagation) completo — inicialización de LLRs del canal AWGN, mensajes variable→nodo-de-verificación y verificación→nodo-de-variable, y decisión iterativa. Simula la curva BER Monte Carlo para al menos dos tasas de código y observa el <em>waterfall</em> con al menos 3 décadas de caída en BER.</p>
+</li>
+<li>
+<p><strong>Ej. 4 — Polar N=64: encoder + bits congelados (~20 min)</strong>: Construye el encoder Polar con la matriz <span class="arithmatex">\(G_{64}\)</span> y selección de bits congelados por parámetro de Bhattacharyya. Visualiza la polarización del canal mediante el histograma de <span class="arithmatex">\(Z(W_{64}^{(i)})\)</span>. <em>(El decodificador SC/SCL queda diferido — ver extensión futura.)</em></p>
+</li>
+<li>
+<p><strong>Ej. 5 — Curvas waterfall comparativas (~15 min)</strong>: Genera las curvas BER de LDPC (<span class="arithmatex">\(r_c=1/2\)</span>, <span class="arithmatex">\(2/3\)</span>, <span class="arithmatex">\(3/4\)</span>), Polar equivalente y BPSK sin código en el mismo eje. Cuantifica la ganancia de codificación de cada esquema a BER = <span class="arithmatex">\(10^{-5}\)</span>.</p>
+</li>
+<li>
+<p><strong>Ej. 6 — Integrador OFDM+LDPC (~30 min)</strong>: Reutiliza sin modificación las funciones <code>ofdm_tx</code>, <code>apply_channel</code>, <code>ofdm_rx_no_channel</code> y <code>zf_equalizer</code> de la Sesión 03. Añade una capa de codificación LDPC (encode antes de transmitir, decode tras el ecualizador) y compara la BER coded vs uncoded sobre un canal frequency-selective de 3 taps.</p>
+</li>
+</ol>
+<hr />
+<h2 id="lecturas-recomendadas">Lecturas Recomendadas</h2>
+<ol>
+<li><strong>Richardson, T. &amp; Urbanke, R.</strong> — <em>Modern Coding Theory</em>, Cambridge University Press, 2008. Capítulos 4 (LDPC) y 5 (análisis de umbral).</li>
+<li><strong>Arıkan, E.</strong> — "Channel Polarization: A Method for Constructing Capacity-Achieving Codes for Symmetric Binary-Input Memoryless Channels", <em>IEEE Trans. Inf. Theory</em>, vol. 55, no. 7, 2009.</li>
+<li><strong>Goldsmith, A.</strong> — <em>Wireless Communications</em>, Cambridge University Press, 2005. Capítulo 8 (fundamentos de teoría de la información y codificación).</li>
+<li><strong>3GPP TS 38.212</strong> — <em>Multiplexing and channel coding</em>, Release 17. §5 (LDPC), §7 (Polar).</li>
+<li><strong>Dahlman, E., Parkvall, S. &amp; Sköld, J.</strong> — <em>5G NR: The Next Generation Wireless Access Technology</em>, Academic Press, 2018. Capítulo 10 (codificación de canal en NR).</li>
+</ol>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

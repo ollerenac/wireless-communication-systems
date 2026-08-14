@@ -1,0 +1,2484 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cómo elegir entre diversidad, beamforming, SU-MIMO, MU-MIMO y Massive MIMO según SNR, rank, CSI, interferencia, pilotos y arquitectura de red.">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/06-mimo-systems/">
+      
+      
+        <link rel="prev" href="../05-channel-coding/">
+      
+      
+        <link rel="next" href="../07-network-design/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sesion-06-mimo-en-redes-reales-cobertura-capacidad-y-usuarios" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../exams/" class="md-tabs__link">
+          
+  
+  
+  Evaluaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-gnuradio-ofdm/gnuradio-ofdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-primero-el-problema-de-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Primero el problema de red
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-que-arreglo-de-antenas-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Qué arreglo de antenas usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-el-canal-como-diagnostico-operativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El canal como diagnóstico operativo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. El canal como diagnóstico operativo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-indicadores-de-diagnostico-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Indicadores de diagnóstico del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-diversidad-beamforming-y-multiplexacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Diversidad, beamforming y multiplexación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-deteccion-y-precodificacion-que-se-implementan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Detección y precodificación que se implementan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Detección y precodificación que se implementan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-deteccion-en-el-receptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Detección en el receptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-precodificacion-en-la-estacion-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Precodificación en la estación base
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-rank-adaptation-y-capacidad-util" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Rank adaptation y capacidad útil
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-massive-mimo-como-problema-de-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Massive MIMO como problema de red
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Massive MIMO como problema de red">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-csi-el-cuello-de-botella" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 CSI: el cuello de botella
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-fr1-fr2-y-beamforming-hibrido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 FR1, FR2 y beamforming híbrido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-de-asimilacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios de Asimilación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 — Diseño de Red de Acceso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    07 — Diseño de Red de Acceso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/rsrp-rsrq-sinr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/crs-dos-celdas-pci-mod3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: CRS con dos celdas y PCI mod 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/de-sinr-a-capacidad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: de SINR a capacidad de celda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-design/escena-osm-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía: escena OSM con Blender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcial 01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exams/examen-diseno-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examen — Diseño de red 5G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objetivos-de-aprendizaje" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Objetivos de Aprendizaje
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduccion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introducción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teoría
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoría">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-primero-el-problema-de-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Primero el problema de red
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-que-arreglo-de-antenas-usar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Qué arreglo de antenas usar
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-el-canal-como-diagnostico-operativo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El canal como diagnóstico operativo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. El canal como diagnóstico operativo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-indicadores-de-diagnostico-del-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Indicadores de diagnóstico del canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-diversidad-beamforming-y-multiplexacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Diversidad, beamforming y multiplexación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-deteccion-y-precodificacion-que-se-implementan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Detección y precodificación que se implementan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Detección y precodificación que se implementan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-deteccion-en-el-receptor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Detección en el receptor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-precodificacion-en-la-estacion-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Precodificación en la estación base
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-rank-adaptation-y-capacidad-util" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Rank adaptation y capacidad útil
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-massive-mimo-como-problema-de-red" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Massive MIMO como problema de red
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Massive MIMO como problema de red">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-csi-el-cuello-de-botella" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 CSI: el cuello de botella
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-fr1-fr2-y-beamforming-hibrido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 FR1, FR2 y beamforming híbrido
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laboratorio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laboratorio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejercicios-de-asimilacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios de Asimilación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resumen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resumen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sesion-06-mimo-en-redes-reales-cobertura-capacidad-y-usuarios">Sesión 06 — MIMO en redes reales: cobertura, capacidad y usuarios</h1>
+<ul>
+<li><a href="https://youtu.be/GaMZSzmyoIs">Vídeo - Parte 1</a></li>
+</ul>
+<h2 id="objetivos-de-aprendizaje">Objetivos de Aprendizaje</h2>
+<p>Al finalizar esta sesión, el estudiante será capaz de:</p>
+<ol>
+<li>Diagnosticar qué problema de red intenta resolver un sistema multiantena: cobertura, throughput, interferencia, densidad de usuarios o pérdida de propagación en bandas altas.</li>
+<li>Elegir entre SIMO, MISO, SU-MIMO, MU-MIMO, Massive MIMO y beamforming híbrido según el escenario de despliegue.</li>
+<li>Interpretar la matriz de canal <span class="arithmatex">\(\mathbf{H}\)</span> como herramienta de diseño: rank, valores singulares, condicionamiento, correlación espacial, normas de canal y CSI.</li>
+<li>Decidir cuándo conviene diversidad, beamforming o multiplexación espacial, y cuándo subir o bajar el rank de transmisión.</li>
+<li>Comparar detectores y precodificadores implementables (ZF, MMSE, SIC, ML, MRT, ZF y RZF/MMSE) en términos de interferencia, ruido, cómputo y disponibilidad de CSI.</li>
+<li>Explicar por qué Massive MIMO depende de TDD, pilotos, reciprocidad, scheduler y control de contaminación de pilotos.</li>
+</ol>
+<hr />
+<h2 id="introduccion">Introducción</h2>
+<p>En las sesiones anteriores el problema parecía tener una sola dimensión: una señal entra, una señal sale, y el diseñador ajusta modulación, codificación, OFDM o potencia para que los bits sobrevivan. MIMO cambia la pregunta. La pregunta ya no es solo "cuánta capacidad tiene una matriz", sino:</p>
+<blockquote>
+<p>Tengo un problema de cobertura, capacidad, interferencia o densidad de usuarios. ¿Qué hago con las antenas?</p>
+</blockquote>
+<p>Esa es la lectura implementativa de MIMO. Las antenas no son decoración ni una fórmula de capacidad: son grados de libertad espaciales que se pueden gastar de formas distintas. A veces se usan para que un usuario en borde de celda reciba suficiente energía. A veces para enviar dos o cuatro capas al mismo terminal. A veces para servir varios usuarios al mismo tiempo. A veces para formar un haz estrecho en mmWave, donde sin ganancia de array el enlace ni siquiera cierra.</p>
+<p>La decisión correcta depende del canal, no de una regla fija. Si el canal tiene buen rank y SNR alta, subir capas aumenta throughput. Si el canal está mal condicionado, forzar muchas capas hace que el receptor o el precoder amplifique ruido. Si los usuarios tienen canales casi ortogonales, MU-MIMO funciona bien. Si los canales son paralelos, el scheduler debe separarlos en tiempo/frecuencia o el precoder pagará mucha potencia para cancelar interferencia.</p>
+<p>El objetivo de esta sesión es construir esa brújula. La matemática sigue estando: <span class="arithmatex">\(\mathbf{H}\)</span>, la SVD, el compromiso diversidad-multiplexación (DMT), y los precodificadores y detectores clásicos (MRT, ZF, MMSE). Pero aquí aparecen como herramientas para tomar decisiones de red; cada sigla se define en la sección donde se usa por primera vez.</p>
+<div class="admonition warning">
+<p class="admonition-title">Antes de empezar: qué repasar</p>
+<p>Esta sesión usa álgebra lineal que <strong>no se enseña aquí</strong>:</p>
+<ul>
+<li>multiplicación matriz-vector;</li>
+<li><strong>eigenvalores y eigenvectores</strong> — la ecuación <span class="arithmatex">\(\mathbf{A}\mathbf{v} = \lambda\mathbf{v}\)</span>: las direcciones que una matriz no rota, solo escala. En los textos en español el tema aparece como <strong>valores y vectores propios</strong> (o autovalores/autovectores) — buscar con esos nombres;</li>
+<li>la conjugada transpuesta <span class="arithmatex">\(\mathbf{A}^{\mathsf{H}}\)</span> (transponer y conjugar cada entrada compleja);</li>
+<li>la norma <span class="arithmatex">\(\|\mathbf{v}\|\)</span> de un vector y su cuadrado <span class="arithmatex">\(\|\mathbf{v}\|^2\)</span> como energía.</li>
+</ul>
+<p>Si "eigenvector" no le dice nada, repáselo antes de llegar a §3 con alguna de estas referencias:</p>
+<ul>
+<li><strong>3Blue1Brown</strong>, <em>Essence of Linear Algebra</em>, capítulos 13–14 (intuición visual de valores y vectores propios; subtítulos en español) — la mejor inversión de 30 minutos para esta sesión;</li>
+<li><strong>Khan Academy</strong> (en español), unidad <em>Valores y vectores propios</em>: ahí se practica exactamente el procedimiento <span class="arithmatex">\((\mathbf{A} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\)</span> que usa la receta de §3.1;</li>
+<li>cualquier texto de álgebra lineal, capítulo de valores propios (Grossman, Lay o Strang).</li>
+</ul>
+<p>La caja "Cálculo de la SVD de un canal 2×2" en §3.1 muestra el procedimiento completo paso a paso, incluida la relación <span class="arithmatex">\(\sigma = \sqrt{\lambda}\)</span> — pero enseña a <em>aplicar</em> el concepto, no lo sustituye.</p>
+</div>
+<hr />
+<h2 id="teoria">Teoría</h2>
+<div class="admonition note">
+<p class="admonition-title">Vocabulario de la sesión</p>
+<ul>
+<li><strong>Capa = stream = flujo</strong>: son la misma cosa y este documento los usa como sinónimos. Es una secuencia de datos independiente que se transmite al mismo tiempo que las demás. Los estándares dicen <em>layers</em>; la literatura dice <em>streams</em>.</li>
+<li><strong>Modo espacial = subcanal</strong>: cada canal paralelo e independiente contenido dentro de <span class="arithmatex">\(\mathbf{H}\)</span>; la SVD los revela. No es sinónimo de capa: la <strong>capa</strong> es <em>lo que se transmite</em>, el <strong>subcanal</strong> es <em>por dónde pasa</em>. Idealmente cada capa viaja por su propio subcanal.</li>
+<li><strong>Grados de libertad espaciales</strong>: cuántas señales independientes puede manejar simultáneamente el arreglo de antenas. Se gastan en robustez, en throughput o en servir más usuarios — no alcanzan para todo a la vez.</li>
+<li><strong>Cerrar el enlace</strong>: lograr que la potencia que llega al receptor alcance el SNR mínimo que exige la tasa de error objetivo. Si el enlace "no cierra", ninguna otra optimización importa.</li>
+<li><strong>CSI / CSIT / CSIR</strong>: <em>channel state information</em> — el conocimiento de <span class="arithmatex">\(\mathbf{H}\)</span>. La T o R final indica quién lo tiene: el Transmisor o el Receptor.</li>
+<li><strong>BS / UE</strong>: estación base / terminal del usuario.</li>
+<li><strong>TDD / FDD</strong>: duplexación por tiempo (subida y bajada alternan sobre la <strong>misma</strong> frecuencia → el canal de ida y el de vuelta son el mismo: <em>reciprocidad</em>) / por frecuencia (subida y bajada en bandas <strong>distintas</strong> → canales distintos, la reciprocidad no aplica).</li>
+<li><strong>FR1 / FR2</strong>: los dos rangos de frecuencia de 5G. FR1: sub-6 GHz. FR2: ondas milimétricas (24 GHz en adelante), donde la pérdida de propagación es tan alta que sin ganancia de haz el enlace no cierra.</li>
+<li>Los términos propios de Massive MIMO (<em>channel hardening</em>, <em>favorable propagation</em>, contaminación de pilotos) se definen en §7.</li>
+</ul>
+</div>
+<h3 id="1-primero-el-problema-de-red">1. Primero el problema de red</h3>
+<p>Antes de hablar de SVD conviene mirar el síntoma del sistema. El mismo array de antenas puede resolver problemas diferentes según cómo se use.</p>
+<p>Esta tabla es un mapa de la sesión completa: nombra estrategias y precodificadores que se definen en §5 y §7. Conviene leerla primero como panorama, sin necesidad de entender cada sigla todavía, y volver a ella al final de la sesión.</p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Síntoma de red</th>
+<th>Estrategia MIMO natural</th>
+<th>Costo o riesgo principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Borde de celda rural</td>
+<td>SNR baja, enlace frágil</td>
+<td>Beamforming o diversidad (→ §4)</td>
+<td>Subir rank demasiado rompe la robustez</td>
+</tr>
+<tr>
+<td>Hotspot urbano</td>
+<td>Muchos usuarios, interferencia alta</td>
+<td>MU-MIMO con ZF/RZF (→ §5.2) y scheduler</td>
+<td>CSI fresco y canales separables</td>
+</tr>
+<tr>
+<td>Indoor / small cell</td>
+<td>Canal rico, distancias cortas</td>
+<td>SU-MIMO rank 2/4</td>
+<td>Antenas muy juntas reducen rank efectivo</td>
+</tr>
+<tr>
+<td>Massive MIMO sub-6 GHz</td>
+<td>Muchos UEs por celda</td>
+<td><span class="arithmatex">\(M \gg K\)</span>, TDD, RZF/MRT (→ §7)</td>
+<td>Pilotos, reciprocidad y contaminación (→ §7.1)</td>
+</tr>
+<tr>
+<td>FR2 / mmWave</td>
+<td>Path loss alto, haces estrechos</td>
+<td>Arrays grandes y beamforming híbrido (→ §7.2)</td>
+<td>Bloqueo, alineamiento de beams y RF chains (→ §7.2)</td>
+</tr>
+</tbody>
+</table>
+<figure>
+  <img alt="Mapa de decisión de estrategias MIMO según problema de red" src="figures/mimo-design-map.png" />
+<br />
+<!-- generada por generate_design_figures.py -->
+
+
+<br />
+<figcaption><strong>Figura 1.</strong> Mapa de decisión para traducir un síntoma de red en una estrategia MIMO y en el costo operativo que debe vigilarse. Sirve como brújula antes de elegir rank, detector o precoder.
+  </figcaption>
+</figure>
+<p>Una regla práctica aparece desde el primer minuto:</p>
+<div class="admonition note">
+<p class="admonition-title">Regla de diseño</p>
+<p>Primero se <strong>cierra el enlace</strong>; después se sube el rank. Si el UE apenas recibe señal, la prioridad es beamforming/diversidad. Si el enlace ya es robusto y el canal tiene modos espaciales independientes, entonces se explota multiplexación.</p>
+</div>
+<p>MIMO ofrece tres usos básicos:</p>
+<ul>
+<li><strong>Diversidad</strong>: repetir o codificar la misma información sobre caminos independientes para reducir probabilidad de error.</li>
+<li><strong>Beamforming</strong>: sumar señales con fases controladas para concentrar energía hacia un usuario o dirección.</li>
+<li><strong>Multiplexación espacial</strong>: enviar capas distintas al mismo tiempo y en la misma banda para aumentar throughput.</li>
+</ul>
+<p>La dificultad real es que esas tres metas compiten por los mismos grados de libertad espaciales. Un array no puede gastar todos sus recursos en robustez, máxima tasa y cancelación perfecta de interferencia a la vez.</p>
+<details class="question">
+<summary>Comprueba tu comprensión</summary>
+<p><strong>P1.</strong> Un UE en borde de celda reporta bajo SNR y alto BLER. ¿Subirías rank o reforzarías beamforming/diversidad?</p>
+<p><strong>P2.</strong> Dos usuarios tienen canales casi paralelos. ¿Es buen momento para servirlos simultáneamente con MU-MIMO?</p>
+<hr />
+<p><strong>R1.</strong> Reforzaría beamforming/diversidad. Subir rank significa repartir la misma potencia entre más capas — cada una llega más débil — justo cuando el enlace todavía no cierra. Primero energía suficiente; después capas.</p>
+<p><strong>R2.</strong> No es ideal. Si los canales son casi paralelos, los dos usuarios "se ven iguales" desde la estación base: cualquier señal dirigida a uno llega casi idéntica al otro, y no hay geometría espacial que explotar. Separarlos espacialmente es posible pero caro (en §5 se verá cuánto cuesta); lo razonable es que el scheduler los sirva en tiempos o frecuencias distintas.</p>
+</details>
+<h3 id="2-que-arreglo-de-antenas-usar">2. Qué arreglo de antenas usar</h3>
+<p>La Figura 2 muestra las configuraciones básicas. La lectura práctica no es "más antenas siempre es mejor", sino "qué extremo tiene antenas, quién conoce el canal y qué se quiere optimizar".</p>
+<figure>
+  <img alt="Configuraciones SISO, SIMO, MISO y MIMO" src="figures/mimo-configurations.png" />
+<br />
+<!-- generada por celda 2 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 2.</strong> Configuraciones de antenas. <strong>SISO</strong>: referencia escalar. <strong>SIMO</strong>: varias ramas de recepción para diversidad/combining. <strong>MISO</strong>: varias antenas transmisoras para formar haz hacia un receptor simple. <strong>MIMO</strong>: antenas en ambos extremos para diversidad, beamforming y/o multiplexación espacial.
+  </figcaption>
+</figure>
+<table>
+<thead>
+<tr>
+<th>Configuración</th>
+<th>Dónde aparece</th>
+<th>Cuándo usarla</th>
+<th>Qué gana</th>
+<th>Qué no resuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIMO</td>
+<td>Receptor con varias ramas</td>
+<td>Mejorar recepción sin cambiar TX</td>
+<td>Diversidad RX y combining</td>
+<td>No crea múltiples capas si TX=1</td>
+</tr>
+<tr>
+<td>MISO</td>
+<td>BS con varias antenas, UE simple</td>
+<td>Cobertura downlink</td>
+<td>Array gain y beamforming</td>
+<td>No multiplexa varios streams a un UE de una antena</td>
+</tr>
+<tr>
+<td>SU-MIMO</td>
+<td>BS y UE multiantena</td>
+<td>Throughput por usuario</td>
+<td>Rank espacial y capas simultáneas</td>
+<td>Exige canal bien condicionado</td>
+</tr>
+<tr>
+<td>MU-MIMO</td>
+<td>BS multiantena, varios UEs</td>
+<td>Capacidad de celda</td>
+<td>Reutilización espacial</td>
+<td>Exige CSI y scheduler</td>
+</tr>
+<tr>
+<td>Massive MIMO</td>
+<td><span class="arithmatex">\(M\)</span> mucho mayor que <span class="arithmatex">\(K\)</span></td>
+<td>Densidad y eficiencia energética</td>
+<td>Hardening (→ §7) y canales casi ortogonales</td>
+<td>Pilotos, TDD, correlación y contaminación (→ §7.1)</td>
+</tr>
+<tr>
+<td>Híbrido mmWave</td>
+<td>Arrays grandes con pocas cadenas RF (→ §7.2)</td>
+<td>FR2/sub-THz</td>
+<td>Ganancia de haz viable en hardware</td>
+<td>Bloqueo y entrenamiento de beams</td>
+</tr>
+</tbody>
+</table>
+<p>Un punto de implementación que se olvida fácilmente: <strong>antenas físicas no equivalen automáticamente a grados de libertad independientes</strong>. Para que MIMO entregue multiplexación, las firmas espaciales deben ser distinguibles. Importan:</p>
+<ul>
+<li>separación de antenas, típicamente alrededor de <span class="arithmatex">\(\lambda/2\)</span>;</li>
+<li>geometría del array: ULA, UPA, paneles activos;</li>
+<li>polarización;</li>
+<li>entorno de scattering;</li>
+<li>línea de vista y correlación espacial;</li>
+<li>orientación del UE.</li>
+</ul>
+<p>En un teléfono pequeño, dos antenas pueden estar tan correlacionadas que el segundo modo espacial sea débil. En una estación base con muchos elementos, el problema opuesto aparece: hay muchas antenas, pero el sistema necesita CSI y calibración para usarlas bien.</p>
+<div class="admonition note">
+<p class="admonition-title">¿Y el espectro? Las capas no se reparten la banda</p>
+<p>Los streams espaciales transmiten <strong>al mismo tiempo y en la misma banda</strong>. No se separan por subportadoras, slots ni códigos distintos. Se separan porque cada stream deja una firma espacial diferente en el receptor, codificada en las columnas de <span class="arithmatex">\(\mathbf{H}\)</span>. Por eso MIMO puede aumentar throughput sin comprar más espectro, siempre que el canal tenga rank suficiente.</p>
+</div>
+<h3 id="3-el-canal-como-diagnostico-operativo">3. El canal como diagnóstico operativo</h3>
+<p>"Diagnóstico operativo" significa que <span class="arithmatex">\(\mathbf{H}\)</span> cumple el mismo papel que un análisis clínico: se estima porque cada decisión de operación se <strong>lee</strong> de ahí — quién transmite, cuántas capas, hacia dónde apuntar, cómo separar. Sin <span class="arithmatex">\(\mathbf{H}\)</span> medida, todas las decisiones de esta sesión se tomarían a ciegas.</p>
+<p>La matriz de canal no es solo notación. En un sistema real, <span class="arithmatex">\(\mathbf{H}\)</span> es el objeto que se estima con pilotos y del que salen decisiones de scheduler, rank, beamforming, precoding y detección.</p>
+<p>Para un canal de banda estrecha:</p>
+<div class="arithmatex">\[\boxed{\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}} \tag{1}\]</div>
+<p>donde <span class="arithmatex">\(\mathbf{x} \in \mathbb{C}^{N_t}\)</span> es el vector transmitido, <span class="arithmatex">\(\mathbf{y} \in \mathbb{C}^{N_r}\)</span> el vector recibido, <span class="arithmatex">\(\mathbf{H} \in \mathbb{C}^{N_r \times N_t}\)</span> la matriz de canal y <span class="arithmatex">\(\mathbf{n} \sim \mathcal{CN}(\mathbf{0}, N_0\mathbf{I})\)</span> el ruido. La notación <span class="arithmatex">\(\mathcal{CN}\)</span> se lee "gaussiana compleja": cada antena receptora sufre un ruido con parte real e imaginaria gaussianas, de potencia total <span class="arithmatex">\(N_0\)</span>, independiente del ruido de las demás antenas (eso dice la <span class="arithmatex">\(\mathbf{I}\)</span>). Cada entrada <span class="arithmatex">\(h_{ji}\)</span> responde: cuánto de la antena TX <span class="arithmatex">\(i\)</span> llega a la antena RX <span class="arithmatex">\(j\)</span>, con qué amplitud y fase.</p>
+<figure>
+  <img alt="Estructura de la matriz de canal MIMO" src="figures/mimo-channel-matrix.png" />
+<br />
+<!-- generada por celda 3 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 3.</strong> Matriz <span class="arithmatex">\(\mathbf{H}\)</span> para un sistema <span class="arithmatex">\(4 \times 4\)</span>. Cada casilla contiene magnitud y fase del acoplamiento entre una antena transmisora y una receptora. Para implementación, esta matriz no es abstracta: es el insumo que estima el receptor o la estación base para decidir rank, precoder y detector.
+  </figcaption>
+</figure>
+<details class="example">
+<summary>Cómo se estima H con pilotos</summary>
+<p><span class="arithmatex">\(\mathbf{H}\)</span> no se conoce a priori: se estima. El mecanismo tiene tres partes.</p>
+<p><strong>1. Un piloto es una pregunta cuya respuesta ya se conoce.</strong> El transmisor envía un símbolo <span class="arithmatex">\(x_p\)</span> pactado de antemano — el receptor sabe exactamente qué se transmitió. Recibe <span class="arithmatex">\(y_p = h\,x_p + n\)</span> y despeja:</p>
+<div class="arithmatex">\[\hat{h} = \frac{y_p}{x_p} = h + \frac{n}{x_p}\]</div>
+<p>Es una estimación, no una medición perfecta: el ruido viene incluido. Por eso los pilotos se transmiten con potencia generosa y se promedian varios.</p>
+<p><strong>2. Para llenar una matriz: una antena habla, las demás callan.</strong> Una división llena <strong>una casilla</strong>, y <span class="arithmatex">\(\mathbf{H} \in \mathbb{C}^{N_r \times N_t}\)</span> tiene <span class="arithmatex">\(N_r N_t\)</span> casillas. El protocolo:</p>
+<ul>
+<li><em>Instante 1</em>: TX<span class="arithmatex">\(_1\)</span> transmite su piloto; TX<span class="arithmatex">\(_2, \ldots,\)</span> TX<span class="arithmatex">\(_{N_t}\)</span> guardan silencio. Cada antena receptora <span class="arithmatex">\(j\)</span> escucha su propia versión, <span class="arithmatex">\(y_j = h_{j1}x_p + n_j\)</span>, y divide: <span class="arithmatex">\(\hat{h}_{j1} = y_j/x_p\)</span>. Las <span class="arithmatex">\(N_r\)</span> divisiones simultáneas llenan la <strong>columna 1</strong>.</li>
+<li><em>Instante 2</em>: habla TX<span class="arithmatex">\(_2\)</span> → columna 2. Y así hasta TX<span class="arithmatex">\(_{N_t}\)</span>.</li>
+</ul>
+<p>Un 2×2: 2 pilotos × 2 antenas receptoras = 4 divisiones = las 4 casillas. En el grid tiempo-frecuencia de OFDM, cada antena TX tiene reservados sus <em>resource elements</em> de piloto — separados en tiempo, en frecuencia o por códigos ortogonales — y en los REs de piloto de una antena, las demás transmiten cero.</p>
+<p><strong>3. Contraste entre REs de piloto y REs de datos:</strong></p>
+<table>
+<thead>
+<tr>
+<th>REs de piloto</th>
+<th>REs de datos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>una TX habla, el resto calla</td>
+<td>todas hablan a la vez</td>
+</tr>
+<tr>
+<td>sin mezcla → división directa</td>
+<td>mezcla total → hace falta <span class="arithmatex">\(\mathbf{H}\)</span></td>
+</tr>
+<tr>
+<td>aquí se <strong>mide</strong> <span class="arithmatex">\(\mathbf{H}\)</span></td>
+<td>aquí se <strong>usa</strong> <span class="arithmatex">\(\mathbf{H}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Cada RE gastado en piloto no lleva datos, y la medida caduca — vale durante el tiempo de coherencia y en las subportadoras vecinas dentro del ancho de banda de coherencia; entre pilotos se interpola. Quién ejecuta la división y cómo llega el resultado al otro extremo (feedback en FDD vía RI/PMI/CQI, o reciprocidad en TDD) es exactamente el cuello de botella que decide la arquitectura de Massive MIMO en §7.1.</p>
+</details>
+<p>El modelo pedagógico más limpio es Rayleigh i.i.d.:</p>
+<div class="arithmatex">\[h_{ji} \sim \mathcal{CN}(0,1) \tag{2}\]</div>
+<p>Significa dos cosas. <strong>Independientes</strong>: saber un coeficiente no predice los demás. <strong>Idénticamente distribuidos</strong>: todos los pares TX-RX siguen la misma estadística. Es un buen laboratorio mental para entender MIMO, aunque una red real usa modelos correlacionados como CDL (<em>Cluster Delay Line</em>) del TR 38.901 — el modelo de canal estándar de 3GPP, que en vez de coeficientes independientes describe grupos de trayectos físicos con sus retardos, ángulos de salida y llegada, y la geometría real del array.</p>
+<p>En sistemas OFDM, esta ecuación vive por subportadora. MIMO-OFDM no tiene una sola matriz <span class="arithmatex">\(\mathbf{H}\)</span>, sino una matriz <span class="arithmatex">\(\mathbf{H}[k]\)</span> por subportadora <span class="arithmatex">\(k\)</span>. La Sesión 03 ya explicó cómo OFDM convierte un canal selectivo en frecuencia en muchos canales planos; aquí se decide qué hacer espacialmente en cada uno.</p>
+<h4 id="31-indicadores-de-diagnostico-del-canal">3.1 Indicadores de diagnóstico del canal</h4>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Cómo se lee</th>
+<th>Decisión de diseño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(\mathrm{rank}(\mathbf{H})\)</span></td>
+<td>Número de modos espaciales útiles</td>
+<td>Límite superior de capas simultáneas</td>
+</tr>
+<tr>
+<td>Valores singulares <span class="arithmatex">\(\sigma_k\)</span></td>
+<td>Ganancia de cada modo espacial</td>
+<td>Qué capas merecen potencia</td>
+</tr>
+<tr>
+<td>Condicionamiento <span class="arithmatex">\(\kappa = \sigma_1/\sigma_r\)</span></td>
+<td>Desbalance entre modo fuerte y débil</td>
+<td>Si ZF va a amplificar mucho ruido</td>
+</tr>
+<tr>
+<td>Producto interno <span class="arithmatex">\(\mathbf{h}_i^{\mathsf{H}}\mathbf{h}_j\)</span></td>
+<td>Separabilidad entre usuarios</td>
+<td>Si MU-MIMO simultáneo es razonable</td>
+</tr>
+<tr>
+<td>Norma <span class="arithmatex">\(\|\mathbf{h}_k\|^2\)</span></td>
+<td>Fuerza del canal de un usuario</td>
+<td>Scheduling, beamforming y power control</td>
+</tr>
+<tr>
+<td>Tiempo de coherencia</td>
+<td>Cuánto dura el CSI</td>
+<td>Coste de pilotos y velocidad de adaptación</td>
+</tr>
+</tbody>
+</table>
+<p>El nombre "condicionamiento" viene del análisis numérico: un problema está <em>bien condicionado</em> cuando errores pequeños en los datos producen errores pequeños en el resultado, y <em>mal condicionado</em> cuando los amplifican. <span class="arithmatex">\(\kappa\)</span> mide exactamente esa sensibilidad para el canal: al invertir <span class="arithmatex">\(\mathbf{H}\)</span> (lo que hará el detector ZF en §5.1), los errores relativos — ruido, CSI imperfecta — pueden amplificarse hasta <span class="arithmatex">\(\kappa\)</span> veces.</p>
+<p>Regla rápida para leer el condicionamiento: <span class="arithmatex">\(\kappa \approx 1\)</span> significa modos parejos, canal dócil para multiplexar; <span class="arithmatex">\(\kappa \gtrsim 10\)</span> significa que el modo débil es frágil y separarlo costará ruido o potencia; <span class="arithmatex">\(\kappa \to \infty\)</span> significa rank deficiente — hay menos modos útiles que antenas (el caso extremo es el canal <em>keyhole</em>, donde todos los trayectos pasan por un mismo "agujero" y <span class="arithmatex">\(\kappa\)</span> diverge).</p>
+<p>La SVD aparece como herramienta de diagnóstico:</p>
+<div class="arithmatex">\[\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} \tag{3}\]</div>
+<p>La lectura implementativa es directa. Las columnas de <span class="arithmatex">\(\mathbf{V}\)</span> son direcciones de transmisión; las columnas de <span class="arithmatex">\(\mathbf{U}\)</span> son combinaciones de recepción; los valores singulares <span class="arithmatex">\(\sigma_k\)</span> dicen cuán bueno es cada modo. Si el segundo valor singular es pequeño, el segundo stream existe en álgebra, pero será caro en BER.</p>
+<p>Esta interpretación organiza el resto de la sesión. La SVD muestra que dentro de cualquier <span class="arithmatex">\(\mathbf{H}\)</span> — por mezclado que se vea el canal antena a antena — existen canales paralelos que <strong>no se mezclan entre sí</strong>: los subcanales (los modos espaciales del vocabulario inicial). Los subcanales no se construyen: ya estaban en el canal físico; la SVD solo los encuentra. Con esa interpretación, las cinco decisiones que abrieron esta sección son cinco preguntas sobre los mismos subcanales:</p>
+<table>
+<thead>
+<tr>
+<th>Decisión</th>
+<th>Pregunta sobre los subcanales</th>
+<th>Dónde se desarrolla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rank</td>
+<td>¿cuántos subcanales vale la pena activar?</td>
+<td>§3.1 y §6</td>
+</tr>
+<tr>
+<td>Beamforming</td>
+<td>si abro uno solo, ¿toda la potencia por el más fuerte?</td>
+<td>§4</td>
+</tr>
+<tr>
+<td>Precoding</td>
+<td>¿cómo alineo cada capa con la entrada de su subcanal?</td>
+<td>§5.2</td>
+</tr>
+<tr>
+<td>Scheduler</td>
+<td>¿los subcanales de <strong>quién</strong> están mejor en este instante?</td>
+<td>§5.2 y §7</td>
+</tr>
+<tr>
+<td>Detección</td>
+<td>si el TX no pudo alinear (sin CSIT), ¿cómo deshace el RX la mezcla y a qué precio?</td>
+<td>§5.1</td>
+</tr>
+</tbody>
+</table>
+<p>Precoding y detección son simétricos: el primero arregla la mezcla <strong>antes</strong> de transmitir (lado <span class="arithmatex">\(\mathbf{V}\)</span>, exige CSIT); la segunda la arregla <strong>después</strong> de recibir (lado <span class="arithmatex">\(\mathbf{U}\)</span>, basta CSIR). Mismo problema, dos extremos del cable.</p>
+<figure>
+  <img alt="SVD descompone H en canales paralelos" src="figures/mimo-svd-channels.png" />
+<br />
+<!-- generada por celda 5 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 4.</strong> La SVD interpreta el canal MIMO como modos espaciales paralelos. En una lección implementativa, esto se usa como diagnóstico de rank y calidad de capas: no basta contar antenas; hay que mirar cuántos modos espaciales son fuertes.
+  </figcaption>
+</figure>
+<details class="example">
+<summary>Cálculo de la SVD de un canal 2×2</summary>
+<p>Procedimiento para obtener los valores singulares (<span class="arithmatex">\(\sigma_1\)</span>, <span class="arithmatex">\(\sigma_2\)</span>) y las direcciones (<span class="arithmatex">\(\mathbf{v}_1\)</span>, <span class="arithmatex">\(\mathbf{v}_2\)</span>) de un canal — los mismos que el ejemplo posterior usa como datos. Son cuatro pasos válidos para cualquier matriz, aplicados aquí a <span class="arithmatex">\(\mathbf{H} = \begin{pmatrix} 1 &amp; 0{,}5 \\ 0{,}5 &amp; 1 \end{pmatrix}\)</span>.</p>
+<p><strong>Paso 1.</strong> Formar <span class="arithmatex">\(\mathbf{H}^{\mathsf{H}}\mathbf{H}\)</span> (siempre sale simétrica). Esta <span class="arithmatex">\(\mathbf{H}\)</span> es real y simétrica, así que <span class="arithmatex">\(\mathbf{H}^{\mathsf{H}} = \mathbf{H}\)</span>:</p>
+<div class="arithmatex">\[\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1 &amp; 0{,}5 \\ 0{,}5 &amp; 1 \end{pmatrix}\begin{pmatrix} 1 &amp; 0{,}5 \\ 0{,}5 &amp; 1 \end{pmatrix} = \begin{pmatrix} 1 + 0{,}25 &amp; 0{,}5 + 0{,}5 \\ 0{,}5 + 0{,}5 &amp; 0{,}25 + 1 \end{pmatrix} = \begin{pmatrix} 1{,}25 &amp; 1 \\ 1 &amp; 1{,}25 \end{pmatrix}\]</div>
+<p><strong>Paso 2.</strong> Sus eigenvalores son los <span class="arithmatex">\(\sigma^2\)</span>:</p>
+<div class="arithmatex">\[\det(\mathbf{H}^{\mathsf{H}}\mathbf{H} - \lambda\mathbf{I}) = (1{,}25-\lambda)^2 - 1 = 0 \;\Rightarrow\; \lambda_1 = 2{,}25, \; \lambda_2 = 0{,}25\]</div>
+<div class="arithmatex">\[\sigma_1 = \sqrt{2{,}25} = 1{,}5, \qquad \sigma_2 = \sqrt{0{,}25} = 0{,}5\]</div>
+<p>¿Por qué la raíz cuadrada? Porque los eigenvalores de <span class="arithmatex">\(\mathbf{H}^{\mathsf{H}}\mathbf{H}\)</span> son <strong>energías</strong> de salida: si <span class="arithmatex">\(\mathbf{v}\)</span> es un eigenvector unitario con eigenvalor <span class="arithmatex">\(\lambda\)</span>, la energía que sale del canal al transmitir <span class="arithmatex">\(\mathbf{v}\)</span> es</p>
+<div class="arithmatex">\[\|\mathbf{H}\mathbf{v}\|^2 = \mathbf{v}^{\mathsf{H}}(\mathbf{H}^{\mathsf{H}}\mathbf{H})\mathbf{v} = \mathbf{v}^{\mathsf{H}}(\lambda\mathbf{v}) = \lambda\]</div>
+<p>Es decir: <span class="arithmatex">\(\lambda\)</span> vive en el mundo de la potencia y <span class="arithmatex">\(\sigma\)</span> en el de la amplitud, y la conversión entre ambos es el cuadrado — la misma relación que entre voltaje y potencia. La amplitud de salida es <span class="arithmatex">\(\|\mathbf{H}\mathbf{v}\| = \sqrt{\lambda} \equiv \sigma\)</span>. De paso, esto garantiza que la raíz siempre existe: <span class="arithmatex">\(\lambda = \|\mathbf{H}\mathbf{v}\|^2 \geq 0\)</span> por ser una norma al cuadrado.</p>
+<p><strong>Paso 3.</strong> Sus eigenvectores son las columnas de <span class="arithmatex">\(\mathbf{V}\)</span>:</p>
+<div class="arithmatex">\[(\mathbf{H}^{\mathsf{H}}\mathbf{H} - 2{,}25\,\mathbf{I})\,\mathbf{v} = \begin{pmatrix} -1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}\mathbf{v} = \mathbf{0} \;\Rightarrow\; \mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}\]</div>
+<p>y con <span class="arithmatex">\(\lambda_2 = 0{,}25\)</span> sale <span class="arithmatex">\(\mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}\)</span>.</p>
+<p><strong>Paso 4.</strong> Las columnas de <span class="arithmatex">\(\mathbf{U}\)</span>: <span class="arithmatex">\(\mathbf{u}_k = \mathbf{H}\mathbf{v}_k / \sigma_k\)</span>. Con los números:</p>
+<div class="arithmatex">\[\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \frac{1}{1{,}5} \cdot \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \cdot 1 + 0{,}5 \cdot 1 \\ 0{,}5 \cdot 1 + 1 \cdot 1 \end{pmatrix} = \frac{1}{1{,}5} \cdot \frac{1}{\sqrt{2}}\begin{pmatrix} 1{,}5 \\ 1{,}5 \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \mathbf{v}_1\]</div>
+<p>y análogamente <span class="arithmatex">\(\mathbf{u}_2 = \mathbf{H}\mathbf{v}_2/0{,}5 = \mathbf{v}_2\)</span>. Coinciden <strong>solo porque esta <span class="arithmatex">\(\mathbf{H}\)</span> es simétrica</strong>; en un canal general <span class="arithmatex">\(\mathbf{U} \neq \mathbf{V}\)</span>: las direcciones buenas de entrada y de salida son distintas (el segundo ejemplo de esta caja lo muestra).</p>
+<p><strong>Paso 5.</strong> Ensamblar las tres matrices de la ecuación (3). Cada <span class="arithmatex">\(\mathbf{v}_k\)</span> es una columna de <span class="arithmatex">\(\mathbf{V}\)</span> y cada <span class="arithmatex">\(\mathbf{u}_k\)</span> una columna de <span class="arithmatex">\(\mathbf{U}\)</span>. La matriz <span class="arithmatex">\(\mathbf{\Sigma}\)</span> se construye así: es una matriz con los valores singulares en la diagonal, <strong>ordenados de mayor a menor</strong> (<span class="arithmatex">\(\sigma_1 \geq \sigma_2\)</span>, la convención universal), y ceros en todo lo demás:</p>
+<div class="arithmatex">\[\mathbf{\Sigma} = \begin{pmatrix} \sigma_1 &amp; 0 \\ 0 &amp; \sigma_2 \end{pmatrix}\]</div>
+<p>Los ceros fuera de la diagonal no son relleno — son el mensaje central de la SVD: en las coordenadas de los subcanales <strong>nada se mezcla con nada</strong>; cada entrada <span class="arithmatex">\(\sigma_k\)</span> solo multiplica a su propio subcanal. El orden importa porque la posición define la pareja: <span class="arithmatex">\(\sigma_1\)</span> trabaja con la columna 1 de <span class="arithmatex">\(\mathbf{U}\)</span> y la columna 1 de <span class="arithmatex">\(\mathbf{V}\)</span> (el subcanal fuerte), <span class="arithmatex">\(\sigma_2\)</span> con las columnas 2 (el débil). Con los números:</p>
+<div class="arithmatex">\[\mathbf{V} = \begin{pmatrix} | &amp; | \\ \mathbf{v}_1 &amp; \mathbf{v}_2 \\ | &amp; | \end{pmatrix} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}, \qquad \mathbf{U} = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}, \qquad \mathbf{\Sigma} = \begin{pmatrix} 1{,}5 &amp; 0 \\ 0 &amp; 0{,}5 \end{pmatrix}\]</div>
+<p>El producto reconstruye el canal original:</p>
+<div class="arithmatex">\[\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}} = \frac{1}{2}\begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}\begin{pmatrix} 1{,}5 &amp; 0 \\ 0 &amp; 0{,}5 \end{pmatrix}\begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix} = \begin{pmatrix} 1 &amp; 0{,}5 \\ 0{,}5 &amp; 1 \end{pmatrix} = \mathbf{H} \;\checkmark\]</div>
+<p><strong>Verificación rápida sin ensamblar:</strong> <span class="arithmatex">\(\mathbf{H}\mathbf{v}_1 = 1{,}5\,\mathbf{v}_1\)</span> y <span class="arithmatex">\(\mathbf{H}\mathbf{v}_2 = 0{,}5\,\mathbf{v}_2\)</span>; basta comprobar los cuatro productos. En la práctica este cálculo lo realiza <code>numpy.linalg.svd(H)</code>.</p>
+<hr />
+<p><strong>El mismo procedimiento con un canal no simétrico.</strong> En el ejemplo anterior <span class="arithmatex">\(\mathbf{U} = \mathbf{V}\)</span> por la simetría de <span class="arithmatex">\(\mathbf{H}\)</span>; ese es el caso excepcional. Un canal típico tiene los cuatro acoplamientos no nulos y los cruzados desiguales:</p>
+<div class="arithmatex">\[\mathbf{H} = \begin{pmatrix} 1{,}2 &amp; 0{,}4 \\ 1{,}1 &amp; 1{,}2 \end{pmatrix}\]</div>
+<p>Caminos directos comparables (<span class="arithmatex">\(h_{11} = h_{22} = 1{,}2\)</span>) y acoplamientos cruzados distintos (<span class="arithmatex">\(h_{12} = 0{,}4 \neq h_{21} = 1{,}1\)</span>): sin simetría.</p>
+<p><em>Paso 1:</em></p>
+<div class="arithmatex">\[\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}2^2 + 1{,}1^2 &amp; 1{,}2 \cdot 0{,}4 + 1{,}1 \cdot 1{,}2 \\ 1{,}8 &amp; 0{,}4^2 + 1{,}2^2 \end{pmatrix} = \begin{pmatrix} 2{,}65 &amp; 1{,}8 \\ 1{,}8 &amp; 1{,}6 \end{pmatrix}\]</div>
+<p><em>Paso 2:</em> el polinomio característico es <span class="arithmatex">\(\lambda^2 - 4{,}25\,\lambda + 1 = 0\)</span> (traza <span class="arithmatex">\(= 2{,}65 + 1{,}6 = 4{,}25\)</span>; determinante <span class="arithmatex">\(= 2{,}65 \cdot 1{,}6 - 1{,}8^2 = 1\)</span>). El discriminante es <span class="arithmatex">\(4{,}25^2 - 4 = 14{,}0625 = 3{,}75^2\)</span>:</p>
+<div class="arithmatex">\[\lambda_1 = \frac{4{,}25 + 3{,}75}{2} = 4, \qquad \lambda_2 = \frac{4{,}25 - 3{,}75}{2} = 0{,}25 \;\Rightarrow\; \sigma_1 = 2, \; \sigma_2 = 0{,}5\]</div>
+<p><em>Paso 3:</em> se plantea <span class="arithmatex">\((\mathbf{H}^{\mathsf{H}}\mathbf{H} - \lambda\mathbf{I})\mathbf{v} = \mathbf{0}\)</span> para cada eigenvalor. Con <span class="arithmatex">\(\lambda_1 = 4\)</span>:</p>
+<div class="arithmatex">\[\mathbf{H}^{\mathsf{H}}\mathbf{H} - 4\mathbf{I} = \begin{pmatrix} 2{,}65 - 4 &amp; 1{,}8 \\ 1{,}8 &amp; 1{,}6 - 4 \end{pmatrix} = \begin{pmatrix} -1{,}35 &amp; 1{,}8 \\ 1{,}8 &amp; -2{,}4 \end{pmatrix}\]</div>
+<p>El vector buscado es la incógnita: se escribe <span class="arithmatex">\(\mathbf{v} = \binom{x}{y}\)</span> y se ejecuta la multiplicación matriz-vector del sistema <span class="arithmatex">\((\mathbf{H}^{\mathsf{H}}\mathbf{H} - 4\mathbf{I})\mathbf{v} = \mathbf{0}\)</span>, fila por fila:</p>
+<div class="arithmatex">\[\begin{pmatrix} -1{,}35 &amp; 1{,}8 \\ 1{,}8 &amp; -2{,}4 \end{pmatrix}\begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \;\Rightarrow\; \begin{cases} -1{,}35\,x + 1{,}8\,y = 0 &amp; \text{(fila 1)} \\ \;\;\,1{,}8\,x - 2{,}4\,y = 0 &amp; \text{(fila 2)} \end{cases}\]</div>
+<p>La fila 1 da <span class="arithmatex">\(-1{,}35\,x + 1{,}8\,y = 0 \Rightarrow y = 0{,}75\,x\)</span>: dirección <span class="arithmatex">\((4, 3)\)</span>, normalizada <span class="arithmatex">\(\mathbf{v}_1 = \binom{0{,}8}{0{,}6}\)</span>. (La fila 2, <span class="arithmatex">\(1{,}8\,x - 2{,}4\,y = 0\)</span>, da la misma recta — con <span class="arithmatex">\(\lambda\)</span> correcto las filas son proporcionales, así que basta una; si dieran rectas distintas, el eigenvalor está mal calculado.) Con <span class="arithmatex">\(\lambda_2 = 0{,}25\)</span>, la fila 1 da <span class="arithmatex">\(2{,}4\,x + 1{,}8\,y = 0 \Rightarrow\)</span> <span class="arithmatex">\(\mathbf{v}_2 = \binom{-0{,}6}{0{,}8}\)</span>.</p>
+<p><em>Paso 4:</em> primero la multiplicación <span class="arithmatex">\(\mathbf{H}\mathbf{v}_1\)</span>, fila por columna:</p>
+<div class="arithmatex">\[\mathbf{H}\mathbf{v}_1 = \begin{pmatrix} 1{,}2 &amp; 0{,}4 \\ 1{,}1 &amp; 1{,}2 \end{pmatrix}\begin{pmatrix} 0{,}8 \\ 0{,}6 \end{pmatrix} = \begin{pmatrix} 1{,}2 \cdot 0{,}8 + 0{,}4 \cdot 0{,}6 \\ 1{,}1 \cdot 0{,}8 + 1{,}2 \cdot 0{,}6 \end{pmatrix} = \begin{pmatrix} 0{,}96 + 0{,}24 \\ 0{,}88 + 0{,}72 \end{pmatrix} = \begin{pmatrix} 1{,}2 \\ 1{,}6 \end{pmatrix}\]</div>
+<p>Dividir entre <span class="arithmatex">\(\sigma_1 = 2\)</span> es dividir cada componente:</p>
+<div class="arithmatex">\[\mathbf{u}_1 = \frac{\mathbf{H}\mathbf{v}_1}{\sigma_1} = \begin{pmatrix} 1{,}2/2 \\ 1{,}6/2 \end{pmatrix} = \begin{pmatrix} 0{,}6 \\ 0{,}8 \end{pmatrix}\]</div>
+<p>Lo mismo con <span class="arithmatex">\(\mathbf{v}_2\)</span>:</p>
+<div class="arithmatex">\[\mathbf{H}\mathbf{v}_2 = \begin{pmatrix} 1{,}2 &amp; 0{,}4 \\ 1{,}1 &amp; 1{,}2 \end{pmatrix}\begin{pmatrix} -0{,}6 \\ 0{,}8 \end{pmatrix} = \begin{pmatrix} -0{,}72 + 0{,}32 \\ -0{,}66 + 0{,}96 \end{pmatrix} = \begin{pmatrix} -0{,}4 \\ 0{,}3 \end{pmatrix}, \qquad \mathbf{u}_2 = \begin{pmatrix} -0{,}4/0{,}5 \\ 0{,}3/0{,}5 \end{pmatrix} = \begin{pmatrix} -0{,}8 \\ 0{,}6 \end{pmatrix}\]</div>
+<div class="arithmatex">\[\mathbf{U} = \begin{pmatrix} 0{,}6 &amp; -0{,}8 \\ 0{,}8 &amp; 0{,}6 \end{pmatrix} \neq \mathbf{V} = \begin{pmatrix} 0{,}8 &amp; -0{,}6 \\ 0{,}6 &amp; 0{,}8 \end{pmatrix}\]</div>
+<p><em>Paso 5:</em> reconstruir <span class="arithmatex">\(\mathbf{H} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}\)</span> multiplicando de izquierda a derecha. Primer producto, <span class="arithmatex">\(\mathbf{U}\mathbf{\Sigma}\)</span> — multiplicar por una matriz diagonal escala cada <strong>columna</strong>: la columna 1 de <span class="arithmatex">\(\mathbf{U}\)</span> por <span class="arithmatex">\(\sigma_1 = 2\)</span> y la columna 2 por <span class="arithmatex">\(\sigma_2 = 0{,}5\)</span>:</p>
+<div class="arithmatex">\[\mathbf{U}\mathbf{\Sigma} = \begin{pmatrix} 0{,}6 &amp; -0{,}8 \\ 0{,}8 &amp; 0{,}6 \end{pmatrix}\begin{pmatrix} 2 &amp; 0 \\ 0 &amp; 0{,}5 \end{pmatrix} = \begin{pmatrix} 0{,}6 \cdot 2 &amp; -0{,}8 \cdot 0{,}5 \\ 0{,}8 \cdot 2 &amp; 0{,}6 \cdot 0{,}5 \end{pmatrix} = \begin{pmatrix} 1{,}2 &amp; -0{,}4 \\ 1{,}6 &amp; 0{,}3 \end{pmatrix}\]</div>
+<p>Segundo ingrediente, <span class="arithmatex">\(\mathbf{V}^{\mathsf{H}}\)</span>: como esta <span class="arithmatex">\(\mathbf{V}\)</span> es real, conjugar no hace nada y solo se transpone (filas ↔ columnas):</p>
+<div class="arithmatex">\[\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 0{,}8 &amp; -0{,}6 \\ 0{,}6 &amp; 0{,}8 \end{pmatrix}^{\mathsf{T}} = \begin{pmatrix} 0{,}8 &amp; 0{,}6 \\ -0{,}6 &amp; 0{,}8 \end{pmatrix}\]</div>
+<p>Producto final, fila por columna con las sumas a la vista:</p>
+<div class="arithmatex">\[(\mathbf{U}\mathbf{\Sigma})\mathbf{V}^{\mathsf{H}} = \begin{pmatrix} 1{,}2 &amp; -0{,}4 \\ 1{,}6 &amp; 0{,}3 \end{pmatrix}\begin{pmatrix} 0{,}8 &amp; 0{,}6 \\ -0{,}6 &amp; 0{,}8 \end{pmatrix} = \begin{pmatrix} 0{,}96 + 0{,}24 &amp; 0{,}72 - 0{,}32 \\ 1{,}28 - 0{,}18 &amp; 0{,}96 + 0{,}24 \end{pmatrix} = \begin{pmatrix} 1{,}2 &amp; 0{,}4 \\ 1{,}1 &amp; 1{,}2 \end{pmatrix} = \mathbf{H} \;\checkmark\]</div>
+<p>(También cuadra <span class="arithmatex">\(\det \mathbf{H} = 1{,}44 - 0{,}44 = 1 = \sigma_1\sigma_2\)</span>.)</p>
+<p>La lectura: el mejor patrón de entrada es <span class="arithmatex">\(\mathbf{v}_1 = (0{,}8;\, 0{,}6)\)</span> — más peso en TX<span class="arithmatex">\(_1\)</span> — pero la señal llega al receptor como <span class="arithmatex">\(\mathbf{u}_1 = (0{,}6;\, 0{,}8)\)</span> — más peso en RX<span class="arithmatex">\(_2\)</span>. El canal rotó la dirección al atravesarlo; por eso la SVD lleva dos juegos de direcciones: el transmisor alinea con <span class="arithmatex">\(\mathbf{v}_k\)</span> y el receptor proyecta sobre <span class="arithmatex">\(\mathbf{u}_k\)</span>. Nota práctica: los eigenvectores están definidos salvo signo — <code>numpy</code> puede devolver <span class="arithmatex">\(\mathbf{v}_2\)</span> y <span class="arithmatex">\(\mathbf{u}_2\)</span> con ambos signos invertidos; el producto <span class="arithmatex">\(\mathbf{U}\mathbf{\Sigma}\mathbf{V}^{\mathsf{H}}\)</span> no cambia.</p>
+</details>
+<details class="example">
+<summary>Ejemplo mínimo: canal 2×2 bien y mal condicionado</summary>
+<p><strong>Canal A — acoplamiento cruzado moderado:</strong></p>
+<div class="arithmatex">\[\mathbf{H}_A = \begin{pmatrix} 1 &amp; 0{,}5 \\ 0{,}5 &amp; 1 \end{pmatrix}\]</div>
+<p>Sus direcciones naturales son la señal en fase y en contrafase:</p>
+<div class="arithmatex">\[\mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ 1 \end{pmatrix}, \qquad \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 \\ -1 \end{pmatrix}\]</div>
+<p>En fase, el camino cruzado suma al directo: <span class="arithmatex">\(\sigma_1 = 1 + 0{,}5 = 1{,}5\)</span>. En contrafase, resta: <span class="arithmatex">\(\sigma_2 = 1 - 0{,}5 = 0{,}5\)</span>. Las ganancias por modo son <span class="arithmatex">\(\sigma_1^2 = 2{,}25\)</span> y <span class="arithmatex">\(\sigma_2^2 = 0{,}25\)</span>, y el condicionamiento:</p>
+<div class="arithmatex">\[\kappa_A = \frac{\sigma_1}{\sigma_2} = \frac{1{,}5}{0{,}5} = 3\]</div>
+<p>Según la regla rápida de arriba: canal dócil. Rank 2 utilizable si el SNR acompaña.</p>
+<p><strong>Canal B — acoplamiento cruzado fuerte (las antenas casi se copian):</strong></p>
+<div class="arithmatex">\[\mathbf{H}_B = \begin{pmatrix} 1 &amp; 0{,}9 \\ 0{,}9 &amp; 1 \end{pmatrix}\]</div>
+<p>Mismas direcciones naturales (la matriz sigue siendo simétrica), pero ahora:</p>
+<div class="arithmatex">\[\sigma_1 = 1 + 0{,}9 = 1{,}9, \qquad \sigma_2 = 1 - 0{,}9 = 0{,}1, \qquad \kappa_B = \frac{1{,}9}{0{,}1} = 19\]</div>
+<p>Ganancias por modo: <span class="arithmatex">\(\sigma_1^2 = 3{,}61\)</span> contra <span class="arithmatex">\(\sigma_2^2 = 0{,}01\)</span> — el segundo modo transporta <strong>361 veces menos</strong> energía que el primero.</p>
+<p>La razón física del deterioro: con acoplamiento 0,9, las dos antenas receptoras escuchan <strong>casi la misma mezcla</strong> — la información que las distingue vive en la pequeña diferencia entre sus señales. Separar dos capas ahí obliga a restar cantidades casi iguales (<span class="arithmatex">\(\sigma_2 = 1 - 0{,}9\)</span> es literalmente esa resta), y una diferencia tan pequeña queda al nivel del ruido. Ese es el sentido operativo de "mal condicionado": la información de la segunda capa existe, pero llega escondida en una diferencia diminuta que cualquier error entierra.</p>
+<p>La misma situación, vista geométricamente: las columnas de <span class="arithmatex">\(\mathbf{H}_B\)</span> son las firmas espaciales de cada antena transmisora, <span class="arithmatex">\(\binom{1}{0{,}9}\)</span> y <span class="arithmatex">\(\binom{0{,}9}{1}\)</span> — dos vectores <strong>casi paralelos</strong>. Casi paralelos significa casi linealmente dependientes: la matriz está a un paso de ser rank 1. En el canal A las columnas <span class="arithmatex">\(\binom{1}{0{,}5}\)</span> y <span class="arithmatex">\(\binom{0{,}5}{1}\)</span> se separan con un ángulo mucho mayor. Un canal bien condicionado es uno cuyas antenas transmisoras dejan huellas claramente distinguibles en el receptor; en <span class="arithmatex">\(\mathbf{H}_B\)</span> las dos huellas casi coinciden.</p>
+<p><strong>Lectura conjunta:</strong> ambos canales tienen rank algebraico 2 (ningún determinante es cero), pero sus destinos son opuestos. El canal A multiplexa 2 capas con SNR razonable; el canal B tiene un segundo modo tan hundido que forzar 2 capas es pagar BER — en la práctica se opera con rank 1. <strong>El rank cuenta los modos; κ dice si valen algo.</strong></p>
+<p>El precio exacto de ignorar κ lo calcula el ejemplo de ZF en §5.1: separar las capas del canal A multiplica el ruido por 2,22; hacerlo con el canal B lo multiplica por 50.</p>
+<p>Chequeo de energía para ambos (la norma de Frobenius siempre reparte entre modos):</p>
+<div class="arithmatex">\[\|\mathbf{H}_A\|_F^2 = 1 + 0{,}25 + 0{,}25 + 1 = 2{,}5 = 2{,}25 + 0{,}25 \;\checkmark\]</div>
+<div class="arithmatex">\[\|\mathbf{H}_B\|_F^2 = 1 + 0{,}81 + 0{,}81 + 1 = 3{,}62 = 3{,}61 + 0{,}01 \;\checkmark\]</div>
+<p>Nótese que el canal B tiene <strong>más</strong> energía total que el A — y aun así es peor para multiplexar. Energía no es lo mismo que grados de libertad: en B casi toda la energía cae en un solo modo.</p>
+</details>
+<h3 id="4-diversidad-beamforming-y-multiplexacion">4. Diversidad, beamforming y multiplexación</h3>
+<p>Ahora podemos formular la decisión central. Con grados de libertad espaciales, ¿qué se optimiza?</p>
+<table>
+<thead>
+<tr>
+<th>Modo de uso</th>
+<th>Qué transmite</th>
+<th>Cuándo conviene</th>
+<th>Riesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diversidad</td>
+<td>Misma información por caminos independientes</td>
+<td>Cobertura, baja SNR, enlace crítico</td>
+<td>No aumenta throughput por capas</td>
+</tr>
+<tr>
+<td>Beamforming</td>
+<td>Señal alineada en fase hacia un usuario/dirección</td>
+<td>Cobertura DL, FR2, UEs simples</td>
+<td>Requiere CSI o búsqueda de haz</td>
+</tr>
+<tr>
+<td>Multiplexación espacial</td>
+<td>Capas distintas simultáneas</td>
+<td>Alto SNR y buen rank</td>
+<td>BER alta si el canal está mal condicionado</td>
+</tr>
+</tbody>
+</table>
+<p>Las tres filas de la tabla compiten por las mismas antenas: cada grado de libertad gastado en enviar una capa extra es un grado de libertad que ya no protege a las capas restantes. La teoría clásica del <em>Diversity-Multiplexing Tradeoff</em> (DMT, compromiso diversidad-multiplexación) cuantifica este conflicto con dos números:</p>
+<ul>
+<li><span class="arithmatex">\(r\)</span> = <strong>ganancia de multiplexación</strong>: cuántas capas simultáneas efectivas transporta el sistema — cómo escala el throughput cuando sube el SNR;</li>
+<li><span class="arithmatex">\(d\)</span> = <strong>ganancia de diversidad</strong>: cuántos caminos independientes protegen cada capa — qué tan rápido cae la probabilidad de error al subir el SNR (BER <span class="arithmatex">\(\propto \text{SNR}^{-d}\)</span>: a mayor <span class="arithmatex">\(d\)</span>, la curva de error cae más en picada).</li>
+</ul>
+<p>Para un canal <span class="arithmatex">\(N_t \times N_r\)</span> i.i.d. Rayleigh, el mejor par <span class="arithmatex">\((r, d)\)</span> alcanzable es:</p>
+<div class="arithmatex">\[d^{\text{opt}}(r) = (N_t-r)(N_r-r), \quad r \in \{0,1,\ldots,\min(N_t,N_r)\} \tag{4}\]</div>
+<p>Notación: <span class="arithmatex">\(d^{\text{opt}}(r)\)</span> es una función, como <span class="arithmatex">\(f(x)\)</span> — se elige <span class="arithmatex">\(r\)</span> (cuántas capas) y la fórmula devuelve la mejor diversidad alcanzable con esa elección. En la literatura esta misma función se escribe <span class="arithmatex">\(d^*(r)\)</span>, con el asterisco denotando "óptimo"; conviene reconocer ambas formas.</p>
+<p>La lectura práctica no es memorizar el límite, sino la pendiente del compromiso: cada capa adicional (sube <span class="arithmatex">\(r\)</span>) resta caminos de protección (baja <span class="arithmatex">\(d\)</span>). No se puede tener el máximo de ambos a la vez.</p>
+<details class="example">
+<summary>DMT evaluada para un canal 2×2</summary>
+<p>Con <span class="arithmatex">\(N_t = N_r = 2\)</span>, la fórmula (4) da exactamente tres opciones. Se elige <span class="arithmatex">\(r\)</span> y se sustituye:</p>
+<table>
+<thead>
+<tr>
+<th>Evaluación de la función</th>
+<th>Interpretación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(d^{\text{opt}}(0) = (2-0)(2-0) = 4\)</span></td>
+<td>Se eligen 0 capas extra → protección máxima: las 4 combinaciones TX–RX protegen el mismo símbolo. BER cae como <span class="arithmatex">\(\text{SNR}^{-4}\)</span> (el régimen de Alamouti, §4)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(d^{\text{opt}}(1) = (2-1)(2-1) = 1\)</span></td>
+<td>Una capa → protección modesta: BER cae como <span class="arithmatex">\(\text{SNR}^{-1}\)</span>, igual que un SISO</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(d^{\text{opt}}(2) = (2-2)(2-2) = 0\)</span></td>
+<td>Dos capas → protección agotada: throughput máximo, cada capa queda expuesta a su propio fading</td>
+</tr>
+</tbody>
+</table>
+<p>Las opciones son discretas y no hay punto intermedio gratuito: pasar de <span class="arithmatex">\(r=0\)</span> a <span class="arithmatex">\(r=2\)</span> cuesta toda la diversidad. La fila intermedia describe una decisión real de red: transmitir 1 capa con beamforming no desperdicia la segunda antena — la convierte en protección o ganancia en lugar de throughput.</p>
+</details>
+<table>
+<thead>
+<tr>
+<th>Si el sistema ve...</th>
+<th>Acción razonable</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SNR baja o borde de celda</td>
+<td>Rank bajo + beamforming/diversidad</td>
+<td>Primero cerrar enlace</td>
+</tr>
+<tr>
+<td>SNR alta y valores singulares equilibrados</td>
+<td>Subir rank</td>
+<td>El canal soporta capas</td>
+</tr>
+<tr>
+<td>Segundo valor singular muy débil</td>
+<td>Bajar rank o usar más codificación</td>
+<td>La capa extra cuesta demasiada BER</td>
+</tr>
+<tr>
+<td>Usuarios casi ortogonales</td>
+<td>MU-MIMO simultáneo</td>
+<td>La interferencia espacial es baja</td>
+</tr>
+<tr>
+<td>Usuarios casi paralelos</td>
+<td>Scheduler o ZF/RZF con cuidado</td>
+<td>Separarlos cuesta potencia y ruido</td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>Alamouti: diversidad plena sin CSIT</summary>
+<p><strong>Diversidad plena</strong>: cada símbolo viaja por <em>todos</em> los caminos disponibles (aquí 2), el máximo posible — el enlace solo falla si todos los caminos fallan a la vez. <strong>Sin CSIT</strong>: el transmisor lo logra sin conocer el canal — no hay feedback ni pilotos de regreso; solo el receptor conoce <span class="arithmatex">\(h_1\)</span> y <span class="arithmatex">\(h_2\)</span> (CSIR, que obtiene de los pilotos de bajada).</p>
+<p><strong>Escenario y notación.</strong> Dos antenas transmisoras, una receptora. <span class="arithmatex">\(h_1\)</span> es el canal de la antena TX 1 a la antena RX; <span class="arithmatex">\(h_2\)</span>, el de la TX 2. Son números <strong>complejos</strong>: su magnitud dice cuánto se atenúa el camino y su fase cuánto se desfasa. Notación que aparece en todo el desarrollo:</p>
+<ul>
+<li><span class="arithmatex">\(s^*\)</span> = <strong>conjugado complejo</strong> de <span class="arithmatex">\(s\)</span>: mismo número con la fase invertida (<span class="arithmatex">\(a + jb \mapsto a - jb\)</span>). Ojo: este asterisco no es el "óptimo" de la ecuación (4) — colisión de notación desafortunada pero universal en la literatura.</li>
+<li><span class="arithmatex">\(|h|^2 = h^*h\)</span> = magnitud al cuadrado: la <strong>ganancia de potencia</strong> del camino. Siempre real y positiva — conjugar y multiplicar elimina la fase.</li>
+<li><span class="arithmatex">\(\hat{s}\)</span> (con sombrero) = <strong>estimación</strong> de <span class="arithmatex">\(s\)</span>: lo que el receptor reconstruye, distinto del <span class="arithmatex">\(s\)</span> verdadero porque lleva ruido.</li>
+<li><span class="arithmatex">\(n_1, n_2\)</span> = ruido que la antena receptora suma en cada tiempo de símbolo.</li>
+</ul>
+<p><strong>La estrategia.</strong> Se quieren enviar dos símbolos de datos, <span class="arithmatex">\(s_1\)</span> y <span class="arithmatex">\(s_2\)</span>, usando dos tiempos de símbolo consecutivos (no confundir con el <em>slot</em> de LTE/5G, que agrupa muchos símbolos). El código dicta qué transmite cada antena en cada tiempo:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Antena TX 1</th>
+<th>Antena TX 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tiempo de símbolo 1</td>
+<td><span class="arithmatex">\(s_1\)</span></td>
+<td><span class="arithmatex">\(s_2\)</span></td>
+</tr>
+<tr>
+<td>Tiempo de símbolo 2</td>
+<td><span class="arithmatex">\(-s_2^*\)</span></td>
+<td><span class="arithmatex">\(s_1^*\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>En el tiempo 1 se transmiten los símbolos tal cual; en el tiempo 2 se retransmiten <strong>intercambiados, conjugados y con un signo cambiado</strong> — el patrón está elegido a la medida de una cancelación que el desarrollo siguiente muestra.</p>
+<p><strong>Lo que llega al receptor.</strong> El aire suma linealmente lo que ambas antenas emiten, cada una filtrada por su camino. En el tiempo de símbolo 1, la antena TX 1 emite <span class="arithmatex">\(s_1\)</span> (llega como <span class="arithmatex">\(h_1 s_1\)</span>) y la TX 2 emite <span class="arithmatex">\(s_2\)</span> (llega como <span class="arithmatex">\(h_2 s_2\)</span>); el receptor captura la suma más su ruido:</p>
+<div class="arithmatex">\[r_1 = h_1 s_1 + h_2 s_2 + n_1\]</div>
+<p>En el tiempo de símbolo 2, la TX 1 emite <span class="arithmatex">\(-s_2^*\)</span> y la TX 2 emite <span class="arithmatex">\(s_1^*\)</span>; con los <strong>mismos</strong> <span class="arithmatex">\(h_1, h_2\)</span> (el canal no cambió: dos tiempos de símbolo caben de sobra dentro del tiempo de coherencia):</p>
+<div class="arithmatex">\[r_2 = -h_1 s_2^* + h_2 s_1^* + n_2\]</div>
+<p>Hasta aquí el receptor tiene dos ecuaciones (<span class="arithmatex">\(r_1\)</span>, <span class="arithmatex">\(r_2\)</span>) y dos incógnitas (<span class="arithmatex">\(s_1\)</span>, <span class="arithmatex">\(s_2\)</span>) — un sistema mezclado, como cualquier canal MIMO.</p>
+<p><strong>Combinación en el receptor.</strong> El receptor conoce <span class="arithmatex">\(h_1\)</span> y <span class="arithmatex">\(h_2\)</span> y quiere extraer <span class="arithmatex">\(s_1\)</span>. La regla que genera los pesos es el <strong>filtro adaptado</strong> (<em>matched filter</em>): cada copia recibida de <span class="arithmatex">\(s_1\)</span> se multiplica por el <strong>conjugado del coeficiente que la acompaña</strong>. Multiplicar <span class="arithmatex">\(h\,s_1\)</span> por <span class="arithmatex">\(h^*\)</span> produce <span class="arithmatex">\(|h|^2 s_1\)</span> — un número real y positivo por <span class="arithmatex">\(s_1\)</span>: la fase del camino queda cancelada y la copia queda alineada. Copias alineadas se suman constructivamente; sin alinear las fases, dos copias pueden llegar en contrafase y destruirse.</p>
+<p>Aplicando la regla: en <span class="arithmatex">\(r_1\)</span>, el símbolo <span class="arithmatex">\(s_1\)</span> viene acompañado de <span class="arithmatex">\(h_1\)</span> → peso <span class="arithmatex">\(h_1^*\)</span>. En <span class="arithmatex">\(r_2^*\)</span> (se verá abajo), <span class="arithmatex">\(s_1\)</span> viene acompañado de <span class="arithmatex">\(h_2^*\)</span> → peso <span class="arithmatex">\((h_2^*)^* = h_2\)</span>. De ahí, y de la regla análoga para <span class="arithmatex">\(s_2\)</span>:</p>
+<div class="arithmatex">\[\hat{s}_1 = h_1^* r_1 + h_2 r_2^*, \qquad \hat{s}_2 = h_2^* r_1 - h_1 r_2^*\]</div>
+<p>Esta técnica de alinear-y-sumar es la combinación de razón máxima (MRC, <em>maximum ratio combining</em>), y reaparece en §5.2: el precoder MRT es la misma idea aplicada en el transmisor.</p>
+<p>Desarrollo completo para <span class="arithmatex">\(\hat{s}_1\)</span>. Se necesita <span class="arithmatex">\(r_2^*\)</span>: conjugar una suma es conjugar cada término, conjugar un producto es conjugar cada factor, y <span class="arithmatex">\((s^*)^* = s\)</span>:</p>
+<div class="arithmatex">\[r_2^* = (-h_1 s_2^* + h_2 s_1^* + n_2)^* = -h_1^* s_2 + h_2^* s_1 + n_2^*\]</div>
+<p>Primer ingrediente — multiplicar <span class="arithmatex">\(r_1\)</span> por <span class="arithmatex">\(h_1^*\)</span>, término a término (usando <span class="arithmatex">\(h_1^* h_1 = |h_1|^2\)</span>):</p>
+<div class="arithmatex">\[h_1^* r_1 = h_1^* h_1 s_1 + h_1^* h_2 s_2 + h_1^* n_1 = |h_1|^2 s_1 + \underline{h_1^* h_2\, s_2} + h_1^* n_1\]</div>
+<p>Segundo ingrediente — multiplicar <span class="arithmatex">\(r_2^*\)</span> por <span class="arithmatex">\(h_2\)</span> (usando <span class="arithmatex">\(h_2 h_2^* = |h_2|^2\)</span>):</p>
+<div class="arithmatex">\[h_2 r_2^* = -h_1^* h_2 s_2 + h_2 h_2^* s_1 + h_2 n_2^* = \underline{-h_1^* h_2\, s_2} + |h_2|^2 s_1 + h_2 n_2^*\]</div>
+<p>Los términos subrayados son el mismo número con signo opuesto. Al sumar los dos ingredientes, <span class="arithmatex">\(s_2\)</span> desaparece <strong>exactamente</strong> — sin aproximación, para cualquier valor de <span class="arithmatex">\(h_1\)</span> y <span class="arithmatex">\(h_2\)</span>:</p>
+<div class="arithmatex">\[\hat{s}_1 = (|h_1|^2 + |h_2|^2)\, s_1 + \tilde{n}_1\]</div>
+<p>donde <span class="arithmatex">\(\tilde{n}_1 = h_1^* n_1 + h_2 n_2^*\)</span> agrupa el ruido combinado — una suma de gaussianas sigue siendo gaussiana, con potencia <span class="arithmatex">\((|h_1|^2 + |h_2|^2)N_0\)</span>: crece con la misma constante que multiplica a <span class="arithmatex">\(s_1\)</span>, así que la relación señal-ruido resultante es la suma de las SNR de ambos caminos. El desarrollo simétrico con los pesos de <span class="arithmatex">\(\hat{s}_2\)</span> elimina <span class="arithmatex">\(s_1\)</span> y entrega <span class="arithmatex">\(\hat{s}_2 = (|h_1|^2 + |h_2|^2)\, s_2 + \tilde{n}_2\)</span>.</p>
+<p><strong>Por qué el patrón de la tabla es ese y no otro.</strong> El <span class="arithmatex">\(-s_2^*\)</span> y el <span class="arithmatex">\(s_1^*\)</span> del segundo tiempo de símbolo se eligieron <em>hacia atrás</em>, desde la cancelación: son la única combinación de intercambio, conjugados y signos que hace que los términos cruzados salgan iguales y opuestos <strong>sin que el transmisor conozca <span class="arithmatex">\(h_1\)</span> ni <span class="arithmatex">\(h_2\)</span></strong>. Ahí está el "sin CSIT" del título: la cancelación la ejecuta el receptor con su conocimiento del canal; el transmisor solo sigue una plantilla fija.</p>
+<p><strong>Lectura del resultado.</strong> Cada símbolo llega escalado por <span class="arithmatex">\(|h_1|^2 + |h_2|^2\)</span>: la suma de las ganancias de potencia de <strong>ambos</strong> caminos. Si un camino se desvanece (<span class="arithmatex">\(h_1 \approx 0\)</span>), el otro sostiene el enlace — la detección solo falla si ambos caen a la vez. Eso es diversidad de orden 2, la máxima con 2 antenas TX y 1 RX: "plena".</p>
+<p><strong>El precio.</strong> Dos tiempos de símbolo para entregar dos símbolos: tasa 1 símbolo por tiempo, exactamente igual que una sola antena. Alamouti no multiplexa — gasta el grado de libertad espacial completo en protección (<span class="arithmatex">\(r = 0\)</span> en el lenguaje del DMT). Para un enlace crítico en borde de celda, esa robustez puede valer más que una capa adicional.</p>
+</details>
+<figure>
+  <img alt="Curva DMT para sistemas 2×2, 4×4" src="figures/mimo-dmt.png" />
+<br />
+<!-- generada por celda 8 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 5.</strong> Curva DMT para sistemas <span class="arithmatex">\(2\times2\)</span> y <span class="arithmatex">\(4\times4\)</span>. En operación real se traduce como rank adaptation: el sistema sube capas cuando el canal y el SNR lo permiten, y baja capas cuando necesita robustez.
+  </figcaption>
+</figure>
+<h3 id="5-deteccion-y-precodificacion-que-se-implementan">5. Detección y precodificación que se implementan</h3>
+<p>Una vez elegido el uso del espacio, aparece el bloque de procesamiento: ¿quién separa la mezcla? ¿El receptor, el transmisor o ambos?</p>
+<h4 id="51-deteccion-en-el-receptor">5.1 Detección en el receptor</h4>
+<p>Si el transmisor no conoce <span class="arithmatex">\(\mathbf{H}\)</span>, envía flujos y el receptor separa:</p>
+<div class="arithmatex">\[\mathbf{y} = \mathbf{H}\mathbf{x} + \mathbf{n}\]</div>
+<table>
+<thead>
+<tr>
+<th>Detector</th>
+<th>Idea</th>
+<th>Ventaja</th>
+<th>Costo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZF</td>
+<td>Invertir el canal con <span class="arithmatex">\(\mathbf{H}^+\)</span></td>
+<td>Cancela interferencia entre capas</td>
+<td>Amplifica ruido si <span class="arithmatex">\(\mathbf{H}\)</span> está mal condicionada</td>
+</tr>
+<tr>
+<td>MMSE</td>
+<td>Invertir con regularización</td>
+<td>Balancea ruido e interferencia</td>
+<td>Requiere estimar SNR/ruido</td>
+</tr>
+<tr>
+<td>SIC / V-BLAST</td>
+<td>Detectar una capa, restarla y repetir</td>
+<td>Mejor que lineal puro</td>
+<td>Propagación de errores y ordenamiento</td>
+</tr>
+<tr>
+<td>ML</td>
+<td>Probar combinaciones de símbolos</td>
+<td>Óptimo</td>
+<td>Costo exponencial con <span class="arithmatex">\(N_t\)</span></td>
+</tr>
+</tbody>
+</table>
+<details class="example">
+<summary>Por qué ZF amplifica ruido</summary>
+<p>En el canal A del ejemplo de §3.1 (<span class="arithmatex">\(\kappa = 3\)</span>):</p>
+<div class="arithmatex">\[\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}25 &amp; 1 \\ 1 &amp; 1{,}25 \end{pmatrix}\]</div>
+<p>Para invertirla se usa la regla de la inversa 2×2 — intercambiar la diagonal, cambiar el signo de la antidiagonal y dividir todo entre el determinante:</p>
+<div class="arithmatex">\[\begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}^{-1} = \frac{1}{ad - bc}\begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}\]</div>
+<p>Con <span class="arithmatex">\(\det = 1{,}25^2 - 1^2 = 0{,}5625\)</span>:</p>
+<div class="arithmatex">\[(\mathbf{H}^{\mathsf{H}}\mathbf{H})^{-1} = \frac{1}{0{,}5625}\begin{pmatrix} 1{,}25 &amp; -1 \\ -1 &amp; 1{,}25 \end{pmatrix}\]</div>
+<p>La diagonal vale <span class="arithmatex">\(1{,}25/0{,}5625 \approx 2{,}22\)</span>. ZF elimina interferencia, pero multiplica el ruido de cada flujo por 2,22.</p>
+<p>Ahora el canal B del mismo ejemplo (<span class="arithmatex">\(\kappa = 19\)</span>): la misma cuenta da</p>
+<div class="arithmatex">\[\mathbf{H}^{\mathsf{H}}\mathbf{H} = \begin{pmatrix} 1{,}81 &amp; 1{,}8 \\ 1{,}8 &amp; 1{,}81 \end{pmatrix}, \qquad \det = 1{,}81^2 - 1{,}8^2 = 0{,}0361\]</div>
+<p>y la diagonal de la inversa vale <span class="arithmatex">\(1{,}81/0{,}0361 \approx 50\)</span>. <strong>El ruido de cada flujo se multiplica por 50.</strong> Ahí está el condicionamiento convertido en número: κ pasó de 3 a 19 y el precio de invertir pasó de ×2,22 a ×50 — crece como <span class="arithmatex">\(1/\sigma_2^2\)</span>, el modo débil manda. Esa es la razón operativa para preferir MMSE cuando el SNR no es alto o el canal está mal condicionado.</p>
+</details>
+<figure>
+  <img alt="BER de detectores ZF, MMSE y ML en canal 2×2" src="figures/mimo-detectors.png" />
+<br />
+<!-- generada por celda "Figura 4b" de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 6.</strong> BER de detectores ZF, MMSE y ML en un canal <span class="arithmatex">\(2\times2\)</span> con QPSK. La curva ilustra una decisión implementativa: ZF es barato pero paga ruido; MMSE suele ser el detector lineal práctico; ML sirve como referencia óptima pero no escala bien.
+  </figcaption>
+</figure>
+<h4 id="52-precodificacion-en-la-estacion-base">5.2 Precodificación en la estación base</h4>
+<p>En MU-MIMO downlink, la BS tiene <span class="arithmatex">\(M\)</span> antenas y sirve a <span class="arithmatex">\(K\)</span> usuarios:</p>
+<div class="arithmatex">\[\mathbf{y} = \mathbf{H}\mathbf{W}\mathbf{s} + \mathbf{n} \tag{5}\]</div>
+<p>El usuario <span class="arithmatex">\(k\)</span> recibe:</p>
+<div class="arithmatex">\[y_k = \mathbf{h}_k^{\mathsf{H}}\mathbf{w}_ks_k + \sum_{j\neq k}\mathbf{h}_k^{\mathsf{H}}\mathbf{w}_js_j + n_k \tag{6}\]</div>
+<p>La matriz <span class="arithmatex">\(\mathbf{W}\)</span> decide cuánta energía va al usuario deseado y cuánta interferencia cae sobre los demás. Los tres precodificadores clásicos son tres respuestas distintas a ese dilema:</p>
+<ul>
+<li><strong>MRT</strong> (<em>Maximum Ratio Transmission</em>, transmisión de razón máxima): apunta toda la potencia alineada con el canal de cada usuario, ignorando a los demás. Es el filtro adaptado aplicado en el transmisor — la misma regla de alinear-y-sumar del combinador de Alamouti (§4), ahora del lado TX: pesos = conjugado del canal. Maximiza la señal deseada; no hace nada contra la interferencia.</li>
+<li><strong>ZF</strong> (<em>Zero Forcing</em>, forzado a cero): invierte el canal para que cada usuario reciba su señal con interferencia <strong>exactamente cero</strong> — pone un nulo espacial hacia cada usuario ajeno. Es la misma álgebra del detector ZF de §5.1, movida al transmisor; y paga el mismo precio: si los canales de los usuarios son casi paralelos, invertir cuesta potencia y amplifica errores.</li>
+<li><strong>RZF/MMSE</strong> (<em>Regularized ZF / Minimum Mean Square Error</em>): ZF con un término de regularización que suaviza la inversión — cancela interferencia solo hasta donde el ruido lo justifica. Interpola entre los dos extremos: a SNR baja se comporta como MRT (el ruido domina, no vale la pena forzar nulos), a SNR alta como ZF (la interferencia domina, los nulos pagan).</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Precoder</th>
+<th>Fórmula base</th>
+<th>Cuándo usarlo</th>
+<th>Costo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MRT</td>
+<td><span class="arithmatex">\(\mathbf{W}\propto \mathbf{H}^{\mathsf{H}}\)</span></td>
+<td>SNR baja, <span class="arithmatex">\(M/K\)</span> grande, canales casi ortogonales</td>
+<td>No cancela interferencia</td>
+</tr>
+<tr>
+<td>ZF</td>
+<td><span class="arithmatex">\(\mathbf{W}=\mathbf{H}^{\mathsf{H}}(\mathbf{H}\mathbf{H}^{\mathsf{H}})^{-1}\)</span></td>
+<td>Interferencia dominante, SNR alta, <span class="arithmatex">\(M\geq K\)</span></td>
+<td>Amplifica ruido y pierde potencia si canales son paralelos</td>
+</tr>
+<tr>
+<td>RZF/MMSE</td>
+<td>ZF regularizado</td>
+<td>Caso práctico general</td>
+<td>Necesita regularización y estimación de ruido</td>
+</tr>
+</tbody>
+</table>
+<figure>
+  <img alt="BER de MRT vs ZF para K=4 usuarios" src="figures/mimo-mrt-zf.png" />
+<br />
+<!-- generada por celda 10 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 7.</strong> BER de MRT y ZF para <span class="arithmatex">\(M=8\)</span>, <span class="arithmatex">\(K=4\)</span>. A baja SNR, torcer haces con ZF no siempre compensa. A mayor SNR, MRT satura por interferencia y ZF cae sin piso. Esta es una decisión de diseño, no una preferencia estética.
+  </figcaption>
+</figure>
+<p>La dualidad es importante: ZF/MMSE aparecen tanto en receptor como en transmisor. Es la misma álgebra vista desde lados distintos. La decisión depende de dónde está el CSI, quién tiene capacidad de cómputo y qué extremo puede coordinarse.</p>
+<h3 id="6-rank-adaptation-y-capacidad-util">6. Rank adaptation y capacidad útil</h3>
+<p>La capacidad MIMO sigue siendo el marco teórico que explica por qué subir capas puede aumentar throughput:</p>
+<div class="arithmatex">\[C = \sum_{k=1}^{r}\log_2\left(1 + \frac{P_k\sigma_k^2}{N_0}\right) \tag{7}\]</div>
+<p>donde <span class="arithmatex">\(P_k\)</span> es la potencia asignada al modo espacial <span class="arithmatex">\(k\)</span> (sujeta a <span class="arithmatex">\(\sum_k P_k = P_{\text{total}}\)</span>) y <span class="arithmatex">\(r\)</span> es el rank usado. La estructura de la expresión refleja la descomposición en subcanales: la capacidad total es la <strong>suma de capacidades de canales SISO independientes</strong>, uno por modo — cada término es la fórmula de Shannon de un subcanal con ganancia <span class="arithmatex">\(\sigma_k^2\)</span>.</p>
+<p>En implementación esta expresión no se evalúa como fin en sí mismo: se usa como criterio para rank adaptation:</p>
+<ol>
+<li>medir o estimar calidad del canal;</li>
+<li>mirar SNR, valores singulares, correlación e interferencia;</li>
+<li>elegir cuántas capas enviar;</li>
+<li>reportar o usar indicadores como CQI, RI y PMI;</li>
+<li>verificar BLER objetivo después de la adaptación.</li>
+</ol>
+<details class="example">
+<summary>Rank 1 o rank 2 según la fórmula (7), con los números de §3.1</summary>
+<p>Canal A: <span class="arithmatex">\(\sigma_1^2 = 2{,}25\)</span>, <span class="arithmatex">\(\sigma_2^2 = 0{,}25\)</span>. Potencia total <span class="arithmatex">\(P = 2\)</span>.</p>
+<p><strong>SNR alta</strong> (<span class="arithmatex">\(N_0 = 0{,}1\)</span>):</p>
+<div class="arithmatex">\[C_{\text{rank 2}} = \log_2\!\left(1 + \frac{1 \cdot 2{,}25}{0{,}1}\right) + \log_2\!\left(1 + \frac{1 \cdot 0{,}25}{0{,}1}\right) = 4{,}55 + 1{,}81 \approx 6{,}4 \text{ bits/s/Hz}\]</div>
+<div class="arithmatex">\[C_{\text{rank 1}} = \log_2\!\left(1 + \frac{2 \cdot 2{,}25}{0{,}1}\right) = \log_2(46) \approx 5{,}5 \text{ bits/s/Hz}\]</div>
+<p>Gana rank 2: hasta el modo débil aporta casi 2 bits.</p>
+<p><strong>SNR baja</strong> (<span class="arithmatex">\(N_0 = 1\)</span>):</p>
+<div class="arithmatex">\[C_{\text{rank 2}} = \log_2(1 + 2{,}25) + \log_2(1 + 0{,}25) = 1{,}70 + 0{,}32 \approx 2{,}0 \text{ bits/s/Hz}\]</div>
+<div class="arithmatex">\[C_{\text{rank 1}} = \log_2(1 + 4{,}5) \approx 2{,}5 \text{ bits/s/Hz}\]</div>
+<p>Gana rank 1: los 0,32 bits que aporta el modo débil no compensan frente a concentrar la potencia en el modo fuerte.</p>
+<p><strong>Misma matriz, decisión opuesta según el SNR.</strong> Eso es rank adaptation: el logaritmo premia repartir potencia cuando el SNR sobra y lo castiga cuando escasea.</p>
+</details>
+<figure>
+  <img alt="Flujo de decisión para elegir rank, capas y precoder" src="figures/mimo-rank-precoder-flow.png" />
+<br />
+<!-- generada por generate_design_figures.py -->
+
+
+<br />
+<figcaption><strong>Figura 8.</strong> Flujo de decisión para rank adaptation y selección de precoder. La ruta baja el rank si el enlace no cierra o si el segundo modo espacial es débil, y solo usa ZF/RZF cuando la interferencia domina y los canales son separables.
+  </figcaption>
+</figure>
+<figure>
+  <img alt="Capacidad MIMO vs SNR para diferentes configuraciones" src="figures/mimo-capacity.png" />
+<br />
+<!-- generada por celda 6 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 9.</strong> Capacidad ergódica para <span class="arithmatex">\(1\times1\)</span>, <span class="arithmatex">\(2\times2\)</span>, <span class="arithmatex">\(4\times4\)</span> y <span class="arithmatex">\(8\times8\)</span>. La lectura práctica: más antenas solo se convierten en throughput si el canal ofrece modos espaciales utilizables y el sistema puede estimarlos y explotarlos.
+  </figcaption>
+</figure>
+<details class="example">
+<summary>Water-filling como criterio de apagado de capas</summary>
+<p>Si el transmisor conoce los valores singulares, puede repartir potencia con water-filling:</p>
+<div class="arithmatex">\[P_k^* = \left(\mu - \frac{N_0}{\sigma_k^2}\right)^+\]</div>
+<p>donde <span class="arithmatex">\(\mu\)</span> es el "nivel del agua" — una constante que se ajusta hasta que las potencias asignadas suman la potencia total disponible — y <span class="arithmatex">\((x)^+ = \max(x, 0)\)</span>: un modo que queda "bajo el agua" recibe potencia cero, no potencia negativa.</p>
+<p>La idea implementativa es simple: un modo espacial muy débil no merece potencia. El cálculo se muestra en dos casos:</p>
+<p><strong>Caso 1 — todos los modos fuertes.</strong> Canal 3×3 con <span class="arithmatex">\(\sigma_1^2=52\)</span>, <span class="arithmatex">\(\sigma_2^2=13\)</span>, <span class="arithmatex">\(\sigma_3^2=4\)</span>; <span class="arithmatex">\(N_0 = 1\)</span>, <span class="arithmatex">\(P_{\text{total}} = 1\)</span>. Los "pisos" <span class="arithmatex">\(N_0/\sigma_k^2\)</span> valen <span class="arithmatex">\(0{,}019\)</span>, <span class="arithmatex">\(0{,}077\)</span> y <span class="arithmatex">\(0{,}25\)</span>. Con los tres modos activos, <span class="arithmatex">\(\mu\)</span> sale de exigir que las potencias sumen 1:</p>
+<div class="arithmatex">\[\mu = \frac{1 + 0{,}019 + 0{,}077 + 0{,}25}{3} = 0{,}449\]</div>
+<div class="arithmatex">\[P_1^* = 0{,}43, \qquad P_2^* = 0{,}37, \qquad P_3^* = 0{,}20\]</div>
+<p>Compárese con el reparto uniforme <span class="arithmatex">\((0{,}33,\, 0{,}33,\, 0{,}33)\)</span>: la diferencia es pequeña. Cuando todos los modos son fuertes, water-filling gana poco frente a potencia uniforme.</p>
+<p><strong>Caso 2 — un modo hundido.</strong> Mismo canal pero <span class="arithmatex">\(\sigma_3^2 = 0{,}04\)</span>: su piso es <span class="arithmatex">\(N_0/\sigma_3^2 = 25\)</span>, muchísimo más alto que cualquier nivel de agua alcanzable con <span class="arithmatex">\(P_{\text{total}} = 1\)</span>. El <span class="arithmatex">\((\cdot)^+\)</span> lo apaga: <span class="arithmatex">\(P_3^* = 0\)</span>, y el agua se reparte entre los dos que quedan:</p>
+<div class="arithmatex">\[\mu = \frac{1 + 0{,}019 + 0{,}077}{2} = 0{,}548, \qquad P_1^* = 0{,}53, \qquad P_2^* = 0{,}47, \qquad P_3^* = 0\]</div>
+<p>Water-filling ejecuta <strong>rank adaptation por sí solo</strong>: bajó de 3 capas a 2. Apagar un modo y bajar el rank son la misma decisión vista desde dos fórmulas.</p>
+</details>
+<h3 id="7-massive-mimo-como-problema-de-red">7. Massive MIMO como problema de red</h3>
+<p>Massive MIMO no es solo "muchas antenas". Es un régimen operativo: una estación base con <span class="arithmatex">\(M\)</span> antenas sirve a <span class="arithmatex">\(K\)</span> usuarios con <span class="arithmatex">\(M \gg K\)</span> — por ejemplo, 64 antenas para 8 usuarios. La idea central de esta sección: cuando <span class="arithmatex">\(M\)</span> crece mucho, el canal deja de comportarse como un objeto aleatorio caprichoso y empieza a comportarse de forma predecible. Dos fenómenos estadísticos hacen ese trabajo, y cada uno resuelve un problema distinto de la sesión.</p>
+<p><strong>Channel hardening: el canal de cada usuario deja de fluctuar.</strong></p>
+<div class="arithmatex">\[\frac{\|\mathbf{h}_k\|^2}{M} \xrightarrow[M\to\infty]{\text{a.s.}} \beta_k \tag{8}\]</div>
+<p>Cada término, en orden. <span class="arithmatex">\(\mathbf{h}_k\)</span> es el <strong>vector de canal del usuario <span class="arithmatex">\(k\)</span></strong>: tiene <span class="arithmatex">\(M\)</span> entradas, una por antena de la estación base — es la firma espacial del usuario vista desde el array completo. <span class="arithmatex">\(\|\mathbf{h}_k\|^2\)</span> es la <strong>energía total</strong> que las <span class="arithmatex">\(M\)</span> antenas capturan juntas de ese usuario: la suma de las <span class="arithmatex">\(M\)</span> ganancias de potencia individuales. Al dividir entre <span class="arithmatex">\(M\)</span> queda la <strong>energía promedio por antena</strong>. La flecha dice que ese promedio converge cuando <span class="arithmatex">\(M\)</span> crece; la etiqueta "a.s." (<em>almost surely</em>, casi seguramente) es lenguaje de probabilidad para "converge salvo casos de probabilidad cero". Y <span class="arithmatex">\(\beta_k\)</span> es el destino de la convergencia: la <strong>componente lenta del canal</strong> — pérdida de trayecto más sombra — que depende de dónde está el usuario, no del multitrayecto rápido.</p>
+<p>La mecánica es la ley de los grandes números. Con una sola antena, <span class="arithmatex">\(|h|^2\)</span> es una variable aleatoria que salta con el fading: el enlace puede caer 10 dB de un instante a otro. Con <span class="arithmatex">\(M\)</span> antenas, cada una ve un fading independiente, y el promedio de muchas variables independientes se aplana — igual que el promedio de 64 dados se pega a 3,5 aunque cada dado siga siendo impredecible. El fading rápido no desaparece del aire; desaparece del <strong>agregado</strong>.</p>
+<p>Consecuencia operativa: el enlace de cada usuario se vuelve estable y predecible. El scheduler ya no persigue picos de canal (el scheduling oportunista pierde sentido: no hay picos), el control de potencia y de MCS trabaja sobre un canal casi constante, y los márgenes de diseño se encogen.</p>
+<p><strong>Favorable propagation: los usuarios se separan solos.</strong></p>
+<div class="arithmatex">\[\frac{\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j}{M} \xrightarrow[M\to\infty]{\text{a.s.}} 0, \quad k\neq j \tag{9}\]</div>
+<p>De nuevo término a término. <span class="arithmatex">\(\mathbf{h}_k^{\mathsf{H}}\mathbf{h}_j\)</span> es el <strong>producto interno</strong> entre las firmas de dos usuarios distintos — el mismo indicador de la tabla de §3.1: mide cuánto se parecen dos usuarios vistos desde la estación base. Producto grande = firmas parecidas = interferencia mutua si se les sirve a la vez; producto cero = firmas ortogonales = pueden compartir el mismo recurso sin estorbarse. La división entre <span class="arithmatex">\(M\)</span> normaliza para comparar con la energía propia de cada usuario, y la flecha dice que esa semejanza normalizada <strong>tiende a cero</strong> al crecer <span class="arithmatex">\(M\)</span>.</p>
+<p>La intuición: la firma de cada usuario es un vector de <span class="arithmatex">\(M\)</span> números aleatorios, y dos vectores aleatorios largos son casi ortogonales casi siempre — con <span class="arithmatex">\(M\)</span> grande, hay tantas dimensiones disponibles que dos usuarios cualesquiera prácticamente nunca coinciden en dirección. Es el efecto huella digital: con 3 rasgos, dos personas pueden confundirse; con 64, no.</p>
+<p>Consecuencia operativa, dicha con el vocabulario de la sesión: cada usuario se convierte en su <strong>propio subcanal espacial casi ortogonal, gratis</strong>. La separación que ZF compraba invirtiendo matrices (y pagando ruido), aquí la regala la estadística. Por eso MRT — el precoder más simple, que solo apunta y no cancela nada — se vuelve competitivo cuando <span class="arithmatex">\(M/K\)</span> es grande: la interferencia que MRT ignora se está yendo a cero sola. En sistemas reales RZF/MMSE sigue siendo más robusto, porque <span class="arithmatex">\(M\)</span> es grande pero no infinito y los residuos de interferencia existen.</p>
+<figure>
+  <img alt="Channel hardening y favorable propagation vs M" src="figures/mimo-massive.png" />
+<br />
+<!-- generada por celdas 12–13 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 10.</strong> Channel hardening y favorable propagation al aumentar <span class="arithmatex">\(M\)</span>. Para el ingeniero, estas curvas dicen cuándo el exceso de antenas empieza a simplificar el precoding y estabilizar el enlace.
+  </figcaption>
+</figure>
+<h4 id="71-csi-el-cuello-de-botella">7.1 CSI: el cuello de botella</h4>
+<p>Todo lo anterior tiene una letra pequeña: supone que la estación base <strong>conoce</strong> los <span class="arithmatex">\(K\)</span> vectores de canal. Y conocerlos cuesta pilotos — la mecánica de la caja de §3 ("una división por casilla"), solo que ahora las casillas son muchas. Con <span class="arithmatex">\(M\)</span> grande, ese costo decide la arquitectura completa:</p>
+<ul>
+<li>En <strong>FDD</strong>, subida y bajada van en frecuencias distintas, así que el canal de bajada solo puede medirlo el UE. Con <span class="arithmatex">\(M = 128\)</span> antenas en la base, cada UE tendría que estimar 128 coeficientes de bajada y reportarlos todos por el canal de subida. El overhead crece con <span class="arithmatex">\(M\)</span> — con las antenas de la base, que es justo el número que Massive MIMO quiere hacer enorme. El costo escala con lo que se quiere agrandar: mala combinación.</li>
+<li>En <strong>TDD</strong>, subida y bajada comparten frecuencia, y el canal es <strong>recíproco</strong>: el camino de ida es el mismo de vuelta. Entonces la jugada se invierte: los <span class="arithmatex">\(K\)</span> usuarios mandan pilotos hacia arriba, la base estima los canales ella misma, y reutiliza esa estimación para precodificar hacia abajo. El costo escala con <span class="arithmatex">\(K\)</span> (los usuarios, que son pocos), no con <span class="arithmatex">\(M\)</span> (las antenas, que son muchas). Cada UE manda un solo piloto sin importar si la base tiene 64 o 256 antenas.</li>
+<li>Queda un problema que las antenas no arreglan: la <strong>contaminación de pilotos</strong>. En una red multicelda los pilotos se reutilizan — no hay secuencias ortogonales infinitas. Si un usuario de la celda vecina transmite el mismo piloto al mismo tiempo, la base recibe la suma de ambos canales y su estimación queda <span class="arithmatex">\(\hat{\mathbf{h}} = \mathbf{h}_{\text{propio}} + \mathbf{h}_{\text{vecino}} + \text{ruido}\)</span>: el canal del vecino queda pegado a la estimación. Todo lo que la base haga con esa estimación — el beam, el nulo — apunta en parte hacia el vecino, permanentemente. Agregar antenas no limpia esto; afila por igual el haz bien apuntado y el mal apuntado.</li>
+</ul>
+<figure>
+  <img alt="Sobrecarga de CSI en FDD y TDD para Massive MIMO" src="figures/mimo-csi-overhead.png" />
+<br />
+<!-- generada por generate_design_figures.py -->
+
+
+<br />
+<figcaption><strong>Figura 11.</strong> Sobrecarga de CSI para <span class="arithmatex">\(K=8\)</span> usuarios al crecer <span class="arithmatex">\(M\)</span>. En FDD el coste de estimación y realimentación de canal de bajada crece con las antenas de la BS; en TDD el coste de pilotos queda ligado al número de usuarios.
+  </figcaption>
+</figure>
+<p>Por eso Massive MIMO práctico está profundamente ligado a TDD, a la calibración de reciprocidad (los circuitos de transmisión y recepción no son idénticos y hay que compensarlos para que la reciprocidad del aire sirva de algo), al diseño de pilotos y al scheduler. La cadena causal completa, en una línea: muchas antenas → CSI caro → TDD con pilotos de subida → pilotos reutilizados entre celdas → contaminación como límite final. El cuello de botella de Massive MIMO no es el álgebra: es el conocimiento del canal.</p>
+<figure>
+  <img alt="Sum-rate MRT vs ZF vs óptimo para Massive MIMO" src="figures/mimo-sumrate.png" />
+<br />
+<!-- generada por celda 14 de lab.ipynb -->
+
+
+<br />
+<figcaption><strong>Figura 12.</strong> Sum-rate frente a número de antenas BS para <span class="arithmatex">\(K=4\)</span>. La curva muestra una decisión de arquitectura: con pocas antenas ZF/RZF controla interferencia; con muchas antenas, MRT se aproxima al óptimo porque los canales se separan solos.
+  </figcaption>
+</figure>
+<h4 id="72-fr1-fr2-y-beamforming-hibrido">7.2 FR1, FR2 y beamforming híbrido</h4>
+<p>Falta una pieza de vocabulario para esta parte: la <strong>cadena RF</strong> (<em>RF chain</em>) es la electrónica que hay detrás de cada antena — conversores digital-analógico, mezcladores, amplificadores. Es lo que convierte números en ondas. Precoding <strong>digital</strong> significa una cadena RF por antena: cada antena recibe su propia señal calculada, control total.</p>
+<p>En FR1 (sub-6 GHz) eso es viable: las configuraciones comerciales 32T32R, 64T64R o 128T128R llevan precoding digital completo en estaciones base activas. En FR2 (ondas milimétricas) deja de serlo: a esas frecuencias cada cadena RF es cara y consume demasiada potencia, y poner 256 no se justifica. La solución de compromiso es el <strong>beamforming híbrido</strong>, en dos etapas: una etapa <strong>analógica</strong> forma haces gruesos usando solo desfasadores (componentes baratos que rotan la fase de la señal — suficiente para apuntar, no para precodificar fino), y una etapa <strong>digital</strong> pequeña — pocas cadenas RF, por ejemplo 4 para un array de 256 elementos — ajusta capas y usuarios dentro de los haces ya formados. El array completo aporta la ganancia de apuntado; las pocas cadenas digitales aportan la flexibilidad.</p>
+<p>La consecuencia para diseño es concreta: en FR2 no basta "usar Massive MIMO". Los haces analógicos no se calculan desde una H estimada — se <strong>buscan</strong>: la base y el UE prueban haces de un catálogo hasta encontrar el par que cierra el enlace (entrenamiento de haz), y deben repetir la búsqueda cuando el usuario se mueve o algo bloquea el camino — a estas frecuencias un cuerpo humano tapa el enlace. El presupuesto de diseño ya no se mide solo en antenas: se mide en cadenas RF, en tiempo de búsqueda de haces y en robustez ante bloqueo.</p>
+<hr />
+<h2 id="laboratorio">Laboratorio</h2>
+<p>El laboratorio de esta sesión se puede leer como una serie de decisiones implementativas. El notebook sigue en:
+<a href="lab.ipynb"><code>lab.ipynb</code></a></p>
+<ol>
+<li><strong>Diagnóstico de canal y rank</strong>: generar matrices <span class="arithmatex">\(\mathbf{H}\)</span> Rayleigh, calcular SVD y observar distribución de valores singulares. Pregunta de diseño: ¿cuántas capas son razonables?</li>
+<li><strong>Capacidad y rank adaptation</strong>: comparar <span class="arithmatex">\(1\times1\)</span>, <span class="arithmatex">\(2\times2\)</span>, <span class="arithmatex">\(4\times4\)</span> y <span class="arithmatex">\(8\times8\)</span>. Pregunta de diseño: ¿cuándo las antenas se convierten realmente en throughput?</li>
+<li><strong>Detección ZF/MMSE/ML</strong>: simular BER en un canal <span class="arithmatex">\(2\times2\)</span>. Pregunta de diseño: ¿cuándo vale la pena pagar cómputo o regularización?</li>
+<li><strong>Precodificadores MRT y ZF</strong>: comparar BER para <span class="arithmatex">\(M=8\)</span>, <span class="arithmatex">\(K=4\)</span>. Pregunta de diseño: ¿cuándo domina ruido y cuándo domina interferencia?</li>
+<li><strong>Massive MIMO</strong>: barrer <span class="arithmatex">\(M\)</span> para observar hardening, favorable propagation y sum-rate. Pregunta de diseño: ¿a partir de qué <span class="arithmatex">\(M/K\)</span> el precoder simple empieza a funcionar?</li>
+</ol>
+<p>Extensión natural para una versión futura del laboratorio: añadir un mini selector de rank que use SNR, valores singulares y BLER objetivo para decidir si transmitir 1, 2 o más capas.</p>
+<hr />
+<h2 id="ejercicios-de-asimilacion">Ejercicios de Asimilación</h2>
+<p>Estos ejercicios están planteados como mini-casos de diseño. La meta es justificar decisiones, no solo sustituir números.</p>
+<p><strong>Ejercicio A1 (borde de celda).</strong> Un UE reporta bajo SNR y alto BLER. La BS puede usar 2 capas SU-MIMO o un haz de mayor ganancia con rank 1. ¿Qué eliges primero y por qué?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>Elegiría rank 1 con beamforming/diversidad. Si el enlace no cierra, dos capas solo reparten potencia y hacen más frágil la detección. Primero se estabiliza el enlace; luego se intenta subir rank si el SNR y el canal lo permiten.</p>
+</details>
+<p><strong>Ejercicio A2 (rank y valores singulares).</strong> Un canal 2×2 tiene <span class="arithmatex">\(\sigma_1^2=2{,}25\)</span> y <span class="arithmatex">\(\sigma_2^2=0{,}25\)</span>. ¿El rank algebraico permite 2 capas? ¿El diseño debería usar siempre 2 capas?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>El rank algebraico puede ser 2, pero la segunda capa es mucho más débil. A SNR alta quizá se use; a SNR baja o BLER alto conviene rank 1. La decisión no es contar antenas, sino mirar calidad de modos espaciales.</p>
+</details>
+<p><strong>Ejercicio A3 (usuarios paralelos).</strong> Dos usuarios tienen canales con producto interno normalizado cercano a 1. ¿Los servirías juntos con MU-MIMO? ¿Qué alternativa tiene el scheduler?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>No son buenos candidatos simultáneos: sus canales se pisan espacialmente. ZF puede separarlos, pero pagará potencia y ruido. El scheduler puede separarlos en tiempo/frecuencia y emparejar cada uno con otro usuario más ortogonal.</p>
+</details>
+<p><strong>Ejercicio A4 (MRT o ZF).</strong> En un sistema <span class="arithmatex">\(M=8\)</span>, <span class="arithmatex">\(K=4\)</span>, a SNR muy baja, ZF no mejora la BER frente a MRT. ¿Por qué?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>A SNR baja domina el ruido térmico. ZF elimina interferencia, pero al invertir un canal finito pierde ganancia útil y amplifica ruido. Si la interferencia aún no domina, ese pago no compensa. MMSE/RZF es el compromiso práctico.</p>
+</details>
+<p><strong>Ejercicio A5 (TDD frente a FDD).</strong> Una BS tiene 128 antenas y sirve 8 usuarios. ¿Por qué TDD es más natural para Massive MIMO que FDD?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>En FDD, estimar y reportar CSI de bajada escala con el número de antenas de la BS. En TDD, los 8 usuarios envían pilotos en subida y la BS usa reciprocidad para precodificar en bajada. El overhead escala con usuarios, no con antenas.</p>
+</details>
+<p><strong>Ejercicio A6 (FR2).</strong> En mmWave, ¿por qué no basta decir "usemos 256 antenas digitales"?</p>
+<details class="example">
+<summary>Solución</summary>
+<p>Porque una cadena RF por antena es costosa y consume mucha potencia. FR2 usa arrays grandes para ganar link budget, pero suele implementar beamforming híbrido: fase analógica para formar haces y pocas cadenas digitales para multiplexación/precoding fino.</p>
+</details>
+<hr />
+<h2 id="resumen">Resumen</h2>
+<table>
+<thead>
+<tr>
+<th>Decisión</th>
+<th>Indicador que miras</th>
+<th>Acción típica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cerrar cobertura</td>
+<td>SNR, BLER, norma de canal</td>
+<td>Beamforming, diversidad, rank bajo</td>
+</tr>
+<tr>
+<td>Subir throughput por UE</td>
+<td>Valores singulares, rank, SNR</td>
+<td>SU-MIMO con más capas</td>
+</tr>
+<tr>
+<td>Servir varios usuarios</td>
+<td>Ortogonalidad entre canales, <span class="arithmatex">\(M/K\)</span></td>
+<td>MU-MIMO, scheduler, RZF/ZF</td>
+</tr>
+<tr>
+<td>Elegir detector</td>
+<td>Condicionamiento y SNR</td>
+<td>MMSE si ZF amplifica ruido; ML solo como referencia o baja dimensión</td>
+</tr>
+<tr>
+<td>Elegir precoder</td>
+<td>Interferencia vs ruido</td>
+<td>MRT para <span class="arithmatex">\(M/K\)</span> grande o SNR baja; ZF/RZF si interferencia domina</td>
+</tr>
+<tr>
+<td>Escalar a Massive MIMO</td>
+<td>Pilotos, TDD, reciprocidad</td>
+<td>Estimar CSI por UL, controlar contaminación de pilotos</td>
+</tr>
+<tr>
+<td>Usar FR2/mmWave</td>
+<td>Path loss, bloqueo, RF chains</td>
+<td>Beamforming híbrido y entrenamiento de haces</td>
+</tr>
+</tbody>
+</table>
+<p>La frase clave de la sesión: <strong>MIMO no se diseña contando antenas; se diseña leyendo el canal y el problema de red</strong>. Las fórmulas de SVD, capacidad y DMT explican por qué funcionan las decisiones, pero la tarea del ingeniero es escoger la estrategia correcta para el escenario correcto.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

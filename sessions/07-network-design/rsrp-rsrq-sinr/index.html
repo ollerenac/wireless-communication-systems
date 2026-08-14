@@ -1,0 +1,2050 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Curso de máster en sistemas de comunicaciones inalámbricas — fundamentos, 5G/6G e IA aplicada">
+      
+      
+        <meta name="author" content="ollerenac">
+      
+      
+        <link rel="canonical" href="https://ollerenac.github.io/wireless-communication-systems/sessions/07-network-design/rsrp-rsrq-sinr/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../crs-dos-celdas-pci-mod3/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Nota: RSRP, RSRQ y SINR - Sistemas de Comunicaciones Inalámbricas</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rsrp-rsrq-y-sinr-nota-de-referencia" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-header__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sistemas de Comunicaciones Inalámbricas
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Nota: RSRP, RSRQ y SINR
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../syllabus/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Programa
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../01-channel-modeling/" class="md-tabs__link">
+          
+  
+  
+  Sesiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../exams/" class="md-tabs__link">
+          
+  
+  
+  Evaluaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Sistemas de Comunicaciones Inalámbricas" class="md-nav__button md-logo" aria-label="Sistemas de Comunicaciones Inalámbricas" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sistemas de Comunicaciones Inalámbricas
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ollerenac/wireless-communication-systems" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ollerenac/wireless-communication-systems
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../syllabus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sesiones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sesiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-channel-modeling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 — Modelado del Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-digital-modulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 — Modulación Digital
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-ofdm-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 — Sistemas OFDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-gnuradio-ofdm/gnuradio-ofdm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04 — Lab OFDM con GNU Radio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-channel-coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05 — Codificación de Canal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-mimo-systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06 — MIMO y Massive MIMO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07 — Diseño de Red de Acceso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    07 — Diseño de Red de Acceso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lección
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: RSRP, RSRQ y SINR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-rsrp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RSRP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. RSRP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definicion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definición
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-patron-de-las-crs-lte-cp-normal-puertos-0-y-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El patrón de las CRS (LTE, CP normal, puertos 0 y 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#las-posiciones-cambian-dinamicamente-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ¿Las posiciones cambian dinámicamente? No.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculo-el-enlace-con-el-link-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo: el enlace con el link budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#independencia-del-ancho-de-banda-y-la-trampa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Independencia del ancho de banda — y la trampa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-dos-correcciones-que-conviene-hacer-explicitas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dos correcciones que conviene hacer explícitas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Dos correcciones que conviene hacer explícitas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-las-crs-no-se-anuncian-por-el-canal-de-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Las CRS no se anuncian por el canal de control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-el-ue-no-devuelve-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 El UE no devuelve H
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. SINR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. SINR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#la-regla-que-mas-se-viola" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La regla que más se viola
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-numerico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo numérico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-interferencia-depende-de-la-carga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La interferencia depende de la carga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shannon-tres-advertencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shannon: tres advertencias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nota-de-medicion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nota de medición
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rsrq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. RSRQ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. RSRQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#las-dos-propiedades-que-lo-hacen-raro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Las dos propiedades que lo hacen raro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#puente-con-el-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Puente con el SINR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cuadro-de-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cuadro de diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-uso-y-valores-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Uso y valores de referencia
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-lte-vs-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. LTE vs NR
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crs-dos-celdas-pci-mod3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: CRS con dos celdas y PCI mod 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../de-sinr-a-capacidad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nota: de SINR a capacidad de celda
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../escena-osm-blender/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guía: escena OSM con Blender
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Evaluaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Evaluaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcial 01
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exams/examen-diseno-red/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examen — Diseño de red 5G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-rsrp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. RSRP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. RSRP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definicion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Definición
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#el-patron-de-las-crs-lte-cp-normal-puertos-0-y-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El patrón de las CRS (LTE, CP normal, puertos 0 y 1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#las-posiciones-cambian-dinamicamente-no" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ¿Las posiciones cambian dinámicamente? No.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calculo-el-enlace-con-el-link-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo: el enlace con el link budget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#independencia-del-ancho-de-banda-y-la-trampa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Independencia del ancho de banda — y la trampa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-dos-correcciones-que-conviene-hacer-explicitas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Dos correcciones que conviene hacer explícitas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Dos correcciones que conviene hacer explícitas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-las-crs-no-se-anuncian-por-el-canal-de-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Las CRS no se anuncian por el canal de control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-el-ue-no-devuelve-h" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 El UE no devuelve H
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. SINR
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. SINR">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#la-regla-que-mas-se-viola" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La regla que más se viola
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-numerico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo numérico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-interferencia-depende-de-la-carga" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        La interferencia depende de la carga
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shannon-tres-advertencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shannon: tres advertencias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nota-de-medicion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nota de medición
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-rsrq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. RSRQ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. RSRQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#las-dos-propiedades-que-lo-hacen-raro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Las dos propiedades que lo hacen raro
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#puente-con-el-sinr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Puente con el SINR
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-cuadro-de-diagnostico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Cuadro de diagnóstico
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-uso-y-valores-de-referencia" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Uso y valores de referencia
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-lte-vs-nr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. LTE vs NR
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="rsrp-rsrq-y-sinr-nota-de-referencia">RSRP, RSRQ y SINR — nota de referencia</h1>
+<blockquote>
+<p>Las tres métricas no miden lo mismo con distinta escala. Miden cosas físicamente
+distintas y responden preguntas distintas.</p>
+</blockquote>
+<p><em>Nota de profundización de la <a href="../">Sesión 07</a>: el §Fase 0 presenta las
+tres métricas a nivel conceptual; aquí está la mecánica de estándar (dónde
+viven en la grilla, cómo se calculan, sus trampas). El §Fase 2 usa la
+sección de EPRE/link budget como punto de partida del dimensionamiento.</em></p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Qué es</th>
+<th>Pregunta que responde</th>
+<th>Unidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RSRP</strong></td>
+<td>Potencia absoluta de la señal de referencia, <strong>por resource element</strong></td>
+<td>¿Cuánta señal <em>mía</em> llega?</td>
+<td>dBm</td>
+</tr>
+<tr>
+<td><strong>SINR</strong></td>
+<td>Relación señal / (interferencia + ruido)</td>
+<td>¿Qué tan <em>limpia</em> llega?</td>
+<td>dB</td>
+</tr>
+<tr>
+<td><strong>RSRQ</strong></td>
+<td>Fracción de la potencia total recibida que es señal de referencia</td>
+<td>¿Qué proporción de lo que oigo es <em>mío</em>, y qué tan cargada está la celda?</td>
+<td>dB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-rsrp">1. RSRP</h2>
+<h3 id="definicion">Definición</h3>
+<p>Promedio <strong>lineal</strong> (en watts, no en dB) de la potencia recibida en los resource
+elements que transportan las señales de referencia, dentro del ancho de banda de
+medición.</p>
+<ul>
+<li><strong>LTE:</strong> REs con CRS (<em>Cell-specific Reference Signal</em>), puerto de antena 0.</li>
+<li><strong>NR:</strong> SS-RSRP, medido sobre el SSS y el DMRS del PBCH dentro del SSB.</li>
+</ul>
+<p>La palabra clave es <strong>por RE</strong>: es potencia por subportadora de 15 kHz, no potencia
+total sobre la banda.</p>
+<h3 id="el-patron-de-las-crs-lte-cp-normal-puertos-0-y-1">El patrón de las CRS (LTE, CP normal, puertos 0 y 1)</h3>
+<table>
+<thead>
+<tr>
+<th>Dimensión</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Separación en frecuencia, dentro de un símbolo</td>
+<td><strong>6 subportadoras</strong> (90 kHz) → 2 REs por RB por puerto</td>
+</tr>
+<tr>
+<td>Separación efectiva combinando símbolos</td>
+<td><strong>3 subportadoras</strong> (45 kHz), por el escalonamiento</td>
+</tr>
+<tr>
+<td>Símbolos ocupados en la subtrama</td>
+<td><strong>0, 4, 7 y 11</strong> (símbolos 0 y 4 de cada slot)</td>
+</tr>
+<tr>
+<td>Separación en tiempo</td>
+<td>4 y 3 símbolos alternados (~0.25 ms)</td>
+</tr>
+<tr>
+<td>Densidad</td>
+<td>8 REs por RB por subtrama por puerto (~4.8% de overhead)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Escalonamiento:</strong> en el símbolo 0 las CRS del puerto 0 caen en k = 0, 6; en el
+símbolo 4 caen en k = 3, 9. No es estético: con 45 kHz de espaciamiento efectivo el
+muestreo del canal es válido hasta un delay spread de ~22 µs, muy por encima del CP
+normal de 4.7 µs. La separación temporal de ~0.25 ms permite seguir Doppler de hasta
+~2 kHz.</p>
+<p><strong>Silenciamiento:</strong> donde el puerto 0 transmite CRS, el puerto 1 está en DTX en ese
+mismo RE, y viceversa. Si no, el UE no podría separar los dos canales.</p>
+<figure>
+  <img alt="Patrón de CRS en un resource block durante una subtrama" src="../figures/patron_crs_lte_1rb_subtrama.svg" />
+<br />
+<figcaption><strong>Figura A.</strong> Un RB (12 subportadoras) × 1 subtrama (14 símbolos). Las CRS del puerto 0 y del puerto 1 ocupan los símbolos 0, 4, 7 y 11, escalonadas en frecuencia; donde un puerto transmite, el otro calla (DTX). El resto de la grilla es PDSCH/control.
+  </figcaption>
+</figure>
+<h3 id="las-posiciones-cambian-dinamicamente-no">¿Las posiciones cambian dinámicamente? <strong>No.</strong></h3>
+<p>Las posiciones son <strong>fijas y deterministas</strong>, fijadas por un corrimiento en
+frecuencia que depende únicamente del identificador de celda:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>v_shift = PCI mod 6
+</code></pre></div>
+<p>Lo que <strong>sí</strong> cambia de slot a slot es el <strong>valor</strong> que va montado en esos REs: una
+secuencia pseudoaleatoria QPSK generada a partir del PCI, el número de slot y el
+número de símbolo.</p>
+<blockquote>
+<p><strong>Posición estática, contenido variable.</strong></p>
+</blockquote>
+<p><strong>Cuidado con la conclusión apresurada</strong> "PCI distinto módulo 6 ⇒ pilotos que no
+colisionan": vale solo con <strong>1 puerto de antena</strong>. Con 2 o 4 puertos, cada celda
+ocupa <code>{v_shift, v_shift+3, v_shift+6, v_shift+9}</code> — un patrón de <strong>período 3</strong> —
+y la regla de planificación real es <strong>PCI mod 3</strong>. El ejemplo completo con dos
+celdas vecinas (PCI 12 vs 13, y el contraejemplo PCI 12 vs 15 que colisiona
+puerto contra puerto), más el vínculo elegante con el índice del PSS, está en la
+nota <a href="../crs-dos-celdas-pci-mod3/">Patrón de CRS con dos celdas — PCI mod 3</a>.
+Cuando una colisión ocurre, el <strong>RSRP se contamina</strong>: la potencia de la vecina se
+promedia dentro de la medición — y como las CRS están siempre encendidas, el daño
+no depende de la carga.</p>
+<h3 id="calculo-el-enlace-con-el-link-budget">Cálculo: el enlace con el link budget</h3>
+<p>El punto de partida no es la potencia total del amplificador, sino la potencia
+<strong>por RE</strong> (EPRE, <em>Energy Per Resource Element</em>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>EPRE [dBm] = P_total [dBm] − 10·log10(N_subportadoras)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>RSRP [dBm] = EPRE + G_Tx − PL − L_otras + G_Rx
+</code></pre></div>
+<p>La red transmite el EPRE explícitamente en el <strong>SIB2</strong>, como <code>referenceSignalPower</code>
+(dBm por RE), justamente para que el UE pueda despejar el path loss restando su RSRP
+medido.</p>
+<h3 id="independencia-del-ancho-de-banda-y-la-trampa">Independencia del ancho de banda — y la trampa</h3>
+<p><strong>Verdadero para el ancho de banda de <em>medición</em>.</strong> RSRP es un promedio, no una suma.
+Agregar más REs al promedio solo reduce la <strong>varianza</strong> del estimador; no cambia su
+valor esperado. Por eso el estándar permite medir sobre un mínimo de 6 RBs y aun así
+comparar celdas de 1.4 MHz contra 20 MHz.</p>
+<p><strong>Falso para el ancho de banda de <em>despliegue</em>, si la potencia del PA es fija.</strong> Con
+un amplificador de 40 W, pasar de 10 MHz a 20 MHz reparte la misma potencia entre el
+doble de subportadoras: el EPRE cae <strong>3 dB</strong> y el RSRP medido en el mismo punto
+geográfico cae 3 dB con él.</p>
+<hr />
+<h2 id="2-dos-correcciones-que-conviene-hacer-explicitas">2. Dos correcciones que conviene hacer explícitas</h2>
+<h3 id="21-las-crs-no-se-anuncian-por-el-canal-de-control">2.1 Las CRS <strong>no</strong> se anuncian por el canal de control</h3>
+<p>El UE <strong>deduce</strong> las posiciones de las CRS a partir del PCI, que obtiene del
+<strong>PSS/SSS</strong> durante la búsqueda de celda.</p>
+<p>Tiene que ser así por necesidad lógica: el UE necesita las CRS para estimar el canal y
+poder <strong>demodular</strong> el PBCH y el PDCCH. Si la ubicación de las CRS viniera anunciada
+por el canal de control, habría un problema del huevo y la gallina.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>PSS/SSS → PCI → v_shift → posiciones CRS → estimación de H → demodulación de PBCH/PDCCH
+</code></pre></div>
+<p>Lo único que se señaliza es el <em>número de puertos de antena</em> (implícito en la máscara
+del CRC del PBCH) y el ancho de banda del sistema (en el MIB).</p>
+<h3 id="22-el-ue-no-devuelve-h">2.2 El UE <strong>no</strong> devuelve H</h3>
+<p>La estimación del canal es de <strong>uso local</strong> del UE: sirve para ecualizar y demodular.
+Nunca viaja de vuelta en crudo — el volumen sería inviable. Lo que regresa son dos
+cosas distintas, por vías y escalas de tiempo distintas:</p>
+<table>
+<thead>
+<tr>
+<th>Qué regresa</th>
+<th>Por dónde</th>
+<th>Capa</th>
+<th>Escala de tiempo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CSI</strong> (CQI, PMI, RI) — derivada de H, cuantizada brutalmente (CQI = 4 bits)</td>
+<td>PUCCH / PUSCH</td>
+<td>Física</td>
+<td>milisegundos</td>
+</tr>
+<tr>
+<td><strong>RSRP / RSRQ</strong> — filtrados, cuantizados (RSRP en 97 niveles, −140 a −44 dBm)</td>
+<td><em>Measurement reports</em> RRC, eventos A1–A6 o periódicos</td>
+<td>RRC (capa 3)</td>
+<td>cientos de ms</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>CQI es capa física y rápido → adaptación de enlace.
+RSRP es RRC y lento → handover.</strong></p>
+</blockquote>
+<p>Nota adicional: el "canal de retorno" no está en la misma grilla. En FDD es una
+portadora completamente distinta, con su propia grilla SC-FDMA.</p>
+<hr />
+<h2 id="3-sinr">3. SINR</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>SINR = S / (I + N)        I = Σ P_j  (suma LINEAL sobre todas las vecinas co-canal)
+</code></pre></div>
+<h3 id="la-regla-que-mas-se-viola">La regla que más se viola</h3>
+<p><strong>S, I y N deben estar los tres referidos al mismo ancho de banda.</strong> Como S proviene
+del RSRP, que es potencia <em>por RE</em>, entonces I y N también deben ser por RE.</p>
+<p>El ruido térmico no es un número, es una densidad:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>N [dBm] = −174 dBm/Hz + 10·log10(B) + NF
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Referencia</th>
+<th>Cálculo</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Por RE (15 kHz), NF = 7 dB</td>
+<td>−174 + 41.8 + 7</td>
+<td><strong>≈ −125 dBm</strong></td>
+</tr>
+<tr>
+<td>Banda completa (10 MHz ≈ 9 MHz útiles), NF = 7 dB</td>
+<td>−174 + 69.5 + 7</td>
+<td><strong>≈ −98 dBm</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Mezclar un RSRP por RE con un piso de ruido de banda ancha produce SINRs imposibles.
+Es el error número uno.</p>
+<h3 id="ejemplo-numerico">Ejemplo numérico</h3>
+<p>Con S = −90 dBm, I = −95 dBm, N = −125 dBm (todos por RE):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>SINR = 10^(-9) / (10^(-9.5) + 10^(-12.5)) ≈ 3.16   →   ≈ 5.0 dB
+</code></pre></div>
+<figure>
+  <img alt="Niveles de señal, interferencia y ruido por resource element" src="../figures/niveles_sinr_por_resource_element.svg" />
+<br />
+<figcaption><strong>Figura B.</strong> Los tres niveles del ejemplo, referidos al mismo ancho de banda (15 kHz = 1 RE). Con N 30 dB por debajo de I, el ruido es irrelevante: el escenario es limitado por interferencia.
+  </figcaption>
+</figure>
+<p>Si se elimina N por completo el resultado prácticamente no cambia: el ruido está
+30 dB por debajo de la interferencia. <strong>Es un escenario limitado por interferencia.</strong>
+Subir la potencia de la celda no ayudaría — subiría S, pero las vecinas subirían I en
+la misma proporción. La solución es tilt, azimut, ICIC o coordinación de scheduling.</p>
+<h3 id="la-interferencia-depende-de-la-carga">La interferencia depende de la carga</h3>
+<p>BS2 solo interfiere en un PRB dado <strong>si en ese TTI está efectivamente programando
+datos en ese PRB</strong>. Por eso el SINR fluctúa en un drive test aunque el UE no se mueva,
+y por eso funcionan el ICIC y el reuso fraccional. La interferencia no es una
+propiedad geométrica fija, es consecuencia de las decisiones de scheduling ajenas.</p>
+<h3 id="shannon-tres-advertencias">Shannon: tres advertencias</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>C = B · log2(1 + SINR)
+</code></pre></div>
+<ol>
+<li><strong>SINR en lineal, no en dB.</strong> En el ejemplo se entra con 3.16, no con 5.0.</li>
+<li><strong>Es una cota, no una predicción.</strong> LTE alcanza ~60–75% por overhead de CP,
+   señales de referencia, control y MCS discretos. Versión práctica:
+   <code>C ≈ α · B · log2(1 + SINR)</code> con α ≈ 0.7.</li>
+<li><strong>Hay techo duro.</strong> El CQI satura alrededor de 22 dB de SINR: con 64QAM y tasa 0.93
+   el límite es ~5.55 bps/Hz. Shannon crece sin límite; LTE no. A partir de ahí la
+   única salida es MIMO: multiplicar por el número de capas.</li>
+</ol>
+<p>Cerrando el ejemplo: 9 MHz · log2(4.16) ≈ 18.5 Mbps de cota, ~13 Mbps con α = 0.7.
+Valor realista para SISO a 5 dB de SINR en 10 MHz.</p>
+<h3 id="nota-de-medicion">Nota de medición</h3>
+<p>En LTE el SINR <strong>no</strong> es una cantidad 3GPP reportable en las medidas RRC — lo calcula
+el chipset y lo exponen las herramientas de drive test. En NR sí se formalizó
+(SS-SINR, Rel-15). Además, el valor mostrado suele ser <strong>post-combinación</strong>: con dos
+antenas de recepción y MRC ya trae ~3 dB de ganancia respecto al cálculo por rama.</p>
+<hr />
+<h2 id="4-rsrq">4. RSRQ</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>RSRQ = N · RSRP / RSSI          N = número de RBs sobre los que se mide el RSSI
+</code></pre></div>
+<p>El RSSI de banda ancha incluye <strong>todo</strong> lo que entra en la antena en los símbolos que
+llevan CRS: señal propia + datos propios (PDSCH) + interferencia de vecinas + ruido.</p>
+<h3 id="las-dos-propiedades-que-lo-hacen-raro">Las dos propiedades que lo hacen raro</h3>
+<p><strong>Depende de la carga.</strong> En los símbolos con CRS, los REs que no son CRS llevan datos
+<em>solo si hay tráfico</em>. Celda vacía → RSSI bajo → RSRQ alto. Celda al 100% → RSRQ se
+degrada, aunque el RSRP y la interferencia sean idénticos.</p>
+<p><strong>Tiene techo estructural.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Escenario</th>
+<th>Cálculo</th>
+<th>RSRQ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 puerto, celda vacía (solo 2 de 12 REs con energía)</td>
+<td>1/2</td>
+<td><strong>−3 dB</strong> (límite superior 3GPP)</td>
+</tr>
+<tr>
+<td>2 puertos, celda 100% cargada, sin interferencia ni ruido</td>
+<td>1/12</td>
+<td><strong>−10.8 dB</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ese −10.8 dB es el "piso ideal", no un valor malo.</p>
+<h3 id="puente-con-el-sinr">Puente con el SINR</h3>
+<p>Bajo celda cargada, con interferencia y ruido repartidos en todos los REs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>SINR = 12 · RSRQ / (1 − 12 · RSRQ)        (ambos en lineal)
+</code></pre></div>
+<p>Verificación: RSRQ = −13.8 dB → SINR = 0 dB. Sirve para mostrar que el RSRQ es un
+<em>proxy</em> del SINR, pero contaminado por el factor de carga.</p>
+<hr />
+<h2 id="5-cuadro-de-diagnostico">5. Cuadro de diagnóstico</h2>
+<p>Cruzar RSRP contra SINR es donde los tres conceptos se separan solos:</p>
+<table>
+<thead>
+<tr>
+<th>RSRP</th>
+<th>SINR</th>
+<th>Diagnóstico</th>
+<th>Escenario típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alto</td>
+<td>Alto</td>
+<td>Ideal</td>
+<td>Cerca del sitio, buen aislamiento</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td><strong>Bajo</strong></td>
+<td><strong>Limitado por interferencia</strong></td>
+<td>Pilot pollution, overshooting; azotea urbana con vista a varios sitios</td>
+</tr>
+<tr>
+<td><strong>Bajo</strong></td>
+<td><strong>Alto</strong></td>
+<td><strong>Limitado por ruido</strong></td>
+<td>Rural: celda lejana pero sin vecinas</td>
+</tr>
+<tr>
+<td>Bajo</td>
+<td>Bajo</td>
+<td>Borde de celda + interferencia</td>
+<td>Peor caso; indoor profundo urbano</td>
+</tr>
+</tbody>
+</table>
+<p>El segundo caso es contraintuitivo y es donde falla la idea de "más barras = más
+velocidad": hay señal de sobra y la sesión va lenta porque varias celdas pisan los
+mismos PRBs.</p>
+<p><strong>Analogía:</strong> RSRP es <em>qué tan fuerte habla</em> la persona; SINR es <em>cuánto ruido de
+fondo</em> hay en el bar; RSRQ es <em>qué fracción de todo lo que oyes</em> es esa persona — y
+empeora cuando el bar se llena, aunque ella siga hablando igual de fuerte.</p>
+<hr />
+<h2 id="6-uso-y-valores-de-referencia">6. Uso y valores de referencia</h2>
+<table>
+<thead>
+<tr>
+<th>Tarea</th>
+<th>Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diseño de cobertura, link budget</td>
+<td><strong>RSRP</strong></td>
+</tr>
+<tr>
+<td>Predicción de throughput, dimensionamiento de capacidad</td>
+<td><strong>SINR</strong></td>
+</tr>
+<tr>
+<td>Handover, reselección, detección de congestión</td>
+<td><strong>RSRQ</strong></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Excelente</th>
+<th>Bueno</th>
+<th>Regular</th>
+<th>Malo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RSRP (dBm)</td>
+<td>≥ −80</td>
+<td>−80 a −90</td>
+<td>−90 a −100</td>
+<td>≤ −100</td>
+</tr>
+<tr>
+<td>RSRQ (dB)</td>
+<td>≥ −10</td>
+<td>−10 a −15</td>
+<td>−15 a −20</td>
+<td>&lt; −20</td>
+</tr>
+<tr>
+<td>SINR (dB)</td>
+<td>≥ 20</td>
+<td>13 a 20</td>
+<td>0 a 13</td>
+<td>&lt; 0</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="7-lte-vs-nr">7. LTE vs NR</h2>
+<p>El marco conceptual es idéntico (SS-RSRP / SS-RSRQ / SS-SINR sobre el SSB, o las
+variantes sobre CSI-RS), pero la estructura de la señal de referencia cambia por
+completo:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LTE (CRS)</th>
+<th>NR (SSB)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cobertura en frecuencia</td>
+<td>Todo el ancho de banda</td>
+<td>Solo 20 RBs (240 subportadoras)</td>
+</tr>
+<tr>
+<td>Presencia en tiempo</td>
+<td>Cada subtrama, siempre encendido</td>
+<td>Ráfagas periódicas (típ. 20 ms)</td>
+</tr>
+<tr>
+<td>Direccionalidad</td>
+<td>Omnidireccional (cell-wide)</td>
+<td>Barrido de haces</td>
+</tr>
+<tr>
+<td>Base de la medida</td>
+<td>CRS</td>
+<td>SSS + DMRS del PBCH</td>
+</tr>
+</tbody>
+</table>
+<p>NR eliminó a propósito la señal de referencia siempre encendida (<em>lean carrier</em>) para
+reducir consumo e interferencia. Consecuencia práctica: en NR el RSRP es <strong>por haz</strong>,
+y hay que especificar qué haz se está midiendo — algo que en LTE no existía.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.breadcrumbs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
