@@ -1,57 +1,85 @@
 {
   "version": "1.0",
-  "timestamp": "2026-08-13T05:17:43.316Z",
+  "timestamp": "2026-08-14T08:35:00.000Z",
   "phase": null,
-  "phase_name": "Session 07 publication and exam",
+  "phase_name": "Final exam grading and per-student feedback publication",
   "phase_dir": null,
   "plan": null,
-  "task": 4,
-  "total_tasks": 4,
+  "task": 7,
+  "total_tasks": 7,
   "status": "paused",
   "completed_tasks": [
     {
       "id": 1,
-      "name": "Publish the 5G network-design exam in the course blog",
+      "name": "Grade the five final-exam notebooks against a phase rubric (F0=2, F1-F6=3; 60% numeric / 40% justification)",
       "status": "done",
-      "commit": "e3fc4e59"
+      "commit": "n/a-local-only"
     },
     {
       "id": 2,
-      "name": "Make examen-alumno.ipynb selectable and coherent for Jesús María and San Isidro",
+      "name": "Run a cross-student calibration pass to remove inter-grader drift (6 adjustments applied)",
       "status": "done",
-      "commit": "aa76284b"
+      "commit": "n/a-local-only"
     },
     {
       "id": 3,
-      "name": "Add both Session 07 lecture-video links and place them below the page title",
+      "name": "Write feedback.md per student plus the internal RESUMEN-NOTAS.md summary table",
       "status": "done",
-      "commit": "df874ca7"
+      "commit": "n/a-gitignored"
     },
     {
       "id": 4,
-      "name": "Persist missing notebook cell identifiers",
+      "name": "Strip AI/process tells: remove calibration notes, rubric vocabulary, and peer names from student-facing copies",
       "status": "done",
-      "commit": "108e48ea"
+      "commit": "n/a-gitignored"
+    },
+    {
+      "id": 5,
+      "name": "Append the weighted course grade (30% practicals / 30% midterm / 40% final) to each feedback",
+      "status": "done",
+      "commit": "n/a-gitignored"
+    },
+    {
+      "id": 6,
+      "name": "Broaden .gitignore so student submissions, feedback.md and RESUMEN-NOTAS.md never reach the public repo",
+      "status": "done",
+      "commit": "202314ca"
+    },
+    {
+      "id": 7,
+      "name": "Publish unlisted per-student feedback pages on the course site with random-code URLs",
+      "status": "done",
+      "commit": "202314ca"
     }
   ],
   "remaining_tasks": [
     {
-      "id": 5,
+      "id": 8,
+      "name": "Send each student their personal feedback URL",
+      "status": "not_started"
+    },
+    {
+      "id": 9,
+      "name": "Decide what to do with the six now-redundant Google Drive documents (feedback duplicates plus the internal summary)",
+      "status": "not_started"
+    },
+    {
+      "id": 10,
       "name": "Finish the Session 07 lesson closing material and remove the construction notice",
       "status": "not_started"
     },
     {
-      "id": 6,
+      "id": 11,
       "name": "Create the two explicit Phase 4 SVG placeholders: sectorizacion_3x120.svg and downtilt_geometria.svg",
       "status": "not_started"
     },
     {
-      "id": 7,
+      "id": 12,
       "name": "Synchronize the external instructor script artifact with the completed lesson",
       "status": "not_started"
     },
     {
-      "id": 8,
+      "id": 13,
       "name": "Refresh stale active-work sections in PROJECT.md and earlier sections of STATE.md",
       "status": "not_started"
     }
@@ -61,42 +89,63 @@
   "background_processes": [],
   "human_actions_pending": [
     {
-      "action": "Re-export cercado-lima-01 from Blender before offering it as an exam scene",
-      "context": "The scene remains in preparation and is explicitly unavailable on the published exam page.",
+      "action": "Distribute the five feedback URLs to the students through whatever channel the instructor prefers",
+      "context": "The pages are live but unlisted; nobody can reach them until the instructor sends each link.",
       "blocking": false
     },
     {
-      "action": "Provide student email addresses before distributing Parcial 01 feedback",
-      "context": "Deferred administrative task; outside the current Session 07 workstream.",
+      "action": "Decide whether to keep or trash the Google Drive copies now that the site hosts the feedback",
+      "context": "Folder 'Examen Final 5G - Retroalimentacion 2026' holds five student docs plus the internal summary. They were never shared; the student docs are superseded by the site pages.",
+      "blocking": false
+    },
+    {
+      "action": "Re-export cercado-lima-01 from Blender before offering it as an exam scene",
+      "context": "The scene remains in preparation and is explicitly unavailable on the published exam page.",
       "blocking": false
     }
   ],
   "decisions": [
     {
-      "decision": "The student exam notebook supports exactly jesus-maria-01 and san-isidro-01 through the Colab ESCENA selector.",
-      "rationale": "Changing only the XML path was insufficient: each map also needs coherent TdR, bandwidth, site limits, PRB verification, and placement guidance.",
+      "decision": "Feedback pages are emitted as standalone .html under docs/f/, never as .md.",
+      "rationale": "MkDocs copies non-Markdown files verbatim, which keeps them out of the search index, the sitemap and the navigation. Emitting .md would place every student's full text into search_index.json, where a name typed into the course search box would surface it.",
       "phase": null
     },
     {
-      "decision": "Every GitHub Pages deployment installs Sionna RT and runs scripts/verify-exam-colab.py --with-sionna before the strict MkDocs build.",
-      "rationale": "Publication must fail if either ZIP cannot be extracted or either scene cannot be loaded by Sionna.",
+      "decision": "URLs follow <slug-del-nombre>-<12 digitos aleatorios>.html; the codes live in exams/final-01/.enlaces.json so rebuilds keep the same links.",
+      "rationale": "The instructor wanted the student name visible in the URL while making one student's link underivable from another's. --rotar issues new codes if a link must be invalidated.",
       "phase": null
     },
     {
-      "decision": "examen-solucion.ipynb remains local-only and ignored; only the student notebook is public.",
-      "rationale": "Avoid publishing the solution with the assessment.",
+      "decision": "Protection is obscurity, accepted knowingly by the instructor.",
+      "rationale": "Instructor's explicit call: for a five-student class, one student seeing another's feedback is a minor harm. Search-engine indexing was still blocked (noindex meta plus docs/robots.txt) because permanent public indexing of names and grades is a different order of risk.",
+      "phase": null
+    },
+    {
+      "decision": "Grades were calibrated across all five exams after independent grading, and the calibration notes were then removed from the student-facing copies.",
+      "rationale": "Parallel independent graders drifted, mostly on the justification axis; six adjustments of 0.1-0.4 harmonised them. The notes explaining that moderation are internal mechanics and stay in RESUMEN-NOTAS.md.",
+      "phase": null
+    },
+    {
+      "decision": "Student submissions, feedback.md and RESUMEN-NOTAS.md stay gitignored; only the rendered HTML pages are published.",
+      "rationale": "The repository is public. The rendered pages are the deliberate publication; the working files are not.",
       "phase": null
     }
   ],
   "blocking_constraints": [
     {
-      "name": "Multi-map consistency",
+      "name": "Public repository",
       "severity": "advisory",
-      "description": "Do not treat an ESCENA URL switch as complete multi-map support; scenario-specific wording, TdR, verifiers, dimensions, and Sionna loading must stay aligned.",
-      "prevention": "Run python scripts/verify-exam-colab.py --with-sionna and mkdocs build --strict before publication."
+      "description": "Anything committed here is world-readable, including git history. Student PII must reach the repo only as the deliberately published docs/f/ pages.",
+      "prevention": "Keep exams/final-01/ gitignored; check git status before committing after touching grading material."
+    },
+    {
+      "name": "MkDocs publishes its own index",
+      "severity": "advisory",
+      "description": "search_index.json, sitemap.xml and the public gh-pages branch each enumerate site content, so an obscure URL alone does not make a Markdown page private.",
+      "prevention": "Keep unlisted pages as .html, and after any publication verify zero /f/ entries in both sitemap.xml and search_index.json on the live site."
     }
   ],
   "uncommitted_files": [],
-  "next_action": "Resume by choosing a Session 07 closing task; recommended first action is to finish the lesson closing material and the two explicit Phase 4 SVG placeholders, then refresh PROJECT.md/STATE.md.",
-  "context_notes": "No formal roadmap or phase is active. main is clean and synchronized with origin/main at 108e48ea. The exam page is live at /exams/examen-diseno-red/, the Colab notebook exposes two maps, and the deployment gate loads both scenes with Sionna. PROJECT.md and older STATE.md position/todo sections predate the completed Session 07 work; trust this handoff and the latest git history first."
+  "next_action": "Send the five feedback URLs to the students. Everything technical is done and verified live; the remaining grading work is purely distribution.",
+  "context_notes": "main is clean and synchronized with origin/main at 202314ca. The five feedback pages are live and return 200, with zero entries in sitemap.xml and search_index.json and a 404 on a wrong code. Final course grades: Bermudez 17.6, Castilla 17.8, Loayza 15.9, Livia 15.5, Taipe 14.9. NOTE, raised but explicitly NOT actioned at the instructor's instruction: docs/sessions/03-ofdm-systems/index.md and docs/sessions/04-gnuradio-ofdm/gnuradio-ofdm.md publish named lab-grade tables, including 2/20 and 5/20 marks and an observation describing copied code. Do not touch them unless the instructor asks."
 }

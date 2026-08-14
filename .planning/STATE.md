@@ -53,6 +53,28 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- Páginas no listadas (2026-08-14): la retroalimentación por alumno se publica
+  como **`.html` suelto** bajo `docs/f/`, nunca como `.md`. MkDocs copia los
+  archivos que no son Markdown sin procesarlos, así que quedan fuera del índice
+  de búsqueda, del `sitemap.xml` y de la navegación. Como `.md` entrarían a
+  `search_index.json` y escribir un apellido en el buscador del curso mostraría
+  el informe de un compañero. Verificar siempre cero entradas `/f/` en el
+  sitemap y en el índice del sitio publicado.
+- URL de retroalimentación (2026-08-14): `<slug-del-nombre>-<12 dígitos>.html`,
+  con los códigos guardados en `exams/final-01/.enlaces.json` para que
+  regenerar no cambie los enlaces; `--rotar` los invalida. La protección es
+  obscuridad y se aceptó como tal; la indexación por buscadores sí se bloqueó
+  (`noindex` y `docs/robots.txt`), porque exponer nombres y notas de forma
+  permanente en Google es un riesgo de otro orden.
+- Calificación por rúbrica (2026-08-14): F0 = 2 pts, F1–F6 = 3 pts; dentro de
+  cada fase 60% numérico y 40% justificación. Tras calificar en paralelo se
+  aplica una **pasada de calibración cruzada** entre alumnos, porque
+  correctores independientes derivan en el eje de justificación. Esa mecánica
+  de moderación es interna: no aparece en el informe del alumno.
+- PII (2026-08-14): entregas, `feedback.md` y `RESUMEN-NOTAS.md` quedan en
+  `.gitignore`. El repositorio es público y el historial es permanente; lo
+  único que se publica son las páginas renderizadas de `docs/f/`.
+
 - Voz editorial (2026-08-06): **tuteo** (segunda persona) es la voz oficial de todo el material del curso — lecciones, guías y notas. Decisión no retroactiva: lo ya escrito no se toca. La forma impersonal queda descartada como estándar.
 - Registro léxico (2026-08-11): **"cálculo"**, nunca "cuenta" (no natural en español peruano); **"la publicidad"**, nunca "folleto". Barrido retroactivo aplicado a Sesión 07 (lección, notebook, guion). Regla didáctica: ningún símbolo entra a una fórmula sin nombrarse en palabras en su primer uso; glosario de siglas como respaldo.
 - Registro léxico (2026-08-11b): **"perilla" prohibida** (anglicismo de *knob*, nadie la usa). Usar **"variable"** para `ESCENA` (lo que el alumno cambia) y **"parámetro"** para ajustes de diseño (tilt, azimut). Barrido aplicado a lección, guía y ambos notebooks.
@@ -80,6 +102,12 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
+- **Examen final:** enviar a cada alumno su enlace personal (las páginas están
+  publicadas pero no listadas; nadie llega hasta que se envíen). Códigos en
+  `exams/final-01/.enlaces.json`.
+- **Examen final:** decidir qué hacer con la carpeta de Drive "Examen Final 5G —
+  Retroalimentación 2026": cinco documentos ya redundantes más el resumen
+  interno, ninguno compartido.
 - **Session 07 next:** write `docs/sessions/07-network-design/index.md` wrapping the 8 notebook parts with the 4G/5G architecture + procedures theory (skeleton agreed: why architecture → minimal EPC → 5G evolution/NSA-SA → designer-facing procedures → small-network parameters → integrative case).
 - Session 07: sectorization step — 3×`tr38901` sectors with azimuth/tilt per BS (replaces the iso-element simplification in Part 2).
 - Session 07: decide final scene (current San Isidro test scene vs another Lima district / campus); fix OSM building heights by hand for key buildings in Blender if needed.
@@ -114,6 +142,18 @@ Recent decisions affecting current work:
 | Documentation | Persistent `guion-clase.md` | Deferred until requested | 2026-07-04 handoff |
 
 ## Session Continuity
+
+Last session: 2026-08-14
+Stopped at: Examen final calificado, calibrado y publicado. Los cinco informes
+viven como páginas no listadas en `docs/f/<nombre>-<12 dígitos>.html`, generadas
+por `scripts/build-feedback-pages.py`. Notas finales del curso (30/30/40):
+Bermúdez 17.6, Castilla 17.8, Loayza 15.9, Livia 15.5, Taipe 14.9. `main` limpio
+y sincronizado en `202314ca`; despliegue en verde y las cinco URLs responden 200.
+Pendiente: enviar los enlaces a cada alumno, decidir qué hacer con las copias en
+Drive, y el trabajo editorial de Sesión 07 que sigue intacto.
+Resume file: `.planning/.continue-here.md` (fuente estructurada: `.planning/HANDOFF.json`)
+
+### Previous session continuity (2026-08-13)
 
 Last session: 2026-08-13
 Stopped at: S07 y examen publicados. El examen está en el blog y `examen-alumno.ipynb` permite elegir `jesus-maria-01` o `san-isidro-01` con TdR/verificadores coherentes. CI instala Sionna RT, extrae y carga ambas escenas antes de cada despliegue. La lección incluye enlaces a los videos Parte 1 y Parte 2. `main` limpio y sincronizado en `108e48ea` antes del commit de pausa.
