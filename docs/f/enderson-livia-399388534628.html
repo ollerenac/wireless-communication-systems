@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Examen final — Diseño de red 5G (san-isidro-01)</title>
+<style>
+  :root {
+    --fondo: #ffffff; --texto: #1f2328; --tenue: #59636e;
+    --borde: #d1d9e0; --acento: #1c6bba; --suave: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0d1117; --texto: #e6edf3; --tenue: #9198a1;
+      --borde: #30363d; --acento: #6cb0ff; --suave: #161b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 5rem;
+    background: var(--fondo); color: var(--texto);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  .aviso {
+    border: 1px solid var(--borde); border-left: 3px solid var(--acento);
+    background: var(--suave); padding: .7rem .9rem; border-radius: 5px;
+    font-size: .87rem; color: var(--tenue); margin-bottom: 2.5rem;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 1.2rem; }
+  h2 {
+    font-size: 1.18rem; margin: 2.4rem 0 .8rem;
+    padding-bottom: .3rem; border-bottom: 1px solid var(--borde);
+  }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .6rem; }
+  p, li { margin: 0 0 .85rem; }
+  code {
+    background: var(--suave); border: 1px solid var(--borde);
+    border-radius: 4px; padding: .1em .35em; font-size: .875em;
+  }
+  .tabla { overflow-x: auto; margin: 1.2rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { border: 1px solid var(--borde); padding: .45rem .7rem; text-align: left; }
+  th { background: var(--suave); font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--borde); margin: 2.5rem 0; }
+  blockquote {
+    margin: 1.2rem 0; padding-left: 1rem;
+    border-left: 3px solid var(--borde); color: var(--tenue);
+  }
+  footer {
+    margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--borde);
+    font-size: .82rem; color: var(--tenue);
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="aviso">
+  Página personal y no listada. Su dirección es única para ti — no aparece en el
+  menú ni en el buscador del curso. Evita reenviarla.
+</div>
+<h1>Examen final — Diseño de red 5G (san-isidro-01)</h1>
+<p><strong>Nota final: 16.1 / 20</strong></p>
+<p>Tu cadena analítica es de las más sólidas del grupo: los cálculos de F1 a F3 están completos, correctos y bien defendidos. Lo que te bajó la nota no fue la matemática sino la disciplina de verificación: dejaste F4 en error, F5 sin verificar, y F6 validó un despliegue que tu propio verificador había rechazado. Vamos fase por fase.</p>
+<h2>F0 — Requisitos (1.9 / 2.0)</h2>
+<p>Tu <code>REQ</code> quedó bien formado y casi todos los valores tienen origen correcto: −110 dBm / 95% de la Tabla 0.1 (fila "Débil", bien citada), 0 dB / 90%, el 50/5 de borde <strong>adoptado</strong> del TdR (bien: no caíste en la circularidad de derivarlo de la demanda), n78, 100 MHz, 6 sitios y 43 dBm.</p>
+<p>Los insumos de la demanda también salen del TdR de tu escena: 25 000 personas presentes/km² en hora cargada, 30% de participación y 10 GB/mes son los valores de <code>san-isidro-01</code> (los 30 000 × 25% × 12 GB/mes pertenecen a Jesús María). Tu demanda de 583 Mbps/km² está bien calculada. Lo que sí conviene mirar es el margen: tu R5 = 600 Mbps/km² deja apenas 17 Mbps/km² sobre la demanda (2.9%), un colchón muy delgado para un diseño que debe durar. Un R5 con más holgura habría sido más defendible.</p>
+<p>En la justificación, la respuesta al escenario de +10 pp de participación va en la dirección correcta pero sin aritmética: con 40% la demanda sube a ~777 Mbps/km² y tu R5 de 600 revienta. Ese cálculo lo hiciste bien... en F3. Aquí faltó.</p>
+<h2>F1 — Espectro (2.8 / 3.0)</h2>
+<p>Numérico completo: la tabla de bandas está bien calculada (Δpérdida 20·log10(f/fc), radios relativos con n = 3.8), la guarda de 0.845 MHz es la correcta para 100 MHz con SCS 30 kHz, y los 273 PRB coinciden exactamente con el TdR. El reparto DDDSU (71.4 MHz DL / 20 MHz UL efectivos) está bien contado.</p>
+<p>En la justificación, ojo con un detalle: escribiste "3 × 7.98 ≈ 24 sitios" para n258, pero tu propia tabla da un factor de 8.26× y tu proyecto usa 4 sitios (serían ~33). Ese 7.98 no sale de tu notebook — cuando cites un número, que sea el tuyo. La pregunta sobre el espectro contiguo en n28 quedó a medias: dijiste que "no vende el producto" (correcto) pero la pista apuntaba a que en 700 MHz no existen 100 MHz contiguos que licenciar. Las respuestas sobre la guarda, el UL en DDDSU y el SCS están bien.</p>
+<h2>F2 — Link budget (2.9 / 3.0)</h2>
+<p>Fase impecable. EPRE 7.85 dBm (43 − 10·log10(3276)), MAPL DL 124.8 dB con tu umbral de −110 y margen de 9 dB, MAPL UL 132 dB con la ventana de 5 MHz del UE de borde, radio 371 m invirtiendo el UMa, y 4 sitios por cobertura sobre tus 1.32 km². Todo defendible y todo encadenado.</p>
+<p>La justificación identifica correctamente que aquí limita el DL (la potencia repartida entre 3 276 subportadoras contra el UE que concentra en 5 MHz) y lista bien dónde sí limitaría el UL. El escenario del 99% está cuantificado: 7 sitios contra los 6 del municipio, proyecto inviable — exactamente el tipo de lectura que pide el curso. Lo único: la pregunta 1 pedía mostrar la aritmética del EPRE y la describiste más que mostrarla.</p>
+<h2>F3 — Dimensionamiento (3.0 / 3.0)</h2>
+<p>Fase completa. Celda de 111 Mbps (2.0 × 71.4 × 0.78), demanda de 792 Mbps sobre tu área, n_capacidad = 3, y el veredicto max(4, 3) = 4 sitios de 6 autorizados. La justificación es la mejor del examen: margen 1.69×, consumido en ~2.3 años a 25% de crecimiento anual, escenario de +10 pp recalculado con tus propios números (1 025 Mbps, margen 1.30×, ~1.1 años), y una lectura madura de la asimetría DL/UL y del orden de las salidas del operador (SE primero, portadora después, sitios al final). Así se defiende un diseño.</p>
+<h2>F4 — Despliegue (1.4 / 3.0)</h2>
+<p>Aquí se quebró el examen. El verificador terminó en <strong>AssertionError: la antena de s3 quedó a 3 m</strong> — el sitio cayó en la calle, no en una azotea. Una fase cuyo verificador no pasa no puede puntuar como una que sí pasó, por bien planteada que esté. Te reconocí el trabajo hecho — el PLAN de 4 sitios existe y el mapa exploratorio corrió — pero eso da 0.6 de los 1.8 puntos numéricos, no más.</p>
+<p>Lo más costoso no es el error en sí — colocar sitios sobre un mapa real tiene su dificultad — sino que <strong>no lo corregiste ni lo reconociste</strong>. Tu justificación declara como criterios "altura de azotea" y evitar "sitios en la calle"... mientras s3 estaba exactamente en la calle. El plot de huellas que menciona el propio mensaje de error te habría mostrado dónde buscar una azotea de verdad. Las respuestas sobre el muestreo 10⁵ vs 10⁶ y el elemento de 8 dBi vs los 16 dBi del link budget están bien planteadas.</p>
+<h2>F5 — Plan de celdas (1.7 / 3.0)</h2>
+<p>Tu trabajo corrió y está <strong>correcto</strong>: el PCI = 3·i + grupo respeta la regla dura co-sitio (cada sitio con sus tres grupos mod-3), el coloreo bajó el conflicto de 3 910 a 3 435 m, y el cálculo RACH es exacto (t_guard 2.57 µs con tu radio de 371 m, N_CS mínimo 3 → 13 de tabla, 64 preámbulos por raíz, 1 raíz). Una sola TA para 1.3 km² es la decisión correcta.</p>
+<p>Pero la celda del verificador quedó <strong>sin ejecutar</strong>, y sin su salida no hay constancia de que el plan pasó: otra vez 0.6 de 1.8. Duele especialmente porque el trabajo estaba bien hecho — ejecutar una celda más te habría dado 1.2 puntos.</p>
+<p>La justificación es muy buena: el caso rural de 15 km está recalculado con la tabla completa (N_CS 119, 7 preámbulos por raíz, 10 raíces por celda — los tres números correctos), y la explicación de por qué el coloreo con 3 grupos no puede eliminar todo conflicto es sólida.</p>
+<h2>F6 — Validación (2.4 / 3.0)</h2>
+<p>El verificador pasó y tus cálculos sobre el mapa consolidado son correctos: R2 60.4%, R3 64.7%, p5 = 60 Mbps (cumple el 50 del TdR), SE medida 4.53, n medido 3.68, σ aparente 14.2 dB.</p>
+<p>Pero hay un problema de coherencia de cadena que debes ver: tu tabla final declara <strong>"R8: 4 sitios en azoteas (verificado F4) — CUMPLE"</strong>, y F4 no verificó nada — falló con s3 a 3 m. Tu F6 valida un despliegue que tu propio verificador había rechazado, y parte del déficit de R2/R3 (60% contra las metas de 95/90) viene precisamente de ese sitio radiando a nivel de calle, ahogado entre edificios. Un veredicto final que cita una verificación que falló no es un veredicto: la primera salida de tu lista de correcciones debía ser "subir s3 a una azotea y re-validar", antes que cualquier tilt.</p>
+<p>En la justificación hay además números que no son los tuyos: citas SE 4.9 cuando tu salida dice 4.53, y describes el invasor como "s2c2 a 399 m con ~29 dB" cuando tu bisturí reporta <strong>s4c2, 334 m, 27.1 dB</strong>. Eso delata texto trasladado de otra corrida sin verificar contra tu propia ejecución — en un informe de ingeniería eso invalida la evidencia.</p>
+<p>Lo bueno: el diagnóstico de la σ es de lo mejor del examen. Reconoces que los 14.2 dB medidos casi duplican la hipótesis de 8 dB, que el margen de 9 dB de F2 solo compra ~75% del área, y cuantificas la consecuencia (margen ~20 dB, radio ~210 m, ~10 sitios contra los 6 del TdR). Esa lectura — "la σ se mide, no se recita" — es exactamente la lección de la fase. Y la conclusión sobre el bisturí de tilt (delta −0.0 pp porque no había overshooting que corregir) es correcta.</p>
+<h2>Resumen</h2>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Numérico</th>
+<th>Justificación</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F0</td>
+<td>1.2 / 1.2</td>
+<td>0.7 / 0.8</td>
+<td>1.9 / 2.0</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>1.8 / 1.8</td>
+<td>1.0 / 1.2</td>
+<td>2.8 / 3.0</td>
+</tr>
+<tr>
+<td>F2</td>
+<td>1.8 / 1.8</td>
+<td>1.1 / 1.2</td>
+<td>2.9 / 3.0</td>
+</tr>
+<tr>
+<td>F3</td>
+<td>1.8 / 1.8</td>
+<td>1.2 / 1.2</td>
+<td>3.0 / 3.0</td>
+</tr>
+<tr>
+<td>F4</td>
+<td>0.6 / 1.8</td>
+<td>0.8 / 1.2</td>
+<td>1.4 / 3.0</td>
+</tr>
+<tr>
+<td>F5</td>
+<td>0.6 / 1.8</td>
+<td>1.1 / 1.2</td>
+<td>1.7 / 3.0</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>1.6 / 1.8</td>
+<td>0.8 / 1.2</td>
+<td>2.4 / 3.0</td>
+</tr>
+<tr>
+<td><strong>Nota</strong></td>
+<td></td>
+<td></td>
+<td><strong>16.1 / 20</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Tienes el cálculo y la defensa técnica de un buen planificador — F2 y F3 lo demuestran. Lo que te falta es el reflejo del verificador: un diseño no está terminado cuando el código corre, sino cuando <strong>pasa su verificación</strong> y cuando cada número que citas en el informe es el que tu propia ejecución produjo. Corrige s3 a una azotea, re-ejecuta la cadena F4→F6 y compara: esa diferencia en R2/R3 es la lección más valiosa que este examen te dejó pendiente.</p>
+<hr />
+<h2>Nota final del curso</h2>
+<p>Esta es tu nota final, con el peso de cada evaluación:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Evaluación</th>
+<th>Peso</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promedio de trabajos prácticos</td>
+<td>30%</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Examen parcial</td>
+<td>30%</td>
+<td>15.2</td>
+</tr>
+<tr>
+<td>Examen final (este informe)</td>
+<td>40%</td>
+<td>16.1</td>
+</tr>
+<tr>
+<td><strong>Nota final</strong></td>
+<td></td>
+<td><strong>15.5</strong> — quince con cinco décimas</td>
+</tr>
+</tbody>
+</table></div>
+<p>El examen final pesa el 40%, así que los 16.1 puntos que obtuviste aquí aportan 6.44 a esa nota.</p>
+<footer>
+  Comunicaciones Inalámbricas · Retroalimentación del examen final ·
+  ¿Dudas sobre la calificación? Escríbeme y la revisamos.
+</footer>
+</main>
+</body>
+</html>

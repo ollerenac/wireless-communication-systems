@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Examen final — Diseño de red 5G (jesus-maria-01)</title>
+<style>
+  :root {
+    --fondo: #ffffff; --texto: #1f2328; --tenue: #59636e;
+    --borde: #d1d9e0; --acento: #1c6bba; --suave: #f6f8fa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fondo: #0d1117; --texto: #e6edf3; --tenue: #9198a1;
+      --borde: #30363d; --acento: #6cb0ff; --suave: #161b22;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2.5rem 1.25rem 5rem;
+    background: var(--fondo); color: var(--texto);
+    font: 16px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  main { max-width: 46rem; margin: 0 auto; }
+  .aviso {
+    border: 1px solid var(--borde); border-left: 3px solid var(--acento);
+    background: var(--suave); padding: .7rem .9rem; border-radius: 5px;
+    font-size: .87rem; color: var(--tenue); margin-bottom: 2.5rem;
+  }
+  h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 1.2rem; }
+  h2 {
+    font-size: 1.18rem; margin: 2.4rem 0 .8rem;
+    padding-bottom: .3rem; border-bottom: 1px solid var(--borde);
+  }
+  h3 { font-size: 1rem; margin: 1.8rem 0 .6rem; }
+  p, li { margin: 0 0 .85rem; }
+  code {
+    background: var(--suave); border: 1px solid var(--borde);
+    border-radius: 4px; padding: .1em .35em; font-size: .875em;
+  }
+  .tabla { overflow-x: auto; margin: 1.2rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+  th, td { border: 1px solid var(--borde); padding: .45rem .7rem; text-align: left; }
+  th { background: var(--suave); font-weight: 600; }
+  hr { border: 0; border-top: 1px solid var(--borde); margin: 2.5rem 0; }
+  blockquote {
+    margin: 1.2rem 0; padding-left: 1rem;
+    border-left: 3px solid var(--borde); color: var(--tenue);
+  }
+  footer {
+    margin-top: 4rem; padding-top: 1rem; border-top: 1px solid var(--borde);
+    font-size: .82rem; color: var(--tenue);
+  }
+</style>
+</head>
+<body>
+<main>
+<div class="aviso">
+  Página personal y no listada. Su dirección es única para ti — no aparece en el
+  menú ni en el buscador del curso. Evita reenviarla.
+</div>
+<h1>Examen final — Diseño de red 5G (jesus-maria-01)</h1>
+<p><strong>Nota: 18.7 / 20</strong></p>
+<p>Hiciste un examen muy sólido, Meri Karina: los siete verificadores pasan, la cadena F0→F6 es coherente de punta a punta, y tus decisiones de diseño están defendidas. Lo que te separa del puntaje perfecto está casi todo en un solo hábito: varias celdas de justificación citan números de corridas anteriores del notebook que ya no coinciden con la salida final. En un informe de ingeniería, ese desfase le quita credibilidad a un análisis que en el fondo es correcto. Vamos fase por fase.</p>
+<h2>F0 — Requisitos (1.9 / 2.0)</h2>
+<p>Tu cálculo de demanda es correcto: 12 GB/mes con f_bh = 0.10 da 88.89 kbps por abonado, y con 7 500 abonados/km² llegas a 666.67 Mbps/km². Declaraste R5 = 700 Mbps/km² con un margen de ~5% y lo dijiste explícitamente — eso es exactamente lo que pide el curso: R5 sale de tu demanda, no al revés. También está bien que adoptaras el 50/5 del TdR sin intentar derivarlo.</p>
+<p>Dos observaciones. En la pregunta 2 no citaste los bitrates mínimos de la Tabla 0.3: la pregunta pedía el mínimo técnico en DL y en UL de los servicios de la publicidad, con números, para compararlos contra el 50/5. Decir que el video HD y las videollamadas "son los más exigentes" es cierto pero incompleto sin las cifras. Y en la pregunta 3, tu punto sobre el margen de 5% frente a un alza de diez puntos de participación es correcto — con 35% la demanda sube a ~933 Mbps/km² y tu R5 de 700 queda corto — aunque el argumento habría ganado con ese cálculo explícito.</p>
+<h2>F1 — Espectro (2.9 / 3.0)</h2>
+<p>Tu réplica de la Tabla 1.1 es correcta (n258 costaría 8.26 veces más sitios; n28 daría cobertura barata pero con solo 15 MHz de espectro contiguo, que no soporta la capacidad del proyecto). Los 217 PRB coinciden con el TdR, y el reparto DDDSU (71.4% DL / 20% UL) está bien contado. Me gustó el cálculo de la pregunta 3: SE = 5/16 = 0.3125 bit/s/Hz para el borde UL, concluyendo que el tiempo no es el problema sino la potencia del UE — esa es la lectura correcta.</p>
+<h2>F2 — Link budget (2.6 / 3.0)</h2>
+<p>Numérico impecable: EPRE 8.8 dBm (43 − 10·log10(2604)), MAPL DL 125.8 dB contra UL 132.0 dB, radio 394 m, 4 sitios por cobertura. La aritmética del EPRE en la pregunta 1 está bien mostrada.</p>
+<p>Donde perdiste puntos es en las preguntas 2 y 3. Identificaste que el DL limita (125.8 &lt; 132.0), pero la pregunta pedía más: <em>por qué</em> falla aquí el dicho "el uplink siempre limita" (tu umbral R2 de −110 dBm es exigente para el control DL, mientras el UE de borde solo necesita empujar 5 Mbps en 5 MHz) y en qué tipo de proyecto sí aplicaría (uno de datos con umbral de cobertura relajado). Y en la pregunta 3 afirmaste que con 99% de área se "superan los 7 sitios autorizados" sin mostrar el cálculo: con margen 14.5 dB el MAPL cae 5.5 dB, el radio baja a ~285 m y salen exactamente 7 sitios — el proyecto queda justo en el límite del municipio, sin margen para capacidad, que es una conclusión distinta (y más interesante) que excederlo.</p>
+<h2>F3 — Dimensionamiento (3.0 / 3.0)</h2>
+<p>La mejor fase de tu examen. Numérico correcto (celda 89 Mbps, demanda 951 Mbps, veredicto 4 sitios) y una justificación con toda la aritmética a la vista: margen 1069.3/951.2 = 1.124, que con 25% de crecimiento anual se consume en 0.52 años; el escenario de +10 pp de participación de mercado resuelto completo (1331.7 Mbps → 5 sitios, aún viable frente al tope de 7); y la asimetría DL/UL defendida con números (180 Mbps instalados en UL contra 143 de demanda). Así se defiende un número.</p>
+<h2>F4 — Despliegue (2.8 / 3.0)</h2>
+<p>Aquí estaba la decisión más importante del examen y la tomaste bien. Tu F3 decía 4 sitios, pero al mirar el mapa viste zonas de sombra y escalaste hasta los 7 que autoriza R8, explicándolo en la pregunta 1: el veredicto analítico es el mínimo, el trazador manda sobre la geometría. Eso es exactamente el criterio del curso. Los 7 sitios quedaron en azoteas (16.6 a 24.0 m) y los proxies están bien calculados: R2 59.1% / R3 62.3%.</p>
+<p>El descuento viene de los números citados: en las preguntas 2 y 4 escribiste 60.1% y 56.8%, que son de una corrida anterior — tu salida final dice 62.3% y 59.1%. El contenido de las respuestas es correcto (el mapa usa un elemento de ~8 dBi contra los 16 dBi del link budget, y el muestreo 10⁵ es exploratorio), pero cada número citado debe corresponder a la corrida que entregas.</p>
+<h2>F5 — Plan de celdas (2.9 / 3.0)</h2>
+<p>Todo correcto: 21 PCIs únicos con la regla co-sitio dura respetada, conflicto mod-3 de 12 740 m, RACH bien resuelto (t_guard 2.73 µs → N_CS mínimo 3 → N_CS = 13 → 64 preámbulos por raíz → 1 raíz por celda) y una sola tracking area razonada por el tamaño de la red y el costo en batería y señalización. La respuesta sobre la celda rural de 15 km va en la dirección correcta; solo la explicación de por qué el plan de raíces se hace junto al de PCI quedó algo imprecisa — el punto central es que ambas son numeraciones limitadas que deben coordinarse entre vecinas para que la red no confunda accesos ni identidades.</p>
+<h2>F6 — Veredicto y diagnóstico (2.6 / 3.0)</h2>
+<p>Numérico completo y correcto: R2 87.3% (meta 95%), R3 87.4% (meta 90%), p5 = 45 Mbps (meta 50), SE medida 3.90, n = 1.77, sigma aparente 12.9 dB. Que R2, R3 y R4 reprueben no te resta por sí solo: mi propia versión de referencia llegó a 94.6/89.7 con otro posicionamiento. Lo que miro aquí es tu diagnóstico.</p>
+<p>Y el diagnóstico, en lo conceptual, está bien armado: explicaste que el 62.3% exploratorio y el 87.4% consolidado no se comparan entre sí porque difieren en muestreo, no en red; leíste la SE medida (3.90) como techo optimista frente a la hipótesis conservadora de 2.0, y dijiste cuál usar para dimensionar y cuál para validar; interpretaste el bisturí de tilt (+0.0 pp) como señal de que el problema no es de apuntamiento sino de interferencia multitrayecto en geografía densa; y ordenaste las salidas por costo (edificios más altos, ICIC, small cells en las sombras dado que R8 ya está al tope).</p>
+<p>El problema, otra vez, son los números citados: escribiste 86% y 86.5% cuando tu salida dice 87.3% y 87.4%; el bisturí que citaste (60.1%, 20.7 → 20.6 dB) es de otra corrida (la final da 62.3%, 24.4 → 24.3 dB); y el argumento clave sobre el margen de shadowing — que es correcto en su forma — usa una sigma de "15.5 dB" que no aparece en tu salida: tu drive test virtual midió 12.9 dB. La conclusión sigue en pie (12.9 &gt; 8 dB declarados, así que el margen de 9 dB de la Fase 2 compra menos área de la prometida), pero citada con el número equivocado pierde fuerza justo donde más la necesitabas.</p>
+<h2>En resumen</h2>
+<p><strong>Fortalezas:</strong> cadena numérica completa y verificada, la escalada 4 → 7 sitios defendida con evidencia del mapa, y una F3 ejemplar en mostrar la aritmética.</p>
+<p><strong>A corregir para la próxima:</strong> antes de entregar, relee cada celda de justificación contra la salida final del notebook — cada número citado debe tener origen en <em>esa</em> corrida. Y cuando una pregunta pide cifras de una tabla (los mínimos técnicos de la Tabla 0.3) o un cálculo (los sitios con 99% de área), muéstralos: la diferencia entre afirmar y demostrar es lo que separa un buen diseño de un buen informe de diseño.</p>
+<p><strong>Nota final: 18.7 / 20.</strong></p>
+<hr />
+<h2>Nota final del curso</h2>
+<p>Esta es tu nota final, con el peso de cada evaluación:</p>
+<div class="tabla"><table>
+<thead>
+<tr>
+<th>Evaluación</th>
+<th>Peso</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promedio de trabajos prácticos</td>
+<td>30%</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Examen parcial</td>
+<td>30%</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td>Examen final (este informe)</td>
+<td>40%</td>
+<td>18.7</td>
+</tr>
+<tr>
+<td><strong>Nota final</strong></td>
+<td></td>
+<td><strong>14.9</strong> — catorce con nueve décimas</td>
+</tr>
+</tbody>
+</table></div>
+<p>El examen final pesa el 40%, así que los 18.7 puntos que obtuviste aquí aportan 7.48 a esa nota.</p>
+<footer>
+  Comunicaciones Inalámbricas · Retroalimentación del examen final ·
+  ¿Dudas sobre la calificación? Escríbeme y la revisamos.
+</footer>
+</main>
+</body>
+</html>

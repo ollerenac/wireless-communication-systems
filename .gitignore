@@ -40,8 +40,12 @@ docs/**/figures/gen_*.py
 # Material fuente local recuperado; no forma parte del sitio versionado
 docs/sessions/06-mimo-systems/figures/svd-based-mimo/
 
-# Entregas de alumnos y notas — PII, nunca al repo
+# Entregas de alumnos, retroalimentación y notas — PII, nunca al repo.
+# Los enunciados versionados de parcial-01 se exceptúan explícitamente.
 exams/**/examen-parcial-soluciones/
+exams/final-01/
+exams/**/feedback.md
+exams/**/RESUMEN-NOTAS.md
 
 # understand-anything knowledge graph (local)
 .understand-anything/
